@@ -1,0 +1,156 @@
+{% schema %}
+{
+  "name": "New Arrivals",
+  "tag": "section",
+  "class": "new-arrivals",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "NEW ARRIVALS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Arrivals",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+  .new-arrivals {
+    padding: 60px 20px;
+    background: #fff;
+  }
+  .new-arrivals h2 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+  }
+  .new-arrivals .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    padding:30px 0;
+  }
+  .new-arrivals .card {
+    background: #fff;
+    padding: 20px;
+    width: 320px;
+    position: relative;
+    transition: 0.3s ease;
+    padding: 15px 30px;
+    box-shadow: 0 0 20px 0 rgba(6, 0, 0, 0.08);
+    border-radius: 30px;
+    min-height: 475px;
+    padding-bottom: 90px;
+  }
+  .new-arrivals .card:hover {
+    transform: translateY(-5px);
+  }
+  .new-arrivals .card a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .new-arrivals .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .new-arrivals .vendor {
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .new-arrivals .product-details {
+    display:flex;
+    justify-content: space-between;
+  }
+  .new-arrivals .subtitle {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+  }
+  .new-arrivals .price {
+    color: #007bff;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  .new-arrivals .card img {
+    display: block;
+    max-width: 100%;
+    max-height: 200px;
+    height: 200px;
+    width: 300px;
+    min-height: 200px;
+    -o-object-fit: contain;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+  .new-arrivals .arrow {
+    font-size: 18px;
+    color: #111;
+  }
+  .new-arrivals .wishlist {
+    position: absolute;
+    bottom: 0px;
+    right: 18px;
+    font-size: 30px;
+    color: #111;
+    cursor: pointer;
+  }
+{% endstyle %}
+
+<section class="new-arrivals">
+  <div class="page-width">
+    <h2>{{ section.settings.heading }}</h2>
+    <div class="product-grid">
+      {% for block in section.blocks %}
+        {% assign product = block.settings.product %}
+        {% if product %}
+          <div class="card">
+            <a href="{{ product.url }}">
+              <div class="card-header">
+                <div class="vendor">{{ product.vendor }}</div>
+                <div class="arrow">→</div>
+              </div>
+              <div class="product-details">
+                <div class="subtitle">{{ product.title }}</div>
+                <div class="price">{{ product.price | money }}</div>
+              </div>
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 300 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  width="300"
+                  height="{{ 300 | divided_by: product.featured_image.aspect_ratio | round }}"
+                  loading="lazy"
+                >
+              {% endif %}
+            </a>
+            <div class="wishlist">♡</div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>

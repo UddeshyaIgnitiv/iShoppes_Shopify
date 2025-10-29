@@ -91,6 +91,70 @@
         "button_label": "START SHOPPING"
       }
     },
+    "travel_exclusives": {
+      "type": "travel-exclusives",
+      "blocks": {
+        "product_A9QcLP": {
+          "type": "product",
+          "settings": {
+            "product": "the-3p-fulfilled-snowboard"
+          }
+        },
+        "product_bGhzxg": {
+          "type": "product",
+          "settings": {
+            "product": "the-collection-snowboard-oxygen"
+          }
+        }
+      },
+      "block_order": [
+        "product_A9QcLP",
+        "product_bGhzxg"
+      ],
+      "name": "Travel Exclusives",
+      "settings": {
+        "heading": "TRAVEL EXCLUSIVES"
+      }
+    },
+    "new_arrivals": {
+      "type": "new-arrivals",
+      "blocks": {
+        "product_R7yUXe": {
+          "type": "product",
+          "settings": {
+            "product": "the-out-of-stock-snowboard"
+          }
+        },
+        "product_bC4FQP": {
+          "type": "product",
+          "settings": {
+            "product": "the-compare-at-price-snowboard"
+          }
+        },
+        "product_Fczywd": {
+          "type": "product",
+          "settings": {
+            "product": "the-inventory-not-tracked-snowboard"
+          }
+        },
+        "product_hDR33Y": {
+          "type": "product",
+          "settings": {
+            "product": "the-multi-managed-snowboard"
+          }
+        }
+      },
+      "block_order": [
+        "product_R7yUXe",
+        "product_bC4FQP",
+        "product_Fczywd",
+        "product_hDR33Y"
+      ],
+      "name": "New Arrivals",
+      "settings": {
+        "heading": "NEW ARRIVALS"
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -366,6 +430,8 @@
   "order": [
     "slideshow_ifejig",
     "duty_free_works",
+    "travel_exclusives",
+    "new_arrivals",
     "hero_jVaWmY",
     "product_list_fa6P9H"
   ]

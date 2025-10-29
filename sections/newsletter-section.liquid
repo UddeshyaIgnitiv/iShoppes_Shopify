@@ -1,0 +1,98 @@
+{% schema %}
+{
+  "name": "Newsletter Section",
+  "tag": "section",
+  "class": "newsletter-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "GET IN TOUCH"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Sign up for our newsletter and promotions."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Section"
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+  .newsletter-section {
+    background: linear-gradient(to right, #343333, #060000);
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .newsletter-section h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color:#fff;
+    font-weight:500;
+  }
+
+  .newsletter-section p {
+    margin-bottom: 40px;
+    font-size: 16px;
+  }
+
+  .newsletter-section form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .newsletter-section input[type="email"] {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    width: 500px;
+    margin-bottom: 30px;
+  }
+
+  .newsletter-section input[type="email"]::placeholder {
+    color: #aaa;
+  }
+
+  .newsletter-section button {
+    display: inline-block;
+    background-color: white;
+    color: black;
+    font-size:18px;
+    padding: 15px 50px;
+    font-weight: 500;
+    border-radius: 50px;
+    text-decoration: none;
+    border: 1px solid #2c2c2c;
+    transition: background 0.3s ease;
+    box-shadow: 0px 0px 0px 8px rgb(255 255 255 / 20%);
+  }
+
+  .newsletter-section button:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0px 0px 0px 8px rgba(6, 0, 0, 0.1);
+  }
+{% endstyle %}
+
+<section class="newsletter-section">
+  <h2>{{ section.settings.heading }}</h2>
+  <p>{{ section.settings.subtext }}</p>
+  <form method="post" action="{{ routes.newsletter_subscribe_url }}">
+    <input type="hidden" name="form_type" value="customer">
+    <input type="hidden" name="utf8" value="✓">
+    <input type="email" name="contact[email]" placeholder="Email" required>
+    <button type="submit">SUBSCRIBE</button>
+  </form>
+</section>

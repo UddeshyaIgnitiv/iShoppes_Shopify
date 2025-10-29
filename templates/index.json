@@ -234,6 +234,14 @@
         "title": "OFFICIAL STORES"
       }
     },
+    "newsletter_section": {
+      "type": "newsletter-section",
+      "name": "Newsletter Section",
+      "settings": {
+        "heading": "GET IN TOUCH",
+        "subtext": "Sign up for our newsletter and promotions."
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -514,6 +522,7 @@
     "promotion_banners",
     "content_image_info_banner",
     "official_stores",
+    "newsletter_section",
     "hero_jVaWmY",
     "product_list_fa6P9H"
   ]

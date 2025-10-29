@@ -1,0 +1,188 @@
+{% schema %}
+{
+  "name": "Special Offers",
+  "tag": "section",
+  "class": "special-offers-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "SPECIAL OFFERS"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "IS Duty Free provides exclusive deals you won’t find anywhere else!"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View All Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "offer",
+      "name": "Offer",
+      "settings": [
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Top Label",
+          "default": "LIMITED TIME OFFER"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product Title",
+          "default": "Product Promo Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Product Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Special Offers",
+      "category": "Custom",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+    .special-offers-section {
+      padding: 0px 20px;
+      background:#fff;
+    }
+    .special-offers-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      background: linear-gradient(to right, #7e7d7e, #7e7d7e);
+      padding:90px 50px;
+    }
+    .special-offers-left {
+      flex: 1 1 250px;
+      max-width: 300px;
+
+    display: flex;
+    justify-content: center;   /* Horizontal centering */
+    align-items: center;       /* Vertical centering */
+    text-align: center;        /* Optional: center the text */
+    min-height: 100%;
+    }
+    .offer-section {
+    width: 100%;
+      text-align:left;
+  }
+    .special-offers-left h2 {
+      font-size: 28px;
+      font-weight: 500;
+    }
+    .special-offers-left p {
+      margin-top: 10px;
+      margin-bottom:5px;
+    }
+    .special-offers-left a {
+      display: inline-block;
+      font-weight: 500;
+      color: #000;
+      font-size: 18px;
+      text-decoration: none;
+    }
+    .special-offers-right {
+      flex: 3;
+      overflow-x: auto;
+      display: flex;
+      gap: 20px;
+      padding-bottom: 10px;
+      justify-content:center;
+    }
+    .offer-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      width: 430px;
+      height:462px;
+      flex-shrink: 0;
+      position: relative;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    }
+    .offer-card img {
+      width: 100%;
+      display: block;
+    }
+    .offer-card .content {
+      padding: 10px;
+    }
+    .offer-card .subtext {
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+    }
+    .offer-card .title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+    .offer-card .arrow {
+      position: absolute;
+      font-size: 18px;
+      color: #fff;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 60px;
+      background-color: rgba(6, 0, 0, 0.8);
+      padding: 10px;
+      text-align: right;
+    }
+{% endstyle %}
+
+<section class="special-offers-section">
+  <div class="page-width special-offers-wrapper">
+    <div class="special-offers-left">
+      <div class="offer-section">
+        <h2>{{ section.settings.title }}</h2>
+        <p>{{ section.settings.description }}</p>
+        {% if section.settings.view_all_link %}
+          <a href="{{ section.settings.view_all_link }}">View All →</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="special-offers-right">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.link }}" class="offer-card" {{ block.shopify_attributes }}>
+          {% if block.settings.image %}
+            <img
+              src="{{ block.settings.image | image_url: width: 300 }}"
+              alt="{{ block.settings.title | escape }}"
+              width="300"
+              height="{{ 300 | divided_by: block.settings.image.aspect_ratio | round }}"
+              loading="lazy"
+            >
+          {% endif %}
+          <div class="content">
+            <div class="subtext">{{ block.settings.subtext }}</div>
+            <div class="title">{{ block.settings.title }}</div>
+          </div>
+          <div class="arrow">→</div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -155,6 +155,39 @@
         "heading": "NEW ARRIVALS"
       }
     },
+    "promotion_banners": {
+      "type": "promotion-banners",
+      "blocks": {
+        "offer_dLbLaj": {
+          "type": "offer",
+          "settings": {
+            "subtext": "LIMITED TIME OFFER",
+            "title": "Product Promo Title",
+            "image": "shopify://shop_images/Main_5127218a-8f6c-498f-b489-09242c0fab0a.jpg",
+            "link": ""
+          }
+        },
+        "offer_Y8Tc3Q": {
+          "type": "offer",
+          "settings": {
+            "subtext": "LIMITED TIME OFFER",
+            "title": "Product Promo Title",
+            "image": "shopify://shop_images/Main_5127218a-8f6c-498f-b489-09242c0fab0a.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "offer_dLbLaj",
+        "offer_Y8Tc3Q"
+      ],
+      "name": "Special Offers",
+      "settings": {
+        "title": "SPECIAL OFFERS",
+        "description": "IS Duty Free provides exclusive deals you won’t find anywhere else!",
+        "view_all_link": "shopify://products/the-collection-snowboard-hydrogen"
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -432,6 +465,7 @@
     "duty_free_works",
     "travel_exclusives",
     "new_arrivals",
+    "promotion_banners",
     "hero_jVaWmY",
     "product_list_fa6P9H"
   ]

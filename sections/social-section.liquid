@@ -1,0 +1,87 @@
+{% schema %}
+{
+  "name": "iShoppes Social Section",
+  "tag": "section",
+  "class": "ishoppes-social-wrapper",
+  "settings": [],
+  "presets": [
+    {
+      "name": "iShoppes Social Section"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .footer-callout-hhR {
+    background-color: black;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    height: 89.59px;
+
+    /* Vertical centering using flexbox */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-socialLinks-Dfa {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .footer-socialLinks-Dfa li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+  }
+
+  .footer-socialLinks-Dfa li:hover {
+    background-color: #e5e5e5;
+  }
+
+  .footer-socialLinks-Dfa img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display:block;
+  }
+</style>
+
+<div class="footer-callout-hhR">
+  <ul class="footer-socialLinks-Dfa">
+    <li>
+      <a href="https://www.instagram.com/isdutyfree" target="_blank" rel="noopener noreferrer">
+        <img
+          src="{{ 'Insta-icon-8Tg.png' | file_url }}"
+          alt="Instagram"
+          loading="lazy"
+          width="24px"
+          height="24px"
+        >
+      </a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/isdutyfree/" target="_blank" rel="noopener noreferrer">
+        <img
+          src="{{ 'fb-icon-m22.png' | file_url }}"
+          alt="Facebook"
+          loading="lazy"
+          width="24px"
+          height="24px"
+        >
+      </a>
+    </li>
+  </ul>
+</div>

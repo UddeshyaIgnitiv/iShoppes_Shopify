@@ -1,49 +1,86 @@
 {%- doc -%}
-  Renders a slideshow arrow control
-
-  @param {string} action - { 'previous' | 'next' } The action to perform when the arrow is clicked.
-  @param {string} [icon_style] - { 'arrow' | 'chevron' } The style of the icon, defaults to 'arrow'.
-  @param {string} [icon_shape] - { 'none' | 'circle' | 'square' } The shape of the icon background, defaults to 'none'.
-  @param {string} [icon_size] - { 'small' | 'medium' | 'large' } The size of the icon, defaults to 'medium'.
-
-  @example
-  {%- render 'slideshow-arrow', action: 'previous' -%}
+  Custom slideshow arrow control
+  Uses real angle-left/right icons (not chevrons) with white rounded background
 {%- enddoc -%}
 
 {%- liquid
-  assign icon_name = 'arrow'
   assign style = icon_style | default: 'arrow'
   assign shape = icon_shape | default: 'none'
-
-  if icon_style contains 'chevron'
-    assign icon_name = 'caret'
-  endif
-
-  if icon_style contains 'large'
-    assign icon_size = 'large'
-  endif
+  assign size = icon_size | default: 'medium'
+  assign direction = action
 -%}
+
+<style>
+/* --- Custom White Rounded Slideshow Arrows (Angle Icons) --- */
+.custom-slideshow-arrow {
+  background-color: #ffffff;
+  border-radius: 50%;
+  width: 24px!important;
+  height: 24px!important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease;
+  color: #666666!important; /* grey icon */
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+/* Position arrows 10px from edges */
+.custom-slideshow-arrow.slideshow-control--previous {
+  left: 20px !important;
+}
+
+.custom-slideshow-arrow.slideshow-control--next {
+  right: 20px !important;
+}
+
+
+.custom-slideshow-arrow:hover {
+  background-color: #ffffff;
+  color: #000!important; /* icon turns black */
+  transform: translateY(-50%) scale(1.05);
+}
+
+.custom-slideshow-arrow svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+</style>
 
 <button
   class="
     slideshow-control slideshow-control--{{ action }}
-    {% if icon_size %} slideshow-control--{{ icon_size }}{% endif %}
-    {% if shape != 'none' %} slideshow-control--shape-{{ shape }}{% endif %}
-    slideshow-control--style-{{ style }}
-    button button-unstyled button-unstyled--transparent
-    {% if action == 'previous' %} flip-x{% endif %}
+    slideshow-control--{{ size }}
+    custom-slideshow-arrow
+    button button-unstyled
   "
-  {% # theme-check-disable %}
   aria-label="{{ 'accessibility.slideshow_' | append: action | t }}"
-  {% # theme-check-enable %}
   on:click="/{{ action }}"
   ref="{{ action }}"
 >
-  <span class="svg-wrapper icon-{{ icon_name }}">
-    {%- if icon_name == 'caret' -%}
-      {{- 'icon-caret.svg' | inline_asset_content -}}
-    {%- else -%}
-      {{- 'icon-arrow.svg' | inline_asset_content -}}
-    {%- endif -%}
-  </span>
+  {% if action == 'previous' %}
+    <span class="svg-wrapper icon-angle-left">
+      <!-- True Angle Left Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" aria-hidden="true">
+        <path d="M192 448c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l137.4 137.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448z"/>
+      </svg>
+    </span>
+  {% else %}
+    <span class="svg-wrapper icon-angle-right">
+      <!-- True Angle Right Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" aria-hidden="true">
+        <path d="M64 64c8.188 0 16.38 3.125 22.62 9.375l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160c-12.5 12.5-32.75 12.5-45.25 0s-12.5-32.75 0-45.25L178.8 256 41.37 118.6c-12.5-12.5-12.5-32.75 0-45.25C47.63 67.13 55.82 64 64 64z"/>
+      </svg>
+    </span>
+  {% endif %}
 </button>

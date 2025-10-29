@@ -188,6 +188,17 @@
         "view_all_link": "shopify://products/the-collection-snowboard-hydrogen"
       }
     },
+    "content_image_info_banner": {
+      "type": "perfect-moments",
+      "name": "Perfect Moments",
+      "settings": {
+        "heading": "PERFECT MOMENTS ARE TAILOR MADE",
+        "description": "Château Magnol is the heart of Barton & Guestier. The estate dates back to the 17th century and is known for producing high-quality wines that reflect the unique terroir of the region. “Château Magnol is the epitome of elegance, silky and exquisite”. Laurent Prada, B&G Head Winemaker.",
+        "button_label": "SHOP NOW",
+        "button_link": "#",
+        "right_image": "shopify://shop_images/perfect-moment.jpg"
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -466,6 +477,7 @@
     "travel_exclusives",
     "new_arrivals",
     "promotion_banners",
+    "content_image_info_banner",
     "hero_jVaWmY",
     "product_list_fa6P9H"
   ]

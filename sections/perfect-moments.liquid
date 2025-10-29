@@ -1,0 +1,179 @@
+{% schema %}
+{
+  "name": "Perfect Moments",
+  "tag": "section",
+  "class": "perfect-moments-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "PERFECT MOMENTS ARE TAILOR MADE"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Château Magnol is the heart of Barton & Guestier..."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Right Side Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Perfect Moments",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+  .perfect-moments-section {
+    background: #fff;
+    padding: 0px 20px;
+  }
+
+  .perfect-moments-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    min-height: 450px;
+  }
+
+  .perfect-moments-left,
+  .perfect-moments-right {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .perfect-moments-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    background: linear-gradient(to right, rgba(52, 51, 51, 0.9), rgba(6, 0, 0, 0.9));
+    color: #fff;
+    position:relative;
+  }
+  .perfect-moments-contents {
+    position: absolute;
+    left: 98px;
+    top: 50%;
+    padding: 10px;
+    max-width: 400px;
+    transform: translateY(-50%);
+  }
+
+  .perfect-moments-left h2 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  .perfect-moments-left p {
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+
+  .perfect-moments-left a {
+    background: white;
+    color: black;
+    padding: 10px 40px;
+    font-weight: 500;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: 0.3s;
+    width: fit-content;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .perfect-moments-left a:hover {
+    background: #e0e0e0;
+  }
+
+  .perfect-moments-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    padding: 20px;
+  }
+
+  .perfect-moments-right img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .shop-now-btn {
+    display: inline-block;
+    background-color: white;
+    color: black;
+    padding: 12px 50px;
+    font-weight: 500;
+    border-radius: 50px;
+    text-decoration: none;
+    border: 1px solid #2c2c2c;
+    transition: background 0.3s ease;
+    box-shadow: 0px 0px 0px 8px rgb(255 255 255 / 20%);
+  }
+
+  .shop-now-btn:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0px 0px 0px 8px rgba(6, 0, 0, 0.1);
+  }
+
+  @media screen and (max-width: 768px) {
+    .perfect-moments-wrapper {
+      flex-direction: column;
+    }
+
+    .perfect-moments-left,
+    .perfect-moments-right {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+
+    .perfect-moments-left {
+      padding: 30px 20px;
+      text-align: center;
+    }
+  }
+{% endstyle %}
+
+<section class="perfect-moments-section">
+  <div class="perfect-moments-wrapper">
+    <div class="perfect-moments-left">
+      <div class="perfect-moments-contents">
+        <h2>{{ section.settings.heading }}</h2>
+        <p>{{ section.settings.description }}</p>
+        {% if section.settings.button_link %}
+          <a href="{{ section.settings.button_link }}" class="shop-now-btn">
+            {{ section.settings.button_label }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="perfect-moments-right">
+      {% if section.settings.right_image %}
+        <img src="{{ section.settings.right_image | image_url: width: 600 }}" alt="Perfect Moment Image">
+      {% endif %}
+    </div>
+  </div>
+</section>

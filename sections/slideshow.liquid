@@ -1,5 +1,3 @@
-
-
 {% if section.blocks.size > 1 %}
   {% capture controls %}
     {%- render 'slideshow-controls',
@@ -32,22 +30,70 @@
 %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
 <div
   class="spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} disable-section-top-offset"
   style="{% render 'spacing-padding', settings: section.settings %}"
 >
-  {% render 'slideshow',
-    class: slideshow_class,
-    controls: controls,
-    show_arrows: show_arrows,
-    icon_style: section.settings.icons_style,
-    autoplay: section.settings.autoplay,
-    autoplay_speed: section.settings.autoplay_speed,
-    slides: slides,
-    slide_count: section.blocks.size,
-    slide_size: section.settings.slide_height
-  %}
+  <!-- Slideshow wrapper with side margins -->
+  <div class="slideshow-margin-wrapper">
+    {% render 'slideshow',
+      class: slideshow_class,
+      controls: controls,
+      show_arrows: show_arrows,
+      icon_style: section.settings.icons_style,
+      autoplay: section.settings.autoplay,
+      autoplay_speed: section.settings.autoplay_speed,
+      slides: slides,
+      slide_count: section.blocks.size,
+      slide_size: section.settings.slide_height
+    %}
+  </div>
 </div>
+
+{% stylesheet %}
+/* 45px margin left & right for slideshow container */
+.slideshow-margin-wrapper {
+  margin-left: 45px !important;
+  margin-right: 45px !important;
+  overflow: hidden; /* ensures no image overflow */
+}
+
+/* Make slides fill the available space inside margin */
+.slideshow-margin-wrapper .slideshow {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Set slide height based on theme setting */
+.slideshow-margin-wrapper .slideshow__slide {
+  width: 100% !important;
+  height: {% if section.settings.slide_height == 'small' %}300px{% elsif section.settings.slide_height == 'medium' %}500px{% elsif section.settings.slide_height == 'large' %}700px{% else %}auto{% endif %} !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Make images scale properly and fill slide */
+.slideshow-margin-wrapper .slideshow__slide img,
+.slideshow-margin-wrapper .slideshow__media img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover; /* fills slide without stretching */
+  display: block !important;
+}
+
+/* Mobile: reduce margins to 15px */
+@media screen and (max-width: 767px) {
+  .slideshow-margin-wrapper {
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+  }
+}
+{% endstylesheet %}
 
 {% schema %}
 {

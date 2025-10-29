@@ -242,6 +242,11 @@
         "subtext": "Sign up for our newsletter and promotions."
       }
     },
+    "social_section": {
+      "type": "social-section",
+      "name": "Social Section",
+      "settings": {}
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -523,6 +528,7 @@
     "content_image_info_banner",
     "official_stores",
     "newsletter_section",
+    "social_section",
     "hero_jVaWmY",
     "product_list_fa6P9H"
   ]

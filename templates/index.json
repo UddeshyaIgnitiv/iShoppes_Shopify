@@ -199,6 +199,41 @@
         "right_image": "shopify://shop_images/perfect-moment.jpg"
       }
     },
+    "official_stores": {
+      "type": "official-stores",
+      "blocks": {
+        "logo_PUKrWD": {
+          "type": "logo",
+          "settings": {
+            "brand_logo": "shopify://shop_images/dior_logo.webp",
+            "link": ""
+          }
+        },
+        "logo_Fdz7wy": {
+          "type": "logo",
+          "settings": {
+            "brand_logo": "shopify://shop_images/geln_logo.webp",
+            "link": ""
+          }
+        },
+        "logo_jkY9tb": {
+          "type": "logo",
+          "settings": {
+            "brand_logo": "shopify://shop_images/macallan_logo.webp",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_PUKrWD",
+        "logo_Fdz7wy",
+        "logo_jkY9tb"
+      ],
+      "name": "Official Stores",
+      "settings": {
+        "title": "OFFICIAL STORES"
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -478,6 +513,7 @@
     "new_arrivals",
     "promotion_banners",
     "content_image_info_banner",
+    "official_stores",
     "hero_jVaWmY",
     "product_list_fa6P9H"
   ]

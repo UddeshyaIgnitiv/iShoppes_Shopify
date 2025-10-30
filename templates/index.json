@@ -162,16 +162,18 @@
           "type": "offer",
           "settings": {
             "subtext": "LIMITED TIME OFFER",
-            "title": "Product Promo Title",
-            "link": ""
+            "title": "Product Promo Title 1",
+            "link": "https://ishoppes.com/products/product-1",
+            "image": "shopify://shop_images/sample_offer_image1.jpg"
           }
         },
         "offer_Y8Tc3Q": {
           "type": "offer",
           "settings": {
             "subtext": "LIMITED TIME OFFER",
-            "title": "Product Promo Title",
-            "link": ""
+            "title": "Product Promo Title 2",
+            "link": "https://ishoppes.com/products/product-2",
+            "image": "shopify://shop_images/sample_offer_image2.jpg"
           }
         }
       },

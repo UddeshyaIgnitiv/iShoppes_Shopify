@@ -242,6 +242,14 @@
         "icon_UNityz": {
           "type": "icon",
           "settings": {
+            "icon": "shopify://shop_images/Insta-icon-8Tg.png",
+            "alt_text": "Social link",
+            "link": ""
+          }
+        },
+        "icon_tKhcYf": {
+          "type": "icon",
+          "settings": {
             "icon": "shopify://shop_images/fb-icon-m22.png",
             "alt_text": "Social link",
             "link": ""
@@ -249,7 +257,8 @@
         }
       },
       "block_order": [
-        "icon_UNityz"
+        "icon_UNityz",
+        "icon_tKhcYf"
       ],
       "name": "Social Section",
       "settings": {}

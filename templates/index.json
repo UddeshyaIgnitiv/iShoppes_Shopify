@@ -193,7 +193,8 @@
         "heading": "PERFECT MOMENTS ARE TAILOR MADE",
         "description": "Château Magnol is the heart of Barton & Guestier. The estate dates back to the 17th century and is known for producing high-quality wines that reflect the unique terroir of the region. “Château Magnol is the epitome of elegance, silky and exquisite”. Laurent Prada, B&G Head Winemaker.",
         "button_label": "SHOP NOW",
-        "button_link": "#"
+        "button_link": "#",
+        "right_image": "shopify://shop_images/default_image.jpg"
       }
     },
     "official_stores": {

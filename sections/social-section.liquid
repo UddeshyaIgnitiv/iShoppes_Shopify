@@ -1,87 +1,122 @@
+{% stylesheet %}
+.footer-callout-hhR {
+  background-color: black;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  height: 89.59px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-socialLinks-Dfa {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.footer-socialLinks-Dfa li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.footer-socialLinks-Dfa li:hover {
+  background-color: #e5e5e5;
+}
+
+.footer-socialLinks-Dfa img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+{% endstylesheet %}
+
+<div class="footer-callout-hhR">
+  <ul class="footer-socialLinks-Dfa">
+    {% for block in section.blocks %}
+      <li {{ block.shopify_attributes }}>
+        <a href="{{ block.settings.link }}" target="_blank" rel="noopener noreferrer" aria-label="{{ block.settings.alt_text }}">
+          {% if block.settings.icon != blank %}
+            <img
+              src="{{ block.settings.icon | image_url }}"
+              alt="{{ block.settings.alt_text | escape }}"
+              loading="lazy"
+              width="24"
+              height="24"
+            >
+          {% else %}
+            <span>{{ block.settings.alt_text }}</span>
+          {% endif %}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
 {% schema %}
 {
-  "name": "iShoppes Social Section",
+  "name": "Social Section",
   "tag": "section",
-  "class": "ishoppes-social-wrapper",
+  "class": "social-section",
   "settings": [],
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Social icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Upload icon"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt text",
+          "default": "Social link"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Social link URL"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "iShoppes Social Section"
+      "name": "Social Section",
+      "blocks": [
+        {
+          "type": "icon",
+          "settings": {
+            "alt_text": "Instagram",
+            "link": "https://www.instagram.com/",
+            "icon": "shopify://shop_images/Insta-icon-8Tg.png"
+          }
+        },
+        {
+          "type": "icon",
+          "settings": {
+            "alt_text": "Facebook",
+            "link": "https://www.facebook.com/",
+            "icon": "shopify://shop_images/fb-icon-m22.png"
+          }
+        }
+      ]
     }
   ]
 }
 {% endschema %}
-
-<style>
-  .footer-callout-hhR {
-    background-color: black;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-    height: 89.59px;
-
-    /* Vertical centering using flexbox */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .footer-socialLinks-Dfa {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-
-  .footer-socialLinks-Dfa li {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    background-color: white;
-    border-radius: 50%;
-    transition: background-color 0.3s ease;
-  }
-
-  .footer-socialLinks-Dfa li:hover {
-    background-color: #e5e5e5;
-  }
-
-  .footer-socialLinks-Dfa img {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-    display:block;
-  }
-</style>
-
-<div class="footer-callout-hhR">
-  <ul class="footer-socialLinks-Dfa">
-    <li>
-      <a href="https://www.instagram.com/isdutyfree" target="_blank" rel="noopener noreferrer">
-        <img
-          src="{{ 'Insta-icon-8Tg.png' | file_url }}"
-          alt="Instagram"
-          loading="lazy"
-          width="24px"
-          height="24px"
-        >
-      </a>
-    </li>
-    <li>
-      <a href="https://www.facebook.com/isdutyfree/" target="_blank" rel="noopener noreferrer">
-        <img
-          src="{{ 'fb-icon-m22.png' | file_url }}"
-          alt="Facebook"
-          loading="lazy"
-          width="24px"
-          height="24px"
-        >
-      </a>
-    </li>
-  </ul>
-</div>

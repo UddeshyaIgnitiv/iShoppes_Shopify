@@ -14,7 +14,7 @@
       "type": "url",
       "id": "view_all_link",
       "label": "View All Link",
-      "default": "#"
+      "default": "/"
     },
     {
       "type": "color",
@@ -134,20 +134,20 @@
 
 /* --- Dots container --- */
 .flickity-page-dots-container {
-  display: none; /* hidden on desktop */
+  display: none !important; /* Hide on desktop */
   align-items: center;
 }
 
 /* --- Mobile controls --- */
 .mobile-controls {
-  display: none;
+  display: none !important; /* Hide on desktop */
   width: 100%;
   justify-content: space-between;
   align-items: center;
   margin: 0 20px 10px 20px;
 }
 
-/* --- Flickity dots styling --- */
+/* --- Dots styling --- */
 .flickity-page-dots li {
   width: 14px !important;
   height: 14px !important;
@@ -161,7 +161,7 @@
   background: #0a1f33 !important;
 }
 
-/* --- View all link --- */
+/* --- View All link --- */
 .view-all-link {
   font-weight: 500;
   font-size: 16px;
@@ -200,7 +200,7 @@
     width: auto !important;
   }
 
-  /* Show dots and view all only on mobile */
+  /* ✅ Show only on mobile */
   .mobile-controls,
   .flickity-page-dots-container {
     display: flex !important;
@@ -270,9 +270,5 @@ document.addEventListener('DOMContentLoaded', function () {
       dotsContainer.appendChild(dots);
     }
   }
-
-  window.addEventListener('resize', function () {
-    location.reload();
-  });
 });
 {% endjavascript %}

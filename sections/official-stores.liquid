@@ -14,7 +14,7 @@
       "type": "url",
       "id": "view_all_link",
       "label": "View All Link",
-      "default": "/"
+      "default": "#"
     },
     {
       "type": "color",
@@ -97,126 +97,128 @@
 {% endschema %}
 
 {% style %}
-.official-stores {
-  padding: 20px;
-  background: {{ section.settings.background_color }};
-  text-align: left;
-}
+  .official-stores {
+    padding: 20px;
+    background: {{ section.settings.background_color }};
+    text-align: left;
+  }
 
-.official-stores h2 {
-  font-size: 28px;
-  font-weight: 500;
-  margin-bottom: 40px;
-  margin-left: 20px;
-  color: #0a1f33;
-}
+  .official-stores h2 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 40px;
+    margin-left: 20px;
+    color: #0a1f33;
+  }
 
-.official-stores-logos {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: {{ section.settings.alignment }};
-  gap: {{ section.settings.logo_spacing }}px;
-}
+  /* Container for logos and controls on mobile */
+  .official-stores-mobile-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 20px 30px 20px;
+  }
 
-.official-stores-logos a {
-  display: inline-block;
-  transition: all 0.3s ease;
-}
-
-.official-stores-logos img {
-  width: {{ section.settings.logo_width }}px;
-  height: {{ section.settings.logo_height }}px;
-  object-fit: contain;
-  transition: all 0.3s ease;
-}
-
-{% if section.settings.hover_effect %}
-.official-stores-logos a:hover img {
-  transform: scale(1.05);
-  opacity: 0.9;
-}
-{% endif %}
-
-/* Flickity page dots */
-.flickity-page-dots-container {
-  display: flex;
-  align-items: center;
-}
-
-.flickity-page-dots {
-  margin: 0;
-}
-
-.flickity-page-dots li {
-  width: 12px;
-  height: 12px;
-  margin: 0 5px;
-}
-
-.flickity-page-dots .is-selected {
-  background: #333;
-}
-
-/* View All link */
-.view-all-link {
-  font-weight: 500;
-  font-size: 16px;
-  color: #0a1f33;
-  text-decoration: none;
-  display: none; /* hide on desktop */
-  align-items: center;
-  white-space: nowrap;
-}
-
-.view-all-link svg {
-  margin-left: 5px;
-  width: 16px;
-  height: 16px;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
-}
-
-/* Mobile controls */
-.mobile-controls {
-  display: none; /* hide on desktop */
-}
-
-/* Responsive: mobile */
-@media screen and (max-width: 768px) {
   .official-stores-logos {
-    flex-wrap: nowrap;
-    overflow: hidden;
-    gap: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: {{ section.settings.alignment }};
+    gap: {{ section.settings.logo_spacing }}px;
   }
 
   .official-stores-logos a {
-    margin-right: 10px;
-    flex: 0 0 auto;
+    display: inline-block;
+    transition: all 0.3s ease;
   }
 
   .official-stores-logos img {
-    width: 150px !important;
-    height: auto !important;
+    width: {{ section.settings.logo_width }}px;
+    height: {{ section.settings.logo_height }}px;
+    object-fit: contain;
+    transition: all 0.3s ease;
   }
 
-  .official-stores {
-    padding-bottom: 0;
+  {% if section.settings.hover_effect %}
+    .official-stores-logos a:hover img {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+  {% endif %}
+
+  /* Flickity page dots container */
+  .flickity-page-dots-container {
+    display: flex;
+    align-items: center;
   }
 
-  /* Show mobile controls */
+  /* Position dots left, View All link right on mobile */
   .mobile-controls {
-    display: flex !important;
+    display: none;
     width: 100%;
-    justify-content: space-between; /* dots left, view all right */
+    justify-content: space-between;
     align-items: center;
     margin: 0 20px 10px 20px;
   }
 
-  .view-all-link {
-    display: inline-flex !important;
+  .flickity-page-dots {
+    margin: 0;
   }
-}
+
+  .flickity-page-dots li {
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+  }
+
+  .flickity-page-dots .is-selected {
+    background: #333;
+  }
+
+  .view-all-link {
+    font-weight: 500;
+    font-size: 16px;
+    color: #0a1f33;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .view-all-link svg {
+    margin-left: 5px;
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+  }
+
+  /* Responsive styles */
+  @media screen and (max-width: 768px) {
+    .official-stores-logos {
+      flex-wrap: nowrap;
+      overflow: hidden;
+      gap: 0;
+    }
+
+    .official-stores-logos a {
+      margin-right: 10px;
+      flex: 0 0 auto;
+    }
+
+    .official-stores-logos img {
+      width: 150px !important;
+      height: auto !important;
+    }
+
+    .official-stores {
+      padding-bottom: 0;
+    }
+
+    /* Show mobile controls */
+    .mobile-controls {
+      display: flex;
+    }
+  }
 {% endstyle %}
 
 <section class="official-stores">
@@ -225,7 +227,7 @@
       <h2>{{ section.settings.title }}</h2>
     {% endif %}
 
-    <!-- Mobile controls -->
+    <!-- Mobile controls: dots left, view all right -->
     <div class="mobile-controls">
       <div class="flickity-page-dots-container"></div>
       <a href="{{ section.settings.view_all_link }}" class="view-all-link" target="_blank" rel="noopener">
@@ -252,55 +254,55 @@
 </section>
 
 {% javascript %}
-document.addEventListener('DOMContentLoaded', function () {
-  var logosContainer = document.querySelector('.official-stores-logos');
-  var dotsContainer = document.querySelector('.flickity-page-dots-container');
-  var flkty;
+  document.addEventListener('DOMContentLoaded', function () {
+    var logosContainer = document.querySelector('.official-stores-logos');
+    var dotsContainer = document.querySelector('.flickity-page-dots-container');
+    var flkty;
 
-  function initFlickity() {
-    if (window.innerWidth <= 768 && logosContainer) {
-      if (!logosContainer.classList.contains('flickity-enabled')) {
-        flkty = new Flickity(logosContainer, {
-          cellAlign: 'left',
-          contain: true,
-          pageDots: true,
-          prevNextButtons: false,
-          wrapAround: true,
-          draggable: true,
-          adaptiveHeight: true,
-          friction: 0.05,
-          selectedAttraction: 0.015,
-        });
+    function initFlickity() {
+      if (window.innerWidth <= 768 && logosContainer) {
+        if (!logosContainer.classList.contains('flickity-enabled')) {
+          flkty = new Flickity(logosContainer, {
+            cellAlign: 'left',
+            contain: true,
+            pageDots: true,
+            prevNextButtons: false,
+            wrapAround: true,
+            draggable: true,
+            adaptiveHeight: true,
+            friction: 0.05,
+            selectedAttraction: 0.015,
+          });
 
-        // Move Flickity dots into our container
-        var dots = logosContainer.querySelector('.flickity-page-dots');
-        if (dots && dotsContainer) {
-          dotsContainer.appendChild(dots);
-        }
-
-        // Smooth continuous auto scroll
-        let scrollX = 0;
-        let speed = 0.5; // pixels per frame
-
-        function animate() {
-          scrollX += speed;
-          if (scrollX >= flkty.slideableWidth) {
-            scrollX = 0;
+          // Move Flickity dots into our container
+          var dots = logosContainer.querySelector('.flickity-page-dots');
+          if (dots && dotsContainer) {
+            dotsContainer.appendChild(dots);
           }
-          flkty.x = -scrollX;
-          flkty.positionSlider();
-          requestAnimationFrame(animate);
-        }
 
-        animate();
+          // Smooth continuous auto scroll
+          let scrollX = 0;
+          let speed = 0.5; // pixels per frame
+
+          function animate() {
+            scrollX += speed;
+            if (scrollX >= flkty.slideableWidth) {
+              scrollX = 0;
+            }
+            flkty.x = -scrollX;
+            flkty.positionSlider();
+            requestAnimationFrame(animate);
+          }
+
+          animate();
+        }
       }
     }
-  }
 
-  initFlickity();
+    initFlickity();
 
-  window.addEventListener('resize', function () {
-    location.reload();
+    window.addEventListener('resize', function () {
+      location.reload();
+    });
   });
-});
 {% endjavascript %}

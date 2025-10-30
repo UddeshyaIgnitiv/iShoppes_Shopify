@@ -15,6 +15,98 @@
       "id": "subtext",
       "label": "Subtext",
       "default": "Sign up for our newsletter and promotions."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "SUBSCRIBE"
+    },
+    {
+      "type": "color",
+      "id": "background_start",
+      "label": "Background Gradient Start",
+      "default": "#343333"
+    },
+    {
+      "type": "color",
+      "id": "background_end",
+      "label": "Background Gradient End",
+      "default": "#060000"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext Color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input Border Color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_placeholder_color",
+      "label": "Placeholder Text Color",
+      "default": "#aaaaaa"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg",
+      "label": "Button Hover Background",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "button_shadow_color",
+      "label": "Button Glow/Shadow Color",
+      "default": "rgba(255,255,255,0.2)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Padding",
+      "default": 30,
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Padding",
+      "default": 30,
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px"
     }
   ],
   "presets": [
@@ -27,22 +119,24 @@
 
 {% style %}
   .newsletter-section {
-    background: linear-gradient(to right, #343333, #060000);
-    color: white;
+    background: linear-gradient(to right, {{ section.settings.background_start }}, {{ section.settings.background_end }});
+    color: {{ section.settings.heading_color }};
     text-align: center;
-    padding: 30px 20px;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
   }
 
   .newsletter-section h2 {
     font-size: 32px;
     margin-bottom: 10px;
-    color:#fff;
-    font-weight:500;
+    color: {{ section.settings.heading_color }};
+    font-weight: 500;
   }
 
   .newsletter-section p {
     margin-bottom: 40px;
     font-size: 16px;
+    color: {{ section.settings.subtext_color }};
   }
 
   .newsletter-section form {
@@ -54,34 +148,36 @@
   .newsletter-section input[type="email"] {
     background: transparent;
     border: none;
-    border-bottom: 2px solid #ccc;
-    color: white;
+    border-bottom: 2px solid {{ section.settings.input_border_color }};
+    color: {{ section.settings.input_text_color }};
     font-size: 16px;
     padding: 10px;
     width: 500px;
+    max-width: 90%;
     margin-bottom: 30px;
+    text-align: center;
   }
 
   .newsletter-section input[type="email"]::placeholder {
-    color: #aaa;
+    color: {{ section.settings.input_placeholder_color }};
   }
 
   .newsletter-section button {
     display: inline-block;
-    background-color: white;
-    color: black;
-    font-size:18px;
+    background-color: {{ section.settings.button_bg }};
+    color: {{ section.settings.button_text_color }};
+    font-size: 18px;
     padding: 15px 50px;
     font-weight: 500;
     border-radius: 50px;
-    text-decoration: none;
     border: 1px solid #2c2c2c;
-    transition: background 0.3s ease;
-    box-shadow: 0px 0px 0px 8px rgb(255 255 255 / 20%);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0px 0px 0px 8px {{ section.settings.button_shadow_color }};
   }
 
   .newsletter-section button:hover {
-    background-color: #e0e0e0;
+    background-color: {{ section.settings.button_hover_bg }};
     box-shadow: 0px 0px 0px 8px rgba(6, 0, 0, 0.1);
   }
 {% endstyle %}
@@ -93,6 +189,6 @@
     <input type="hidden" name="form_type" value="customer">
     <input type="hidden" name="utf8" value="✓">
     <input type="email" name="contact[email]" placeholder="Email" required>
-    <button type="submit">SUBSCRIBE</button>
+    <button type="submit">{{ section.settings.button_text }}</button>
   </form>
 </section>

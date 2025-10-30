@@ -41,7 +41,7 @@
         },
         {
           "type": "image_picker",
-          "id": "image",
+          "id": "banner_image",
           "label": "Product Image"
         },
         {
@@ -194,8 +194,8 @@
     <div class="special-offers-right">
       {% for block in section.blocks %}
         <a href="{{ block.settings.link }}" class="offer-card" {{ block.shopify_attributes }}>
-          {% if block.settings.image %}
-            <img src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+          {% if block.settings.banner_image %}
+            <img src="{{ block.settings.banner_image | image_url: width: 300 }}" alt="{{ block.settings.title | escape }}" loading="lazy">
           {% endif %}
           <div class="content">
             <div class="subtext">{{ block.settings.subtext }}</div>

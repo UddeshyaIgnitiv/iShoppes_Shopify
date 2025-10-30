@@ -219,12 +219,20 @@
             "brand_logo": "shopify://shop_images/macallan_logo_d79a2ecfde.webp",
             "link": "https://ishoppes.com/featured-brands/macallan"
           }
+        },
+        "logo_wBUFM7": {
+          "type": "logo",
+          "settings": {
+            "brand_logo": "shopify://shop_images/chanel_logo2_9760e7bdbd.jpg",
+            "link": "https://ishoppes.com/featured-brands/chanel"
+          }
         }
       },
       "block_order": [
         "logo_PUKrWD",
         "logo_Fdz7wy",
-        "logo_jkY9tb"
+        "logo_jkY9tb",
+        "logo_wBUFM7"
       ],
       "name": "Official Stores",
       "settings": {

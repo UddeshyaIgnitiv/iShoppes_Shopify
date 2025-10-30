@@ -81,9 +81,9 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#060000",
+          "background": "#ffffff",
           "foreground_heading": "#000000",
-          "foreground": "#000000cf",
+          "foreground": "#000000",
           "primary": "#000000cf",
           "primary_hover": "#000000",
           "border": "#0000000f",
@@ -237,7 +237,7 @@
       },
       "scheme-5": {
         "settings": {
-          "background": "#333333",
+          "background": "#060000",
           "foreground_heading": "#ffffff",
           "foreground": "#ffffff",
           "primary": "#ffffff",

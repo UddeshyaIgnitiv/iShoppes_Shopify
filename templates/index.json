@@ -250,9 +250,10 @@
         },
         "icon_tKhcYf": {
           "type": "icon",
+          "name": "Facebook icon",
           "settings": {
             "icon": "shopify://shop_images/fb-icon-m22.png",
-            "alt_text": "Social link",
+            "alt_text": "Facebook icon",
             "link": "https://www.facebook.com/isdutyfree/"
           }
         }

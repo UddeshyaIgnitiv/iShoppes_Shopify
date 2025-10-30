@@ -186,7 +186,7 @@
     </div>
     <div class="perfect-moments-right">
       {% if section.settings.right_image %}
-        <img src="{{ section.settings.right_image | image_url: width: 600 }}" alt="Perfect Moment Image">
+        <img src="{{ section.settings.right_image.src | image_url: width: 600 }}" alt="Perfect Moment Image">
       {% endif %}
     </div>
   </div>

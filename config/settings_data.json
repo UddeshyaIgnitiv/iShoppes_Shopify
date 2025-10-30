@@ -10,6 +10,7 @@
 {
   "current": {
     "logo": "shopify://shop_images/logo.png",
+    "favicon": "shopify://shop_images/favicon-16x16.png",
     "type_body_font": "inter_n4",
     "type_subheading_font": "inter_n5",
     "type_heading_font": "inter_n7",

@@ -50,16 +50,16 @@
       "default": true
     },
     {
-      "type": "select",
-      "id": "alignment",
-      "label": "Logo Alignment",
-      "default": "center",
-      "options": [
-        { "value": "flex-start", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "flex-end", "label": "Right" },
-        { "value": "space-between", "label": "Space Between" }
-      ]
+      "type": "url",
+      "id": "view_all_link",
+      "label": "\"View All\" Link URL",
+      "default": "/collections/all"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "\"View All\" Text",
+      "default": "View All →"
     }
   ],
   "blocks": [
@@ -94,21 +94,20 @@
   .official-stores {
     padding: 20px;
     background: {{ section.settings.background_color }};
-    text-align: left;
   }
 
   .official-stores h2 {
     font-size: 28px;
     font-weight: 500;
-    margin-bottom: 40px;
-    margin-left:20px;
+    margin-bottom: 30px;
+    margin-left: 10px;
     color: #0a1f33;
   }
 
   .official-stores-logos {
     display: flex;
     flex-wrap: wrap;
-    justify-content: {{ section.settings.alignment }};
+    justify-content: center;
     gap: {{ section.settings.logo_spacing }}px;
   }
 
@@ -131,14 +130,48 @@
     }
   {% endif %}
 
-  /* Responsive adjustments */
+  /* "View All" link */
+  .official-stores-view-all {
+    text-align: right;
+    margin-top: 15px;
+    margin-right: 10px;
+  }
+
+  .official-stores-view-all a {
+    color: #0a1f33;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  .official-stores-view-all a:hover {
+    text-decoration: underline;
+  }
+
+  /* ===== Mobile Slider ===== */
   @media screen and (max-width: 768px) {
     .official-stores-logos {
-      justify-content: center;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
       gap: 20px;
+      padding-bottom: 15px;
     }
+
+    .official-stores-logos::-webkit-scrollbar {
+      display: none;
+    }
+
+    .official-stores-logos a {
+      flex: 0 0 80%;
+      scroll-snap-align: center;
+    }
+
     .official-stores-logos img {
-      width: 150px;
+      width: 100%;
       height: auto;
     }
   }
@@ -149,6 +182,7 @@
     {% if section.settings.title != blank %}
       <h2>{{ section.settings.title }}</h2>
     {% endif %}
+
     <div class="official-stores-logos">
       {% for block in section.blocks %}
         {% if block.settings.brand_logo != blank %}
@@ -161,5 +195,29 @@
         {% endif %}
       {% endfor %}
     </div>
+
+    {% if section.settings.view_all_link != blank %}
+      <div class="official-stores-view-all">
+        <a href="{{ section.settings.view_all_link }}">{{ section.settings.view_all_text }}</a>
+      </div>
+    {% endif %}
   </div>
 </section>
+
+{% javascript %}
+  /* Auto-scroll effect on mobile */
+  document.addEventListener('DOMContentLoaded', function() {
+    const container = document.querySelector('.official-stores-logos');
+    if (window.innerWidth < 768 && container) {
+      let scrollAmount = 0;
+      const slideTimer = setInterval(function() {
+        container.scrollBy({ left: 250, behavior: 'smooth' });
+        scrollAmount += 250;
+        if (scrollAmount >= container.scrollWidth - container.clientWidth) {
+          container.scrollTo({ left: 0, behavior: 'smooth' });
+          scrollAmount = 0;
+        }
+      }, 2500);
+    }
+  });
+{% endjavascript %}

@@ -57,6 +57,7 @@
     "button_font_weight_secondary": "default",
     "cart_type": "drawer",
     "cart_price_font": "secondary",
+    "auto_open_cart_drawer": false,
     "show_cart_note": false,
     "show_add_discount_code": true,
     "drawer_drop_shadow": true,

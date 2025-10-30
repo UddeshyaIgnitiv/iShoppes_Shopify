@@ -45,7 +45,7 @@
             "type_font_primary_size": "0.875rem",
             "type_case_primary_link": "uppercase",
             "type_font_secondary_link": "body",
-            "type_case_secondary_link": "none",
+            "type_case_secondary_link": "uppercase",
             "type_font_tertiary_link": "body",
             "type_case_tertiary_link": "none",
             "navigation_bar": false,

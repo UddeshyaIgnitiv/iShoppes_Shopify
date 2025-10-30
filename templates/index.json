@@ -209,7 +209,8 @@
         "logo_Fdz7wy": {
           "type": "logo",
           "settings": {
-            "link": ""
+            "brand_logo": "shopify://shop_images/geln_logo_3069bc83eb.webp",
+            "link": "https://ishoppes.com/featured-brands/glenfiddich"
           }
         },
         "logo_jkY9tb": {

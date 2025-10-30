@@ -12,7 +12,7 @@
   @param {object} [section] - The section object.
 
   @example
-  {% render 'mega-menu-list', parent_link: link, id: 'MegaMenuList-1', grid_columns_count: 6, menu_content_type: 'featured_products' %}
+  {% render 'mega-menu-list', parent_link: link, id: 'MegaMenuList-1', grid_columns_count: 5 %}
 {%- enddoc -%}
 
 {% liquid
@@ -23,7 +23,7 @@
   assign open_column_span = false
   assign column_count = 0
   assign links_before_wrap = 10
-  assign max_menu_columns = grid_columns_count | default: 6
+  assign max_menu_columns = grid_columns_count | default: 5
   assign max_menu_columns_tablet = grid_columns_count_tablet | default: 4
 
   ##
@@ -138,6 +138,7 @@
           {{- link.title -}}
         </span>
       </a>
+      <hr />
       {% if link.links != blank %}
         <ul
           class="list-unstyled"
@@ -152,12 +153,21 @@
                 style="break-after: column;"
               {% endif %}
             >
+              {% assign boldTitles = 'View All Brands,View More Brands' | split: ',' %}
+              {% if childLink.title != 'untitled' %}
               <a
                 href="{{ childLink.url }}"
                 class="mega-menu__link"
               >
-                <span class="mega-menu__link-title">{{- childLink.title -}}</span>
+                <span class="mega-menu__link-title" 
+                  {% if boldTitles contains childLink.title %}
+                    style="font-weight: bold;"
+                  {% endif %}
+                >
+                  {{- childLink.title -}}
+                </span>
               </a>
+              {% endif %}
             </li>
           {% endfor %}
         </ul>
@@ -185,7 +195,7 @@
   {% endfor %}
 </ul>
 
-{% liquid
+{% comment %} {% liquid
   # decide how many grid columns are needed for the menu list, and how many columns are needed for the featured content
   # prioritize a minimum of 1 featured_collection (2 columns), and minimum 2 featured_products (2 columns)
   assign min_products = 2
@@ -247,7 +257,7 @@
     assign max_featured_collections_tablet = 1
     assign max_menu_columns_tablet = max_menu_columns_tablet | minus: max_collection_columns_tablet
   endif
-%}
+%} {% endcomment %}
 
 {% style %}
   [data-menu-grid-id="{{ id }}"] {
@@ -255,7 +265,7 @@
       --menu-columns-desktop: {{ grid_columns_count_collection_images }};
       --menu-columns-tablet: {{ grid_columns_count_tablet }};
     {% else %}
-      --menu-columns-desktop: {{ grid_columns_count }};
+      --menu-columns-desktop: 5;
       --menu-columns-tablet: {{ grid_columns_count_tablet }};
     {% endif %}
   }
@@ -265,12 +275,12 @@
       --menu-columns-desktop: {{ grid_columns_count_collection_images }};
       --menu-columns-tablet: {{ max_menu_columns_tablet }};
     {% else %}
-      --menu-columns-desktop: {{ max_menu_columns }};
+      --menu-columns-desktop: 5;
       --menu-columns-tablet: {{ max_menu_columns_tablet }};
     {% endif %}
   }
 {% endstyle %}
-
+{% comment %} 
 {% case menu_content_type %}
   {% when 'featured_products' %}
     {%- capture image_sizes -%}
@@ -345,4 +355,4 @@
         {% endfor %}
       </ul>
     </span>
-{% endcase %}
+{% endcase %} {% endcomment %}

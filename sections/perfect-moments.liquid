@@ -43,132 +43,141 @@
 {% endschema %}
 
 {% style %}
-  .perfect-moments-section {
-    background: #fff;
-    padding: 0px 20px;
-  }
+.perfect-moments-section {
+  background: #fff;
+  padding: 0px 20px;
+}
 
+.perfect-moments-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  min-height: 400px;
+}
+
+.perfect-moments-left,
+.perfect-moments-right {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.perfect-moments-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  background: linear-gradient(to right, rgba(52, 51, 51, 0.9), rgba(6, 0, 0, 0.9));
+  color: #fff;
+  position: relative;
+}
+
+.perfect-moments-contents {
+  position: absolute;
+  left: 98px;
+  top: 50%;
+  padding: 10px;
+  max-width: 400px;
+  transform: translateY(-50%);
+}
+
+.perfect-moments-left h2 {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.perfect-moments-left p {
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.perfect-moments-left a {
+  background: white;
+  color: black;
+  padding: 10px 40px;
+  font-weight: 500;
+  border-radius: 40px;
+  text-decoration: none;
+  transition: 0.3s;
+  width: fit-content;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.perfect-moments-left a:hover {
+  background: #e0e0e0;
+}
+
+.perfect-moments-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  padding: 20px;
+}
+
+.perfect-moments-right img {
+  max-width: 100%;
+  height: auto;
+}
+
+.shop-now-btn {
+  display: inline-block;
+  background-color: white;
+  color: black;
+  padding: 12px 50px;
+  font-weight: 500;
+  border-radius: 50px;
+  text-decoration: none;
+  border: 1px solid #2c2c2c;
+  transition: background 0.3s ease;
+  box-shadow: 0px 0px 0px 8px rgb(255 255 255 / 20%);
+}
+
+.shop-now-btn:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0px 0px 0px 8px rgba(6, 0, 0, 0.1);
+}
+
+/* Mobile responsive styles */
+@media screen and (max-width: 768px) {
   .perfect-moments-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    min-height: 400px;
+    flex-direction: column-reverse; /* Content below, image on top */
   }
 
   .perfect-moments-left,
   .perfect-moments-right {
-    flex: 0 0 50%;
-    max-width: 50%;
+    flex: 1 1 100%;
+    max-width: 100%;
   }
 
   .perfect-moments-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 40px;
-    background: linear-gradient(to right, rgba(52, 51, 51, 0.9), rgba(6, 0, 0, 0.9));
-    color: #fff;
-    position:relative;
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
   }
 
   .perfect-moments-contents {
-    position: absolute;
-    left: 98px;
-    top: 50%;
-    padding: 10px;
-    max-width: 400px;
-    transform: translateY(-50%);
-  }
-
-  .perfect-moments-left h2 {
-    font-size: 28px;
-    font-weight: 500;
-    margin-bottom: 20px;
-    color: #fff;
-  }
-
-  .perfect-moments-left p {
-    line-height: 1.6;
-    margin-bottom: 30px;
-  }
-
-  .perfect-moments-left a {
-    background: white;
-    color: black;
-    padding: 10px 40px;
-    font-weight: 500;
-    border-radius: 40px;
-    text-decoration: none;
-    transition: 0.3s;
-    width: fit-content;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
-
-  .perfect-moments-left a:hover {
-    background: #e0e0e0;
+    position: static;
+    transform: none;
+    max-width: 100%;
+    left: auto;
+    top: auto;
+    padding: 0;
   }
 
   .perfect-moments-right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-    padding: 20px;
+    padding: 10px;
   }
 
   .perfect-moments-right img {
+    width: 100%;
     max-width: 100%;
     height: auto;
+    object-fit: contain;
   }
-
-  .shop-now-btn {
-    display: inline-block;
-    background-color: white;
-    color: black;
-    padding: 12px 50px;
-    font-weight: 500;
-    border-radius: 50px;
-    text-decoration: none;
-    border: 1px solid #2c2c2c;
-    transition: background 0.3s ease;
-    box-shadow: 0px 0px 0px 8px rgb(255 255 255 / 20%);
-  }
-
-  .shop-now-btn:hover {
-    background-color: #e0e0e0;
-    box-shadow: 0px 0px 0px 8px rgba(6, 0, 0, 0.1);
-  }
-
-  /* Existing mobile styles */
-  @media screen and (max-width: 768px) {
-    .perfect-moments-wrapper {
-      flex-direction: column;
-    }
-
-    .perfect-moments-left,
-    .perfect-moments-right {
-      flex: 1 1 100%;
-      max-width: 100%;
-    }
-
-    .perfect-moments-left {
-      padding: 30px 20px;
-      text-align: center;
-    }
-
-    /* Responsive improvements for right image */
-    .perfect-moments-right {
-      padding: 10px;
-    }
-
-    .perfect-moments-right img {
-      width: 100%;
-      max-width: 100%;
-      height: auto;
-      object-fit: contain;
-    }
-  }
+}
 {% endstyle %}
 
 <section class="perfect-moments-section">

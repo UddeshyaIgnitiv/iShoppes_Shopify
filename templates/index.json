@@ -237,13 +237,13 @@
       "name": "Official Stores",
       "settings": {
         "title": "OFFICIAL STORES",
+        "view_all_link": "https://ishoppes.com/all-brands",
         "background_color": "#ffffff",
         "logo_width": 310,
         "logo_height": 180,
         "logo_spacing": 40,
         "hover_effect": false,
-        "view_all_link": "https://ishoppes.com/all-brands",
-        "view_all_text": "View All →"
+        "alignment": "center"
       }
     },
     "newsletter_section": {

@@ -163,7 +163,6 @@
           "settings": {
             "subtext": "LIMITED TIME OFFER",
             "title": "Product Promo Title",
-            "image": "shopify://shop_images/Main_5127218a-8f6c-498f-b489-09242c0fab0a.jpg",
             "link": ""
           }
         },
@@ -172,7 +171,6 @@
           "settings": {
             "subtext": "LIMITED TIME OFFER",
             "title": "Product Promo Title",
-            "image": "shopify://shop_images/Main_5127218a-8f6c-498f-b489-09242c0fab0a.jpg",
             "link": ""
           }
         }
@@ -195,8 +193,7 @@
         "heading": "PERFECT MOMENTS ARE TAILOR MADE",
         "description": "Château Magnol is the heart of Barton & Guestier. The estate dates back to the 17th century and is known for producing high-quality wines that reflect the unique terroir of the region. “Château Magnol is the epitome of elegance, silky and exquisite”. Laurent Prada, B&G Head Winemaker.",
         "button_label": "SHOP NOW",
-        "button_link": "#",
-        "right_image": "shopify://shop_images/perfect-moment.jpg"
+        "button_link": "#"
       }
     },
     "official_stores": {
@@ -205,21 +202,18 @@
         "logo_PUKrWD": {
           "type": "logo",
           "settings": {
-            "brand_logo": "shopify://shop_images/dior_logo.webp",
             "link": ""
           }
         },
         "logo_Fdz7wy": {
           "type": "logo",
           "settings": {
-            "brand_logo": "shopify://shop_images/geln_logo.webp",
             "link": ""
           }
         },
         "logo_jkY9tb": {
           "type": "logo",
           "settings": {
-            "brand_logo": "shopify://shop_images/macallan_logo.webp",
             "link": ""
           }
         }
@@ -244,6 +238,19 @@
     },
     "social_section": {
       "type": "social-section",
+      "blocks": {
+        "icon_UNityz": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/fb-icon-m22.png",
+            "alt_text": "Social link",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "icon_UNityz"
+      ],
       "name": "Social Section",
       "settings": {}
     }

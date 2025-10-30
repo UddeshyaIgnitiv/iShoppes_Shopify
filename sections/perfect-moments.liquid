@@ -52,7 +52,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    min-height: 450px;
+    min-height: 400px;
   }
 
   .perfect-moments-left,
@@ -70,6 +70,7 @@
     color: #fff;
     position:relative;
   }
+
   .perfect-moments-contents {
     position: absolute;
     left: 98px;
@@ -139,6 +140,7 @@
     box-shadow: 0px 0px 0px 8px rgba(6, 0, 0, 0.1);
   }
 
+  /* Existing mobile styles */
   @media screen and (max-width: 768px) {
     .perfect-moments-wrapper {
       flex-direction: column;
@@ -153,6 +155,18 @@
     .perfect-moments-left {
       padding: 30px 20px;
       text-align: center;
+    }
+
+    /* Responsive improvements for right image */
+    .perfect-moments-right {
+      padding: 10px;
+    }
+
+    .perfect-moments-right img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
     }
   }
 {% endstyle %}

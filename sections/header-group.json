@@ -51,8 +51,8 @@
             "navigation_bar": true,
             "color_scheme_navigation_bar": "",
             "drawer_accordion": true,
-            "drawer_accordion_expand_first": true,
-            "drawer_dividers": true
+            "drawer_accordion_expand_first": false,
+            "drawer_dividers": false
           },
           "blocks": {}
         }

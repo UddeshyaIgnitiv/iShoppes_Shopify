@@ -241,9 +241,10 @@
       "blocks": {
         "icon_UNityz": {
           "type": "icon",
+          "name": "Instagram icon",
           "settings": {
             "icon": "shopify://shop_images/Insta-icon-8Tg.png",
-            "alt_text": "Social link",
+            "alt_text": "Instagram icon",
             "link": "https://www.instagram.com/isdutyfree"
           }
         },

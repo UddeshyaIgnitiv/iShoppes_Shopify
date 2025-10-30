@@ -238,11 +238,11 @@
       "settings": {
         "title": "OFFICIAL STORES",
         "background_color": "#ffffff",
-        "logo_width": 200,
-        "logo_height": 120,
+        "logo_width": 310,
+        "logo_height": 180,
         "logo_spacing": 40,
-        "hover_effect": true,
-        "alignment": "center"
+        "hover_effect": false,
+        "alignment": "flex-start"
       }
     },
     "newsletter_section": {

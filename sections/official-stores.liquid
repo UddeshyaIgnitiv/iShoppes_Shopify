@@ -93,27 +93,27 @@
   color: #0a1f33;
 }
 
-/* Logos container */
+/* --- Logo container --- */
 .official-stores-logos {
   display: flex;
   flex-wrap: wrap;
   justify-content: {{ section.settings.alignment }};
-  align-items: center; /* Vertically center */
+  align-items: center;
   gap: {{ section.settings.logo_spacing }}px;
 }
 
 .official-stores-logos a {
-  display: flex;
-  align-items: center; /* Center vertically inside link */
+  display: flex !important;
+  align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  height: 150px; /* Fixed equal height */
+  height: 150px !important;
+  box-sizing: border-box;
 }
 
 .official-stores-logos img {
-  height: 100%;
+  max-height: 100%;
   width: auto;
-  max-width: 200px; /* keep good proportions */
   object-fit: contain;
   transition: all 0.3s ease;
 }
@@ -125,7 +125,13 @@
 }
 {% endif %}
 
-/* Flickity dots container */
+/* Ensure Flickity slides align vertically */
+.flickity-slider {
+  display: flex;
+  align-items: center;
+}
+
+/* --- Dots container --- */
 .flickity-page-dots-container {
   display: flex;
   align-items: center;
@@ -140,16 +146,20 @@
   margin: 0 20px 10px 20px;
 }
 
+/* Dot size & color */
 .flickity-page-dots li {
-  width: 12px;
-  height: 12px;
-  margin: 0 5px;
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 50%;
+  background: #bbb;
+  margin: 0 4px !important;
 }
 
-.flickity-page-dots .is-selected {
-  background: #333;
+.flickity-page-dots li.is-selected {
+  background: #0a1f33;
 }
 
+/* View all link */
 .view-all-link {
   font-weight: 500;
   font-size: 16px;
@@ -168,23 +178,23 @@
   fill: none;
 }
 
-/* Mobile styles */
+/* --- Mobile styles --- */
 @media screen and (max-width: 768px) {
   .official-stores-logos {
     flex-wrap: nowrap;
     overflow: hidden;
     gap: 0;
-    height:150px!important;
+    height: 150px !important;
   }
 
   .official-stores-logos a {
     flex: 0 0 auto;
+    height: 150px !important;
     margin-right: 10px;
-    height: 150px; /* Keep height consistent */
   }
 
   .official-stores-logos img {
-    height: 100% !important;
+    max-height: 100% !important;
     width: auto !important;
   }
 
@@ -192,10 +202,11 @@
     display: flex;
   }
 
-  .flickity-page-dots .dot {
-    width: 20px!important;
-    height: 20px!important;
-    margin: 0 6px!important;
+  /* Larger dots for mobile */
+  .flickity-page-dots li {
+    width: 20px !important;
+    height: 20px !important;
+    margin: 0 6px !important;
   }
 }
 {% endstyle %}
@@ -206,6 +217,7 @@
       <h2>{{ section.settings.title }}</h2>
     {% endif %}
 
+    <!-- Mobile: dots left, view all right -->
     <div class="mobile-controls">
       <div class="flickity-page-dots-container"></div>
       <a href="{{ section.settings.view_all_link }}" class="view-all-link" target="_blank" rel="noopener">
@@ -246,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
       freeScroll: true,
       friction: 0.1,
       selectedAttraction: 0.02,
-      adaptiveHeight: true
+      adaptiveHeight: false
     });
 
     var dots = logosContainer.querySelector('.flickity-page-dots');

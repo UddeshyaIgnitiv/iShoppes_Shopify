@@ -93,7 +93,7 @@
   color: #0a1f33;
 }
 
-/* --- Logo container --- */
+/* --- Logos container --- */
 .official-stores-logos {
   display: flex;
   flex-wrap: wrap;
@@ -112,9 +112,10 @@
 }
 
 .official-stores-logos img {
-  max-height: 100%;
-  width: auto;
+  height: 100% !important;
+  width: auto !important;
   object-fit: contain;
+  max-width: 200px !important;
   transition: all 0.3s ease;
 }
 
@@ -125,19 +126,19 @@
 }
 {% endif %}
 
-/* Ensure Flickity slides align vertically */
+/* --- Flickity fixes --- */
 .flickity-slider {
-  display: flex;
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
 }
 
 /* --- Dots container --- */
 .flickity-page-dots-container {
-  display: flex;
+  display: none; /* hidden on desktop */
   align-items: center;
 }
 
-/* Mobile controls */
+/* --- Mobile controls --- */
 .mobile-controls {
   display: none;
   width: 100%;
@@ -146,20 +147,21 @@
   margin: 0 20px 10px 20px;
 }
 
-/* Dot size & color */
+/* --- Flickity dots styling --- */
 .flickity-page-dots li {
   width: 14px !important;
   height: 14px !important;
-  border-radius: 50%;
-  background: #bbb;
-  margin: 0 4px !important;
+  border-radius: 50% !important;
+  background: #bbb !important;
+  margin: 0 5px !important;
+  opacity: 1 !important;
 }
 
 .flickity-page-dots li.is-selected {
-  background: #0a1f33;
+  background: #0a1f33 !important;
 }
 
-/* View all link */
+/* --- View all link --- */
 .view-all-link {
   font-weight: 500;
   font-size: 16px;
@@ -181,25 +183,27 @@
 /* --- Mobile styles --- */
 @media screen and (max-width: 768px) {
   .official-stores-logos {
-    flex-wrap: nowrap;
+    flex-wrap: nowrap !important;
     overflow: hidden;
-    gap: 0;
+    gap: 0 !important;
     height: 150px !important;
   }
 
   .official-stores-logos a {
-    flex: 0 0 auto;
+    flex: 0 0 auto !important;
+    margin-right: 10px !important;
     height: 150px !important;
-    margin-right: 10px;
   }
 
   .official-stores-logos img {
-    max-height: 100% !important;
+    height: 100% !important;
     width: auto !important;
   }
 
-  .mobile-controls {
-    display: flex;
+  /* Show dots and view all only on mobile */
+  .mobile-controls,
+  .flickity-page-dots-container {
+    display: flex !important;
   }
 
   /* Larger dots for mobile */
@@ -217,7 +221,7 @@
       <h2>{{ section.settings.title }}</h2>
     {% endif %}
 
-    <!-- Mobile: dots left, view all right -->
+    <!-- Mobile controls (dots + view all) -->
     <div class="mobile-controls">
       <div class="flickity-page-dots-container"></div>
       <a href="{{ section.settings.view_all_link }}" class="view-all-link" target="_blank" rel="noopener">

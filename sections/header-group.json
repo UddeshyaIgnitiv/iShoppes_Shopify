@@ -38,7 +38,7 @@
             "featured_collections_aspect_ratio": "16 / 9",
             "image_border_radius": 0,
             "product_title_case": "default",
-            "collection_title_case": "default",
+            "collection_title_case": "uppercase",
             "color_scheme": "scheme-1",
             "menu_font_style": "inverse",
             "type_font_primary_link": "body",

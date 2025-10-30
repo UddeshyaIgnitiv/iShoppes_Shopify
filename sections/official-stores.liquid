@@ -11,28 +11,16 @@
       "default": "OFFICIAL STORES"
     },
     {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View All Link",
+      "default": "#"
+    },
+    {
       "type": "color",
       "id": "background_color",
       "label": "Background Color",
       "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "logo_width",
-      "label": "Logo Width (px)",
-      "min": 50,
-      "max": 400,
-      "step": 10,
-      "default": 200
-    },
-    {
-      "type": "range",
-      "id": "logo_height",
-      "label": "Logo Height (px)",
-      "min": 50,
-      "max": 300,
-      "step": 10,
-      "default": 120
     },
     {
       "type": "range",
@@ -50,16 +38,16 @@
       "default": true
     },
     {
-      "type": "url",
-      "id": "view_all_link",
-      "label": "\"View All\" Link URL",
-      "default": "/collections/all"
-    },
-    {
-      "type": "text",
-      "id": "view_all_text",
-      "label": "\"View All\" Text",
-      "default": "View All →"
+      "type": "select",
+      "id": "alignment",
+      "label": "Logo Alignment",
+      "default": "center",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" },
+        { "value": "space-between", "label": "Space Between" }
+      ]
     }
   ],
   "blocks": [
@@ -91,96 +79,119 @@
 {% endschema %}
 
 {% style %}
-  .official-stores {
-    padding: 20px;
-    background: {{ section.settings.background_color }};
-  }
+.official-stores {
+  padding: 20px;
+  background: {{ section.settings.background_color }};
+  text-align: left;
+}
 
-  .official-stores h2 {
-    font-size: 28px;
-    font-weight: 500;
-    margin-bottom: 30px;
-    margin-left: 10px;
-    color: #0a1f33;
-  }
+.official-stores h2 {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 30px;
+  margin-left: 20px;
+  color: #0a1f33;
+}
 
-  /* Desktop grid */
+/* Logos container */
+.official-stores-logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: {{ section.settings.alignment }};
+  align-items: center; /* Vertically center */
+  gap: {{ section.settings.logo_spacing }}px;
+}
+
+.official-stores-logos a {
+  display: flex;
+  align-items: center; /* Center vertically inside link */
+  justify-content: center;
+  transition: all 0.3s ease;
+  height: 150px; /* Fixed equal height */
+}
+
+.official-stores-logos img {
+  height: 100%;
+  width: auto;
+  max-width: 200px; /* keep good proportions */
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+{% if section.settings.hover_effect %}
+.official-stores-logos a:hover img {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+{% endif %}
+
+/* Flickity dots container */
+.flickity-page-dots-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Mobile controls */
+.mobile-controls {
+  display: none;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 20px 10px 20px;
+}
+
+.flickity-page-dots li {
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+}
+
+.flickity-page-dots .is-selected {
+  background: #333;
+}
+
+.view-all-link {
+  font-weight: 500;
+  font-size: 16px;
+  color: #0a1f33;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.view-all-link svg {
+  margin-left: 5px;
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* Mobile styles */
+@media screen and (max-width: 768px) {
   .official-stores-logos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: {{ section.settings.logo_spacing }}px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    gap: 0;
   }
 
   .official-stores-logos a {
-    display: inline-block;
-    transition: all 0.3s ease;
+    flex: 0 0 auto;
+    margin-right: 10px;
+    height: 150px; /* Keep height consistent */
   }
 
   .official-stores-logos img {
-    width: {{ section.settings.logo_width }}px;
-    height: {{ section.settings.logo_height }}px;
-    object-fit: contain;
-    transition: all 0.3s ease;
+    height: 100% !important;
+    width: auto !important;
   }
 
-  {% if section.settings.hover_effect %}
-    .official-stores-logos a:hover img {
-      transform: scale(1.05);
-      opacity: 0.9;
-    }
-  {% endif %}
-
-  /* View All link */
-  .official-stores-view-all {
-    text-align: right;
-    margin-top: 15px;
-    margin-right: 10px;
+  .mobile-controls {
+    display: flex;
   }
-
-  .official-stores-view-all a {
-    color: #0a1f33;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    transition: all 0.3s ease;
-  }
-
-  .official-stores-view-all a:hover {
-    text-decoration: underline;
-  }
-
-  /* Flickity overrides for slider */
-  .flickity-enabled {
-    outline: none;
-  }
-
-  /* Mobile slider styles */
-  @media screen and (max-width: 768px) {
-    .official-stores-logos {
-      display: block; /* Flickity changes this */
-    }
-
-    .official-stores-logos .carousel-cell {
-      width: 80vw !important; /* show one large logo */
-      margin-right: 10px;
-    }
-
-    .official-stores-logos img {
-      width: 100% !important;
-      height: auto !important;
-      max-height: {{ section.settings.logo_height }}px;
-      object-fit: contain;
-    }
-  }
+}
 {% endstyle %}
-
-<!-- Flickity CSS CDN -->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/flickity@2/dist/flickity.min.css"
-/>
 
 <section class="official-stores">
   <div class="page-width">
@@ -188,67 +199,57 @@
       <h2>{{ section.settings.title }}</h2>
     {% endif %}
 
+    <div class="mobile-controls">
+      <div class="flickity-page-dots-container"></div>
+      <a href="{{ section.settings.view_all_link }}" class="view-all-link" target="_blank" rel="noopener">
+        View All
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M9 18l6-6-6-6"></path>
+        </svg>
+      </a>
+    </div>
+
     <div class="official-stores-logos">
       {% for block in section.blocks %}
         {% if block.settings.brand_logo != blank %}
-          <a
-            href="{{ block.settings.link | default: '#' }}"
-            target="_blank"
-            {{ block.shopify_attributes }}
-            class="carousel-cell"
-          >
-            <img
-              src="{{ block.settings.brand_logo | image_url: width: section.settings.logo_width }}"
+          <a href="{{ block.settings.link | default: '#' }}" target="_blank" {{ block.shopify_attributes }}>
+            <img 
+              src="{{ block.settings.brand_logo | image_url: width: 300 }}" 
               alt="Brand Logo"
-              loading="lazy"
-            />
+              loading="lazy">
           </a>
         {% endif %}
       {% endfor %}
     </div>
-
-    {% if section.settings.view_all_link != blank %}
-      <div class="official-stores-view-all">
-        <a href="{{ section.settings.view_all_link }}">{{ section.settings.view_all_text }}</a>
-      </div>
-    {% endif %}
   </div>
 </section>
 
-<!-- Flickity JS CDN -->
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-
 {% javascript %}
-  document.addEventListener('DOMContentLoaded', function () {
-    var logosContainer = document.querySelector('.official-stores-logos');
+document.addEventListener('DOMContentLoaded', function () {
+  var logosContainer = document.querySelector('.official-stores-logos');
+  var dotsContainer = document.querySelector('.flickity-page-dots-container');
 
-    function initFlickity() {
-      if (window.innerWidth <= 768 && logosContainer) {
-        if (!logosContainer.classList.contains('flickity-enabled')) {
-          new Flickity(logosContainer, {
-            cellAlign: 'center',
-            contain: true,
-            pageDots: true,
-            prevNextButtons: false,
-            autoPlay: 2500,
-            wrapAround: true,
-            pauseAutoPlayOnHover: true,
-            adaptiveHeight: true,
-            draggable: true,
-            selectedAttraction: 0.025,
-            friction: 0.3,
-          });
-        }
-      }
-    }
-
-    initFlickity();
-
-    window.addEventListener('resize', function () {
-      // re-initialize or destroy Flickity as needed on resize
-      // (optional advanced handling could be added here)
-      // For simplicity, reload page on resize for correct behavior:
-      location.reload();
+  if (window.innerWidth <= 768 && logosContainer) {
+    var flkty = new Flickity(logosContainer, {
+      cellAlign: 'left',
+      contain: true,
+      pageDots: true,
+      prevNextButtons: false,
+      wrapAround: true,
+      freeScroll: true,
+      friction: 0.1,
+      selectedAttraction: 0.02,
+      adaptiveHeight: true
     });
+
+    var dots = logosContainer.querySelector('.flickity-page-dots');
+    if (dots && dotsContainer) {
+      dotsContainer.appendChild(dots);
+    }
+  }
+
+  window.addEventListener('resize', function () {
+    location.reload();
   });
+});
 {% endjavascript %}

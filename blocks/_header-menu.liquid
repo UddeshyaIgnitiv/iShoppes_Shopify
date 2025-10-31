@@ -410,6 +410,21 @@
   }
 
   .mega-menu__link {
+    font-family: var(--menu-parent-font-family);
+    font-style: var(--menu-parent-font-style);
+    font-weight: var(--menu-parent-font-weight);
+    font-size: var(--menu-parent-font-size);
+    line-height: var(--menu-parent-font-line-height);
+    text-transform: var(--menu-parent-font-case);
+    color: var(--menu-parent-font-color);
+
+    &:hover {
+      color: var(--menu-parent-active-font-color);
+    }
+  }
+
+  .mega-menu__link--parent {
+    cursor: default;
     font-family: var(--menu-child-font-family);
     font-style: var(--menu-child-font-style);
     font-weight: var(--menu-child-font-weight);
@@ -425,20 +440,6 @@
 
     &:hover {
       color: var(--menu-child-active-font-color);
-    }
-  }
-
-  .mega-menu__link--parent {
-    font-family: var(--menu-parent-font-family);
-    font-style: var(--menu-parent-font-style);
-    font-weight: var(--menu-parent-font-weight);
-    font-size: var(--menu-parent-font-size);
-    line-height: var(--menu-parent-font-line-height);
-    text-transform: var(--menu-parent-font-case);
-    color: var(--menu-parent-font-color);
-
-    &:hover {
-      color: var(--menu-parent-active-font-color);
     }
   }
 

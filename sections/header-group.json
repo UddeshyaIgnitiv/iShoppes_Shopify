@@ -48,7 +48,7 @@
             "type_case_secondary_link": "uppercase",
             "type_font_tertiary_link": "body",
             "type_case_tertiary_link": "uppercase",
-            "navigation_bar": true,
+            "navigation_bar": false,
             "color_scheme_navigation_bar": "",
             "drawer_accordion": false,
             "drawer_accordion_expand_first": false,

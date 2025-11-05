@@ -1,0 +1,355 @@
+<div class="page-width">
+  <div class="onhow-wishlist-container">
+    <div class="onhow-wishlist-header">
+      <h1 class="onhow-wishlist-page-title">{{ page.title }}</h1>
+    </div>
+    
+    <div class="onhow-wishlist-empty" style="display: none;">
+      <p>Your wishlist is currently empty.</p>
+      <a href="/collections/all" class="button button--primary">Continue Shopping</a>
+    </div>
+    
+    <div class="onhow-wishlist-grid"></div>
+  </div>
+</div>
+
+<style>
+  .onhow-wishlist-container {
+    margin: 30px 0;
+  }
+  
+  .onhow-wishlist-header {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  
+  .onhow-wishlist-page-title {
+    margin: 0;
+    font-size: calc(var(--font-heading-scale) * 2.4rem);
+  }
+  
+  .onhow-wishlist-empty {
+    text-align: center;
+    padding: 40px 0;
+  }
+  
+  .onhow-wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+  }
+  
+  @media screen and (min-width: 550px) {
+    .onhow-wishlist-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media screen and (min-width: 750px) {
+    .onhow-wishlist-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media screen and (min-width: 990px) {
+    .onhow-wishlist-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  .onhow-wishlist-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .onhow-wishlist-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .onhow-wishlist-image {
+    aspect-ratio: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .onhow-wishlist-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .onhow-wishlist-item:hover .onhow-wishlist-image img {
+    transform: scale(1.05);
+  }
+  
+  .onhow-wishlist-content {
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    order: 2;
+  }
+  
+  .onhow-wishlist-title {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+  }
+  
+  .onhow-wishlist-title a {
+    text-decoration: none;
+    color: inherit;
+    transition: text-decoration 0.3s ease;
+  }
+  
+  .onhow-wishlist-title a:hover {
+    text-decoration: underline;
+  }
+  
+  .onhow-wishlist-price {
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  .onhow-wishlist-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .onhow-wishlist-view {
+    flex: 1;
+    padding: 8px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  
+  .onhow-wishlist-view:hover {
+    background: #333;
+    color: #fff;
+  }
+  
+  .onhow-wishlist-remove {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    z-index: 5;
+  }
+  
+  .onhow-wishlist-remove:hover {
+    background: rgba(255,255,255,1);
+  }
+  
+  .onhow-wishlist-remove svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .onhow-wishlist-add-to-cart {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    z-index: 5;
+    padding: 0;
+  }
+  
+  .onhow-wishlist-add-to-cart:hover {
+    background: rgba(255,255,255,1);
+  }
+  
+  .onhow-wishlist-add-to-cart svg {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .onhow-wishlist-add-to-cart.loading {
+    pointer-events: none;
+  }
+  
+  .onhow-wishlist-add-to-cart .loading-overlay__spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .onhow-wishlist-add-to-cart.loading .loading-overlay__spinner {
+    display: block;
+  }
+  
+  .onhow-wishlist-add-to-cart.loading svg.icon-cart {
+    display: none;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const wishlistGrid = document.querySelector('.onhow-wishlist-grid');
+    const emptyMessage = document.querySelector('.onhow-wishlist-empty');
+    
+    function renderWishlist() {
+      const storageKey = 'onhow-wishlist';
+      const wishlistItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      
+      if (wishlistItems.length === 0) {
+        wishlistGrid.style.display = 'none';
+        emptyMessage.style.display = 'block';
+        return;
+      }
+      
+      wishlistGrid.style.display = 'grid';
+      emptyMessage.style.display = 'none';
+      
+      const itemsHTML = wishlistItems.map(item => `
+        <div class="onhow-wishlist-item" data-product-title="${item.title}" data-product-url="${item.url}">
+          <button class="onhow-wishlist-add-to-cart" aria-label="Add to cart">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="icon icon-cart" viewBox="0 0 40 40">
+              <path fill="currentColor" fill-rule="evenodd" d="M20.5 6.5a4.75 4.75 0 0 0-4.75 4.75v.56h-3.16l-.77 11.6a5 5 0 0 0 4.99 5.34h7.38a5 5 0 0 0 4.99-5.33l-.77-11.6h-3.16v-.57A4.75 4.75 0 0 0 20.5 6.5m3.75 5.31v-.56a3.75 3.75 0 1 0-7.5 0v.56zm-7.5 1h7.5v.56a3.75 3.75 0 1 1-7.5 0zm-1 0v.56a4.75 4.75 0 1 0 9.5 0v-.56h2.22l.71 10.67a4 4 0 0 1-3.99 4.27h-7.38a4 4 0 0 1-4-4.27l.72-10.67z"/>
+            </svg>
+            <div class="loading-overlay__spinner">
+              <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+              </svg>
+            </div>
+          </button>
+          
+          <button class="onhow-wishlist-remove" aria-label="Remove from wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"></path>
+            </svg>
+          </button>
+          
+          <a href="${item.url}" class="onhow-wishlist-image">
+            <img src="${item.image}" alt="${item.title}">
+          </a>
+          <div class="onhow-wishlist-content">
+            <h3 class="onhow-wishlist-title">
+              <a href="${item.url}">${item.title}</a>
+            </h3>
+            <p class="onhow-wishlist-price">${item.price}</p>
+            <div class="onhow-wishlist-actions">
+              <a href="${item.url}" class="onhow-wishlist-view">View Product</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      wishlistGrid.innerHTML = itemsHTML;
+      
+      document.querySelectorAll('.onhow-wishlist-remove').forEach(button => {
+        button.addEventListener('click', function() {
+          const item = this.closest('.onhow-wishlist-item');
+          const productTitle = item.dataset.productTitle;
+          removeFromWishlist(productTitle);
+        });
+      });
+      
+      document.querySelectorAll('.onhow-wishlist-add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+          const item = this.closest('.onhow-wishlist-item');
+          const productUrl = item.dataset.productUrl;
+          addToCart(this, productUrl);
+        });
+      });
+    }
+    
+    function removeFromWishlist(productTitle) {
+      const storageKey = 'onhow-wishlist';
+      let wishlistItems = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      
+      wishlistItems = wishlistItems.filter(item => item.title !== productTitle);
+      localStorage.setItem(storageKey, JSON.stringify(wishlistItems));
+      
+      renderWishlist();
+      
+      if (window.onhowWishlist && typeof window.onhowWishlist.updateWishlistCount === 'function') {
+        window.onhowWishlist.updateWishlistCount();
+      }
+    }
+    
+    function addToCart(button, productUrl) {
+      button.classList.add('loading');
+      button.setAttribute('aria-disabled', true);
+      
+      fetch(productUrl)
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          
+          const form = doc.querySelector('form[action="/cart/add"]');
+          if (!form) throw new Error('Add to cart form not found');
+          
+          const formData = new FormData(form);
+          
+          return fetch('/cart/add.js', {
+            method: 'POST',
+            body: formData
+          });
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (typeof window.fetchCartUpdates === 'function') {
+            window.fetchCartUpdates();
+          } else {
+            const cartDrawer = document.querySelector('cart-drawer');
+            if (cartDrawer) cartDrawer.open();
+            
+            const cartNotification = document.querySelector('cart-notification');
+            if (cartNotification) cartNotification.renderContents(data);
+          }
+          
+          button.classList.add('success');
+          setTimeout(() => {
+            button.classList.remove('success');
+          }, 1500);
+        })
+        .catch(error => {
+          console.error('Error adding product to cart:', error);
+          button.classList.add('error');
+          setTimeout(() => {
+            button.classList.remove('error');
+          }, 1500);
+        })
+        .finally(() => {
+          button.classList.remove('loading');
+          button.removeAttribute('aria-disabled');
+        });
+    }
+    
+    renderWishlist();
+  });
+</script>

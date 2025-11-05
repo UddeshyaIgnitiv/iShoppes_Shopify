@@ -11,7 +11,7 @@
     {% render 'account-popover' %}
     {% render 'account-drawer' %}
   {% endif %}
-
+  <a href="/pages/wishlist" class="wishlist-button">♡</a>
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
     {% render 'cart-drawer' %}
   {% else %}

@@ -4268,12 +4268,11 @@ text-component {
   background-color: #000000 !important;
   color: #ffffff !important;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0rem;
   cursor: pointer;
   font-weight: 500;
   font-size: 1.6rem;
   min-height: auto;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
   border-radius: 0.5rem;
   text-decoration: none;
   display: inline-flex;
@@ -4282,8 +4281,8 @@ text-component {
 }
 
 .wishlist-button svg {
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5px;
@@ -4293,11 +4292,6 @@ text-component {
   fill: #ffffff;
 }
 
-.wishlist-button:hover {
-  background-color: #333333 !important;
-  color: #ffffff !important;
-  transform: translateY(-2px);
-}
 
 .header-country-selector {
   display: flex;

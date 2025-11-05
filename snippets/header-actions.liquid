@@ -7,11 +7,27 @@
 <header-actions
   {{- block.shopify_attributes -}}
 >
+  <div class="header-dropdown-Fgw">
+    <button type="button" class="header-dropbtn-HOT">About Us</button>
+    <div class="header-dropdown_content-GQz">
+      <a href="/pages/about-us">About Us</a>
+      <a href="/pages/location">Locations</a>
+    </div>
+  </div>
+  <a href="/pages/faq" class="header__icon header-faq link focus-inset">
+    {% render 'icon-faq' %}
+    <span class="visually-hidden">FAQ</span>
+  </a>
   {% if shop.customer_accounts_enabled %}
     {% render 'account-popover' %}
     {% render 'account-drawer' %}
   {% endif %}
-  <a href="/pages/wishlist" class="wishlist-button">♡</a>
+  <a href="/pages/wishlist" class="header-actions__action wishlist-button">
+    <svg class="icon-wishlist" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" 
+            stroke-width="1.5" d="M10 16.875S3.125 12.5 3.125 7.5a3.438 3.438 0 0 1 6.25-1.992A3.438 3.438 0 0 1 15.625 7.5c0 5-6.875 9.375-6.875 9.375z"/>
+    </svg>
+  </a>
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
     {% render 'cart-drawer' %}
   {% else %}
@@ -200,6 +216,7 @@
 
   .header__column--right header-actions {
     margin-inline-start: calc(var(--gap-md) * -1);
+    gap: 5rem;
   }
 
   .header-actions__action {
@@ -266,5 +283,72 @@
 
   .cart-bubble--animating .cart-bubble__text {
     animation: cartBubbleSlideIn var(--animation-speed) var(--animation-easing);
+  }
+  .header-dropdown-Fgw {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    text-transform: uppercase;
+  }
+
+  /* Main button */
+  .header-dropbtn-HOT {
+    background: transparent;
+    color: white;
+    font-weight: 500;
+    padding: 8px 15px;
+    font-size: 16px;
+    border: 2px solid white;
+    border-radius: 999px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  /* Dropdown content */
+  .header-dropdown_content-GQz {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    padding: 0;
+    z-index: 1;
+    border-radius: 12px;
+    top: 100%;
+    left: 0;
+  }
+
+  /* Triangle pointer */
+  .header-dropdown_content-GQz::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 24px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+  }
+
+  /* Links inside dropdown */
+  .header-dropdown_content-GQz a {
+    color: black;
+    padding: 10px 20px;
+    display: block;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .header-dropdown_content-GQz a:hover {
+    background-color: #f0f0f0;
+    border-radius: 12px;
+  }
+
+  /* Show dropdown on hover */
+  .header-dropdown-Fgw:hover .header-dropdown_content-GQz {
+    display: block;
+  }
+  .header-faq {
+    margin-top: 10px;
   }
 {% endstylesheet %}

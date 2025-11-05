@@ -1,5 +1,5 @@
 {%- doc -%}
-  Renders a contact form with name, email, phone, and comment fields.
+  Renders a contact form with name, email, phone, subject, and message fields.
 
   @param {object} settings - Block settings, required for the 'spacing-style' and 'size-style' snippets.
   @param {string} submit_button - HTML for the submit button, rendered via a `content_for` block.
@@ -104,6 +104,18 @@
       pattern="[0-9\-]*"
       value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
       placeholder="{{ 'blocks.contact_form.phone' | t }}"
+    >
+
+    <label class="visually-hidden" for="ContactForm-subject">
+      {{ 'blocks.contact_form.subject' | t }}
+    </label>
+    <input
+      type="text"
+      id="ContactForm-subject"
+      class="contact-form__input"
+      name="contact[subject]"
+      value="{% if form.subject %}{{ form.subject }}{% endif %}"
+      placeholder="Subject"
     >
 
     <label

@@ -14,6 +14,10 @@
       <a href="/pages/location">Locations</a>
     </div>
   </div>
+  <a href="/pages/faq" class="header__icon link focus-inset">
+    {% render 'icon-faq' %}
+    <span class="visually-hidden">FAQ</span>
+  </a>
   {% if shop.customer_accounts_enabled %}
     {% render 'account-popover' %}
     {% render 'account-drawer' %}

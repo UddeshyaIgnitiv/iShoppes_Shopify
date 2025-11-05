@@ -1,0 +1,316 @@
+<div class="onhow-wishlist-section" style="display:none;">
+</div>
+
+{% if section.settings.enable_floating_button %}
+  <a href="/pages/wishlist" class="onhow-wishlist-floating">
+    <svg width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16.5 4.5c2.206 0 4 1.794 4 4 0 4-5.5 10-8.5 10S3.5 12.5 3.5 8.5c0-2.206 1.794-4 4-4 1.298 0 2.522 1.262 4 2.5 1.478-1.238 2.702-2.5 4-2.5z" class="onhow-wishlist-path"/>
+    </svg>
+    <span class="onhow-wishlist-text">Wishlist</span>
+  </a>
+{% endif %}
+
+<style>
+  .onhow-wishlist-floating {
+    position: fixed;
+    z-index: 99;
+    display: inline-flex;
+    align-items: center;
+    padding: calc(8px * {{ section.settings.button_size_multiplier }}) calc(12px * {{ section.settings.button_size_multiplier }});
+    background-color: {{ section.settings.button_background }};
+    color: {{ section.settings.button_text_color }};
+    border-radius: {{ section.settings.border_radius }}px;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .onhow-wishlist-floating:hover {
+    background-color: {{ section.settings.button_background_hover }};
+    transform: translateY(calc(-2px * {{ section.settings.button_size_multiplier }}));
+  }
+
+  .onhow-wishlist-floating svg {
+    margin-right: calc(8px * {{ section.settings.button_size_multiplier }});
+  }
+
+  .onhow-wishlist-path {
+    fill: {{ section.settings.heart_color }};
+    transition: fill 0.3s ease;
+  }
+
+  .onhow-wishlist-floating:hover .onhow-wishlist-path {
+    fill: {{ section.settings.heart_color_hover }};
+  }
+
+  .onhow-wishlist-text {
+    font-family: var(--font-body-family);
+    font-weight: var(--font-body-weight);
+    font-size: calc({{ section.settings.font_size }}px * {{ section.settings.button_size_multiplier }});
+    color: {{ section.settings.button_text_color }};
+    transition: color 0.3s ease;
+  }
+
+  .onhow-wishlist-floating:hover .onhow-wishlist-text {
+    color: {{ section.settings.button_text_color_hover }};
+  }
+
+  {% case section.settings.floating_position %}
+    {% when 'top-left' %}
+      .onhow-wishlist-floating {
+        top: 20px;
+        left: 0;
+        border-radius: 0 {{ section.settings.border_radius }}px {{ section.settings.border_radius }}px 0;
+      }
+    {% when 'top-right' %}
+      .onhow-wishlist-floating {
+        top: 20px;
+        right: 0;
+        border-radius: {{ section.settings.border_radius }}px 0 0 {{ section.settings.border_radius }}px;
+      }
+    {% when 'middle-left' %}
+      .onhow-wishlist-floating {
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        border-radius: 0 {{ section.settings.border_radius }}px {{ section.settings.border_radius }}px 0;
+      }
+      .onhow-wishlist-floating:hover {
+        transform: translateY(-50%) translateX(calc(2px * {{ section.settings.button_size_multiplier }}));
+      }
+    {% when 'middle-right' %}
+      .onhow-wishlist-floating {
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        border-radius: {{ section.settings.border_radius }}px 0 0 {{ section.settings.border_radius }}px;
+      }
+      .onhow-wishlist-floating:hover {
+        transform: translateY(-50%) translateX(calc(-2px * {{ section.settings.button_size_multiplier }}));
+      }
+    {% when 'bottom-left' %}
+      .onhow-wishlist-floating {
+        bottom: 20px;
+        left: 0;
+        border-radius: 0 {{ section.settings.border_radius }}px {{ section.settings.border_radius }}px 0;
+      }
+    {% when 'bottom-right' %}
+      .onhow-wishlist-floating {
+        bottom: 20px;
+        right: 0;
+        border-radius: {{ section.settings.border_radius }}px 0 0 {{ section.settings.border_radius }}px;
+      }
+  {% endcase %}
+
+  @media screen and (max-width: 749px) {
+    .onhow-wishlist-floating {
+      padding: calc(6px * {{ section.settings.button_size_multiplier }}) calc(10px * {{ section.settings.button_size_multiplier }});
+    }
+    
+    .onhow-wishlist-text {
+      font-size: calc({{ section.settings.font_size | minus: 2 }}px * {{ section.settings.button_size_multiplier }});
+    }
+  }
+</style>
+{% comment %}
+<!-- Designed by OnHOW YouTube Channel - Anas El Medlaoui -->
+{% endcomment %}
+<script>
+  class OnhowWishlist {
+    constructor() {
+      this.storage = {
+        key: 'onhow-wishlist',
+        get: () => JSON.parse(localStorage.getItem(this.storage.key) || '[]'),
+        set: (items) => localStorage.setItem(this.storage.key, JSON.stringify(items))
+      };
+      
+      this.init();
+    }
+    
+    init() {
+      document.addEventListener('click', (e) => {
+        const toggleButton = e.target.closest('.onhow-wishlist-toggle');
+        if (toggleButton) {
+          e.preventDefault();
+          this.toggleProduct(toggleButton);
+        }
+      });
+      
+      this.updateButtons();
+    }
+    
+    toggleProduct(button) {
+      const productData = {
+        title: button.dataset.productTitle,
+        image: button.dataset.productImg,
+        price: button.dataset.productPrice,
+        url: button.dataset.productUrl
+      };
+      
+      let wishlist = this.storage.get();
+      
+      const index = wishlist.findIndex(item => item.title === productData.title);
+      
+      if (index === -1) {
+        wishlist.push(productData);
+        this.setButtonState(button, true);
+      } else {
+        wishlist.splice(index, 1);
+        this.setButtonState(button, false);
+      }
+      
+      this.storage.set(wishlist);
+      
+      this.updateWishlistCount();
+    }
+    
+    setButtonState(button, isInWishlist) {
+      const iconElement = button.querySelector('.onhow-wishlist-icon');
+      const textElement = button.querySelector('.onhow-wishlist-text');
+      
+      if (isInWishlist) {
+        button.classList.add('onhow-in-wishlist');
+        if (iconElement) iconElement.classList.add('onhow-wishlist-active');
+        if (textElement) textElement.textContent = 'In Wishlist';
+      } else {
+        button.classList.remove('onhow-in-wishlist');
+        if (iconElement) iconElement.classList.remove('onhow-wishlist-active');
+        if (textElement) textElement.textContent = 'Add to Wishlist';
+      }
+    }
+    
+    updateButtons() {
+      const wishlist = this.storage.get();
+      const buttons = document.querySelectorAll('.onhow-wishlist-toggle');
+      
+      buttons.forEach(button => {
+        const productTitle = button.dataset.productTitle;
+        const isInWishlist = wishlist.some(item => item.title === productTitle);
+        this.setButtonState(button, isInWishlist);
+      });
+      
+      this.updateWishlistCount();
+    }
+    
+    updateWishlistCount() {
+      const wishlist = this.storage.get();
+      const countElements = document.querySelectorAll('.onhow-wishlist-count');
+      
+      countElements.forEach(element => {
+        element.textContent = wishlist.length;
+        element.style.display = wishlist.length > 0 ? 'flex' : 'none';
+      });
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    window.onhowWishlist = new OnhowWishlist();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Wishlist",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Floating Wishlist Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_floating_button",
+      "label": "Enable Floating Button",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "floating_position",
+      "label": "Button Position",
+      "options": [
+        { "value": "top-left", "label": "Top Left" },
+        { "value": "top-right", "label": "Top Right" },
+        { "value": "middle-left", "label": "Middle Left" },
+        { "value": "middle-right", "label": "Middle Right" },
+        { "value": "bottom-left", "label": "Bottom Left" },
+        { "value": "bottom-right", "label": "Bottom Right" }
+      ],
+      "default": "middle-right"
+    },
+    {
+      "type": "range",
+      "id": "button_size_multiplier",
+      "min": 0.7,
+      "max": 1.5,
+      "step": 0.1,
+      "label": "Button Size Multiplier",
+      "default": 1.0
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Border Radius",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Font Size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button Background",
+      "default": "#efefef"
+    },
+    {
+      "type": "color",
+      "id": "button_background_hover",
+      "label": "Button Background (Hover)",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color_hover",
+      "label": "Text Color (Hover)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heart_color",
+      "label": "Heart Icon Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "heart_color_hover",
+      "label": "Heart Icon Color (Hover)",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wishlist",
+      "category": "Custom Features"
+    }
+  ]
+}
+{% endschema %}

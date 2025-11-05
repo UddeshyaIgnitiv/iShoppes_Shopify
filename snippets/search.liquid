@@ -7,7 +7,7 @@
   @example
   {% render 'search', style: 'default', class: 'custom-class' %}
 {%- enddoc -%}
-
+<div>
 {% unless style == 'none' %}
   <search-button class="search-action{% if class != blank %} {{ class | strip }}{% endif %}">
     <button
@@ -22,15 +22,37 @@
         {{ 'icon-search.svg' | inline_asset_content }}
       </span>
     </button>
+    <div class="header-terminalInfo text-white font-medium">
+      <span>IAH-TERMINALD</span>
+    </div>
   </search-button>
 {% endunless %}
 
+            
+</div>
 {% stylesheet %}
+  .header-terminalInfo {
+    background: #005eb8;
+    color: #fff;
+    border-radius: 10px 0px 0px 10px;
+    justify-self: end;
+    padding: 12px 10px;
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: normal;
+    cursor: pointer;
+  }
+  .header-terminalInfo span {
+    font-size: 11px;
+    white-space: nowrap;
+  }
   .search-action {
+    gap: 3rem;
     --search-border-radius: var(--style-border-radius-inputs);
     --search-border-width: var(--style-border-width-inputs);
 
     display: flex;
+    padding-right: 10px;
   }
 
   .header__column--center .search-action {

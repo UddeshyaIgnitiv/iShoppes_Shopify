@@ -13,7 +13,7 @@
   "sections": {
     "section_JQ4Wda": {
       "type": "section",
-      "name": "t:names.custom_section",
+      "name": "Footer Links",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,

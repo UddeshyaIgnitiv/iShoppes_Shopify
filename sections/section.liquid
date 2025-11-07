@@ -2,48 +2,104 @@
 {% assign contact_address = block.settings.contact_address | default: "540 Rockaway Avenue, Valley Stream, NY 11581" %}
 
 <div class="footer-layout">
+    <!-- Mobile Accordion -->
     <ul class="footer-accordion">
-        {% comment %}
-        If you need dynamic accordion data, you can add it to block settings
-        {% for item in block.settings.accordion_data %}
-            <li class="footer-accordion-item">
-                <div class="footer-accordion-toggle">
-                    <span>{{ item.heading }}</span>
-                    <span>+</span>
-                </div>
-                <div class="footer-accordion-content">
-                    {{ item.content }}
-                </div>
-            </li>
-        {% endfor %}
-        {% endcomment %}
+        <li class="footer-accordion-item">
+            <div class="footer-accordion-toggle">
+                <span>Customer Service</span>
+                <span class="accordion-icon"></span>
+            </div>
+            <div class="footer-accordion-content">
+                <ul class="footer-links">
+                    <li><a href="/pages/faq">Pre-order FAQs</a></li>
+                    <li><a href="/pages/duty-free-allowance">Duty Free Allowances</a></li>
+                    <li><a href="/pages/privacy-policy">Privacy Policy</a></li>
+                    <li><a href="/pages/term">Terms</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="footer-accordion-item">
+            <div class="footer-accordion-toggle">
+                <span>About Us</span>
+                <span class="accordion-icon"></span>
+            </div>
+            <div class="footer-accordion-content">
+                <ul class="footer-links">
+                    <li><a href="/pages/about-us">About Us</a></li>
+                    <li><a href="/pages/location">Locations</a></li>
+                    <li><a href="/pages/career">Careers</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="footer-accordion-item">
+            <div class="footer-accordion-toggle">
+                <span>iShoppes Perks</span>
+                <span class="accordion-icon"></span>
+            </div>
+            <div class="footer-accordion-content">
+                <ul class="footer-links">
+                    <li><a href="/perks">View Perks</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="footer-accordion-item">
+            <div class="footer-accordion-toggle">
+                <span>Payment</span>
+                <span class="accordion-icon"></span>
+            </div>
+            <div class="footer-accordion-content">
+                <ul class="footer-links">
+                    <li class="cards-accept-mobile">
+                        <span><img src="{{ 'icon-visa.svg' | asset_url }}" alt="Visa card" loading="lazy"></span>
+                        <span><img src="{{ 'icon-master.svg' | asset_url }}" alt="Master card" loading="lazy"></span>
+                        <span><img src="{{ 'icon-discover.svg' | asset_url }}" alt="Discover card" loading="lazy"></span>
+                        <span><img src="{{ 'icon-amex.svg' | asset_url }}" alt="Amex card" loading="lazy"></span>
+                        <span><img src="{{ 'icon-wpay.svg' | asset_url }}" alt="Union pay card" loading="lazy"></span>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="footer-accordion-item">
+            <div class="footer-accordion-toggle">
+                <span>Contact</span>
+                <span class="accordion-icon"></span>
+            </div>
+            <div class="footer-accordion-content">
+                <ul class="footer-links">
+                    <li class="contact">Contact us</li>
+                    <li><a href="mailto:{{ contact_email }}">{{ contact_email }}</a></li>
+                    <li>Address: {{ contact_address }}</li>
+                </ul>
+            </div>
+        </li>
     </ul>
 
-    <div class="footer-item">
+    <!-- Desktop Layout -->
+    <div class="footer-item desktop-view">
         <ul class="footer-links">
-            <li>Customer Service</li>
+            <li class="footer-heading">Customer Service</li>
             <li><a href="/pages/faq">Pre-order FAQs</a></li>
             <li><a href="/pages/duty-free-allowance">Duty Free Allowances</a></li>
             <li><a href="/pages/privacy-policy">Privacy Policy</a></li>
             <li><a href="/pages/term">Terms</a></li>
         </ul>
     </div>
-    <div class="footer-item">
+    <div class="footer-item desktop-view">
         <ul class="footer-links">
-            <li>About Us</li>
+            <li class="footer-heading">About Us</li>
             <li><a href="/pages/about-us">About Us</a></li>
             <li><a href="/pages/location">Locations</a></li>
             <li><a href="/pages/career">Careers</a></li>
         </ul>
     </div>
-    <div class="footer-item">
+    <div class="footer-item desktop-view">
         <ul class="footer-links">
-            <li><a href="/perks">iShoppes Perks</a></li>
+            <li class="footer-heading"><a href="/perks">iShoppes Perks</a></li>
         </ul>
     </div>
-    <div class="footer-item">
+    <div class="footer-item desktop-view">
         <ul class="footer-accept footer-links">
-            <li>We Accept</li>
+            <li class="footer-heading">We Accept</li>
             <li class="cards-accept">
                 <span><img src="{{ 'icon-visa.svg' | asset_url }}" alt="Visa card" loading="lazy"></span>
                 <span><img src="{{ 'icon-master.svg' | asset_url }}" alt="Master card" loading="lazy"></span>
@@ -67,7 +123,7 @@
     background-color: #f0f2f2;
     padding: 2.5rem;
     justify-items: center;
-    height: 296.17px;
+    min-height: 296.17px;
 }
 
 .footer-item {
@@ -76,16 +132,15 @@
     font-size: 1rem;
 }
 
-.footer-item ul li:nth-child(1),
-.footer-item ul li.contact {
+.footer-heading {
     padding-bottom: 1rem;
     font-size: 22px;
-    font-weight: 500;
+    font-weight: 900;
 }
 
 .footer-item ul li {
     padding-bottom: 7px;
-    font-weight: 500;
+    {% comment %} font-weight: 500; {% endcomment %}
     font-size: 16px;
     line-height: 130%;
 }
@@ -111,42 +166,162 @@
     height: 26px;
 }
 
-.footer-accordion {
-    display: none;
-}
 .footer-links {
     padding-left: 0;
     margin-left: 0;
     list-style: none;
 }
 
-@media (max-width: 600px) {
-    .footer-item {
-        display: none;
-    }
+/* Accordion Styles */
+.footer-accordion {
+    display: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
 
+.footer-accordion-item {
+    list-style: none;
+    border-bottom: 1px solid #ddd;
+}
+
+.footer-accordion-toggle {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.accordion-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Right-pointing arrow (closed state) */
+.footer-accordion-toggle .accordion-icon::before {
+    content: "";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    color: black;
+    transition: all 0.3s ease;
+    background-image: url('{{ "icon-right.svg" | asset_url }}');
+}
+
+/* Down arrow (open state) */
+.footer-accordion-toggle.active .accordion-icon::before {
+    content: "";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    color: black;
+    transition: all 0.3s ease;
+    background-image: url('{{ "icon-down.svg" | asset_url }}');
+
+}
+
+.footer-accordion-content {
+    display: none;
+    padding-bottom: 1rem;
+}
+
+.footer-accordion-content.active {
+    display: block;
+}
+
+.cards-accept-mobile {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.cards-accept-mobile span img {
+    width: 35px;
+    height: 22px;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
     .footer-layout {
         grid-template-columns: 1fr;
         padding: 20px;
-        height: auto;
+        min-height: auto;
+    }
+
+    .desktop-view {
+        display: none !important;
     }
 
     .footer-accordion {
-        width: 100%;
         display: block;
-        font-size: 22px;
-        font-weight: 500;
     }
 
-    .footer-accordion-item {
-        list-style: none;
+    .footer-accordion-content .footer-links {
+        padding-left: 0;
     }
 
-    .footer-accordion-toggle {
-        cursor: pointer;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+    .footer-accordion-content .footer-links li {
+        padding: 0.5rem 0;
+        border: none;
+    }
+
+    .footer-accordion-content .footer-links li:first-child {
+        padding-top: 0;
+    }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+    .footer-accordion {
+        display: none !important;
+    }
+
+    .desktop-view {
+        display: inline-block !important;
     }
 }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const accordionToggles = document.querySelectorAll('.footer-accordion-toggle');
+    
+    accordionToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const content = this.nextElementSibling;
+            const isActive = this.classList.contains('active');
+            
+            // Close all accordion items first
+            accordionToggles.forEach(otherToggle => {
+                otherToggle.classList.remove('active');
+                otherToggle.nextElementSibling.classList.remove('active');
+            });
+            
+            // If clicking on a closed item, open it
+            if (!isActive) {
+                this.classList.add('active');
+                content.classList.add('active');
+            }
+        });
+    });
+});
+</script>

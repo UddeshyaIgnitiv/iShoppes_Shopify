@@ -20,7 +20,7 @@
     </ul>
 
     <div class="footer-item">
-        <ul>
+        <ul class="footer-links">
             <li>Customer Service</li>
             <li><a href="/pages/faq">Pre-order FAQs</a></li>
             <li><a href="/pages/duty-free-allowance">Duty Free Allowances</a></li>
@@ -29,7 +29,7 @@
         </ul>
     </div>
     <div class="footer-item">
-        <ul>
+        <ul class="footer-links">
             <li>About Us</li>
             <li><a href="/pages/about-us">About Us</a></li>
             <li><a href="/pages/location">Locations</a></li>
@@ -37,19 +37,19 @@
         </ul>
     </div>
     <div class="footer-item">
-        <ul>
+        <ul class="footer-links">
             <li><a href="/perks">iShoppes Perks</a></li>
         </ul>
     </div>
     <div class="footer-item">
-        <ul class="footer-accept">
+        <ul class="footer-accept footer-links">
             <li>We Accept</li>
             <li class="cards-accept">
-                <span><img src="{{ 'visa.png' | asset_url }}" alt="Visa card" loading="lazy"></span>
-                <span><img src="{{ 'master.png' | asset_url }}" alt="Master card" loading="lazy"></span>
-                <span><img src="{{ 'https://cdn.shopify.com/s/files/1/0725/3553/9901/files/discover-icon.svg?v=1762497902&1052' | asset_url }}" alt="Discover card" loading="lazy"></span>
-                <span><img src="{{ 'amex.png' | asset_url }}" alt="Amex card" loading="lazy"></span>
-                <span><img src="{{ 'unionpay.png' | asset_url }}" alt="Union pay card" loading="lazy"></span>
+                <span><img src="{{ 'icon-visa.svg' | asset_url }}" alt="Visa card" loading="lazy"></span>
+                <span><img src="{{ 'icon-master.svg' | asset_url }}" alt="Master card" loading="lazy"></span>
+                <span><img src="{{ 'icon-discover.svg' | asset_url }}" alt="Discover card" loading="lazy"></span>
+                <span><img src="{{ 'icon-amex.svg' | asset_url }}" alt="Amex card" loading="lazy"></span>
+                <span><img src="{{ 'icon-wpay.svg' | asset_url }}" alt="Union pay card" loading="lazy"></span>
             </li>
             <li>&nbsp;</li>
             <li class="contact">Contact us</li>
@@ -113,6 +113,11 @@
 
 .footer-accordion {
     display: none;
+}
+.footer-links {
+    padding-left: 0;
+    margin-left: 0;
+    list-style: none;
 }
 
 @media (max-width: 600px) {

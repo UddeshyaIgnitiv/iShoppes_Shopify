@@ -1,5 +1,3 @@
-
-
 {% liquid
   assign order = 'logo,menu,localization,search,mobile_search,actions'
 
@@ -266,12 +264,25 @@
     </div>
   {% endif %}
 </header-component>
+
 <!-- Mobile Header - Added Below Existing Desktop -->
 <div class="header-mobile">
   <!-- Top Row: Logo, Search, Terminal -->
   <div class="mobile-top-row">
     <div class="mobile-top-container">
       <!-- Logo (Center) -->
+
+<!-- Overlay for mobile navigation -->
+<div class="nav-overlay"></div>
+  {%- if section.settings.menu -%}
+    {% render 'header-drawer', 
+      linklist: section.settings.menu, 
+      class: 'header-drawer--mobile',
+      data_header_drawer_type: 'mobile-drawer',
+      block: block,
+      section: section
+    %}
+  {%- endif -%}
       <div class="mobile-logo">
         <a href="{{ routes.root_url }}" class="header__heading-link">
             <img alt="{{ shop.name }}" class="header__heading-logo" src="{{ settings.logo | image_url }}"  />
@@ -309,128 +320,81 @@
   </div>
 
   <!-- Bottom Sticky Row: Icons with Labels -->
-  <div class="mobile-bottom-row">
-    <div class="mobile-bottom-container">
-      <!-- Menu -->
-      <button class="mobile-nav-toggle" aria-label="Menu">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span class="icon-label">Menu</span>
-      </button>
+<div class="mobile-bottom-row">
+  <div class="mobile-bottom-container">
+    <!-- Help -->
+    <a href="/pages/faq" class="header__icon header-faq link focus-inset">
+      {% render 'icon-faq' %}
+      <span class="visually-hidden">FAQ</span>
+    </a>
 
-      <!-- Help -->
-      <button class="mobile-help-toggle" aria-label="Help">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2"/>
-          <path d="M10 14V13.5C10 12.5 10.5 12 11 11.5C11.5 11 12 10.5 12 9.5C12 8.5 11 7.5 9.5 7.5C8.5 7.5 7.5 8 7 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="10" cy="16" r="1" fill="currentColor"/>
-        </svg>
-        <span class="icon-label">Help</span>
-      </button>
+    <!-- Account -->
+    {% if shop.customer_accounts_enabled %}
+      {% render 'account-popover' %}
+      {% render 'account-drawer' %}
+    {% endif %}
 
-      <!-- Account -->
-      <a href="{{ routes.account_url }}" class="mobile-account-link" aria-label="Account">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="10" cy="5" r="4" stroke="currentColor" stroke-width="2"/>
-          <path d="M17 19C17 14.5817 13.4183 11 9 11C4.58172 11 1 14.5817 1 19" stroke="currentColor" stroke-width="2"/>
-        </svg>
-        <span class="icon-label">Account</span>
+    <!-- Wishlist -->
+    <a href="/pages/wishlist" class="header-actions__action wishlist-button">
+      <svg class="icon-wishlist" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" 
+              stroke-width="1.5" d="M10 16.875S3.125 12.5 3.125 7.5a3.438 3.438 0 0 1 6.25-1.992A3.438 3.438 0 0 1 15.625 7.5c0 5-6.875 9.375-6.875 9.375z"/>
+      </svg>
+    </a>
+
+    <!-- Cart -->
+    {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
+      {% render 'cart-drawer' %}
+    {% else %}
+      <a
+        href="{{ routes.cart_url }}"
+        class="header-actions__action action__cart"
+        aria-label="{{ 'accessibility.cart' | t }} {{ 'accessibility.cart_count' | t }}: {{ cart.item_count }}"
+      >
+        {% render 'cart-icon-component' %}
       </a>
-
-      <!-- Wishlist -->
-      <a href="/pages/wishlist" class="mobile-wishlist-link" aria-label="Wishlist">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 17.5L8.55 16.15C4.5 12.5 2 10.25 2 7.5C2 5.25 3.75 3.5 6 3.5C7.5 3.5 9 4.5 10 5.75C11 4.5 12.5 3.5 14 3.5C16.25 3.5 18 5.25 18 7.5C18 10.25 15.5 12.5 11.45 16.15L10 17.5Z" stroke="currentColor" stroke-width="2" fill="none"/>
-        </svg>
-        <span class="icon-label">Wishlist</span>
-      </a>
-
-      <!-- Cart -->
-      <a href="{{ routes.cart_url }}" class="mobile-cart-link" aria-label="Cart">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 1H3.5L5.5 13H16.5L18.5 5H7.5" stroke="currentColor" stroke-width="2"/>
-          <circle cx="7" cy="17" r="1.5" stroke="currentColor" stroke-width="2"/>
-          <circle cx="15" cy="17" r="1.5" stroke="currentColor" stroke-width="2"/>
-        </svg>
-        <span class="icon-label">Cart</span>
-        {%- if cart.item_count > 0 -%}
-          <span class="cart-count">{{ cart.item_count }}</span>
-        {%- endif -%}
-      </a>
-    </div>
-  </div>
-
-  <!-- Mobile Navigation Drawer -->
-  <div class="mobile-navigation-drawer">
-    <div class="nav-drawer-header">
-      <button class="nav-close" aria-label="Close menu">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+    {% endif %}
+    
+    <!-- Menu - Connected to Header Drawer -->
+    {%- if section.settings.menu -%}
+      <button 
+        type="button" 
+        class="header__icon header__icon--menu header__icon--summary mobile-nav-toggle" 
+        aria-label="{{ 'accessibility.menu' | t }}"
+        aria-controls="Details-menu-drawer-container"
+        aria-expanded="false"
+      >
+        <span class="svg-wrapper">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
       </button>
-    </div>
-    <nav class="mobile-nav">
-      {%- for link in section.settings.menu.links -%}
-        <div class="nav-item">
-          <a href="{{ link.url }}" class="nav-link">
-            {{ link.title }}
-          </a>
-          {%- if link.links.size > 0 -%}
-            <button class="nav-arrow" aria-label="Toggle submenu">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </button>
-            <div class="nav-submenu">
-              {%- for childlink in link.links -%}
-                <a href="{{ childlink.url }}" class="nav-sublink">
-                  {{ childlink.title }}
-                </a>
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
-        </div>
-      {%- endfor -%}
-    </nav>
+    {%- endif -%}
   </div>
 </div>
 
-<!-- Overlay for mobile navigation -->
-<div class="nav-overlay"></div>
+  <!-- Header Drawer Mobile Menu -->
+</div>
+
+
 <script type="text/javascript">
-  // ===== MOBILE FUNCTIONALITY ONLY =====
-const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-const navDrawer = document.querySelector('.mobile-navigation-drawer');
+// ===== MOBILE FUNCTIONALITY ONLY =====
+const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
 const navOverlay = document.querySelector('.nav-overlay');
-const navClose = document.querySelector('.nav-close');
 const searchToggle = document.querySelector('.mobile-search-toggle');
 const searchBar = document.querySelector('.mobile-search-bar');
 const searchClose = document.querySelector('.search-close');
-const navArrows = document.querySelectorAll('.nav-arrow');
 
-// Mobile Menu Toggle
-if (mobileMenuToggle) {
-  mobileMenuToggle.addEventListener('click', function() {
-    navDrawer.classList.add('active');
-    navOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
+// Menu Toggle - Connect bottom row menu button to header drawer
+if (mobileNavToggle) {
+  mobileNavToggle.addEventListener('click', function() {
+    // Find the header drawer summary element and trigger click
+    const headerDrawerSummary = document.querySelector('#Details-menu-drawer-container summary');
+    if (headerDrawerSummary) {
+      headerDrawerSummary.click();
+    }
   });
-}
-
-// Close Menu
-function closeMenu() {
-  navDrawer.classList.remove('active');
-  navOverlay.classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-if (navClose) {
-  navClose.addEventListener('click', closeMenu);
-}
-
-if (navOverlay) {
-  navOverlay.addEventListener('click', closeMenu);
 }
 
 // Search Toggle
@@ -438,7 +402,8 @@ if (searchToggle && searchBar) {
   searchToggle.addEventListener('click', function() {
     searchBar.style.display = 'block';
     setTimeout(() => {
-      searchBar.querySelector('input').focus();
+      const searchInput = searchBar.querySelector('input');
+      if (searchInput) searchInput.focus();
     }, 100);
   });
 }
@@ -449,37 +414,55 @@ if (searchClose) {
   });
 }
 
-// Submenu Toggle
-navArrows.forEach(arrow => {
-  arrow.addEventListener('click', function() {
-    const submenu = this.parentNode.querySelector('.nav-submenu');
-    this.classList.toggle('active');
-    submenu.classList.toggle('active');
-  });
-});
-
 // Close search when clicking outside
 document.addEventListener('click', function(event) {
   if (searchBar && searchBar.style.display === 'block') {
     if (!searchBar.contains(event.target) && 
+        event.target !== searchToggle && 
         !searchToggle.contains(event.target)) {
       searchBar.style.display = 'none';
     }
   }
 });
 
-// Escape key to close menus
+// Escape key to close search
 document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') {
-    if (navDrawer.classList.contains('active')) {
-      closeMenu();
-    }
-    if (searchBar.style.display === 'block') {
+    if (searchBar && searchBar.style.display === 'block') {
       searchBar.style.display = 'none';
     }
   }
 });
+
+// Sync the mobile nav toggle state with the header drawer state
+const headerDrawerDetails = document.querySelector('#Details-menu-drawer-container');
+if (headerDrawerDetails && mobileNavToggle) {
+  headerDrawerDetails.addEventListener('toggle', function() {
+    const isOpen = this.open;
+    mobileNavToggle.setAttribute('aria-expanded', isOpen);
+    
+    // Update overlay
+    if (navOverlay) {
+      if (isOpen) {
+        navOverlay.classList.add('active');
+      } else {
+        navOverlay.classList.remove('active');
+      }
+    }
+  });
+}
+
+// Close drawer when clicking on overlay
+if (navOverlay) {
+  navOverlay.addEventListener('click', function() {
+    const headerDrawerDetails = document.querySelector('#Details-menu-drawer-container');
+    if (headerDrawerDetails && headerDrawerDetails.open) {
+      headerDrawerDetails.removeAttribute('open');
+    }
+  });
+}
 </script>
+
 <script
   src="{{ 'header.js' | asset_url }}"
   type="module"
@@ -634,6 +617,17 @@ document.addEventListener('keydown', function(event) {
     .header__row--top.divider--page-width .header__columns {
       border-bottom-width: var(--border-bottom-width-mobile);
     }
+    .wishlist-button {
+      background-color: #FFFFFF !important;
+      color: #000000 !important;
+    }
+    .header-faq {
+      margin-top: 0px !important;
+    }
+    .mobile-bottom-container {
+      height: 70px !important;
+      padding-top: 10px;
+    }
   }
 
   .header__row.divider--page-width:not(.section--page-width) .header__columns {
@@ -644,7 +638,6 @@ document.addEventListener('keydown', function(event) {
       margin-inline-end: var(--page-margin);
     }
   }
-
   .header__column {
     display: flex;
     align-items: center;
@@ -854,11 +847,6 @@ document.addEventListener('keydown', function(event) {
     }
   }
 
-
-
-
-
-
   /* ===== MOBILE HEADER STYLES ===== */
 .header-mobile {
   display: none;
@@ -867,7 +855,7 @@ document.addEventListener('keydown', function(event) {
 /* Mobile Top Row */
 .mobile-top-row {
   background: #060000;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #060000;
   padding: 12px 0;
   position: sticky;
   top: 0;
@@ -974,6 +962,10 @@ document.addEventListener('keydown', function(event) {
   justify-content: center;
 }
 
+.mobile-nav-toggle[aria-expanded="true"] {
+  color: #000;
+}
+
 /* Mobile Bottom Row - Sticky */
 .mobile-bottom-row {
   background: #ffffff;
@@ -982,7 +974,7 @@ document.addEventListener('keydown', function(event) {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1003;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
 }
@@ -992,14 +984,14 @@ document.addEventListener('keydown', function(event) {
   align-items: center;
   justify-content: space-around;
   padding: 8px 0;
-  height: 60px;
+  height: 70px;
 }
 
 .mobile-bottom-container button,
 .mobile-bottom-container a {
   background: none;
   border: none;
-  padding: 8px;
+  padding: 8px 12px;
   cursor: pointer;
   color: #333;
   text-decoration: none;
@@ -1008,13 +1000,28 @@ document.addEventListener('keydown', function(event) {
   align-items: center;
   gap: 4px;
   flex: 1;
+  max-width: 60px;
   position: relative;
   transition: color 0.3s ease;
+  min-height: 50px;
 }
 
 .mobile-bottom-container button:hover,
 .mobile-bottom-container a:hover {
   color: #000;
+}
+
+.mobile-bottom-container .mobile-nav-toggle {
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  max-width: 60px;
 }
 
 .icon-label {
@@ -1141,6 +1148,10 @@ document.addEventListener('keydown', function(event) {
   border-bottom: none;
 }
 
+.header-drawer--mobile {
+  z-index: 1002;
+}
+
 /* Overlay */
 .nav-overlay {
   position: fixed;
@@ -1149,13 +1160,15 @@ document.addEventListener('keydown', function(event) {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 1001;
   display: none;
 }
+
 
 .nav-overlay.active {
   display: block;
 }
+
 
 /* Mobile Icons Sizing */
 .mobile-bottom-container svg,
@@ -1185,8 +1198,23 @@ document.addEventListener('keydown', function(event) {
     padding-bottom: 60px;
   }
   .mobile-top-container {
-  padding: 0 0 0 16px;
-}
+    padding: 0 0 0 16px;
+  }
+
+  /* Style for the mobile menu toggle in bottom row */
+  .mobile-nav-toggle {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+  }
+  
 }
 
 @media (min-width: 769px) {
@@ -1198,11 +1226,6 @@ document.addEventListener('keydown', function(event) {
     display: block;
   }
 }
-
-
-
-
-
 {% endstylesheet %}
 
 {% unless request.design_mode %}
@@ -1247,6 +1270,12 @@ document.addEventListener('keydown', function(event) {
     {
       "type": "header",
       "content": "t:content.menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:settings.menu",
+      "default": "main-menu"
     },
     {
       "type": "select",

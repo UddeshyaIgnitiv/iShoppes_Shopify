@@ -126,7 +126,7 @@
     <div class="product-grid">
       {% for block in section.blocks %}
         {% assign product = block.settings.product %}
-        {% if product %}
+        {% if product == blank %}
           <div class="card">
             <a href="{{ product.url }}">
               <div class="card-header">
@@ -150,6 +150,10 @@
             <div class="wishlist">♡</div>
           </div>
         {% endif %}
+      {% else %}
+        <div class="no-products-message">
+          <p>No products selected. Please add products in the section settings.</p>
+        </div>
       {% endfor %}
     </div>
   </div>

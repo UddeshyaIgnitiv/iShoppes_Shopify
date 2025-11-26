@@ -9,7 +9,7 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/logo.png",
+    "logo": "shopify://shop_images/logo_a1db43e2-6888-49d3-9428-a7188b1b3800.png",
     "favicon": "shopify://shop_images/favicon-16x16.png",
     "type_body_font": "inter_n4",
     "type_subheading_font": "inter_n5",
@@ -351,16 +351,6 @@
           "selected_variant_hover_background_color": "#1a1a1a",
           "selected_variant_hover_text_color": "#ffffff",
           "selected_variant_hover_border_color": "#1a1a1a"
-        }
-      }
-    },
-    "blocks": {
-      "7870687481494312845": {
-        "type": "shopify://apps/wishlist-hero/blocks/app-embed/a9a5079b-59e8-47cb-b659-ecf1c60b9b72",
-        "disabled": false,
-        "settings": {
-          "additionalWLButtonCssClasses": "",
-          "additionalWLCartBubbleCssClasses": ""
         }
       }
     }

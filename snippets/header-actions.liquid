@@ -16,7 +16,7 @@
   </div>
   <a href="/pages/faq" class="header__icon header-faq link focus-inset">
     {% render 'icon-faq' %}
-    <span class="visually-hidden">FAQ</span>
+    {% comment %} <span class="visually-hidden">FAQ</span> {% endcomment %}
   </a>
   {% if shop.customer_accounts_enabled %}
     {% render 'account-popover' %}
@@ -208,6 +208,7 @@
 
   header-actions {
     display: flex;
+    font-family: 16px / 160% "Montserrat", sans-serif;
 
     @media screen and (max-width: 749px) {
       justify-self: flex-end;
@@ -216,7 +217,7 @@
 
   .header__column--right header-actions {
     margin-inline-start: calc(var(--gap-md) * -1);
-    gap: 5rem;
+    gap: 6.65rem;
   }
 
   .header-actions__action {
@@ -290,6 +291,7 @@
     align-items: center;
     justify-content: right;
     text-transform: uppercase;
+    width: 116px;
   }
 
   /* Main button */

@@ -277,6 +277,13 @@
       endfor
     %}
 
+    /* Force Montserrat globally */
+    /* This will override the theme editor font selections */
+    --font-body--family: 'Montserrat', sans-serif;
+    --font-subheading--family: 'Montserrat', sans-serif;
+    --font-heading--family: 'Montserrat', sans-serif;
+    --font-accent--family: 'Montserrat', sans-serif;
+
     /* Hardcoded font sizes */
     --font-size--2xs: 0.625rem;
     --font-size--xs: 0.8125rem;
@@ -447,7 +454,7 @@
     --icon-size-2xs: 0.6rem;
     --icon-size-xs: 0.85rem;
     --icon-size-sm: 1.25rem;
-    --icon-size-md: 1.375rem;
+    --icon-size-md: 24px;
     --icon-size-lg: 1.5rem;
     --icon-stroke-width: {% if settings.icon_stroke == 'thin' %}1px{% elsif settings.icon_stroke == 'heavy' %}2px{% else %}1.5px{% endif %};
 

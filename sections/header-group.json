@@ -33,7 +33,7 @@
           "static": true,
           "settings": {
             "menu": "main-menu",
-            "menu_style": "featured_collections",
+            "menu_style": "text",
             "featured_products_aspect_ratio": "4 / 5",
             "featured_collections_aspect_ratio": "16 / 9",
             "image_border_radius": 0,
@@ -59,6 +59,7 @@
       },
       "settings": {
         "logo_position": "left",
+        "menu": "main-menu",
         "menu_position": "left",
         "menu_row": "bottom",
         "show_search": true,

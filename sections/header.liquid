@@ -357,20 +357,14 @@
     
     <!-- Menu - Connected to Header Drawer -->
     {%- if section.settings.menu -%}
-      <button 
-        type="button" 
-        class="header__icon header__icon--menu header__icon--summary mobile-nav-toggle" 
-        aria-label="{{ 'accessibility.menu' | t }}"
-        aria-controls="Details-menu-drawer-container"
-        aria-expanded="false"
-      >
-        <span class="svg-wrapper">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </span>
-      </button>
-    {%- endif -%}
+    {% render 'header-drawer', 
+      linklist: section.settings.menu, 
+      class: 'header-drawer--mobile',
+      data_header_drawer_type: 'mobile-drawer',
+      block: block,
+      section: section
+    %}
+  {%- endif -%}
   </div>
 </div>
 
@@ -566,6 +560,12 @@ if (navOverlay) {
     --color-border: inherit;
     --color-border-rgb: inherit;
   }
+  .header__row--top {
+    padding-top: 40px;
+  }
+  .header__row--bottom {
+    padding-bottom: 55px;
+  }
 
   .header-section {
     position: relative;
@@ -650,7 +650,7 @@ if (navOverlay) {
 
   .header__column--left,
   .header__column--center {
-    gap: var(--gap-xl);
+    /* gap: var(--gap-xl); */
     grid-area: left;
   }
 
@@ -698,7 +698,8 @@ if (navOverlay) {
     /* If there is no center column, make the column the menu is in grow eagerly */
     &:where(:not(:has(.header__column--center))) {
       @media screen and (min-width: 750px) {
-        --header-template-columns: var(--header-left) var(--header-right);
+        --header-template-columns: var(--header-left) 
+        /* var(--header-right); */
 
         grid-template-areas: 'left right';
       }
@@ -803,8 +804,8 @@ if (navOverlay) {
   .header__columns {
     /* --padding-block-start: var(--header-padding); */
     /* --padding-block-end: var(--header-padding); */
-    --padding-block-start: 40px;
-    --padding-block-end: 40px;
+    /* --padding-block-start: 40px;
+    --padding-block-end: 40px; */
   }
 
   .header:not(.header--compact) .header__row--bottom {
@@ -813,7 +814,7 @@ if (navOverlay) {
 
   .header--collapse-row-paddings {
     .header__row--top .header__columns {
-      --padding-block-end: 0px;
+      /* --padding-block-end: 0px; */
     }
 
     .header__row--bottom .header__columns {

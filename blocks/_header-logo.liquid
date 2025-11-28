@@ -121,12 +121,15 @@
 
   .header-logo__image {
     object-fit: contain;
-    height: var(--header-logo-image-height-mobile);
-    width: var(--header-logo-image-width-mobile);
+    /* height: var(--header-logo-image-height-mobile);
+    width: var(--header-logo-image-width-mobile); */
+    height: 100%;
+    width: 100%;
 
     @media screen and (min-width: 750px) {
-      height: var(--header-logo-image-height);
-      width: var(--header-logo-image-width);
+      height: auto;
+      width: 203px;
+      padding-left: 5px;
     }
   }
 

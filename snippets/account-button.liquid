@@ -39,12 +39,35 @@
       class="account-button__icon"
       aria-hidden="true"
     >
-      {{- 'icon-account.svg' | inline_asset_content -}}
+      {% comment %} {{- 'user.png' | inline_asset_content -}} {% endcomment %}
+      <img src="{{ 'user.png' | asset_url }}" alt="Flight" class="account-icon" width="32" height="32">
     </span>
   {%- endif -%}
 </{{ tag }}>
 
 {% stylesheet %}
+.header-actions__action {
+    --button-color: var(--color-foreground);
+
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+  }
+
+  .header-actions__action .svg-wrapper {
+    height: var(--button-size);
+    width: var(--button-size);
+  }
+
+  .header-actions__action svg {
+    width: 32px;
+    height: 32px;
+  }
+  .account-icon {
+    height: 32px;
+    width: 32px;
+    max-width: 32px;
+  }
   .account-button {
     color: var(--color-foreground);
     appearance: none;
@@ -82,6 +105,11 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   /* The shop avatar doesn't bubble the click event up to our button, so we need to prevent that or the button doesn't work */

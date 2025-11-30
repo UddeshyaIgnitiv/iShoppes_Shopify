@@ -7,14 +7,14 @@
 <header-actions
   {{- block.shopify_attributes -}}
 >
-  <div class="header-dropdown-Fgw">
+  <div class="header-actions__action header-dropdown-Fgw">
     <button type="button" class="header-dropbtn-HOT">About Us</button>
     <div class="header-dropdown_content-GQz">
       <a href="/pages/about-us">About Us</a>
       <a href="/pages/location">Locations</a>
     </div>
   </div>
-  <a href="/pages/faq" class="header__icon header-faq link focus-inset">
+  <a href="/pages/faq" class="header-actions__action header__icon header-faq link focus-inset">
     {% render 'icon-faq' %}
     {% comment %} <span class="visually-hidden">FAQ</span> {% endcomment %}
   </a>
@@ -23,9 +23,12 @@
     {% render 'account-drawer' %}
   {% endif %}
   <a href="/pages/wishlist" class="header-actions__action wishlist-button">
-    <svg class="icon-wishlist" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+    {% comment %} <svg class="icon-wishlist" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" 
             stroke-width="1.5" d="M10 16.875S3.125 12.5 3.125 7.5a3.438 3.438 0 0 1 6.25-1.992A3.438 3.438 0 0 1 15.625 7.5c0 5-6.875 9.375-6.875 9.375z"/>
+    </svg> {% endcomment %}
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-icon-P1l">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
     </svg>
   </a>
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
@@ -217,7 +220,10 @@
 
   .header__column--right header-actions {
     margin-inline-start: calc(var(--gap-md) * -1);
-    gap: 6.65rem;
+    gap: 6.4rem;
+    /* padding-right: 10px;
+    padding-left: 10px; */
+    padding: 10px;
   }
 
   .header-actions__action {
@@ -234,8 +240,8 @@
   }
 
   .header-actions__action svg {
-    width: var(--icon-size-md);
-    height: var(--icon-size-md);
+    width: 32px;
+    height: 32px;
   }
 
   .header-actions__cart-icon {
@@ -299,10 +305,10 @@
     background: transparent;
     color: white;
     font-weight: 500;
-    padding: 8px 15px;
+    padding: 5px 10px;
     font-size: 16px;
     border: 2px solid white;
-    border-radius: 999px;
+    border-radius: 100px;
     cursor: pointer;
     text-transform: uppercase;
   }
@@ -351,6 +357,6 @@
     display: block;
   }
   .header-faq {
-    margin-top: 10px;
+    margin-top: 7px;
   }
 {% endstylesheet %}

@@ -359,4 +359,22 @@
   .header-faq {
     margin-top: 7px;
   }
+
+  /* Hover Effect: Dim others when one is hovered */
+  header-actions:hover > * {
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+  
+  header-actions > *:hover {
+    opacity: 1;
+  }
+
+  /* Uniform Icon Size */
+  header-actions svg,
+  .account-button svg,
+  .header-actions__action svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
 {% endstylesheet %}

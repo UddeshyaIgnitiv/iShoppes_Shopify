@@ -9,12 +9,28 @@
       "id": "heading",
       "label": "Heading",
       "default": "TRAVEL EXCLUSIVES"
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Product Tag",
+      "default": "travel exclusives",
+      "info": "Products with this tag will be displayed"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Maximum products to show",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 4
     }
   ],
   "blocks": [
     {
       "type": "product",
-      "name": "Product Card",
+      "name": "Product",
       "settings": [
         {
           "type": "product",
@@ -27,7 +43,8 @@
   "presets": [
     {
       "name": "Travel Exclusives",
-      "category": "Custom"
+      "category": "Custom",
+      "blocks": []
     }
   ]
 }
@@ -42,7 +59,7 @@
     font-size: 28px;
     font-weight: 500;
     margin-bottom: 30px;
-    margin-left:20px;
+    margin-left: 20px;
     text-transform: uppercase;
   }
   .product-grid {
@@ -56,7 +73,6 @@
     width: 320px;
     position: relative;
     transition: 0.3s ease;
-
     padding: 15px 30px;
     box-shadow: 0 0 20px 0 rgba(6, 0, 0, 0.08);
     border-radius: 30px;
@@ -81,7 +97,7 @@
     font-size: 18px;
   }
   .product-details {
-    display:flex;
+    display: flex;
     justify-content: space-between;
   }
   .subtitle {
@@ -102,7 +118,6 @@
     height: 200px;
     width: 300px;
     min-height: 200px;
-    -o-object-fit: contain;
     object-fit: contain;
     margin: 0 auto;
   }
@@ -118,19 +133,90 @@
     color: #111;
     cursor: pointer;
   }
+  .no-products-message {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 18px;
+  }
 {% endstyle %}
 
 <section class="travel-exclusives">
   <div class="page-width">
     <h2>{{ section.settings.heading }}</h2>
+    {% comment %} Get products with the specified tag {% endcomment %}
+    {% assign tag_to_filter = section.settings.tag | default: 'travel exclusives' %}
+    {% assign product_limit = section.settings.product_limit | default: 4 %}
+    
+    {% assign tagged_products = '' | split: '' %}
+    
+    {% comment %} Try to find a collection with the handle of the tag first {% endcomment %}
+    {% assign collection_handle = tag_to_filter | handleize %}
+    {% assign target_collection = collections[collection_handle] %}
+    
+    {% if target_collection != blank and target_collection.products.size > 0 %}
+      {% assign tagged_products = target_collection.products %}
+    {% else %}
+      {% comment %} Fallback: Filter all products by tag {% endcomment %}
+      {% for product in collections.all.products %}
+        {% if product.tags contains tag_to_filter %}
+          {% assign tagged_products = tagged_products | push: product %}
+        {% endif %}
+        {% if tagged_products.size >= product_limit %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    
     <div class="product-grid">
-      {% for block in section.blocks %}
-        {% assign product = block.settings.product %}
-        {% if product == blank %}
+      {% if tagged_products.size == 0 %}
+        {% comment %} Fallback to manually added products if no tagged products found {% endcomment %}
+        {% if section.blocks.size == 0 %}
+          <div class="no-products-message">
+            <p>No products found with the "{{ tag_to_filter }}" tag. Please add the tag to some products.</p>
+            <p><small>Debug: Using tag "{{ tag_to_filter }}", limit {{ product_limit }}</small></p>
+          </div>
+        {% else %}
+          {% comment %} Display manually added products as fallback {% endcomment %}
+          {%- for block in section.blocks -%}
+            {%- assign product = all_products[block.settings.product] -%}
+            {% if product != blank %}
+              <div class="card" {{ block.shopify_attributes }}>
+                <a href="{{ product.url }}">
+                  <div class="card-header">
+                    <div class="vendor">{{ product.vendor | default: "Brand" }}</div>
+                    <div class="arrow">→</div>
+                  </div>
+                  <div class="product-details">
+                    <div class="subtitle">{{ product.title }}</div>
+                    <div class="price">{{ product.price | money }}</div>
+                  </div>
+                  {% if product.featured_image %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 300 }}"
+                      alt="{{ product.featured_image.alt | escape }}"
+                      width="300"
+                      height="200"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <div style="width: 300px; height: 200px; background: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                      No image
+                    </div>
+                  {% endif %}
+                </a>
+                <div class="wishlist">♡</div>
+              </div>
+            {% endif %}
+          {%- endfor -%}
+        {% endif %}
+      {% else %}
+        {% comment %} Display tagged products {% endcomment %}
+        {% for product in tagged_products limit: product_limit %}
           <div class="card">
             <a href="{{ product.url }}">
               <div class="card-header">
-                <div class="vendor">{{ product.vendor }}</div>
+                <div class="vendor">{{ product.vendor | default: "Brand" }}</div>
                 <div class="arrow">→</div>
               </div>
               <div class="product-details">
@@ -142,19 +228,19 @@
                   src="{{ product.featured_image | image_url: width: 300 }}"
                   alt="{{ product.featured_image.alt | escape }}"
                   width="300"
-                  height="{{ 300 | divided_by: product.featured_image.aspect_ratio | round }}"
+                  height="200"
                   loading="lazy"
                 >
+              {% else %}
+                <div style="width: 300px; height: 200px; background: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                  No image
+                </div>
               {% endif %}
             </a>
             <div class="wishlist">♡</div>
           </div>
-        {% endif %}
-      {% else %}
-        <div class="no-products-message">
-          <p>No products selected. Please add products in the section settings.</p>
-        </div>
-      {% endfor %}
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
 </section>

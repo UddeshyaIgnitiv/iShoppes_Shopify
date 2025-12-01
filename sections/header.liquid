@@ -329,10 +329,8 @@
     </a>
 
     <!-- Account -->
-    {% if shop.customer_accounts_enabled %}
-      {% render 'account-popover' %}
-      {% render 'account-drawer' %}
-    {% endif %}
+    {% render 'account-popover' %}
+    {% render 'account-drawer' %}
 
     <!-- Wishlist -->
     <a href="/pages/wishlist" class="header-actions__action wishlist-button">
@@ -357,13 +355,11 @@
     
     <!-- Menu - Connected to Header Drawer -->
     {%- if section.settings.menu -%}
-    {% render 'header-drawer', 
-      linklist: section.settings.menu, 
-      class: 'header-drawer--mobile',
-      data_header_drawer_type: 'mobile-drawer',
-      block: block,
-      section: section
-    %}
+      <button type="button" class="mobile-nav-toggle header-actions__action focus-inset" aria-label="{{ 'accessibility.menu' | t }}" aria-controls="Details-menu-drawer-container" aria-expanded="false">
+        <span class="svg-wrapper">
+          {{- 'icon-menu.svg' | inline_asset_content -}}
+        </span>
+      </button>
   {%- endif -%}
   </div>
 </div>
@@ -374,20 +370,29 @@
 
 <script type="text/javascript">
 // ===== MOBILE FUNCTIONALITY ONLY =====
-const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+const mobileNavToggles = document.querySelectorAll('.mobile-nav-toggle');
 const navOverlay = document.querySelector('.nav-overlay');
 const searchToggle = document.querySelector('.mobile-search-toggle');
 const searchBar = document.querySelector('.mobile-search-bar');
 const searchClose = document.querySelector('.search-close');
 
 // Menu Toggle - Connect bottom row menu button to header drawer
-if (mobileNavToggle) {
-  mobileNavToggle.addEventListener('click', function() {
-    // Find the header drawer summary element and trigger click
-    const headerDrawerSummary = document.querySelector('#Details-menu-drawer-container summary');
-    if (headerDrawerSummary) {
-      headerDrawerSummary.click();
-    }
+if (mobileNavToggles.length > 0) {
+  mobileNavToggles.forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Try to find the header-drawer custom element first
+      const headerDrawer = document.querySelector('header-drawer');
+      if (headerDrawer && typeof headerDrawer.toggle === 'function') {
+        headerDrawer.toggle();
+      } else {
+        // Fallback to clicking the summary if component not upgraded yet
+        const headerDrawerSummary = document.querySelector('#Details-menu-drawer-container summary');
+        if (headerDrawerSummary) {
+          headerDrawerSummary.click();
+        }
+      }
+    });
   });
 }
 
@@ -430,10 +435,12 @@ document.addEventListener('keydown', function(event) {
 
 // Sync the mobile nav toggle state with the header drawer state
 const headerDrawerDetails = document.querySelector('#Details-menu-drawer-container');
-if (headerDrawerDetails && mobileNavToggle) {
+if (headerDrawerDetails && mobileNavToggles.length > 0) {
   headerDrawerDetails.addEventListener('toggle', function() {
     const isOpen = this.open;
-    mobileNavToggle.setAttribute('aria-expanded', isOpen);
+    mobileNavToggles.forEach(toggle => {
+      toggle.setAttribute('aria-expanded', isOpen);
+    });
     
     // Update overlay
     if (navOverlay) {
@@ -451,7 +458,13 @@ if (navOverlay) {
   navOverlay.addEventListener('click', function() {
     const headerDrawerDetails = document.querySelector('#Details-menu-drawer-container');
     if (headerDrawerDetails && headerDrawerDetails.open) {
-      headerDrawerDetails.removeAttribute('open');
+      // Check if we can use close method on component
+      const headerDrawer = document.querySelector('header-drawer');
+      if (headerDrawer && typeof headerDrawer.close === 'function') {
+        headerDrawer.close();
+      } else {
+        headerDrawerDetails.removeAttribute('open');
+      }
     }
   });
 }
@@ -561,10 +574,10 @@ if (navOverlay) {
     --color-border-rgb: inherit;
   }
   .header__row--top {
-    padding-top: 40px;
+    padding-top: 34px;
   }
   .header__row--bottom {
-    padding-bottom: 55px;
+    padding-bottom: 47px;
   }
 
   .header-section {
@@ -788,7 +801,8 @@ if (navOverlay) {
     margin-block: calc(-2 * var(--header-padding));
     padding-block: calc(2 * var(--header-padding));
     margin-inline: calc(-1 * var(--gap-xl) / 2);
-    padding-inline: calc(var(--gap-xl) / 2);
+    /* padding-inline: calc(var(--gap-xl) / 2); */
+    padding-inline: 12px;
   }
 
   /* Set header paddings based on height setting */
@@ -1174,8 +1188,8 @@ if (navOverlay) {
 /* Mobile Icons Sizing */
 .mobile-bottom-container svg,
 .mobile-top-container svg {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
 }
 
 /* ===== MOBILE RESPONSIVE BREAKPOINT ===== */

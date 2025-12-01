@@ -248,28 +248,6 @@
         "hover_effect": false
       }
     },
-    "newsletter_section": {
-      "type": "newsletter-section",
-      "name": "Newsletter Section",
-      "settings": {
-        "heading": "GET IN TOUCH",
-        "subtext": "Sign up for our newsletter and promotions.",
-        "button_text": "SUBSCRIBE",
-        "background_start": "#343333",
-        "background_end": "#060000",
-        "heading_color": "#ffffff",
-        "subtext_color": "#cccccc",
-        "input_border_color": "#cccccc",
-        "input_text_color": "#ffffff",
-        "input_placeholder_color": "#aaaaaa",
-        "button_bg": "#ffffff",
-        "button_text_color": "#000000",
-        "button_hover_bg": "#e0e0e0",
-        "button_shadow_color": "#ffffff33",
-        "padding_top": 30,
-        "padding_bottom": 30
-      }
-    },
     "social_section": {
       "type": "social-section",
       "blocks": {
@@ -308,7 +286,6 @@
     "promotion_banners",
     "content_image_info_banner",
     "official_stores",
-    "newsletter_section",
     "social_section"
   ]
 }

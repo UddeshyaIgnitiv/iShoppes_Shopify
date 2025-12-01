@@ -94,29 +94,22 @@
     "travel_exclusives": {
       "type": "travel-exclusives",
       "blocks": {
+        "product_Wm66Be": {
+          "type": "product",
+          "settings": {
+            "product": "har-happy-cola-pouch-300g"
+          }
+        },
         "product_AwykRD": {
           "type": "product",
           "settings": {
             "product": "har-dinosaur-pouch-300g"
           }
-        },
-        "product_A9QcLP": {
-          "type": "product",
-          "settings": {
-            "product": "the-3p-fulfilled-snowboard"
-          }
-        },
-        "product_bGhzxg": {
-          "type": "product",
-          "settings": {
-            "product": "the-collection-snowboard-oxygen"
-          }
         }
       },
       "block_order": [
-        "product_AwykRD",
-        "product_A9QcLP",
-        "product_bGhzxg"
+        "product_Wm66Be",
+        "product_AwykRD"
       ],
       "name": "Travel Exclusives",
       "settings": {

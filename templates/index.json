@@ -94,6 +94,12 @@
     "travel_exclusives": {
       "type": "travel-exclusives",
       "blocks": {
+        "product_AwykRD": {
+          "type": "product",
+          "settings": {
+            "product": "har-dinosaur-pouch-300g"
+          }
+        },
         "product_A9QcLP": {
           "type": "product",
           "settings": {
@@ -108,6 +114,7 @@
         }
       },
       "block_order": [
+        "product_AwykRD",
         "product_A9QcLP",
         "product_bGhzxg"
       ],
@@ -245,8 +252,7 @@
         "logo_width": 310,
         "logo_height": 180,
         "logo_spacing": 40,
-        "hover_effect": false,
-        "alignment": "center"
+        "hover_effect": false
       }
     },
     "newsletter_section": {

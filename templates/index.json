@@ -93,8 +93,24 @@
     },
     "travel_exclusives": {
       "type": "travel-exclusives",
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "product_Wm66Be": {
+          "type": "product",
+          "settings": {
+            "product": "har-happy-cola-pouch-300g"
+          }
+        },
+        "product_AwykRD": {
+          "type": "product",
+          "settings": {
+            "product": "har-dinosaur-pouch-300g"
+          }
+        }
+      },
+      "block_order": [
+        "product_Wm66Be",
+        "product_AwykRD"
+      ],
       "name": "Travel Exclusives",
       "settings": {
         "heading": "TRAVEL EXCLUSIVES"
@@ -229,8 +245,7 @@
         "logo_width": 310,
         "logo_height": 180,
         "logo_spacing": 40,
-        "hover_effect": false,
-        "alignment": "center"
+        "hover_effect": false
       }
     },
     "social_section": {

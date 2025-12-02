@@ -220,10 +220,11 @@
 
   .header__column--right header-actions {
     margin-inline-start: calc(var(--gap-md) * -1);
-    gap: 6.4rem;
+    gap: 6rem;
     /* padding-right: 10px;
     padding-left: 10px; */
-    padding: 10px;
+    /* padding: 10px; */
+    padding-right: 40px;
   }
 
   .header-actions__action {
@@ -305,12 +306,15 @@
     background: transparent;
     color: white;
     font-weight: 500;
-    padding: 5px 10px;
+    /* padding: 10px 10px; */
     font-size: 16px;
     border: 2px solid white;
     border-radius: 100px;
     cursor: pointer;
     text-transform: uppercase;
+    /* padding-right: 1px; */
+    width: 110px;
+    height: 39px;
   }
 
   /* Dropdown content */
@@ -348,13 +352,13 @@
   }
 
   .header-dropdown_content-GQz a:hover {
-    background-color: #f0f0f0;
-    border-radius: 12px;
+    /* background-color: #f0f0f0;
+    border-radius: 12px; */
   }
 
   /* Show dropdown on hover */
   .header-dropdown-Fgw:hover .header-dropdown_content-GQz {
-    display: block;
+    /* display: block; */
   }
   .header-faq {
     margin-top: 7px;
@@ -362,12 +366,12 @@
 
   /* Hover Effect: Dim others when one is hovered */
   header-actions:hover > * {
-    opacity: 0.4;
-    transition: opacity 0.3s ease;
+    /* opacity: 0.4;
+    transition: opacity 0.3s ease; */
   }
   
   header-actions > *:hover {
-    opacity: 1;
+    /* opacity: 1; */
   }
 
   /* Uniform Icon Size */

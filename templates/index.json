@@ -119,36 +119,36 @@
     "new_arrivals": {
       "type": "new-arrivals",
       "blocks": {
-        "product_R7yUXe": {
+        "product_Wm66Be": {
           "type": "product",
           "settings": {
-            "product": "the-out-of-stock-snowboard"
+            "product": "har-happy-cola-pouch-300g"
           }
         },
-        "product_bC4FQP": {
+        "product_AwykRD": {
           "type": "product",
           "settings": {
-            "product": "the-compare-at-price-snowboard"
+            "product": "har-dinosaur-pouch-300g"
           }
         },
-        "product_Fczywd": {
+        "product_AwykRS": {
           "type": "product",
           "settings": {
-            "product": "the-inventory-not-tracked-snowboard"
+            "product": "har-dinosaur-pouch-300g"
           }
         },
-        "product_hDR33Y": {
+        "product_AwykRP": {
           "type": "product",
           "settings": {
-            "product": "the-multi-managed-snowboard"
+            "product": "har-dinosaur-pouch-300g"
           }
         }
       },
       "block_order": [
-        "product_R7yUXe",
-        "product_bC4FQP",
-        "product_Fczywd",
-        "product_hDR33Y"
+        "product_Wm66Be",
+        "product_AwykRD",
+        "product_AwykRS",
+        "product_AwykRP"
       ],
       "name": "New Arrivals",
       "settings": {

@@ -574,7 +574,7 @@ if (navOverlay) {
     --color-border-rgb: inherit;
   }
   .header__row--top {
-    padding-top: 34px;
+    padding-top: 40px;
   }
   .header__row--bottom {
     padding-bottom: 47px;
@@ -689,7 +689,7 @@ if (navOverlay) {
   .header__columns {
     /* Three column layout */
     --header-left: 1fr;
-    --header-center: auto;
+    /* --header-center: auto; */
     --header-right: 1fr;
     --header-template-columns: var(--header-left) var(--header-center) var(--header-right);
 
@@ -697,7 +697,8 @@ if (navOverlay) {
     --header-mobile-bookend: 44px;
 
     display: grid;
-    grid-template-areas: 'left center right';
+    /* grid-template-areas: 'left center right'; */
+    grid-template-areas: 'left right';
     grid-gap: var(--gap-xl);
     grid-template-columns: var(--header-template-columns);
 

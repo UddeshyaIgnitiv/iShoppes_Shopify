@@ -7,7 +7,9 @@
         <li class="footer-accordion-item">
             <div class="footer-accordion-toggle">
                 <span>Customer Service</span>
-                <span class="accordion-icon"></span>
+                <div class="imgAlign">
+                    <img src="{{ 'right-icon.svg' | asset_url }}" alt="Collapse Arrow" class="" width="" height="" loading="lazy">
+                </div>
             </div>
             <div class="footer-accordion-content">
                 <ul class="footer-links">
@@ -21,7 +23,10 @@
         <li class="footer-accordion-item">
             <div class="footer-accordion-toggle">
                 <span>About Us</span>
-                <span class="accordion-icon"></span>
+                
+                <div class="imgAlign">
+                    <img src="{{ 'right-icon.svg' | asset_url }}" alt="Collapse Arrow" class="" width="" height="" loading="lazy">
+                </div>
             </div>
             <div class="footer-accordion-content">
                 <ul class="footer-links">
@@ -34,7 +39,10 @@
         <li class="footer-accordion-item">
             <div class="footer-accordion-toggle">
                 <span>iShoppes Perks</span>
-                <span class="accordion-icon"></span>
+                
+                <div class="imgAlign">
+                    <img src="{{ 'right-icon.svg' | asset_url }}" alt="Collapse Arrow" class="" width="" height="" loading="lazy">
+                </div>
             </div>
             <div class="footer-accordion-content">
                 <ul class="footer-links">
@@ -44,8 +52,11 @@
         </li>
         <li class="footer-accordion-item">
             <div class="footer-accordion-toggle">
-                <span>Payment</span>
-                <span class="accordion-icon"></span>
+                <span>We Accept</span>
+                
+                <div class="imgAlign">
+                    <img src="{{ 'right-icon.svg' | asset_url }}" alt="Collapse Arrow" class="" width="" height="" loading="lazy">
+                </div>
             </div>
             <div class="footer-accordion-content">
                 <ul class="footer-links">
@@ -62,7 +73,10 @@
         <li class="footer-accordion-item">
             <div class="footer-accordion-toggle">
                 <span>Contact Us</span>
-                <span class="accordion-icon"></span>
+                
+                <div class="imgAlign">
+                    <img src="{{ 'right-icon.svg' | asset_url }}" alt="Collapse Arrow" class="" width="" height="" loading="lazy">
+                </div>
             </div>
             <div class="footer-accordion-content">
                 <ul class="footer-links">
@@ -115,6 +129,20 @@
 </div>
 
 <style>
+    .imgAlign {
+        display: inline-block;
+        vertical-align: middle;
+        width: 35px;
+        height: 35px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        box-shadow: 0 0 10px 0 rgba(6, 0, 0, 0.08);
+    }
+    .imgAlign img {
+        width: 1.3rem;
+        height: 1.3rem;
+        margin: 0.5rem;
+    }
 .footer-layout {
     display: grid;
     grid-template-columns: 0.7fr 0.4fr 0.5fr 1.4fr;

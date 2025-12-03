@@ -8,83 +8,260 @@
           {{ 'content.account_title' | t }}
         {% endif %}
       </span>
-      {% if customer %}
-        <span class="account-actions__email">
-          {% if customer.email %}
-            {{ customer.email }}
-          {% elsif customer.phone %}
-            {{ customer.phone }}
-          {% endif %}
-        </span>
-      {% endif %}
     </header>
+    {% if customer.email %}
+      <nav class="account-actions__nav">
+        <ul class="account-actions__list">
+          <li class="account-actions__list-item">
+            <a
+              href="{{ routes.account_url }}"
+              class="account-actions__links button-secondarys"
+              {% if autofocus_enabled and customer %}
+                autofocus
+              {% endif %}
+            >
+              <span
+                class="account-actions__icons"
+                aria-hidden="true"
+              >
+              </span>
+              {{ 'content.account_orders' | t }}
+            </a>
+          </li>
+          <li class="account-actions__list-item">
+            <a
+              href="{{ routes.account_addresses_url }}"
+              class="account-actions__links button-secondarys"
+            >
+              <span
+                class="account-actions__icon"
+                aria-hidden="true"
+              >
+              </span>
+              {{ 'content.account_favorites' | t }}
+            </a>
+          </li>
+          <li class="account-actions__list-item">
+            <a
+              href="{{ routes.account_addresses_url }}"
+              class="account-actions__links button-secondarys"
+            >
+              <span
+                class="account-actions__icon"
+                aria-hidden="true"
+              >
+              </span>
+              {{ 'content.account_profile' | t }}
+            </a>
+          </li>
+
+          <li class="account-actions__list-item">
+            <a
+              href="{{ routes.account_logout_url }}"
+              class="account-actions__links button-secondarys"
+            >
+              <span
+                class="account-actions__icon"
+                aria-hidden="true"
+              >
+              </span>
+              {{ 'actions.log_out' | t }}
+            </a>
+          </li>
+        </ul>
+      </nav>
+    {% endif %}
 
     {% unless customer %}
-      <div
-        class="account-actions__sign-ins"
-        data-skip-subtree-update="true"
-      >
-        <script
-          src="{{ 'account-login-actions.js' | asset_url }}"
-          type="module"
-          fetchpriority="low"
-        ></script>
-        <account-login-actions class="account-actions__shop-login">
-          {{ shop | login_button }}
-        </account-login-actions>
-
-        <a
-          href="{% if request.design_mode %}{{ routes.account_url }}{% else %}{{ routes.storefront_login_url }}{% endif %}"
-          class="account-actions__link button"
-          {% if autofocus_enabled %}
-            autofocus
+      <!-- ================= LOGIN BLOCK ================= -->
+      <div class="account-actions__sign-ins" data-skip-subtree-update="true" id="LoginBlock">
+        {% form 'customer_login', id: 'ClassicLoginForm' %}
+          {% if form.errors %}
+            <div class="form-errors" role="alert" aria-live="polite">
+              <ul class="errors">
+                {% for field in form.errors %}
+                  <li>{{ form.errors.messages[field] }}</li>
+                {% endfor %}
+              </ul>
+            </div>
           {% endif %}
-        >
-          <span class="account-actions__sign-in-text">
-            {{ 'actions.sign_in_options' | t }}
-          </span>
-          <span class="account-actions__fallback-text">
-            {{ 'actions.log_in' | t }}
-          </span>
-        </a>
-      </div>
-    {% endunless %}
 
-    <nav class="account-actions__nav">
-      <ul class="account-actions__list">
-        <li class="account-actions__list-item">
-          <a
-            href="{{ routes.account_url }}"
-            class="account-actions__link button-secondary"
-            {% if autofocus_enabled and customer %}
-              autofocus
-            {% endif %}
-          >
-            <span
-              class="account-actions__icon"
-              aria-hidden="true"
+          <div class="form-field">
+            <label for="LoginEmail">Email address*</label>
+            <input
+              id="LoginEmail"
+              class="input"
+              type="email"
+              name="customer[email]"
+              value="{{ form.email | escape }}"
+              autocomplete="email"
+              required
+              aria-required="true"
             >
-              {{- 'icon-orders.svg' | inline_asset_content -}}
-            </span>
-            {{ 'content.account_orders' | t }}
-          </a>
-        </li>
-        <li class="account-actions__list-item">
-          <a
-            href="{{ routes.account_addresses_url }}"
-            class="account-actions__link button-secondary"
-          >
-            <span
-              class="account-actions__icon"
-              aria-hidden="true"
+          </div>
+
+          <div class="form-field">
+            <label for="LoginPassword">Password*</label>
+            <input
+              id="LoginPassword"
+              class="input"
+              type="password"
+              name="customer[password]"
+              autocomplete="current-password"
+              required
+              aria-required="true"
             >
-              {{- 'icon-account.svg' | inline_asset_content -}}
-            </span>
-            {{ 'content.account_profile' | t }}
-          </a>
-        </li>
-      </ul>
-    </nav>
+          </div>
+
+          <a href="{{ routes.account_recover_url }}" class="link" style="margin-inline-start:auto;">Forgot password?</a>
+
+          <div class="form-actions">
+            <!-- SIGN IN (white) -->
+            <button type="submit" class="account-actions__link button">SIGN IN</button>
+            <!-- TOGGLE REGISTER (black) -->
+            <button type="button" id="ShowRegisterBtn" class="account-actions__link button-secondary">CREATE AN ACCOUNT</button>
+          </div>
+        {% endform %}
+      </div>
+
+      <!-- ================= REGISTER BLOCK (HIDDEN) ================= -->
+      <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RegisterBlock">
+        {% form 'create_customer', id: 'ClassicRegisterForm' %}
+          {% if form.errors %}
+            <div class="form-errors" role="alert" aria-live="polite">
+              <ul class="errors">
+                {% for field in form.errors %}
+                  <li>{{ form.errors.messages[field] }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          <div class="form-field">
+            <label for="RegFirst">First Name*</label>
+            <input id="RegFirst" class="input" type="text" name="customer[first_name]" required aria-required="true">
+          </div>
+
+          <div class="form-field">
+            <label for="RegLast">Last Name*</label>
+            <input id="RegLast" class="input" type="text" name="customer[last_name]" required aria-required="true">
+          </div>
+
+          <div class="form-field">
+            <label for="RegEmail">Email*</label>
+            <input id="RegEmail" class="input" type="email" name="customer[email]" required aria-required="true" autocomplete="email">
+          </div>
+
+          <div class="form-field">
+            <label for="RegCountry">Country of Origin or Residence*</label>
+            <select id="RegCountry" class="input" required aria-required="true">
+              <option value="" selected disabled>Select country</option>
+              {{ all_country_option_tags }}
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="RegMobile">Mobile Number*</label>
+            <input id="RegMobile" class="input" type="tel" required aria-required="true" inputmode="tel" placeholder="+91 98765 43210">
+          </div>
+
+          <div class="form-field">
+            <label for="RegPassword">Password*</label>
+            <input id="RegPassword" class="input" type="password" name="customer[password]" required aria-required="true" autocomplete="new-password">
+          </div>
+
+          <div class="form-field">
+            <label for="RegTerminal">Terminal Number*</label>
+            <select id="RegTerminal" class="input" required aria-required="true">
+              <option value="" selected disabled>Select terminal</option>
+              <option value="T1">T1</option>
+              <option value="T2">T2</option>
+              <option value="T3">T3</option>
+            </select>
+          </div>
+
+          <div class="form-field" style="gap:10px;">
+            <label style="display:flex;align-items:center;gap:10px;">
+              <input type="checkbox" id="RegMarketing" name="customer[accepts_marketing]" value="true">
+              <span>Subscribe to news and updates</span>
+            </label>
+          </div>
+
+          <!-- Pack extra fields into note so they're saved -->
+          <input type="hidden" id="RegNote" name="customer[note]" value="">
+
+          <div class="form-actions">
+            <!-- CREATE (white) -->
+            <button type="submit" class="button">CREATE AN ACCOUNT</button>
+            <!-- CANCEL (black) -->
+            <button type="button" id="CancelRegisterBtn" class="button-secondary">CANCEL</button>
+          </div>
+        {% endform %}
+      </div>
+
+      <script>
+        (function () {
+          const loginBlock = document.getElementById('LoginBlock');
+          const registerBlock = document.getElementById('RegisterBlock');
+          const showBtn = document.getElementById('ShowRegisterBtn');
+          const cancelBtn = document.getElementById('CancelRegisterBtn');
+
+          function showRegister(e) {
+            e?.preventDefault();
+            loginBlock?.classList.add('is-hidden');
+            registerBlock?.classList.remove('is-hidden');
+            document.getElementById('RegFirst')?.focus();
+            registerBlock?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          function showLogin(e) {
+            e?.preventDefault();
+            registerBlock?.classList.add('is-hidden');
+            loginBlock?.classList.remove('is-hidden');
+            document.getElementById('LoginEmail')?.focus();
+            loginBlock?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+
+          showBtn?.addEventListener('click', showRegister);
+          cancelBtn?.addEventListener('click', showLogin);
+
+          // Required-field messages
+          function reqMsg(el, missingMsg, typeMsg) {
+            if (!el) return;
+            el.addEventListener('invalid', () => {
+              if (el.validity.valueMissing) el.setCustomValidity(missingMsg || 'This field is required.');
+              else if (typeMsg && el.validity.typeMismatch) el.setCustomValidity(typeMsg);
+            });
+            el.addEventListener('input', () => el.setCustomValidity(''));
+          }
+          ['RegFirst','RegLast','RegPassword','RegMobile'].forEach(id => reqMsg(document.getElementById(id)));
+          reqMsg(document.getElementById('RegEmail'), 'This field is required.', 'Please enter a valid email address.');
+
+          const RegCountry = document.getElementById('RegCountry');
+          const RegTerminal = document.getElementById('RegTerminal');
+          RegCountry?.addEventListener('invalid', () => RegCountry.setCustomValidity('Please select a country.'));
+          RegCountry?.addEventListener('change', () => RegCountry.setCustomValidity(''));
+          RegTerminal?.addEventListener('invalid', () => RegTerminal.setCustomValidity('Please select a terminal.'));
+          RegTerminal?.addEventListener('change', () => RegTerminal.setCustomValidity(''));
+
+          // Pack extra fields into customer[note] before submit
+          document.getElementById('ClassicRegisterForm')?.addEventListener('submit', () => {
+            const note = document.getElementById('RegNote');
+            const first = (document.getElementById('RegFirst')?.value || '').trim();
+            const last = (document.getElementById('RegLast')?.value || '').trim();
+            const country = RegCountry?.value || '';
+            const mobile = (document.getElementById('RegMobile')?.value || '').trim();
+            const terminal = RegTerminal?.value || '';
+            const parts = [
+              `Country: ${country}`,
+              `Mobile: ${mobile}`,
+              `Terminal: ${terminal}`,
+              `Name: ${first} ${last}`.trim()
+            ];
+            if (note) note.value = parts.filter(Boolean).join(' | ');
+          });
+        })();
+      </script>
+    {% endunless %}
   </div>
 </div>
 
@@ -96,9 +273,7 @@
     position: relative;
     transition: height var(--animation-values);
 
-    &:has([data-active]) .account-actions__main-menu {
-      visibility: hidden;
-    }
+    &:has([data-active]) .account-actions__main-menu { visibility: hidden; }
   }
 
   .account-actions__header {
@@ -109,19 +284,13 @@
   }
 
   .account-actions__title {
-    /* Ideally we set the font-size here, but specificity issues make this necessary */
     --font-h5--size: var(--font-size--lg);
-
     margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
   }
 
   .account-actions__email {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-2xs);
+    display: flex; align-items: center; gap: var(--gap-2xs);
     color: rgb(var(--color-foreground-rgb) / var(--opacity-60));
     max-width: var(--account-actions-max-width);
     word-break: break-all;
@@ -131,35 +300,17 @@
     padding: var(--padding-xl);
     padding-block-start: 0;
     padding-block-end: var(--padding-md);
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-sm);
+    display: flex; flex-direction: column; gap: var(--gap-sm);
+
+    /* Keep forms inside the frame */
+    max-width: min(640px, 100%);
+    margin-inline: auto;
+    max-height: 75vh;
+    overflow-y: auto;
+
+    transition: opacity .25s ease;
   }
-
-  .account-actions__sign-in-text {
-    display: inline;
-  }
-
-  .account-actions__fallback-text {
-    display: none;
-  }
-
-  .account-actions__sign-ins:not(:has(shop-login-button)) {
-    gap: 0;
-
-    .account-actions__sign-in-text {
-      display: none;
-    }
-
-    .account-actions__fallback-text {
-      display: block;
-    }
-  }
-
-  /* Makes the shop login button radius match the theme settings */
-  .account-actions__shop-login {
-    --buttons-radius: var(--style-border-radius-buttons-primary);
-  }
+  .account-actions__sign-ins.is-hidden { opacity: 0; pointer-events: none; display: none}
 
   .account-actions__nav {
     padding: var(--padding-xl);
@@ -167,60 +318,69 @@
   }
 
   .account-actions__list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--gap-sm);
-    width: 100%;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    @media screen and (max-width: 300px) {
-      grid-template-columns: 1fr;
-    }
+    display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm);
+    width: 100%; list-style: none; margin: 0; padding: 0;
   }
+  @media (max-width: 300px) { .account-actions__list { grid-template-columns: 1fr; } }
 
   .account-actions__link {
-    width: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--gap-2xs);
+    width: auto; display: flex; justify-content: center; align-items: center; gap: var(--gap-2xs);
+  }
+  .account-actions__icon { display: flex; width: var(--icon-size-sm); height: var(--icon-size-sm); margin-block: -4px; }
+
+  /* Inputs / fields */
+  .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+  .form-field label { font-weight: 600; font-size: 0.9rem; }
+  .form-field .input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.3);
+    border-radius: var(--style-border-radius-buttons-secondary);
+    background: var(--color-background);
+    width: 100%; box-sizing: border-box;
   }
 
-  .account-actions__icon {
-    display: flex;
-    width: var(--icon-size-sm);
-    height: var(--icon-size-sm);
-    margin-block: -4px;
+  .form-errors {
+    background: rgb(255 0 0 / 0.1);
+    border: 1px solid red;
+    color: red;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
   }
 
-  /* This triggers iOS < 16.4. The outline bug is not recognized as a lack of @supports */
+  /* Buttons stacked + themed */
+  .form-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; align-items: stretch; }
+  .form-actions .button,
+  .form-actions .button-secondary {
+    width: 100%; text-align: center; padding: 0.75rem 1rem; font-weight: 600;
+    border-radius: var(--style-border-radius-buttons-primary);
+    transition: all 0.2s ease-in-out;
+  }
 
+  /* SIGN IN / CREATE (white) */
+  .form-actions .button {
+    background: #ffffff; color: #000000; border: 1px solid #000000;
+  }
+  .form-actions .button:hover { background: #f3f3f3; }
+
+  /* TOGGLE / CANCEL (black) */
+  .form-actions .button-secondary {
+    background: #000000; color: #ffffff; border: 1px solid #000000;
+  }
+  .form-actions .button-secondary:hover { background: #222222; }
+
+  .link { font-size: 0.9rem; text-decoration: underline; text-align: center; margin-top: .25rem; }
+
+  /* Focus workaround for older iOS (kept from your snippet) */
   @supports not (background-color: rgb(from red 150 g b / alpha)) {
-    /**
-    There is a bug in safari < 16.4 that causes the outline to not follow the elements border radius. This is a workaround.
-    Using element selector to increase specificity.
-  **/
-
     .account-actions :is(a.button, a.button-secondary):focus-visible {
-      outline: none;
-      overflow: visible;
-      position: relative;
-
-      &::after {
-        content: '';
-        position: absolute;
-        inset: calc(-1 * var(--focus-outline-offset));
-        border: var(--focus-outline-width) solid currentColor;
-        border-radius: var(--style-border-radius-buttons-secondary);
-        display: inherit;
-      }
+      outline: none; overflow: visible; position: relative;
     }
-
-    .account-actions a.button:focus-visible::after {
-      border-color: var(--button-background-color);
-      border-radius: var(--style-border-radius-buttons-primary);
+    .account-actions :is(a.button, a.button-secondary):focus-visible::after {
+      content: ''; position: absolute; inset: calc(-1 * var(--focus-outline-offset));
+      border: var(--focus-outline-width) solid currentColor;
+      border-radius: var(--style-border-radius-buttons-secondary);
+      display: inherit;
     }
   }
 {% endstylesheet %}

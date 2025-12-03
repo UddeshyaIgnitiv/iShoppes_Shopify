@@ -1,0 +1,194 @@
+{% if customer %}
+<section class="account-orders">
+  <div class="account-orders__header">
+    <h2>My Orders</h2>
+    <p>Welcome back, {{ customer.first_name }}! Here’s a summary of your recent orders.</p>
+  </div>
+
+  {% if customer.orders_count > 0 %}
+    <div class="account-orders__list">
+      {% for order in customer.orders %}
+        <div class="order-card">
+          <div class="order-card__header">
+            <h3>
+              <a href="{{ order.order_status_url }}" target="_blank">
+                Order #{{ order.name }}
+              </a>
+            </h3>
+            <span class="order-card__status">
+              {{ order.financial_status_label }} / {{ order.fulfillment_status_label }}
+            </span>
+          </div>
+
+          <div class="order-card__meta">
+            <p><strong>Date:</strong> {{ order.created_at | date: "%b %d, %Y" }}</p>
+            <p><strong>Total:</strong> {{ order.total_price | money }}</p>
+          </div>
+
+          <div class="order-card__items">
+            {% for line_item in order.line_items %}
+              <div class="order-item">
+                {% if line_item.image %}
+                  <img src="{{ line_item.image | img_url: '100x100' }}" alt="{{ line_item.title }}">
+                {% endif %}
+                <div class="order-item__details">
+                  <p class="order-item__title">{{ line_item.title }}</p>
+                  <p class="order-item__qty">Qty: {{ line_item.quantity }}</p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="order-card__actions">
+            <a href="{{ order.order_status_url }}" target="_blank" class="order_cart_btn_secondary">View Details</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="account-orders__empty">
+      <p>You haven’t placed any orders yet.</p>
+      <a href="/collections/all" class="start_shopping_btn">Start Shopping</a>
+    </div>
+  {% endif %}
+</section>
+{% else %}
+  <section class="account-orders__guest">
+    <h2>My Orders</h2>
+    <p>Please <a href="/account/login">sign in</a> to view your order history.</p>
+  </section>
+{% endif %}
+<style>
+.account-orders {
+  padding: 2rem 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.account-orders__header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.account-orders__header h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.account-orders__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1.25rem;
+  background: #fff;
+}
+
+.order-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.order-card__header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.order-card__header a {
+  color: #000;
+  text-decoration: none;
+}
+
+.order-card__header a:hover {
+  text-decoration: underline;
+}
+
+.order-card__status {
+  background: #f3f3f3;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.order-card__meta {
+  display: block;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.order-card__items {
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-item img {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.order-item__title {
+  font-weight: 600;
+  margin: 0;
+}
+
+.order-card__actions {
+  text-align: right;
+  margin-top: 1rem;
+}
+
+.start_shopping_btn {
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.start_shopping_btn:hover {
+  background: #f3f3f3;
+}
+
+.order_cart_btn_secondary {
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.order_cart_btn_secondary:hover {
+  background: #222;
+}
+
+.account-orders__empty {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+</style>

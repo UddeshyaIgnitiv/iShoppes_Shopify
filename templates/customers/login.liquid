@@ -1,0 +1,19 @@
+<h1>Log in</h1>
+{% form 'customer_login' %}
+  {% if form.errors %}
+    <ul class="errors">
+      {% for field in form.errors %}
+        <li>{{ form.errors.messages[field] }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <label>Email</label>
+  <input type="email" name="customer[email]" value="{{ form.email | escape }}" required>
+
+  <label>Password</label>
+  <input type="password" name="customer[password]" required>
+
+  <button type="submit">Log in</button>
+{% endform %}
+<p><a href="/account/register">Create account</a></p>

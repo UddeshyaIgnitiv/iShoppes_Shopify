@@ -1,0 +1,229 @@
+{% if customer %}
+<section class="account-default-address">
+  <div class="account-default-address__header">
+    <h2>Account Information</h2>
+  </div>
+
+  {% if customer.default_address %}
+    {% assign address = customer.default_address %}
+    <div class="address-card">
+      <div class="address-card__details">
+        <p><strong>Name:</strong><span data-account-name>{{ customer.first_name }} {{ customer.last_name }}</span></p>
+        <div class="customer_email">
+          <p><strong>Email: </strong><span>{{ customer.email }}</span></p>
+        </div>
+        <div class="customer_pass">
+          <p><strong>Password: </strong>**********</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="address-card__actions">
+      <a href="#" class="edit-account-btn js-edit-account">Edit</a>
+    </div>
+  {% endif %}
+</section>
+
+<!-- ===================== EDIT ACCOUNT MODAL ===================== -->
+<div id="editAccountModal" class="ea-modal" aria-hidden="true">
+  <div class="ea-dialog" role="dialog" aria-modal="true" aria-labelledby="eaTitle">
+    <button class="ea-close js-ea-close" aria-label="Close">✕</button>
+    <h3 id="eaTitle">Edit Account Information</h3>
+
+    <form id="eaForm">
+      <div class="ea-grid">
+        <div class="ea-field">
+          <label for="eaFirst">First Name <span aria-hidden="true">*</span></label>
+          <input id="eaFirst" name="firstName" type="text" required value="{{ customer.first_name | escape }}">
+        </div>
+        <div class="ea-field">
+          <label for="eaLast">Last Name <span aria-hidden="true">*</span></label>
+          <input id="eaLast" name="lastName" type="text" required value="{{ customer.last_name | escape }}">
+        </div>
+      </div>
+
+      <div class="ea-field">
+        <label for="eaEmail">Email</label>
+        <input id="eaEmail" type="email" value="{{ customer.email | escape }}" disabled>
+      </div>
+
+      <details class="ea-change-pass">
+        <summary>Change Password</summary>
+        <div class="ea-field">
+          <label for="eaNewPass">New Password</label>
+          <input id="eaNewPass" name="newPassword" type="password" minlength="6" autocomplete="new-password">
+        </div>
+        <div class="ea-field">
+          <label for="eaNewPass2">Confirm New Password</label>
+          <input id="eaNewPass2" type="password" minlength="6" autocomplete="new-password">
+        </div>
+      </details>
+
+      <div class="ea-field">
+        <label for="eaCurrentPass">Current Password <span aria-hidden="true">*</span></label>
+        <input id="eaCurrentPass" name="currentPassword" type="password" required autocomplete="current-password" placeholder="Required to save changes">
+        <small>Used once to authenticate this update.</small>
+      </div>
+
+      <div class="ea-errors" id="eaErrors" role="alert" style="display:none;"></div>
+
+      <div class="ea-actions">
+        <button type="button" class="ea-btn ea-btn--ghost js-ea-cancel">CANCEL</button>
+        <button type="submit" class="ea-btn ea-btn--primary">CONFIRM</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<style>
+/* ===== existing styles you had ===== */
+.account-default-address { padding: 2rem 1rem; max-width: 90%; margin: 0 auto; }
+.account-default-address__header { text-align: center; margin-bottom: 1.5rem; }
+.account-default-address__header h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; }
+.address-card { padding: 1.25rem; background: #fff; display: flex; justify-content: space-between; flex-wrap: wrap; }
+.address-card__details { width: 100%; }
+.address-card__details p { margin: 0.3rem 0; font-size: 0.95rem; }
+.address-card__details p strong { margin-right: 5%; }
+.address-card__details p span { margin-left: 30px; }
+.address-card__actions { display: flex; flex-direction: column; justify-content: center; gap: 0.5rem; position: relative; left: 12%; }
+.edit-account-btn { background: #000; color: #fff; width: 8%; min-width: 120px; border: 1px solid #000; padding: 0.6rem 1rem; border-radius: 24px; text-decoration: none; font-weight: 600; text-align: center; }
+.edit-account-btn:hover { background: #222; }
+.account-default-address__empty { text-align: center; margin-top: 1rem; }
+
+/* ===== modal + form styling ===== */
+.ea-modal { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 16px; }
+.ea-modal[aria-hidden="false"] { display: flex; }
+.ea-dialog { background: #fff; border-radius: 10px; max-width: 720px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,.2); position: relative; padding: 20px 20px 16px; }
+.ea-close { position: absolute; right: 10px; top: 10px; border: none; background: transparent; font-size: 20px; cursor: pointer; }
+.ea-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .ea-grid { grid-template-columns: 1fr; } }
+.ea-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.ea-field input { padding: .65rem .8rem; border: 1px solid #ccc; border-radius: 10px; }
+.ea-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
+.ea-btn { padding: .75rem 1.25rem; border-radius: 999px; font-weight: 600; border: 1px solid #000; cursor: pointer; }
+.ea-btn--primary { background: #000; color: #fff; }
+.ea-btn--primary:disabled { opacity: .6; cursor: not-allowed; }
+.ea-btn--ghost { background: #fff; color: #000; }
+.ea-errors { background: #ffe8e8; border: 1px solid #f33; color: #900; padding: 8px 10px; border-radius: 8px; margin: 8px 0; font-size: .9rem; display:none; }
+.ea-change-pass summary { cursor: pointer; margin: .25rem 0 .5rem; font-weight: 600; }
+</style>
+
+<script>
+(() => {
+  // ---- configure your Storefront API ----
+  const API_URL = '{{ routes.root_url }}api/2024-07/graphql.json';
+  const STOREFRONT_API_TOKEN = '7c930e8aaf24b1c6383f99ee4cf25ba1'; // <-- REQUIRED
+
+  const modal    = document.getElementById('editAccountModal');
+  const openers  = document.querySelectorAll('.js-edit-account');
+  const closeBtn = document.querySelector('.js-ea-close');
+  const cancel   = document.querySelector('.js-ea-cancel');
+  const form     = document.getElementById('eaForm');
+  const errors   = document.getElementById('eaErrors');
+
+  function openModal(e){ e?.preventDefault(); modal.setAttribute('aria-hidden','false'); document.getElementById('eaFirst').focus(); }
+  function closeModal(){ modal.setAttribute('aria-hidden','true'); errors.style.display='none'; errors.textContent=''; }
+
+  openers.forEach(btn => btn.addEventListener('click', openModal));
+  closeBtn?.addEventListener('click', closeModal);
+  cancel?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+
+  async function gql(query, variables) {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type':'application/json',
+        'X-Shopify-Storefront-Access-Token': STOREFRONT_API_TOKEN
+      },
+      body: JSON.stringify({ query, variables })
+    });
+    return res.json();
+  }
+
+  const MUT_TOKEN_CREATE = `
+    mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+      customerAccessTokenCreate(input: $input) {
+        customerAccessToken { accessToken expiresAt }
+        customerUserErrors { code field message }
+      }
+    }`;
+
+  const MUT_UPDATE = `
+    mutation customerUpdate($customerAccessToken: String!, $customer: CustomerUpdateInput!) {
+      customerUpdate(customerAccessToken: $customerAccessToken, customer: $customer) {
+        customer { id firstName lastName email }
+        customerUserErrors { code field message }
+      }
+    }`;
+
+  const MUT_TOKEN_DELETE = `
+    mutation customerAccessTokenDelete($customerAccessToken: String!) {
+      customerAccessTokenDelete(customerAccessToken: $customerAccessToken) {
+        deletedAccessToken
+        deletedCustomerAccessTokenId
+        userErrors { field message }
+      }
+    }`;
+
+  function showError(msg){ errors.textContent = msg; errors.style.display = 'block'; }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errors.style.display='none'; errors.textContent='';
+
+    const firstName = document.getElementById('eaFirst').value.trim();
+    const lastName  = document.getElementById('eaLast').value.trim();
+    const email     = document.getElementById('eaEmail').value.trim(); // locked
+    const currentPw = document.getElementById('eaCurrentPass').value;
+    const newPw     = document.getElementById('eaNewPass').value;
+    const newPw2    = document.getElementById('eaNewPass2').value;
+
+    if (!firstName || !lastName || !currentPw) {
+      showError('Please fill the required fields (First, Last, Current Password).');
+      return;
+    }
+    if (newPw || newPw2) {
+      if (newPw.length < 6) { showError('New password must be at least 6 characters.'); return; }
+      if (newPw !== newPw2) { showError('New password and confirmation do not match.'); return; }
+    }
+
+    // 1) authenticate with current password
+    let token = '';
+    try {
+      const tRes = await gql(MUT_TOKEN_CREATE, { input: { email, password: currentPw } });
+      const tData = tRes?.data?.customerAccessTokenCreate;
+      if (tData?.customerUserErrors?.length) {
+        showError(tData.customerUserErrors.map(e=>e.message).join(' '));
+        return;
+      }
+      token = tData?.customerAccessToken?.accessToken;
+      if (!token) { showError('Could not authenticate. Check your current password.'); return; }
+    } catch (err) {
+      showError('Network error creating access token.'); return;
+    }
+
+    // 2) update first/last (and password if provided)
+    const payload = { firstName, lastName };
+    if (newPw) payload.password = newPw;
+
+    try {
+      const uRes = await gql(MUT_UPDATE, { customerAccessToken: token, customer: payload });
+      const uData = uRes?.data?.customerUpdate;
+      if (uData?.customerUserErrors?.length) {
+        showError(uData.customerUserErrors.map(e=>e.message).join(' '));
+      } else {
+        // update visible name without reload
+        document.querySelectorAll('[data-account-name]').forEach(el => el.textContent = `${firstName} ${lastName}`.trim());
+        closeModal();
+      }
+    } catch (err) {
+      showError('Network error updating profile.');
+    } finally {
+      // 3) delete token
+      try { token && await gql(MUT_TOKEN_DELETE, { customerAccessToken: token }); } catch(e){}
+    }
+  });
+})();
+</script>

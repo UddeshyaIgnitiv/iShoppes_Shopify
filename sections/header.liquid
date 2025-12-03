@@ -325,7 +325,6 @@
     <!-- Help -->
     <a href="/pages/faq" class="header__icon header-faq link focus-inset">
       {% render 'icon-faq' %}
-      <span class="visually-hidden">FAQ</span>
     </a>
 
     <!-- Account -->
@@ -636,6 +635,7 @@ if (navOverlay) {
     }
     .header-faq {
       margin-top: 0px !important;
+      padding-top: 7px !important;
     }
     .mobile-bottom-container {
       height: 70px !important;
@@ -1022,12 +1022,29 @@ if (navOverlay) {
   min-height: 50px;
 }
 
-.mobile-bottom-container button:hover,
-.mobile-bottom-container a:hover {
-  color: #000;
-}
+  .mobile-bottom-container button:hover,
+  .mobile-bottom-container a:hover {
+    color: #000;
+  }
 
-.mobile-bottom-container .mobile-nav-toggle {
+  .mobile-bottom-container .account-button {
+    color: #333 !important;
+    width: auto !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-bottom-container .account-button svg,
+  .mobile-bottom-container .account-button img {
+    width: 32px !important;
+    height: 32px !important;
+    object-fit: contain;
+    filter: invert(1);
+  }
+
+  .mobile-bottom-container .mobile-nav-toggle {
   background: none;
   border: none;
   padding: 8px 12px;

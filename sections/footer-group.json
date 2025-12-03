@@ -33,6 +33,35 @@
         "padding_bottom": 30
       }
     },
+    "social_section": {
+      "type": "social-section",
+      "blocks": {
+        "icon_UNityz": {
+          "type": "icon",
+          "name": "Instagram icon",
+          "settings": {
+            "icon": "shopify://shop_images/Insta-icon-8Tg.png",
+            "alt_text": "Instagram icon",
+            "link": "https://www.instagram.com/isdutyfree"
+          }
+        },
+        "icon_tKhcYf": {
+          "type": "icon",
+          "name": "Facebook icon",
+          "settings": {
+            "icon": "shopify://shop_images/fb-icon-m22.png",
+            "alt_text": "Facebook icon",
+            "link": "https://www.facebook.com/isdutyfree/"
+          }
+        }
+      },
+      "block_order": [
+        "icon_UNityz",
+        "icon_tKhcYf"
+      ],
+      "name": "Social Section",
+      "settings": {}
+    },
     "section_JQ4Wda": {
       "type": "section",
       "name": "Footer Links",
@@ -168,6 +197,7 @@
   },
   "order": [
     "newsletter_section",
+    "social_section",
     "section_JQ4Wda",
     "footer"
   ]

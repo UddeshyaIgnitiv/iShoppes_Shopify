@@ -1,0 +1,46 @@
+{% comment %}
+Renders a layout wrapper that can include a contact form block and a submit button block.
+{% endcomment %}
+
+<section class="contact-wrapper">
+  <div class="contact-wrapper__inner">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'contact_form' %}
+          {% render 'contact-form' %}
+        {% when 'submit_button' %}
+          <button type="submit" form="ContactForm" class="{{ block.settings.style_class }}">
+            {{ block.settings.label }}
+          </button>
+      {% endcase %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact wrapper",
+  "settings": [
+    { "type": "checkbox", "id": "inherit_color_scheme", "label": "Inherit color scheme", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "contact_form",
+      "name": "Contact form",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "submit_button",
+      "name": "Submit button",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Submit" },
+        { "type": "text", "id": "style_class", "label": "CSS classes", "default": "button" }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [{ "name": "Contact wrapper" }]
+}
+{% endschema %}

@@ -165,13 +165,18 @@ export default class PaginatedList extends Component {
   }
 
   async #renderNextPage() {
-    const { grid } = this.refs;
+    const { grid, viewMoreNext } = this.refs;
 
     if (!grid) return;
 
     const nextPage = this.#getPage('next');
 
-    if (!nextPage || !this.#shouldUsePage(nextPage)) return;
+    if (!nextPage || !this.#shouldUsePage(nextPage)) {
+      if (viewMoreNext && this.infinityScrollObserver) {
+        this.infinityScrollObserver.unobserve(viewMoreNext);
+      }
+      return;
+    }
     let nextPageItemElements = this.#getGridForPage(nextPage.page);
 
     if (!nextPageItemElements) {
@@ -184,7 +189,12 @@ export default class PaginatedList extends Component {
 
       await promise;
       nextPageItemElements = this.#getGridForPage(nextPage.page);
-      if (!nextPageItemElements) return;
+      if (!nextPageItemElements) {
+        if (viewMoreNext && this.infinityScrollObserver) {
+          this.infinityScrollObserver.unobserve(viewMoreNext);
+        }
+        return;
+      }
     }
 
     grid.append(...nextPageItemElements);
@@ -193,18 +203,28 @@ export default class PaginatedList extends Component {
 
     history.pushState('', '', nextPage.url.toString());
 
-    requestIdleCallback(() => {
-      this.#fetchPage('next');
-    });
+    const lastPage = Number(grid.dataset.lastPage);
+    if (nextPage.page >= lastPage && viewMoreNext && this.infinityScrollObserver) {
+      this.infinityScrollObserver.unobserve(viewMoreNext);
+    } else {
+      requestIdleCallback(() => {
+        this.#fetchPage('next');
+      });
+    }
   }
 
   async #renderPreviousPage() {
-    const { grid } = this.refs;
+    const { grid, viewMorePrevious } = this.refs;
 
     if (!grid) return;
 
     const previousPage = this.#getPage('previous');
-    if (!previousPage || !this.#shouldUsePage(previousPage)) return;
+    if (!previousPage || !this.#shouldUsePage(previousPage)) {
+      if (viewMorePrevious && this.infinityScrollObserver) {
+        this.infinityScrollObserver.unobserve(viewMorePrevious);
+      }
+      return;
+    }
 
     let previousPageItemElements = this.#getGridForPage(previousPage.page);
     if (!previousPageItemElements) {
@@ -217,7 +237,12 @@ export default class PaginatedList extends Component {
 
       await promise;
       previousPageItemElements = this.#getGridForPage(previousPage.page);
-      if (!previousPageItemElements) return;
+      if (!previousPageItemElements) {
+        if (viewMorePrevious && this.infinityScrollObserver) {
+          this.infinityScrollObserver.unobserve(viewMorePrevious);
+        }
+        return;
+      }
     }
 
     // Store the current scroll position and height of the first element
@@ -242,9 +267,13 @@ export default class PaginatedList extends Component {
       });
     }
 
-    requestIdleCallback(() => {
-      this.#fetchPage('previous');
-    });
+    if (previousPage.page <= 1 && viewMorePrevious && this.infinityScrollObserver) {
+      this.infinityScrollObserver.unobserve(viewMorePrevious);
+    } else {
+      requestIdleCallback(() => {
+        this.#fetchPage('previous');
+      });
+    }
   }
 
   /**

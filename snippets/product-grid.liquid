@@ -108,7 +108,9 @@
         </p>
       </div>
     {% else %}
-      <span ref="viewMorePrevious"></span>
+      {% if section.settings.pagination_type == 'infinite_scroll' %}
+        <span ref="viewMorePrevious"></span>
+      {% endif %}
 
       {% if title %}
         <h4 class="main-collection-grid__title">{{ title }}</h4>
@@ -123,10 +125,115 @@
       >
         {{ children }}
       </ul>
-      <span ref="viewMoreNext"></span>
+      {% if section.settings.pagination_type == 'infinite_scroll' %}
+        <span ref="viewMoreNext"></span>
+      {% else %}
+        {% if paginate.pages > 1 %}
+          <div class="pagination-wrapper">
+            {{ paginate | default_pagination: next: '→', previous: '←' }}
+          </div>
+        {% endif %}
+      {% endif %}
     {% endif %}
   </div>
 </div>
+
+<style>
+  .pagination-wrapper {
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .pagination-wrapper .pagination {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .pagination-wrapper .pagination li {
+    display: inline-flex;
+    margin: 0;
+  }
+
+  /* Base style for all pagination items */
+  .pagination-wrapper .pagination a,
+  .pagination-wrapper .pagination .page.current {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    padding: 0;
+    font-family: var(--font-body-family);
+    font-size: 1.4rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: rgb(var(--color-foreground));
+    background-color: transparent;
+    border: 1px solid rgba(var(--color-foreground), 0.2);
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  /* Hover state for links */
+  .pagination-wrapper .pagination a:hover {
+    background-color: rgba(var(--color-foreground), 0.08);
+    border-color: rgb(var(--color-foreground));
+    color: rgb(var(--color-foreground));
+    transform: translateY(-2px);
+  }
+
+  /* Active Page Style */
+  .pagination-wrapper .pagination .page.current {
+    background-color: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+    border-color: rgb(var(--color-foreground));
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: default;
+  }
+
+  /* Previous and Next Buttons */
+  .pagination-wrapper .pagination .prev a,
+  .pagination-wrapper .pagination .next a {
+    width: auto;
+    min-width: 4rem;
+    padding: 0 1.5rem;
+    border-radius: 3rem; /* Pill shape for arrows/text */
+    font-size: 1.6rem;
+  }
+
+  /* Mobile Responsiveness */
+  @media screen and (max-width: 750px) {
+    .pagination-wrapper {
+      margin-top: 3rem;
+    }
+    
+    .pagination-wrapper .pagination {
+      gap: 0.5rem;
+    }
+
+    .pagination-wrapper .pagination a,
+    .pagination-wrapper .pagination .page.current {
+      width: 3.6rem;
+      height: 3.6rem;
+      font-size: 1.3rem;
+    }
+    
+    .pagination-wrapper .pagination .prev a,
+    .pagination-wrapper .pagination .next a {
+      min-width: 3.6rem;
+      padding: 0 1rem;
+    }
+  }
+</style>
+
 
 {% comment %}
   This script is used to set the grid view on the product grid stored in sessionStorage. Keeping it here helps us prevent seeing the default state.

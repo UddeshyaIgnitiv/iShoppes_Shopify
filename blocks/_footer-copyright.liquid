@@ -82,8 +82,13 @@
 }
 {% endschema %}
 {% stylesheet %}
-.footer-utilities__text{
+.footer-utilities__text {
   font-size: 14px;
   margin-left: 100px;
+}
+@media screen and (max-width: 749px) {
+  .footer-utilities__text {
+    margin-left: 0;
+  }
 }
 {% endstylesheet %}

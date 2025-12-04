@@ -103,7 +103,7 @@
             "padding_block": 8,
             "padding_inline": 0,
             "bold_current_item_on_breadcrumb": true,
-            "hover_effect": "none",
+            "hover_effect": "underline",
             "scroll_on_mobile": true,
             "hidden_product_name_on_breadcrumb": false,
             "background_color": "",
@@ -112,7 +112,7 @@
             "home_display_type": "text",
             "label_home": "Home",
             "label_list_collections": "Collections",
-            "label_catalog": "All products",
+            "label_catalog": "",
             "custom_catalog_link": ""
           }
         }

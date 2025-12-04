@@ -123,17 +123,8 @@
         }
       },
       "settings": {
-        "show_menu": true,
-        "menu": "",
         "layout_type": "grid",
-        "desktop_columns": "3",
-        "mobile_columns": "1",
-        "gap_horizontal": 20,
-        "gap_vertical": 30,
-        "pagination_type": "pagination",
-        "color_scheme": "scheme-1",
-        "padding_top": 40,
-        "padding_bottom": 40
+        "color_scheme": "scheme-1"
       }
     },
     "section": {

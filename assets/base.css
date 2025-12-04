@@ -389,7 +389,9 @@ p:empty {
 
 /* Make the actual section background transparent, and instead apply it to a separate sibling element to enable stacking with hero shadow  */
 .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
-  background: transparent;
+  /* background: transparent; */
+  padding-right: 185px;
+  padding-left: 185px;
 }
 
 .shopify-section:not(.header-section):has(.section) {
@@ -972,7 +974,11 @@ summary::-webkit-details-marker {
   padding: 0;
   list-style: none;
 }
-
+@media screen and (max-width: 750px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
 @media screen and (min-width: 750px) {
   .product-grid {
     grid-template-columns: var(--product-grid-columns-desktop);

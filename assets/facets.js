@@ -209,6 +209,11 @@ if (!customElements.get('facet-inputs-component')) {
  * @typedef {Object} PriceFacetRefs
  * @property {HTMLInputElement} minInput - The minimum price input
  * @property {HTMLInputElement} maxInput - The maximum price input
+ * @property {HTMLInputElement | undefined} minRange - The minimum range input
+ * @property {HTMLInputElement | undefined} maxRange - The maximum range input
+ * @property {HTMLElement | undefined} minDisplay - The minimum display element
+ * @property {HTMLElement | undefined} maxDisplay - The maximum display element
+ * @property {HTMLElement | undefined} sliderHighlight - The slider highlight element
  */
 
 /**
@@ -219,6 +224,7 @@ class PriceFacetComponent extends Component {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('keydown', this.#onKeyDown);
+    this.#initSlider();
   }
 
   disconnectedCallback() {
@@ -252,6 +258,83 @@ class PriceFacetComponent extends Component {
     facetsForm.updateFilters();
     this.#setMinAndMaxValues();
     this.#updateSummary();
+  }
+
+  /**
+   * Initializes the slider if range inputs exist
+   */
+  #initSlider() {
+    const { minRange, maxRange } = this.refs;
+    if (minRange && maxRange) {
+      minRange.addEventListener('input', this.#onSliderInput.bind(this));
+      maxRange.addEventListener('input', this.#onSliderInput.bind(this));
+      minRange.addEventListener('change', this.#onSliderChange.bind(this));
+      maxRange.addEventListener('change', this.#onSliderChange.bind(this));
+      this.#updateSliderUI();
+    }
+  }
+
+  /**
+   * Handles slider input event (while dragging)
+   * @param {Event} event - The input event
+   */
+  #onSliderInput(event) {
+    const { minRange, maxRange } = this.refs;
+    
+    if (!minRange || !maxRange) return;
+
+    const minVal = parseInt(minRange.value);
+    const maxVal = parseInt(maxRange.value);
+
+    // Prevent crossing
+    if (minVal > maxVal - 1) {
+      const target = event.target;
+      if (target === minRange) {
+        minRange.value = (maxVal - 1).toString();
+      } else {
+        maxRange.value = (minVal + 1).toString();
+      }
+    }
+
+    this.#updateSliderUI();
+  }
+
+  /**
+   * Handles slider change event (after dragging stops)
+   */
+  #onSliderChange() {
+    const { minInput, maxInput, minRange, maxRange } = this.refs;
+
+    if (!minInput || !maxInput || !minRange || !maxRange) return;
+
+    minInput.value = minRange.value;
+    maxInput.value = maxRange.value;
+
+    this.updatePriceFilterAndResults();
+  }
+
+  /**
+   * Updates the visual slider UI (highlight bar and text)
+   */
+  #updateSliderUI() {
+    const { minRange, maxRange, minDisplay, maxDisplay, sliderHighlight } = this.refs;
+
+    if (!minRange || !maxRange) return;
+
+    const minVal = parseInt(minRange.value);
+    const maxVal = parseInt(maxRange.value);
+    const maxRangeVal = parseInt(maxRange.max);
+
+    if (minDisplay) minDisplay.textContent = minVal.toString();
+    if (maxDisplay) maxDisplay.textContent = maxVal.toString();
+
+    if (sliderHighlight) {
+      const leftPercent = (minVal / maxRangeVal) * 100;
+      const widthPercent = ((maxVal - minVal) / maxRangeVal) * 100;
+
+      sliderHighlight.style.left = `${leftPercent}%`;
+      sliderHighlight.style.width = `${widthPercent}%`;
+    }
   }
 
   /**

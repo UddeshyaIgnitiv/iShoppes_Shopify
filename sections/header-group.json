@@ -107,7 +107,7 @@
             "scroll_on_mobile": true,
             "hidden_product_name_on_breadcrumb": false,
             "background_color": "",
-            "text_color": "",
+            "text_color": "#000000",
             "trail_divider_style": "forward_slash",
             "home_display_type": "text",
             "label_home": "Home",

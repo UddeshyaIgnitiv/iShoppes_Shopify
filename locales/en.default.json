@@ -316,6 +316,12 @@
       "add_to_cart_error": "Error adding to cart",
       "sold_out": "Sold out",
       "unavailable": "Unavailable"
+    },
+    "facets": {
+      "price": {
+        "min": "Minimum price",
+        "max": "Maximum price"
+      }
     }
   }
 }

@@ -94,7 +94,6 @@
       "blocks": {
         "breadcrumbs_categories_breadcrumbs_QhmQAG": {
           "type": "shopify://apps/breadcrumbs-categories/blocks/breadcrumbs/0199ba93-f2af-7694-9e98-6ee83ae7b093",
-          "disabled": true,
           "settings": {
             "page_width": 1600,
             "font_size": 14,

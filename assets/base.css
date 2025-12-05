@@ -394,6 +394,12 @@ p:empty {
   padding-left: 185px;
 }
 
+/* Remove padding on homepage */
+main[data-template="index"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+  padding-right: 0;
+  padding-left: 0;
+}
+
 .shopify-section:not(.header-section):has(.section) {
   position: relative;
 }

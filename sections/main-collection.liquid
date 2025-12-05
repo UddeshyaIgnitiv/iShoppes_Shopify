@@ -34,6 +34,7 @@
   <div
     class="collection-wrapper grid gap-style"
   >
+    <h2 class="collection-title">{{ collection.title }}</h2>
     {% content_for 'block',
       type: 'filters',
       id: 'filters',
@@ -170,6 +171,14 @@
 {% endstylesheet %}
 
 {% style %}
+  .collection-title {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    text-transform: uppercase;
+    grid-column: 1 / -1;
+  }
   .card {
     background: #fff;
     width: 250px;

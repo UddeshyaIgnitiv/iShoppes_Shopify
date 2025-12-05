@@ -98,7 +98,7 @@
             "page_width": 1600,
             "font_size": 14,
             "separated_icon_size": 14,
-            "separated_size": 1,
+            "separated_size": 0,
             "text_align": "left",
             "padding_block": 16,
             "padding_inline": 0,

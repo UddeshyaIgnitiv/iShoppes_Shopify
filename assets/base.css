@@ -984,6 +984,10 @@ summary::-webkit-details-marker {
   .product-grid {
     grid-template-columns: 1fr;
   }
+  .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+    padding-right: 0;
+    padding-left: 0;
+  }
 }
 @media screen and (min-width: 750px) {
   .product-grid {

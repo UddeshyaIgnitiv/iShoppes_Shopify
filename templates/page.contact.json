@@ -78,7 +78,7 @@
       }
     },
     "form": {
-      "type": "section",
+      "type": "_blocks",
       "blocks": {
         "contact_form_UwiCkQ": {
           "type": "contact-form",

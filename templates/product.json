@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "product-information",
@@ -70,6 +71,7 @@
               "type": "group",
               "name": "Header",
               "settings": {
+                "link": "",
                 "open_in_new_tab": false,
                 "content_direction": "column",
                 "vertical_on_mobile": true,
@@ -138,7 +140,8 @@
                     "rating_color": "primary",
                     "type_preset": "paragraph",
                     "alignment": "left"
-                  }
+                  },
+                  "blocks": {}
                 },
                 "price_tVjtKg": {
                   "type": "price",
@@ -222,6 +225,7 @@
                 },
                 "accelerated-checkout": {
                   "type": "accelerated-checkout",
+                  "disabled": true,
                   "static": true,
                   "settings": {},
                   "blocks": {}
@@ -231,35 +235,105 @@
             },
             "accordion_block": {
               "type": "accordion",
-              "settings": {},
+              "settings": {
+                "icon": "caret",
+                "dividers": true,
+                "type_preset": "h6",
+                "inherit_color_scheme": true,
+                "color_scheme": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
               "blocks": {
                 "desc_row": {
                   "type": "_accordion-row",
                   "settings": {
                     "heading": "Product Description",
-                    "open_by_default": true
+                    "open_by_default": true,
+                    "icon": "none",
+                    "width": 20
                   },
                   "blocks": {
                     "desc_text": {
                       "type": "product-description",
-                      "settings": {}
+                      "settings": {
+                        "text": "",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "var(--color-foreground)",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
                     }
                   },
-                  "block_order": ["desc_text"]
+                  "block_order": [
+                    "desc_text"
+                  ]
                 },
                 "reviews_row": {
                   "type": "_accordion-row",
-                  "settings": { "heading": "Reviews" },
+                  "settings": {
+                    "heading": "Reviews",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
                   "blocks": {
                     "review_text": {
                       "type": "text",
-                      "settings": { "text": "<p>No customer reviews</p>", "width": "100%" }
+                      "settings": {
+                        "text": "<p>No customer reviews</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "rte",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "var(--color-foreground)",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
                     }
                   },
-                  "block_order": ["review_text"]
+                  "block_order": [
+                    "review_text"
+                  ]
                 }
               },
-              "block_order": ["desc_row", "reviews_row"]
+              "block_order": [
+                "desc_row",
+                "reviews_row"
+              ]
             }
           },
           "block_order": [

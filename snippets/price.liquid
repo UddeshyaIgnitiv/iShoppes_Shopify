@@ -41,7 +41,7 @@
   endif
 -%}
 
-<div ref="priceContainer">
+<div ref="priceContainer" class="price-container">
   {% if show_sale_price_first == false and show_compare_price %}
     <span role="group">
       <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
@@ -77,3 +77,11 @@
     {% render 'unit-price', price: unit_price, measurement: selected_variant.unit_price_measurement %}
   {%- endif -%}
 </div>
+{% stylesheet %}
+  .price-container {
+    color: #015EB8;
+    font-size: 30px;
+    line-height: 120%;
+    font-weight: 500;
+  }
+{% endstylesheet %}

@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "product-information",
@@ -70,6 +71,7 @@
               "type": "group",
               "name": "Header",
               "settings": {
+                "link": "",
                 "open_in_new_tab": false,
                 "content_direction": "column",
                 "vertical_on_mobile": true,
@@ -138,7 +140,8 @@
                     "rating_color": "primary",
                     "type_preset": "paragraph",
                     "alignment": "left"
-                  }
+                  },
+                  "blocks": {}
                 },
                 "price_tVjtKg": {
                   "type": "price",
@@ -222,6 +225,7 @@
                 },
                 "accelerated-checkout": {
                   "type": "accelerated-checkout",
+                  "disabled": true,
                   "static": true,
                   "settings": {},
                   "blocks": {}

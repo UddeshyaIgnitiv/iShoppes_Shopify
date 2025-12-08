@@ -567,6 +567,18 @@
   .dialog-zoomed-gallery {
     cursor: zoom-out;
   }
+  
+  /* Custom thumbnail style */
+  .product-media-gallery__slideshow--single-media + .slideshow-controls button[aria-current="true"] img,
+  .dialog-thumbnails-list__thumbnail[aria-selected="true"] img,
+  .slideshow-controls__thumbnail[aria-current="true"] img {
+    border-radius: 50%;
+    border: 2px solid #000;
+    padding: 2px;
+  }
+  .slideshow-controls__thumbnail img {
+    border-radius: 50%;
+  }
 
   .dialog--preloading {
     opacity: 0;

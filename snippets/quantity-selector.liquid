@@ -21,6 +21,54 @@
   {% endif %}
   ref="quantitySelectors[]"
 >
+  <style>
+    .quantity-selector {
+        display: inline-flex;
+        align-items: center;
+        background: #f4f4f4;
+        border-radius: 50px;
+        padding: 5px;
+    }
+    .quantity-selector button {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #ccc;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+    }
+    .quantity-selector button:hover {
+        background: #bbb;
+    }
+    .quantity-selector input {
+        text-align: center;
+        border: none;
+        background: transparent;
+        width: 40px;
+        font-weight: bold;
+        -moz-appearance: textfield;
+    }
+    .quantity-selector input::-webkit-outer-spin-button,
+    .quantity-selector input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .quantity-minus {
+        background: #ccc;
+    }
+    .quantity-plus {
+        background: #000 !important;
+    }
+    .quantity-label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+  </style>
+  <span class="quantity-label">Qty:</span>
   <button
     class="button quantity-minus button-unstyled"
     type="button"
@@ -32,7 +80,7 @@
     {% endif %}
   >
     <span class="visually-hidden">{{ 'accessibility.decrease_quantity' | t }}</span
-    ><span class="svg-wrapper icon-plus">
+    ><span class="svg-wrapper icon-minus">
       {{- 'icon-minus.svg' | inline_asset_content -}}
     </span>
   </button>

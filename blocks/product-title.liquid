@@ -5,6 +5,9 @@
   {% assign product_title = '<p>' | append: text | append: '</p>' %}
   {% render 'text', fallback_text: product_title, block: block %}
 {% elsif closest.product != blank %}
+  {% if closest.product.vendor != blank %}
+      <div class="product__vendor text-block">{{ closest.product.vendor }}</div>
+  {% endif %}
   {% assign product_title = '<p>' | append: closest.product.title | append: '</p>' %}
   <a
     class="contents user-select-text"
@@ -15,7 +18,12 @@
     {% render 'text', fallback_text: product_title, block: block %}
   </a>
 {% endif %}
-
+{% stylesheet %}
+  .product__vendor{
+    text-transform: capitalize;
+    font-size: 2.2rem;
+  }
+{% endstylesheet %}
 {% schema %}
 {
   "name": "t:names.product_title",

@@ -228,46 +228,13 @@
                 }
               },
               "block_order": []
-            },
-            "accordion_block": {
-              "type": "accordion",
-              "settings": {},
-              "blocks": {
-                "desc_row": {
-                  "type": "_accordion-row",
-                  "settings": {
-                    "heading": "Product Description",
-                    "open_by_default": true
-                  },
-                  "blocks": {
-                    "desc_text": {
-                      "type": "product-description",
-                      "settings": {}
-                    }
-                  },
-                  "block_order": ["desc_text"]
-                },
-                "reviews_row": {
-                  "type": "_accordion-row",
-                  "settings": { "heading": "Reviews" },
-                  "blocks": {
-                    "review_text": {
-                      "type": "text",
-                      "settings": { "text": "<p>No customer reviews</p>", "width": "100%" }
-                    }
-                  },
-                  "block_order": ["review_text"]
-                }
-              },
-              "block_order": ["desc_row", "reviews_row"]
             }
           },
           "block_order": [
             "group_icgrde",
             "divider_VJhene",
             "variant_picker_R3rGDr",
-            "buy_buttons_eYQEYi",
-            "accordion_block"
+            "buy_buttons_eYQEYi"
           ]
         }
       },
@@ -281,9 +248,77 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "accordion_block": {
+      "type": "accordion",
+      "settings": {
+        "icon": "caret",
+        "dividers": true
+      },
+      "blocks": {
+        "desc_row": {
+          "type": "_accordion-row",
+          "settings": {
+            "heading": "Product Description",
+            "open_by_default": true
+          },
+          "blocks": {
+            "meta_info": {
+              "type": "product-meta",
+              "settings": {}
+            }
+          },
+          "block_order": [
+            "meta_info"
+          ]
+        },
+        "ingredients_row": {
+          "type": "_accordion-row",
+          "settings": {
+            "heading": "Ingredients",
+            "open_by_default": false
+          },
+          "blocks": {
+            "ingredients_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Jameson Irish Whiskey</p>",
+                "width": "100%"
+              }
+            }
+          },
+          "block_order": [
+            "ingredients_text"
+          ]
+        },
+        "reviews_row": {
+          "type": "_accordion-row",
+          "settings": {
+            "heading": "Reviews"
+          },
+          "blocks": {
+            "review_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>No customer reviews</p>",
+                "width": "100%"
+              }
+            }
+          },
+          "block_order": [
+            "review_text"
+          ]
+        }
+      },
+      "block_order": [
+        "desc_row",
+        "ingredients_row",
+        "reviews_row"
+      ]
     }
   },
   "order": [
-    "main"
+    "main",
+    "accordion_block"
   ]
 }

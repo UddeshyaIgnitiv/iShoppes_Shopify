@@ -36,6 +36,29 @@
   endcapture
 %}
 
+<style>
+  .price-item.price-item--regular, .price-item.price-item--sale {
+    color: #0056b3;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  .offer-text {
+    color: #000;
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+  .terminal-select-btn {
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 1.29;
+    background-color: #060000;
+    padding: 8px 20px;
+    border-radius: 0px 12px 0 12px;
+    text-transform: uppercase;
+  }
+</style>
+
 <product-price
   class="text-block {{ text_block_classes }} text-{{ block_settings.alignment }} {{ block_settings.type_preset | default: 'paragraph' }} spacing-style"
   data-block-id="{{ block.id }}"
@@ -52,6 +75,14 @@
     product_resource: product_resource,
     show_sale_price_first: block_settings.show_sale_price_first
   %}
+
+  <div class="offer-text">
+    Limited Time offer: Buy 4 Makeup/Skincare Products, Get 10% Off
+  </div>
+  
+  <div class="terminal-select-wrapper" style="margin-top: 15px;">
+    <button class="terminal-select-btn">Select Terminal</button>
+  </div>
 
   {% if block_settings.show_tax_info %}
     <div class="tax-note">

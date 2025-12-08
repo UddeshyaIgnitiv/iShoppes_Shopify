@@ -22,35 +22,57 @@
   ref="quantitySelectors[]"
 >
   <style>
-    .quantity-selector {
+    .quantity-selector-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .quantity-header {
+        font-size: 16px;
+        font-weight: 500;
+    }
+    .quantity-controls {
         display: inline-flex;
         align-items: center;
-        background: #f4f4f4;
+        background: #fff;
+        border: 1px solid #e0e0e0;
         border-radius: 50px;
-        padding: 5px;
+        padding: 4px;
+        width: fit-content;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     .quantity-selector button {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: #ccc;
+        background: #000;
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
         border: none;
         cursor: pointer;
+        transition: opacity 0.2s;
     }
     .quantity-selector button:hover {
-        background: #bbb;
+        opacity: 0.8;
+    }
+    .quantity-selector button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
     }
     .quantity-selector input {
         text-align: center;
         border: none;
         background: transparent;
         width: 40px;
-        font-weight: bold;
+        font-weight: 500;
+        font-size: 16px;
         -moz-appearance: textfield;
+        color: #000;
+    }
+    .quantity-selector input:focus {
+        outline: none;
     }
     .quantity-selector input::-webkit-outer-spin-button,
     .quantity-selector input::-webkit-inner-spin-button {
@@ -58,65 +80,97 @@
         margin: 0;
     }
     .quantity-minus {
-        background: #ccc;
+        background: #000;
     }
     .quantity-plus {
-        background: #000 !important;
+        background: #000;
     }
-    .quantity-label {
-        margin-right: 10px;
-        font-weight: bold;
+    .pdp-quantity-button {
+      border-radius: 9999px !important;
+      background-color: #000000 !important;
+      color: #fff !important;
     }
   </style>
-  <span class="quantity-label">Qty:</span>
-  <button
-    class="button quantity-minus button-unstyled"
-    type="button"
-    name="minus"
-    on:click="/decreaseQuantity"
-    ref="quantityButtons[]"
-    {% if can_update_quantity == false %}
-      disabled
-    {% endif %}
-  >
-    <span class="visually-hidden">{{ 'accessibility.decrease_quantity' | t }}</span
-    ><span class="svg-wrapper icon-minus">
-      {{- 'icon-minus.svg' | inline_asset_content -}}
-    </span>
-  </button>
-  <input
-    type="number"
-    name="{% if line_index %}updates[]{% else %}quantity{% endif %}"
-    value="{{ in_cart_quantity | default: 1 }}"
-    min="{{ min | default: 1 }}"
-    on:blur="/setQuantity"
-    on:focus="/selectInputValue"
-    ref="quantityInput"
-    aria-label="{{ 'accessibility.quantity' | t }}"
-    {% if line_index %}
-      data-cart-line="{{ line_index | plus: 1 }}"
-    {% endif %}
-    {% if variant.quantity_rule.max %}
-      max="{{ variant.quantity_rule.max }}"
-    {% endif %}
-    step="{{ variant.quantity_rule.increment | default: 1 }}"
-    {% if can_update_quantity == false or variant.available == false %}
-      disabled
-    {% endif %}
-  >
-  <button
-    class="button quantity-plus button-unstyled"
-    type="button"
-    name="plus"
-    on:click="/increaseQuantity"
-    ref="quantityButtons[]"
-    {% if can_update_quantity == false %}
-      disabled
-    {% endif %}
-  >
-    <span class="visually-hidden">{{ 'accessibility.increase_quantity' | t }}</span
-    ><span class="svg-wrapper icon-plus">
-      {{- 'icon-plus.svg' | inline_asset_content -}}
-    </span>
-  </button>
+  <div class="quantity-selector-wrapper">
+      <div class="quantity-header">Qty: <span class="quantity-display-text">{{ in_cart_quantity | default: 1 }}</span></div>
+      <div class="quantity-controls">
+          <button
+            class="button quantity-minus button-unstyled pdp-quantity-button"
+            type="button"
+            name="minus"
+            on:click="/decreaseQuantity"
+            ref="quantityButtons[]"
+            {% if can_update_quantity == false %}
+              disabled
+            {% endif %}
+          >
+            <span class="visually-hidden">{{ 'accessibility.decrease_quantity' | t }}</span
+            ><span class="svg-wrapper icon-minus">
+              {{- 'icon-minus.svg' | inline_asset_content -}}
+            </span>
+          </button>
+          <input
+            type="number"
+            name="{% if line_index %}updates[]{% else %}quantity{% endif %}"
+            value="{{ in_cart_quantity | default: 1 }}"
+            min="{{ min | default: 1 }}"
+            on:blur="/setQuantity"
+            on:focus="/selectInputValue"
+            on:input="this.closest('.quantity-selector-wrapper').querySelector('.quantity-display-text').textContent = this.value"
+            ref="quantityInput"
+            aria-label="{{ 'accessibility.quantity' | t }}"
+            {% if line_index %}
+              data-cart-line="{{ line_index | plus: 1 }}"
+            {% endif %}
+            {% if variant.quantity_rule.max %}
+              max="{{ variant.quantity_rule.max }}"
+            {% endif %}
+            step="{{ variant.quantity_rule.increment | default: 1 }}"
+            {% if can_update_quantity == false or variant.available == false %}
+              disabled
+            {% endif %}
+          >
+          <button
+            class="button quantity-plus button-unstyled pdp-quantity-button"
+            type="button"
+            name="plus"
+            on:click="/increaseQuantity"
+            ref="quantityButtons[]"
+            {% if can_update_quantity == false %}
+              disabled
+            {% endif %}
+          >
+            <span class="visually-hidden">{{ 'accessibility.increase_quantity' | t }}</span
+            ><span class="svg-wrapper icon-plus">
+              {{- 'icon-plus.svg' | inline_asset_content -}}
+            </span>
+          </button>
+      </div>
+  </div>
+  <script>
+    // Simple script to update the display text when buttons are clicked
+    (function() {
+        const wrapper = document.currentScript.previousElementSibling;
+        const input = wrapper.querySelector('input');
+        const display = wrapper.querySelector('.quantity-display-text');
+        
+        // Observer to watch for value changes on the input
+        const observer = new MutationObserver(function() {
+             display.textContent = input.value;
+        });
+        
+        // Also listen to events
+        input.addEventListener('change', () => display.textContent = input.value);
+        input.addEventListener('input', () => display.textContent = input.value);
+        
+        // Listen to clicks on buttons (delegation or direct)
+        wrapper.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setTimeout(() => {
+                     display.textContent = input.value;
+                }, 0);
+            });
+        });
+    })();
+  </script>
 </quantity-selector-component>

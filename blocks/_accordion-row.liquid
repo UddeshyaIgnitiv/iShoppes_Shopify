@@ -3,8 +3,9 @@
 
 <accordion-custom
   {% if block_settings.open_by_default %}
-    open-by-default-on-desktop
-    open-by-default-on-mobile
+    {% comment %} open-by-default-on-desktop
+    open-by-default-on-mobile {% endcomment %}
+    class="accordion-product-section"
   {% endif %}
 >
   <details
@@ -21,7 +22,7 @@
       %}
       {{ block_settings.heading }}
       <span class="svg-wrapper icon-caret icon-animated">
-        {{- 'icon-caret.svg' | inline_asset_content -}}
+        {{- 'icon-down.svg' | inline_asset_content -}}
       </span>
       <span class="svg-wrapper icon-plus">
         {{- 'icon-plus.svg' | inline_asset_content -}}
@@ -39,6 +40,27 @@
     height: auto;
     margin-inline-end: var(--margin-xs);
   }
+  .details__header {
+    font-size: 21px !important;
+    color: black !important;
+    font-weight: 500 !important;
+    margin-bottom: 0rem !important;
+  }
+  details{
+    padding: 0 20px;
+  }
+  .icon-caret{
+    vertical-align: middle;
+    width: 25px !important;
+    height: 25px !important;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 0 rgba(6, 0, 0, 0.08);
+  }
+  .icon-caret > svg {
+    width: 12px !important;
+    height: 12px !important;
+  } 
 {% endstylesheet %}
 
 {% schema %}

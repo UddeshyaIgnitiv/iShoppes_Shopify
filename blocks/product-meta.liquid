@@ -1,0 +1,30 @@
+<div class="product-meta-specs spacing-style" style="padding-bottom: 1rem;">
+  <div class="meta-row" style="margin-bottom: 0.25rem;">
+    <span class="meta-label" style="font-weight: bold;">Made In:</span> <span class="meta-value">Ireland</span>
+  </div>
+  <div class="meta-row" style="margin-bottom: 0.25rem;">
+    <span class="meta-label" style="font-weight: bold;">SKU #:</span> <span class="meta-value">{{ product.selected_or_first_available_variant.sku | default: '265457' }}</span>
+  </div>
+  <div class="meta-row" style="margin-bottom: 1rem;">
+    <span class="meta-label" style="font-weight: bold;">Size:</span> <span class="meta-value">{{ product.selected_or_first_available_variant.option1 | default: '1000 ml' }}</span>
+  </div>
+  <div class="meta-description">
+    {% if product.description != blank %}
+      {{ product.description | strip_html | truncate: 150 }}
+    {% else %}
+      Jameson Irish Whiskey, finished in Craft IPA Beer Barrels for Crisp, Hoppy Notes.
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Meta Specs",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Product Meta Specs"
+    }
+  ]
+}
+{% endschema %}

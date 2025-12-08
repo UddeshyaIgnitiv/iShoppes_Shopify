@@ -8,7 +8,7 @@
   {% if closest.product.vendor != blank %}
       <div class="product__vendor text-block">{{ closest.product.vendor }}</div>
   {% endif %}
-  {% assign product_title = '<p>' | append: closest.product.title | append: '</p>' %}
+  {% assign product_title = '<p class="prodtitle">' | append: closest.product.title | append: '</p>' %}
   <a
     class="contents user-select-text"
     ref="productTitleLink"
@@ -19,6 +19,9 @@
   </a>
 {% endif %}
 {% stylesheet %}
+  .prodtitle{
+    font-weight: 300 !important;
+  }
   .product__vendor{
     text-transform: capitalize;
     font-size: 2.2rem;

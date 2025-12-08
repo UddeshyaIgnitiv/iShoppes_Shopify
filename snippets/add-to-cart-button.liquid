@@ -36,14 +36,15 @@
     <span
       class="add-to-cart-text"
     >
-      {% if can_add_to_cart %}
-        <span class="svg-wrapper add-to-cart-icon">
-          {{- 'icon-add-to-cart.svg' | inline_asset_content -}}
-        </span>
-      {% endif %}
+      
       <span class="add-to-cart-text__content{% if icon_only_on_mobile %} is-visually-hidden-mobile{% endif %}">
         {{- add_to_cart_text | default: default_add_to_cart_text -}}
       </span>
+      {% if can_add_to_cart %}
+        <span class="svg-wrapper add-to-cart-icon">
+          {{- 'icon-cart.svg' | inline_asset_content -}}
+        </span>
+      {% endif %}
     </span>
     <span
       aria-hidden="true"
@@ -69,6 +70,7 @@
     animation-timing-function: var(--animation-easing);
     animation-fill-mode: forwards;
     transition: opacity var(--animation-speed) var(--animation-easing);
+    text-transform: uppercase;
   }
 
   .atc-added .add-to-cart-text {

@@ -88,10 +88,17 @@
         "disabled": false,
         "settings": {}
       },
-      "14060646107696862457": {
-        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+      "13766566558402285670": {
+        "type": "shopify://apps/doran-product-reviews/blocks/app-embed/ca90c3ee-bc39-4c25-90cd-fdf0519c6d11",
         "disabled": false,
-        "settings": {}
+        "settings": {
+          "isJSONLD": false,
+          "isPopup": false,
+          "isPop": false,
+          "customCSS": "",
+          "is_use_shopify_font": false,
+          "pop_shopify_font": "montserrat_n4"
+        }
       }
     },
     "color_schemes": {

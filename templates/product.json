@@ -132,10 +132,6 @@
                   },
                   "blocks": {}
                 },
-                "judge_me_reviews_preview_badge_yt9ajG": {
-                  "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-                  "settings": {}
-                },
                 "price_tVjtKg": {
                   "type": "price",
                   "settings": {
@@ -161,7 +157,6 @@
               },
               "block_order": [
                 "product_title_eYVzTU",
-                "judge_me_reviews_preview_badge_yt9ajG",
                 "price_tVjtKg"
               ]
             },
@@ -316,13 +311,14 @@
             "width": 20
           },
           "blocks": {
-            "judge_me_reviews_review_widget_xdUGtb": {
-              "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+            "doran_product_reviews_product_widget_4feTrd": {
+              "type": "shopify://apps/doran-product-reviews/blocks/product-widget/ca90c3ee-bc39-4c25-90cd-fdf0519c6d11",
               "settings": {
-                "review_data": "sample_data",
-                "max_width": 1200,
-                "show_shop_reviews": false,
-                "empty_state": "empty_widget"
+                "topPadding": 36,
+                "bottomPadding": 36,
+                "is_hide_if_no_reviews": false,
+                "is_use_shopify_font": false,
+                "shopify_font": "sans_serif_n4"
               }
             },
             "review_text": {
@@ -352,7 +348,7 @@
             }
           },
           "block_order": [
-            "judge_me_reviews_review_widget_xdUGtb",
+            "doran_product_reviews_product_widget_4feTrd",
             "review_text"
           ]
         }

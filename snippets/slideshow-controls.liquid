@@ -46,11 +46,73 @@
   endif
 -%}
 
+<slideshow-controls
+  class="slideshow-controls {{ class }}"
+  pagination-position="{{ pagination_position }}"
+  {% if style == 'thumbnails' %}thumbnails{% endif %}
+  {% if controls_on_media %}controls-on-media{% endif %}
+  {% if arrows_on_media %}icons-on-media{% endif %}
+  style="--aspect-ratio: {{ aspect_ratio }};"
+  ref="slideshowControls"
+>
+  {% if show_arrows_separately and show_arrows %}
+    <div class="slideshow-controls__arrows">
+      {%- render 'slideshow-arrow', action: 'previous', icon_style: icon_style, icon_shape: shape -%}
+      {%- render 'slideshow-arrow', action: 'next', icon_style: icon_style, icon_shape: shape -%}
+    </div>
+  {% endif %}
 
-
-{% if show_arrows_separately and show_arrows %}
-  <div class="slideshow-controls__arrows">
-    {%- render 'slideshow-arrow', action: 'previous', icon_style: icon_style, icon_shape: shape -%}
-    {%- render 'slideshow-arrow', action: 'next', icon_style: icon_style, icon_shape: shape -%}
-  </div>
-{% endif %}
+  {%- if style == 'thumbnails' -%}
+    <div class="slideshow-controls__thumbnails-container" ref="thumbnailsContainer">
+      <scroll-hint class="slideshow-controls__thumbnails list-unstyled" ref="thumbnailsControl">
+        {%- for media in thumbnails -%}
+          {%- liquid
+             assign thumbnail_aspect_ratio = aspect_ratio
+             if aspect_ratio == 'adapt'
+               assign thumbnail_aspect_ratio = media.preview_image.aspect_ratio | default: 1.0
+             endif
+          -%}
+          <button
+            type="button"
+            class="button button-unstyled slideshow-controls__thumbnail"
+            aria-label="{{ 'accessibility.load_slide' | t: slide_number: forloop.index }}"
+            aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+            on:click="select({{ forloop.index0 }})"
+            ref="thumbnails[]"
+            style="--aspect-ratio: {{ thumbnail_aspect_ratio }};"
+          >
+            {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy' }}
+            {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+              <div class="slideshow-controls__thumbnail-badge">
+                {% render 'icon', icon: 'play', size: 'small' %}
+              </div>
+            {%- elsif media.media_type == 'model' -%}
+              <div class="slideshow-controls__thumbnail-badge">
+                {% render 'icon', icon: '3d-model', size: 'small' %}
+              </div>
+            {%- endif -%}
+          </button>
+        {%- endfor -%}
+      </scroll-hint>
+    </div>
+  {%- elsif style == 'dots' -%}
+    <div class="slideshow-controls__dots">
+      {%- for i in (1..item_count) -%}
+        <button
+          type="button"
+          class="button button-unstyled slideshow-controls__dot"
+          aria-label="{{ 'accessibility.load_slide' | t: slide_number: forloop.index }}"
+          aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+          on:click="select({{ forloop.index0 }})"
+          ref="dots[]"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- elsif style == 'counter' -%}
+     <div class="slideshow-controls__counter">
+      <span ref="current">1</span>
+      <span aria-hidden="true">/</span>
+      <span>{{ item_count }}</span>
+    </div>
+  {%- endif -%}
+</slideshow-controls>

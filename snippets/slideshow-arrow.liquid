@@ -13,7 +13,7 @@
 <style>
 /* --- Custom White Rounded Slideshow Arrows (Angle Icons) --- */
 .custom-slideshow-arrow {
-  background-color: #ffffff;
+  background-color: #e0e0e0 !important; /* grey background */
   border-radius: 50%;
   width: 24px!important;
   height: 24px!important;
@@ -25,7 +25,7 @@
   justify-content: center;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
   transition: all 0.25s ease;
-  color: #666666!important; /* grey icon */
+  color: #000000 !important; /* black icon */
   border: none;
   cursor: pointer;
   position: absolute;
@@ -45,7 +45,7 @@
 
 
 .custom-slideshow-arrow:hover {
-  background-color: #ffffff;
+  background-color: #d0d0d0 !important;
   color: #000!important; /* icon turns black */
   transform: translateY(-50%) scale(1.05);
 }
@@ -64,6 +64,7 @@
     custom-slideshow-arrow
     button button-unstyled
   "
+  style="background-color: #e0e0e0 !important; color: #000000 !important;"
   aria-label="{{ 'accessibility.slideshow_' | append: action | t }}"
   on:click="/{{ action }}"
   ref="{{ action }}"

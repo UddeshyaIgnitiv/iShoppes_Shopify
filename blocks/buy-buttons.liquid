@@ -72,7 +72,8 @@
           style="{% render 'spacing-style', settings: block_settings %}"
         >
           {% content_for 'block', type: 'quantity', id: 'quantity' %}
-
+        </div>
+        <div>
           <div class="age-verification-wrapper" style="width: 100%; margin-top: 15px; margin-bottom: 10px;">
              <div style="display: flex; align-items: flex-start; gap: 8px;">
                 <input type="checkbox" id="age-verification-{{ section.id }}" name="properties[Age Verification]" required form="{{ product_form_id }}" style="margin-top: 4px; width: 18px; height: 18px; accent-color: black;">

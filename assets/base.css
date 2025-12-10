@@ -22,6 +22,9 @@ body {
   --surface-transition-duration: 0.3s;
   --surface-transition-timing: var(--ease-out-quad);
 }
+#shop-hcaptcha-badge-container {
+  display: none !important;
+}
 
 html {
   /* Firefox */
@@ -3402,11 +3405,12 @@ slideshow-component:has(slideshow-controls[thumbnails]) {
   }
 
   &:has(slideshow-controls[pagination-position='left']) {
-    display: grid;
+    /* display: grid; */
     grid-template:
-      'controls container' auto
+      'controls container' minmax(0, 1fr)
       'controls arrows' min-content
       / auto 1fr;
+    grid-auto-rows: min-content;
   }
 
   slideshow-controls[pagination-position='left'] {

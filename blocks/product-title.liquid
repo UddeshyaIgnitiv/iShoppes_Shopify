@@ -5,6 +5,40 @@
   {% assign product_title = '<p>' | append: text | append: '</p>' %}
   {% render 'text', fallback_text: product_title, block: block %}
 {% elsif closest.product != blank %}
+  <div class="product-title-icons-wrapper">
+    <button class="share-button" type="button" aria-label="Share">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+    </button>
+    <div class="wishlist">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-icon-P1l">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+       const shareBtn = document.querySelector('.share-button');
+       if(shareBtn) {
+         shareBtn.addEventListener('click', function() {
+            if (navigator.share) {
+              navigator.share({
+                title: '{{ closest.product.title | escape }}',
+                url: '{{ shop.url }}{{ closest.product.url }}'
+              });
+            } else {
+              const dummy = document.createElement('input');
+              const text = window.location.href;
+              document.body.appendChild(dummy);
+              dummy.value = text;
+              dummy.select();
+              document.execCommand('copy');
+              document.body.removeChild(dummy);
+              alert('Link copied to clipboard');
+            }
+         });
+       }
+    });
+  </script>
   {% if closest.product.vendor != blank %}
       <div class="product__vendor text-block">{{ closest.product.vendor }}</div>
   {% endif %}
@@ -25,6 +59,53 @@
   .product__vendor{
     text-transform: capitalize;
     font-size: 2.2rem;
+  }
+  .product-title-icons-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  .share-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    color: black;
+  }
+  .wishlist-button-wrapper {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wishlisthero-pdp-inline {
+    position: relative !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+  .wishlisthero-pdp-inline svg {
+    width: 20px !important;
+    height: 20px !important;
+    max-width: none !important;
+    max-height: none !important;
   }
 {% endstylesheet %}
 {% schema %}

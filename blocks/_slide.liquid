@@ -53,11 +53,24 @@
       -%}
 
       {%- if block_settings.media_type_1 == 'image' -%}
-        {{
-          block_settings.image_1
-          | image_url: width: 3840
-          | image_tag: height: height, sizes: sizes, widths: widths, class: 'slide__image', loading: loading, fetchpriority: fetchpriority
-        }}
+        {%- if block_settings.image_mobile != blank -%}
+          {{
+            block_settings.image_1
+            | image_url: width: 3840
+            | image_tag: height: height, sizes: sizes, widths: widths, class: 'slide__image small-hide', loading: loading, fetchpriority: fetchpriority
+          }}
+          {{
+            block_settings.image_mobile
+            | image_url: width: 3840
+            | image_tag: height: height, sizes: sizes, widths: widths, class: 'slide__image medium-hide large-up-hide', loading: loading, fetchpriority: fetchpriority
+          }}
+        {%- else -%}
+          {{
+            block_settings.image_1
+            | image_url: width: 3840
+            | image_tag: height: height, sizes: sizes, widths: widths, class: 'slide__image', loading: loading, fetchpriority: fetchpriority
+          }}
+        {%- endif -%}
       {%- else -%}
         {%- if block_settings.video_1.preview_image -%}
 
@@ -158,11 +171,19 @@
   .slide__image-container > .slide__video-poster {
     position: absolute;
   }
+
+  @media screen and (max-width: 767px) {
+    .small-hide { display: none !important; }
+  }
+  @media screen and (min-width: 768px) {
+    .medium-hide { display: none !important; }
+    .large-up-hide { display: none !important; }
+  }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "t:names.slide",
+  "name": "Slide",
   "tag": null,
   "blocks": [
     {
@@ -193,6 +214,12 @@
       "type": "image_picker",
       "id": "image_1",
       "label": "t:settings.image",
+      "visible_if": "{{ block.settings.media_type_1 == 'image' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image",
       "visible_if": "{{ block.settings.media_type_1 == 'image' }}"
     },
     {
@@ -448,7 +475,7 @@
   ],
   "presets": [
     {
-      "name": "t:names.slide",
+      "name": "Slide",
       "settings": {
         "horizontal_alignment_flex_direction_column": "center"
       },

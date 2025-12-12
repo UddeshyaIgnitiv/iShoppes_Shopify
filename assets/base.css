@@ -406,6 +406,10 @@ main[data-template="page.glenfiddich"] .shopify-section:not(.header-section) :is
   padding-right: 0;
   padding-left: 0;
 }
+main[data-template="page.chanel"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+  padding-right: 30px;
+  padding-left: 30px;
+}
 
 .shopify-section:not(.header-section):has(.section) {
   position: relative;
@@ -483,6 +487,10 @@ main[data-template="page.glenfiddich"] .shopify-section:not(.header-section) :is
   .mobile\:hidden {
     /* stylelint-disable-next-line declaration-no-important */
     display: none !important;
+  }
+  main[data-template="page.chanel"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+    padding-right: 10px;
+    padding-left: 10px;
   }
 }
 

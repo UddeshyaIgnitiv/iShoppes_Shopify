@@ -397,7 +397,7 @@
       "block_order": [
         "ai_gen_block_f724762_zwaW3G"
       ],
-      "name": "BestSeller",
+      "name": "BEST SELLERS",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -497,7 +497,7 @@
             "alignment": "left",
             "type_preset": "custom",
             "font": "var(--font-body--family)",
-            "font_size": "1rem",
+            "font_size": "1.125rem",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "none",

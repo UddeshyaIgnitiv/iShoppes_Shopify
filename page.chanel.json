@@ -1,0 +1,29 @@
+{
+    "sections": {
+      "banner": {
+        "type": "hero",
+        "settings": {
+          "section_height": "auto",
+          "toggle_overlay": false,
+          "section_width": "full-width",
+          "padding-block-start": 0,
+          "padding-block-end": 0
+        }
+      },
+      "content_image": {
+        "type": "hero",
+        "settings": {
+          "section_height": "auto",
+          "toggle_overlay": false,
+          "section_width": "page-width",
+          "padding-block-start": 40,
+          "padding-block-end": 40
+        }
+      }
+    },
+    "order": [
+      "banner",
+      "content_image"
+    ]
+  }
+  

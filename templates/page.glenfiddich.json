@@ -349,7 +349,7 @@
         "color_scheme": "",
         "autoplay": false,
         "autoplay_speed": 4,
-        "section_width": "full-width",
+        "section_width": "page-width",
         "slide_height": "medium",
         "padding-block-start": 0,
         "padding-block-end": 0

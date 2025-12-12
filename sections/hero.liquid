@@ -2,7 +2,7 @@
 
 {% liquid
   assign media_count = 0
-  if section.settings.image_1 != blank and section.settings.image_2 != blank
+  if section.settings.image_1 != blank and section.settings.image_2 != blank and section.settings.responsive_media == false
     assign media_width_desktop = 100 | divided_by: 2 | append: 'vw'
   else
     assign media_width_desktop = '100vw'
@@ -60,6 +60,16 @@
   endif
 %}
 
+{% liquid
+  assign image_1_class = 'hero__image'
+  assign image_2_class = 'hero__image'
+  
+  if section.settings.responsive_media
+    assign image_1_class = image_1_class | append: ' hidden--mobile'
+    assign image_2_class = image_2_class | append: ' hidden--desktop'
+  endif
+%}
+
 {% capture media %}
   {%- if has_image_1 -%}
     {% assign media_count = media_count | plus: 1 %}
@@ -71,7 +81,7 @@
         widths: widths,
         height: section.settings.image_1.height,
         alt: section.settings.image_1.alt,
-        class: 'hero__image',
+        class: image_1_class,
         sizes: sizes,
         fetchpriority: fetch_priority
     }}
@@ -79,7 +89,7 @@
 
   {%- if has_video_1 -%}
     {% assign media_count = media_count | plus: 1 %}
-    <div class="hero__video-wrapper">
+    <div class="hero__video-wrapper{% if section.settings.responsive_media %} hidden--mobile{% endif %}">
       {%- if section.settings.video_1.preview_image -%}
         {% liquid
           assign fetch_priority_poster = false
@@ -123,7 +133,7 @@
         widths: widths,
         height: section.settings.image_2.height,
         alt: section.settings.image_2.alt,
-        class: 'hero__image',
+        class: image_2_class,
         sizes: sizes,
         fetchpriority: fetch_priority
     }}
@@ -131,7 +141,7 @@
 
   {%- if has_video_2 -%}
     {% assign media_count = media_count | plus: 1 %}
-    <div class="hero__video-wrapper">
+    <div class="hero__video-wrapper{% if section.settings.responsive_media %} hidden--desktop{% endif %}">
       {%- if section.settings.video_2.preview_image -%}
         {{
           section.settings.video_2.preview_image
@@ -163,6 +173,13 @@
   {%- endif -%}
 {% endcapture %}
 
+{% liquid
+  assign hero_media_count = media_count
+  if section.settings.responsive_media
+    assign hero_media_count = 1
+  endif
+%}
+
 {% capture media_blurred %}
   {% if has_image_1 %}
     {{
@@ -173,7 +190,7 @@
         widths: widths,
         height: section.settings.image_1.height,
         alt: '',
-        class: 'hero__image',
+        class: image_1_class,
         sizes: sizes
     }}
   {% endif %}
@@ -186,7 +203,7 @@
         widths: widths,
         height: section.settings.image_2.height,
         alt: '',
-        class: 'hero__image',
+        class: image_2_class,
         sizes: sizes
     }}
   {% endif %}
@@ -197,7 +214,7 @@
 
 <div
   id="Hero-{{ section.id }}"
-  class="hero color-{{ section.settings.color_scheme }}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}"
+  class="hero color-{{ section.settings.color_scheme }}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.responsive_media %} hero--responsive-media{% endif %}"
   style="
     --hero-border-style: {{ section.settings.border }};
     --hero-border-width: {{ section.settings.border_width }}px;
@@ -246,7 +263,7 @@
     {%- endif -%}
     <div
       class="hero__media-wrapper"
-      style="--hero-media-count: {{ media_count }};{%- if section.settings.image_1 != blank -%} --hero-media-aspect-ratio: {{ section.settings.image_1.aspect_ratio }};{% endif %}"
+      style="--hero-media-count: {{ hero_media_count }};{%- if section.settings.image_1 != blank -%} --hero-media-aspect-ratio: {{ section.settings.image_1.aspect_ratio }};{% endif %}"
     >
       {% liquid
         if section.settings.toggle_overlay
@@ -441,6 +458,12 @@
       }
     }
   }
+
+  .hero--responsive-media .hero__blurred-image img {
+    width: 100%;
+    left: 0;
+    right: auto;
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -481,6 +504,12 @@
     {
       "type": "header",
       "content": "t:content.media"
+    },
+    {
+      "type": "checkbox",
+      "id": "responsive_media",
+      "label": "Use separate images for mobile/desktop",
+      "default": true
     },
     {
       "type": "select",

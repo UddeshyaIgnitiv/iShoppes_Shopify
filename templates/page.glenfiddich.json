@@ -504,7 +504,7 @@
             "wrap": "balance",
             "color": "var(--color-foreground)",
             "background": true,
-            "background_color": "#343333",
+            "background_color": "#060000",
             "corner_radius": 0,
             "padding-block-start": 50,
             "padding-block-end": 50,

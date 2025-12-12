@@ -51,6 +51,7 @@
 {% capture attributes %}
   class="{{ class }} spacing-style text-block text-block--{{ block.id }} {{ block_settings.type_preset }}
     {{ text_block_classes }}
+    brand-description
   "
 
   style="
@@ -214,5 +215,10 @@
   .custom-color,
   .custom-color > :is(h1, h2, h3, h4, h5, h6, p, *) {
     color: var(--color);
+  }
+  .brand-description {
+    @media (max-width: 768px) {
+      padding: 20px 10px 60px 10px;
+    }
   }
 {% endstylesheet %}

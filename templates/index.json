@@ -72,7 +72,7 @@
       "name": "t:names.slideshow",
       "settings": {
         "icons_style": "arrows_large",
-        "slideshow_controls_style": "counter",
+        "slideshow_controls_style": "dots",
         "color_scheme": "",
         "autoplay": false,
         "autoplay_speed": 4,
@@ -113,7 +113,9 @@
       ],
       "name": "Travel Exclusives",
       "settings": {
-        "heading": "TRAVEL EXCLUSIVES"
+        "heading": "TRAVEL EXCLUSIVES",
+        "tag": "travel exclusives",
+        "product_limit": 4
       }
     },
     "new_arrivals": {
@@ -152,7 +154,9 @@
       ],
       "name": "New Arrivals",
       "settings": {
-        "heading": "NEW ARRIVALS"
+        "heading": "NEW ARRIVALS",
+        "tag": "New Arrivals",
+        "product_limit": 4
       }
     },
     "promotion_banners": {
@@ -247,36 +251,7 @@
         "logo_spacing": 40,
         "hover_effect": false
       }
-    },
-    // "social_section": {
-    //   "type": "social-section",
-    //   "blocks": {
-    //     "icon_UNityz": {
-    //       "type": "icon",
-    //       "name": "Instagram icon",
-    //       "settings": {
-    //         "icon": "shopify://shop_images/Insta-icon-8Tg.png",
-    //         "alt_text": "Instagram icon",
-    //         "link": "https://www.instagram.com/isdutyfree"
-    //       }
-    //     },
-    //     "icon_tKhcYf": {
-    //       "type": "icon",
-    //       "name": "Facebook icon",
-    //       "settings": {
-    //         "icon": "shopify://shop_images/fb-icon-m22.png",
-    //         "alt_text": "Facebook icon",
-    //         "link": "https://www.facebook.com/isdutyfree/"
-    //       }
-    //     }
-    //   },
-    //   "block_order": [
-    //     "icon_UNityz",
-    //     "icon_tKhcYf"
-    //   ],
-    //   "name": "Social Section",
-    //   "settings": {}
-    // }
+    }
   },
   "order": [
     "slideshow_ifejig",
@@ -285,7 +260,6 @@
     "new_arrivals",
     "promotion_banners",
     "content_image_info_banner",
-    "official_stores",
-    // "social_section"
+    "official_stores"
   ]
 }

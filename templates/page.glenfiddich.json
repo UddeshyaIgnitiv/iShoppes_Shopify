@@ -466,7 +466,7 @@
         },
         "image_c7aVLi": {
           "type": "image",
-          "name": "Logo",
+          "name": "Bottom Logo",
           "settings": {
             "image": "shopify://shop_images/geln_logo.webp",
             "link": "",
@@ -489,7 +489,7 @@
         },
         "text_iWTAWX": {
           "type": "text",
-          "name": "t:names.text",
+          "name": "Brand Description",
           "settings": {
             "text": "<p>Founded in Dufftown, Scotland by innovator William Grant, Glenfiddich first ran from the stills on Christmas Day, 1887. Adopting revolutionary methods and practices Grant’s maverick attitude to whisky production saw Glenfiddich excel for over a hundred and thirty years, becoming the first single malt whisky to be promoted outside of Scotland, and ultimately, the best-selling and most awarded single malt whisky in the world.</p>",
             "width": "100%",
@@ -502,7 +502,7 @@
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "balance",
-            "color": "white",
+            "color": "var(--color-foreground)",
             "background": true,
             "background_color": "#060000",
             "corner_radius": 0,

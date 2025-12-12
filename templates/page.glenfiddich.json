@@ -502,7 +502,7 @@
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "balance",
-            "color": "var(--color-foreground)",
+            "color": "#ffffff",
             "background": true,
             "background_color": "#060000",
             "corner_radius": 0,

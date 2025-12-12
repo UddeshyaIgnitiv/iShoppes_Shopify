@@ -50,6 +50,8 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding: 20px 5px 40px 5px; /* Added padding for shadow */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
 
   .ai-bestseller-carousel__track-{{ ai_gen_id }}::-webkit-scrollbar {
@@ -60,6 +62,7 @@
     flex: 0 0 calc((100% - {{ block.settings.product_gap }}px * ({{ block.settings.products_per_row_desktop | minus: 1 }})) / {{ block.settings.products_per_row_desktop }});
     min-width: 250px;
     position: relative;
+    scroll-snap-align: start;
   }
 
   .ai-bestseller-carousel__product-card-{{ ai_gen_id }} {
@@ -253,24 +256,60 @@
   }
 
   @media screen and (max-width: 768px) {
-    .ai-bestseller-carousel__product-{{ ai_gen_id }} {
-      flex: 0 0 calc((100% - {{ block.settings.product_gap }}px * ({{ block.settings.products_per_row_mobile | minus: 1 }})) / {{ block.settings.products_per_row_mobile }});
+    .ai-bestseller-carousel__container-{{ ai_gen_id }} {
+      padding: 0 15px;
+    }
+
+    .ai-bestseller-carousel__header-{{ ai_gen_id }} {
+      text-align: left;
+      margin-bottom: 25px;
+      padding-left: 0;
+      position: relative;
+      z-index: 2;
+      display: block;
+      width: 100%;
     }
 
     .ai-bestseller-carousel__title-{{ ai_gen_id }} {
       font-size: 24px;
+      color: {{ block.settings.heading_color }};
+      display: block;
+      line-height: 1.2;
     }
 
     .ai-bestseller-carousel__product-card-{{ ai_gen_id }} {
-        padding: 15px;
+      padding: 15px;
     }
-    
+
     .ai-bestseller-carousel__vendor-{{ ai_gen_id }} {
-        font-size: 14px;
+      font-size: 14px;
     }
-    
+
     .ai-bestseller-carousel__product-title-{{ ai_gen_id }} {
-        font-size: 12px;
+      font-size: 13px;
+    }
+
+    .ai-bestseller-carousel__nav-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-bestseller-carousel__track-{{ ai_gen_id }} {
+      padding-bottom: 30px;
+      gap: 15px;
+      scroll-padding-left: 0;
+      flex-wrap: nowrap;
+    }
+
+    .ai-bestseller-carousel__product-{{ ai_gen_id }} {
+      {% if block.settings.products_per_row_mobile == '1' %}
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: none;
+      {% else %}
+        flex: 0 0 calc((100% - 15px) / 2);
+        min-width: 160px;
+      {% endif %}
+      scroll-snap-align: start;
     }
   }
 {% endstyle %}

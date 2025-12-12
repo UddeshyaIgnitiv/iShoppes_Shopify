@@ -464,7 +464,7 @@
           },
           "blocks": {}
         },
-        "image_c7aVLi": {
+        "image_GVWq7c": {
           "type": "image",
           "name": "Bottom Logo",
           "settings": {
@@ -516,7 +516,7 @@
       },
       "block_order": [
         "ai_gen_block_f724762_BhUJJJ",
-        "image_c7aVLi",
+        "image_GVWq7c",
         "text_iWTAWX"
       ],
       "name": "RECOMMENDED",

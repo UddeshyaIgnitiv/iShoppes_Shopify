@@ -144,13 +144,13 @@
       ],
       "name": "MobileSlideShow",
       "settings": {
-        "icons_style": "arrows_large",
+        "icons_style": "arrow",
         "slideshow_controls_style": "dots",
-        "color_scheme": "",
+        "color_scheme": "scheme-1",
         "autoplay": false,
         "autoplay_speed": 4,
         "section_width": "full-width",
-        "slide_height": "medium",
+        "slide_height": "large",
         "padding-block-start": 0,
         "padding-block-end": 0
       }

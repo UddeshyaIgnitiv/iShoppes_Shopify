@@ -495,21 +495,21 @@
             "width": "100%",
             "max_width": "none",
             "alignment": "left",
-            "type_preset": "rte",
+            "type_preset": "custom",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "none",
-            "wrap": "pretty",
+            "wrap": "balance",
             "color": "var(--color-foreground)",
             "background": true,
             "background_color": "#343333",
             "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-block-start": 50,
+            "padding-block-end": 50,
+            "padding-inline-start": 100,
+            "padding-inline-end": 100
           },
           "blocks": {}
         }

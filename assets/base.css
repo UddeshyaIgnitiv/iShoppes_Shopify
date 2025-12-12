@@ -4395,3 +4395,17 @@ text-component {
     display: block !important;
   }
 }
+
+/* Home Page Slider Visibility */
+[id$="slideshow_8X8D3Y"] {
+  display: none !important;
+}
+
+@media screen and (max-width: 749px) {
+  [id$="slideshow_ifejig"] {
+    display: none !important;
+  }
+  [id$="slideshow_8X8D3Y"] {
+    display: block !important;
+  }
+}

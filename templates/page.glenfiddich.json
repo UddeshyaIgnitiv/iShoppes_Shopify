@@ -48,7 +48,7 @@
           },
           "blocks": {}
         },
-        "slide_eBK84V": {
+        "slide_BAY9jy": {
           "type": "_slide",
           "settings": {
             "media_type_1": "image",
@@ -73,21 +73,102 @@
             "padding-inline-end": 0
           },
           "blocks": {}
+        },
+        "slide_E8PQTB": {
+          "type": "_slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/glen-banner-d3.webp",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 0,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "slide_iVpYeL": {
+          "type": "_slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/glen-banner-d4.webp",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 0,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "slide_HbL8Dc": {
+          "type": "_slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/glen-banner-d5.webp",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 0,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
         "slide_xJHy63",
-        "slide_eBK84V"
+        "slide_BAY9jy",
+        "slide_E8PQTB",
+        "slide_iVpYeL",
+        "slide_HbL8Dc"
       ],
-      "name": "t:names.slideshow",
+      "name": "desktop",
       "settings": {
-        "icons_style": "arrows_large",
+        "icons_style": "chevron",
         "slideshow_controls_style": "dots",
-        "color_scheme": "",
+        "color_scheme": "scheme-1",
         "autoplay": false,
         "autoplay_speed": 4,
         "section_width": "full-width",
-        "slide_height": "medium",
+        "slide_height": "small",
         "padding-block-start": 0,
         "padding-block-end": 0
       }

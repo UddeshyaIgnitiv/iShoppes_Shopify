@@ -268,10 +268,10 @@
           "type": "text",
           "name": "t:names.header",
           "settings": {
-            "text": "<h3>Related products</h3>",
-            "width": "fit-content",
+            "text": "<h3>RECOMMENDED</h3>",
+            "width": "100%",
             "max_width": "normal",
-            "alignment": "left",
+            "alignment": "center",
             "type_preset": "rte",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
@@ -386,10 +386,10 @@
       "custom_css": [
         ".terminal-select-wrapper {display: none;}"
       ],
-      "name": "t:names.product_recommendations",
+      "name": "Recommended",
       "settings": {
-        "product": "{{ closest.product }}",
-        "recommendation_type": "related",
+        "product": "",
+        "recommendation_type": "complementary",
         "layout_type": "carousel",
         "carousel_on_mobile": false,
         "max_products": 3,
@@ -397,7 +397,7 @@
         "mobile_columns": "2",
         "columns_gap": 12,
         "rows_gap": 24,
-        "icons_style": "arrow",
+        "icons_style": "none",
         "icons_shape": "none",
         "section_width": "page-width",
         "gap": 28,

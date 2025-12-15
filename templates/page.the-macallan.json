@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -7,11 +16,11 @@
           "type": "image",
           "name": "Top Logo",
           "settings": {
-            "image": "",
+            "image": "shopify://shop_images/macallan_logo.webp",
             "link": "",
             "image_ratio": "adapt",
             "width": "fill",
-            "custom_width": 46,
+            "custom_width": 100,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
             "height": "fit",
@@ -23,7 +32,8 @@
             "padding-block-end": 10,
             "padding-inline-start": 0,
             "padding-inline-end": 0
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -44,7 +54,6 @@
           "type": "_slide",
           "settings": {
             "media_type_1": "image",
-            "image_1": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -63,7 +72,8 @@
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -89,7 +99,6 @@
           "type": "_slide",
           "settings": {
             "media_type_1": "image",
-            "image_1": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -108,7 +117,8 @@
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -156,7 +166,8 @@
             "section_padding_top": 50,
             "section_padding_bottom": 50,
             "card_border_radius": 8
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -220,7 +231,8 @@
             "section_padding_top": 50,
             "section_padding_bottom": 50,
             "card_border_radius": 8
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -255,7 +267,7 @@
         "padding-block-end": 20
       }
     },
-     "masters_decanter": {
+    "masters_decanter": {
       "type": "_blocks",
       "blocks": {
         "carousel": {
@@ -284,7 +296,8 @@
             "section_padding_top": 50,
             "section_padding_bottom": 50,
             "card_border_radius": 8
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -326,7 +339,6 @@
           "type": "image",
           "name": "Bottom Logo",
           "settings": {
-            "image": "",
             "link": "",
             "image_ratio": "adapt",
             "width": "custom",
@@ -342,7 +354,8 @@
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
-          }
+          },
+          "blocks": {}
         },
         "brand_description": {
           "type": "text",
@@ -367,7 +380,8 @@
             "padding-block-end": 50,
             "padding-inline-start": 100,
             "padding-inline-end": 100
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [

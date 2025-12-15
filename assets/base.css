@@ -410,6 +410,10 @@ main[data-template="page.chanel"] .shopify-section:not(.header-section) :is(.sec
   padding-right: 30px;
   padding-left: 30px;
 }
+main[data-template="page.the-macallan"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+  padding-right: 0;
+  padding-left: 0;
+}
 
 .shopify-section:not(.header-section):has(.section) {
   position: relative;
@@ -4406,6 +4410,20 @@ text-component {
     display: none !important;
   }
   [id$="slideshow_8X8D3Y"] {
+    display: block !important;
+  }
+}
+
+/* Macallan Page Slider Visibility */
+[id$="mobile_slider"] {
+  display: none !important;
+}
+
+@media screen and (max-width: 749px) {
+  [id$="desktop_slider"] {
+    display: none !important;
+  }
+  [id$="mobile_slider"] {
     display: block !important;
   }
 }

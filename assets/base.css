@@ -4427,3 +4427,97 @@ text-component {
     display: block !important;
   }
 }
+/* Macallan Our Whisky Section */
+.macallan-our-whisky-section {
+  padding: 50px 0;
+  text-align: center;
+}
+.macallan-section-title {
+  font-family: 'NewFrank', sans-serif;
+  font-size: 24px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+.macallan-whisky-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.macallan-whisky-item {
+  position: relative;
+  overflow: hidden;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+}
+.macallan-whisky-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.macallan-whisky-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.macallan-whisky-item:hover .macallan-whisky-image img {
+  transform: scale(1.05);
+}
+.macallan-whisky-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 30px 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 50%);
+  color: white;
+}
+.macallan-whisky-overlay h3 {
+  color: white;
+  font-family: 'NewFrank', sans-serif;
+  font-size: 20px;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+.macallan-whisky-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  border: 1px solid white;
+  color: white;
+  text-decoration: none;
+  font-family: 'NewFrank', sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+.macallan-whisky-btn:hover {
+  background: white;
+  color: black;
+  border-color: white;
+}
+
+@media screen and (max-width: 768px) {
+  .macallan-whisky-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 15px;
+  }
+  .macallan-whisky-item {
+    height: 350px;
+  }
+}

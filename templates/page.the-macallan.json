@@ -386,7 +386,8 @@
         "text_G8Mq6W"
       ],
       "custom_css": [
-        ".terminal-select-wrapper {display: none;}"
+        ".terminal-select-wrapper {display: none;}",
+        "* {font-family: 'NewFrank', sans-serif; }"
       ],
       "name": "Recommended",
       "settings": {

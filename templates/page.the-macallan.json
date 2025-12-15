@@ -409,6 +409,16 @@
         "padding-block-end": 48
       }
     },
+    "our_whisky_section": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <h2 class=\"macallan-section-title\">OUR WHISKY</h2>\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'macallan_banner_d1.webp' | file_url }}\" alt=\"Colour Collection\">\n      </div>\n      <div class=\"macallan-whisky-overlay\">\n        <h3>COLOUR COLLECTION</h3>\n        <a href=\"#shopify-section-colour_collection\" class=\"macallan-whisky-btn\">EXPLORE</a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'macallan_banner_d2.webp' | file_url }}\" alt=\"Rare Cask Black\">\n      </div>\n      <div class=\"macallan-whisky-overlay\">\n        <h3>RARE CASK BLACK</h3>\n        <a href=\"#shopify-section-rare_cask\" class=\"macallan-whisky-btn\">EXPLORE</a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'macallan_banner_d3.webp' | file_url }}\" alt=\"Masters Decanter Series\">\n      </div>\n      <div class=\"macallan-whisky-overlay\">\n        <h3>MASTERS DECANTER SERIES</h3>\n        <a href=\"#shopify-section-masters_decanter\" class=\"macallan-whisky-btn\">EXPLORE</a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'macallan_banner_m1.webp' | file_url }}\" alt=\"About The Macallan\">\n      </div>\n      <div class=\"macallan-whisky-overlay\">\n        <h3>ABOUT THE MACALLAN</h3>\n        <a href=\"#shopify-section-bottom_section\" class=\"macallan-whisky-btn\">EXPLORE</a>\n      </div>\n    </div>\n  </div>\n</div>",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
     "collection_list_yf4TLQ": {
       "type": "collection-list",
       "blocks": {
@@ -579,6 +589,7 @@
     "desktop_slider",
     "mobile_slider",
     "product_recommendations_mRhXfJ",
+    "our_whisky_section",
     "collection_list_yf4TLQ"
   ]
 }

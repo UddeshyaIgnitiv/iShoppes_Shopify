@@ -104,13 +104,13 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<p>INTRODUCING THE MACALLAN COLOUR COLLECTION</p>",
+            "text": "<p><strong>INTRODUCING THE MACALLAN COLOUR COLLECTION</strong></p>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "custom",
             "font": "var(--font-body--family)",
-            "font_size": "1rem",
+            "font_size": "2rem",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "uppercase",
@@ -157,6 +157,9 @@
         "ai_gen_block_a27b661_JG8qH4",
         "text_9i8JDL",
         "text_nghDmh"
+      ],
+      "custom_css": [
+        "p {font-family: \"NewFrank\", sans-serif;}"
       ],
       "settings": {
         "content_direction": "column",

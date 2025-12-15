@@ -4448,23 +4448,24 @@ text-component {
 .macallan-whisky-item {
   position: relative;
   overflow: hidden;
-  height: 450px;
+  height: auto;
   display: flex;
   flex-direction: column;
 }
 .macallan-whisky-image {
   width: 100%;
-  height: 100%;
-  position: absolute;
+  height: auto;
+  position: relative;
   top: 0;
   left: 0;
   z-index: 1;
 }
 .macallan-whisky-image img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   transition: transform 0.5s ease;
+  display: block;
 }
 .macallan-whisky-item:hover .macallan-whisky-image img {
   transform: scale(1.05);
@@ -4518,6 +4519,6 @@ text-component {
     gap: 15px;
   }
   .macallan-whisky-item {
-    height: 350px;
+    height: auto;
   }
 }

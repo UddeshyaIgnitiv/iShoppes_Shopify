@@ -387,7 +387,7 @@
       ],
       "custom_css": [
         ".terminal-select-wrapper {display: none;}",
-        "* {font-family: 'NewFrank', sans-serif; }"
+        "h3 {font-family: \"NewFrank\", sans-serif; font-size: 1.5rem;}"
       ],
       "name": "Recommended",
       "settings": {

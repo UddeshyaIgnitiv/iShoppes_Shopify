@@ -414,6 +414,10 @@ main[data-template="page.the-macallan"] .shopify-section:not(.header-section) :i
   padding-right: 0;
   padding-left: 0;
 }
+main[data-template="page.macallan.color.collections"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+  padding-right: 0;
+  padding-left: 0;
+}
 
 .shopify-section:not(.header-section):has(.section) {
   position: relative;

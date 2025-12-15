@@ -20,7 +20,7 @@
             "link": "",
             "image_ratio": "adapt",
             "width": "custom",
-            "custom_width": 90,
+            "custom_width": 100,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
             "height": "fit",

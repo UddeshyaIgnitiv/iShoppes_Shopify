@@ -412,174 +412,11 @@
     "our_whisky_section": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <h2 class=\"macallan-section-title\">OUR WHISKY</h2>\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'macallan_banner_d1.webp' | file_url }}\" alt=\"Colour Collection\">\n      </div>\n      <div class=\"macallan-whisky-overlay\">\n        <h3>COLOUR COLLECTION</h3>\n        <a href=\"#shopify-section-colour_collection\" class=\"macallan-whisky-btn\">EXPLORE</a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'macallan_banner_d2.webp' | file_url }}\" alt=\"Rare Cask Black\">\n      </div>\n      <div class=\"macallan-whisky-overlay\">\n        <h3>RARE CASK BLACK</h3>\n        <a href=\"#shopify-section-rare_cask\" class=\"macallan-whisky-btn\">EXPLORE</a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'macallan_banner_d3.webp' | file_url }}\" alt=\"Masters Decanter Series\">\n      </div>\n      <div class=\"macallan-whisky-overlay\">\n        <h3>MASTERS DECANTER SERIES</h3>\n        <a href=\"#shopify-section-masters_decanter\" class=\"macallan-whisky-btn\">EXPLORE</a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'macallan_banner_m1.webp' | file_url }}\" alt=\"About The Macallan\">\n      </div>\n      <div class=\"macallan-whisky-overlay\">\n        <h3>ABOUT THE MACALLAN</h3>\n        <a href=\"#shopify-section-bottom_section\" class=\"macallan-whisky-btn\">EXPLORE</a>\n      </div>\n    </div>\n  </div>\n</div>",
+        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <h2 class=\"macallan-section-title\">OUR WHISKY</h2>\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-1.webp?v=1765817906' | file_url }}\" alt=\"Colour Collection\">\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-2.webp?v=1765817906' | file_url }}\" alt=\"Rare Cask Black\">\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-3.webp?v=1765817906' | file_url }}\" alt=\"Masters Decanter Series\">\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-4.webp?v=1765817906' | file_url }}\" alt=\"About The Macallan\">\n      </div>\n    </div>\n  </div>\n</div>",
         "color_scheme": "",
         "section_width": "page-width",
         "padding-block-start": 40,
         "padding-block-end": 40
-      }
-    },
-    "collection_list_yf4TLQ": {
-      "type": "collection-list",
-      "blocks": {
-        "group_4pDUhw": {
-          "type": "group",
-          "name": "t:names.header",
-          "settings": {
-            "link": "",
-            "open_in_new_tab": false,
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "placeholder": "",
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "text_6CNUat": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<h3>Shop by collection</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 16,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_6CNUat"
-          ]
-        },
-        "static-collection-card": {
-          "type": "_collection-card",
-          "name": "t:names.collection_card",
-          "static": true,
-          "settings": {
-            "placement": "below_image",
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "collection_card_gap": 8,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0
-          },
-          "blocks": {
-            "collection_title_tBKhBw": {
-              "type": "collection-title",
-              "name": "t:names.collection_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "collection-card-image": {
-              "type": "_collection-card-image",
-              "name": "t:names.collection_card_image",
-              "static": true,
-              "settings": {
-                "image_ratio": "adapt",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "collection_title_tBKhBw"
-          ]
-        }
-      },
-      "block_order": [
-        "group_4pDUhw"
-      ],
-      "name": "t:names.collections_carousel",
-      "settings": {
-        "collection_list": [],
-        "layout_type": "carousel",
-        "carousel_on_mobile": false,
-        "columns": 2,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "bento_gap": 8,
-        "rows_gap": 8,
-        "max_collections": 4,
-        "icons_style": "arrow",
-        "icons_shape": "circle",
-        "section_width": "full-width",
-        "gap": 12,
-        "color_scheme": "",
-        "padding-block-start": 48,
-        "padding-block-end": 48
       }
     }
   },
@@ -589,7 +426,6 @@
     "desktop_slider",
     "mobile_slider",
     "product_recommendations_mRhXfJ",
-    "our_whisky_section",
-    "collection_list_yf4TLQ"
+    "our_whisky_section"
   ]
 }

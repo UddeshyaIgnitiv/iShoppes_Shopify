@@ -9,6 +9,68 @@
  */
 {
   "sections": {
+    "1765822097bccbbe06": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_a27b661_JG8qH4": {
+          "type": "ai_gen_block_a27b661",
+          "settings": {
+            "youtube_url": "https://www.youtube.com/watch?v=gDxoQ7RzWOM",
+            "min_height_desktop": 600,
+            "min_height_mobile": 400,
+            "background_color": "#000000",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "heading": "",
+            "heading_size": 56,
+            "subheading": "",
+            "subheading_size": 12,
+            "text_alignment": "center",
+            "content_max_width": 400,
+            "text_color": "#ffffff",
+            "button_text": "",
+            "button_link": "",
+            "button_font_size": 12,
+            "button_border_radius": 0,
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "button_hover_background": "#f5f5f5",
+            "desktop_width_percent": 100
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_a27b661_JG8qH4"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "main": {
       "type": "main-page",
       "blocks": {
@@ -59,75 +121,13 @@
         "padding-block-end": 20
       }
     },
-    "slideshow_ENJ7qt": {
-      "type": "slideshow",
-      "blocks": {
-        "slide_nCzzkw": {
-          "type": "_slide",
-          "name": "t:names.slide",
-          "settings": {
-            "media_type_1": "image",
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "center",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "video_TfrT4P": {
-              "type": "video",
-              "name": "t:names.video",
-              "settings": {
-                "source": "url",
-                "video_url": "https://www.youtube.com/watch?v=gDxoQ7RzWOM",
-                "video_autoplay": false,
-                "video_loop": true,
-                "alt": "",
-                "custom_width": 100,
-                "custom_width_mobile": 100,
-                "aspect_ratio": "auto",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "video_TfrT4P"
-          ]
-        }
-      },
-      "block_order": [
-        "slide_nCzzkw"
-      ],
-      "name": "t:names.slideshow",
+    "custom_liquid_M46Bkk": {
+      "type": "custom-liquid",
+      "name": "t:names.custom_liquid",
       "settings": {
-        "icons_style": "arrows_large",
-        "slideshow_controls_style": "dots",
+        "custom_liquid": "",
         "color_scheme": "",
-        "autoplay": false,
-        "autoplay_speed": 4,
-        "section_width": "full-width",
-        "slide_height": "medium",
+        "section_width": "page-width",
         "padding-block-start": 0,
         "padding-block-end": 0
       }
@@ -136,6 +136,7 @@
   "order": [
     "main",
     "navigation",
-    "slideshow_ENJ7qt"
+    "custom_liquid_M46Bkk",
+    "1765822097bccbbe06"
   ]
 }

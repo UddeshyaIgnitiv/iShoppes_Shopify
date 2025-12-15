@@ -383,6 +383,9 @@
       "block_order": [
         "text_G8Mq6W"
       ],
+      "custom_css": [
+        ".terminal-select-wrapper {display: none;}"
+      ],
       "name": "t:names.product_recommendations",
       "settings": {
         "product": "{{ closest.product }}",

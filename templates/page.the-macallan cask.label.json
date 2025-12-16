@@ -216,6 +216,10 @@
         "text_7ji7iL",
         "text_9JQp9w"
       ],
+      "custom_css": [
+        "h3 {font-family: \"NewFrank\", sans-serif;}",
+        "p {font-family: \"NewFrank\", sans-serif;}"
+      ],
       "name": "Video hero banner",
       "settings": {
         "content_direction": "column",

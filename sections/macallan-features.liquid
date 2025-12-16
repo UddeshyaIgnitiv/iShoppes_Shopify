@@ -166,6 +166,11 @@
     text-align: left; /* Text description is left aligned in the image somewhat, but usually blocks like this center everything. Looking at image closely: Heading is centered relative to text block, text block is justified or left aligned. Let's stick to left for paragraph, but the wrapper is centered in the 50% block. */
   }
 
+  .featured-macallan-colour-collection {
+    padding-left:40px;
+    padding-right:40px;
+  }
+
   @media screen and (max-width: 1024px) {
     .macallan-feature-content {
         padding: 40px;
@@ -196,10 +201,14 @@
       padding: 50px 20px;
       min-height: auto;
     }
+    .featured-macallan-colour-collection {
+      padding-left:0px;
+      padding-right:0px;
+    }
   }
 {% endstyle %}
 
-<div style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;padding-left:40px;padding-right:40px;">
+<div class="featured-macallan-colour-collection" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;padding-left:40px;padding-right:40px;">
   {% for block in section.blocks %}
     <div class="macallan-feature-row layout-{{ block.settings.layout }}" {{ block.shopify_attributes }}>
       

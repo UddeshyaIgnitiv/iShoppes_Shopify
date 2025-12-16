@@ -307,6 +307,40 @@
         "padding-block-start": 40,
         "padding-block-end": 40
       }
+    },
+    "recommended_products_4LbHyr": {
+      "type": "recommended-products",
+      "blocks": {
+        "product_WfdDVX": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-colour-collection-12-years-old-828268"
+          }
+        },
+        "product_LQdBEj": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-colour-collection-15-years-old-828269"
+          }
+        },
+        "product_NcDDgk": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-colour-collection-18-years-old-828270"
+          }
+        }
+      },
+      "block_order": [
+        "product_WfdDVX",
+        "product_LQdBEj",
+        "product_NcDDgk"
+      ],
+      "name": "Recommended Products",
+      "settings": {
+        "heading": "RECOMMENDED",
+        "tag": "recommended",
+        "product_limit": 3
+      }
     }
   },
   "order": [
@@ -315,6 +349,7 @@
     "desktop_slider",
     "mobile_slider",
     "new_arrivals_78x98e",
-    "our_whisky_section"
+    "our_whisky_section",
+    "recommended_products_4LbHyr"
   ]
 }

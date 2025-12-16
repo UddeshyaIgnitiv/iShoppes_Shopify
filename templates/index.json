@@ -175,6 +175,38 @@
     },
     "new_arrivals": {
       "type": "new-arrivals",
+      "blocks": {
+        "product_KykH3m": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-rare-cask-black-224707"
+          }
+        },
+        "product_K6w96Y": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-quest-258568"
+          }
+        },
+        "product_fKba6P": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-oscuro-170250"
+          }
+        },
+        "product_39wVz4": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-m-257437"
+          }
+        }
+      },
+      "block_order": [
+        "product_KykH3m",
+        "product_K6w96Y",
+        "product_fKba6P",
+        "product_39wVz4"
+      ],
       "name": "New Arrivals",
       "settings": {
         "heading": "NEW ARRIVALS",

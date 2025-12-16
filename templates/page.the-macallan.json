@@ -67,7 +67,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/macallan_banner_d1.webp",
-            "link": "https://ash101-1g.myshopify.com/pages/colour-collection",
+            "link": "/pages/colour-collection",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -95,7 +95,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/macallan_banner_d2.webp",
-            "link": "",
+            "link": "shopify://pages/masters-decanter-series",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -123,7 +123,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/macallan_banner_d3.webp",
-            "link": "",
+            "link": "shopify://pages/rare-cask-black",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",

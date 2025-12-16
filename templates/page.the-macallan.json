@@ -263,51 +263,6 @@
         "padding-block-end": 0
       }
     },
-    "new_arrivals_78x98e": {
-      "type": "new-arrivals",
-      "blocks": {
-        "product_6RAaaU": {
-          "type": "product",
-          "settings": {
-            "product": "the-macallan-colour-collection-12-years-old-828268"
-          }
-        },
-        "product_acEe4j": {
-          "type": "product",
-          "settings": {
-            "product": "the-macallan-colour-collection-15-years-old-828269"
-          }
-        },
-        "product_akDVVc": {
-          "type": "product",
-          "settings": {
-            "product": "the-macallan-colour-collection-18-years-old-828270"
-          }
-        }
-      },
-      "block_order": [
-        "product_6RAaaU",
-        "product_acEe4j",
-        "product_akDVVc"
-      ],
-      "name": "New Arrivals",
-      "settings": {
-        "heading": "RECOMMENDED",
-        "tag": "RECOMMENDED",
-        "product_limit": 4
-      }
-    },
-    "our_whisky_section": {
-      "type": "custom-liquid",
-      "name": "Our Whisky",
-      "settings": {
-        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <h2 class=\"macallan-section-title\">OUR WHISKY</h2>\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-1.webp?v=1765817906' | file_url }}\" alt=\"Colour Collection\">\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-2.webp?v=1765817906' | file_url }}\" alt=\"Rare Cask Black\">\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-3.webp?v=1765817906' | file_url }}\" alt=\"Masters Decanter Series\">\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-4.webp?v=1765817906' | file_url }}\" alt=\"About The Macallan\">\n      </div>\n    </div>\n  </div>\n</div>",
-        "color_scheme": "",
-        "section_width": "page-width",
-        "padding-block-start": 40,
-        "padding-block-end": 40
-      }
-    },
     "recommended_products_4LbHyr": {
       "type": "recommended-products",
       "blocks": {
@@ -341,6 +296,17 @@
         "tag": "recommended",
         "product_limit": 3
       }
+    },
+    "our_whisky_section": {
+      "type": "custom-liquid",
+      "name": "Our Whisky",
+      "settings": {
+        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <h2 class=\"macallan-section-title\">OUR WHISKY</h2>\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-1.webp?v=1765817906' | file_url }}\" alt=\"Colour Collection\">\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-2.webp?v=1765817906' | file_url }}\" alt=\"Rare Cask Black\">\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-3.webp?v=1765817906' | file_url }}\" alt=\"Masters Decanter Series\">\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-4.webp?v=1765817906' | file_url }}\" alt=\"About The Macallan\">\n      </div>\n    </div>\n  </div>\n</div>",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
     }
   },
   "order": [
@@ -348,8 +314,7 @@
     "navigation",
     "desktop_slider",
     "mobile_slider",
-    "new_arrivals_78x98e",
-    "our_whisky_section",
-    "recommended_products_4LbHyr"
+    "recommended_products_4LbHyr",
+    "our_whisky_section"
   ]
 }

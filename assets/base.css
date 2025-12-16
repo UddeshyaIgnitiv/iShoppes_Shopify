@@ -4443,6 +4443,20 @@ text-component {
     display: block !important;
   }
 }
+
+/* Macallan About Us Page Slider Visibility */
+[id$="slideshow_QtVp3L"] {
+  display: none !important;
+}
+
+@media screen and (max-width: 749px) {
+  [id$="slideshow_WW7UAn"] {
+    display: none !important;
+  }
+  [id$="slideshow_QtVp3L"] {
+    display: block !important;
+  }
+}
 /* Macallan Our Whisky Section */
 .macallan-our-whisky-section {
   padding: 50px 0;

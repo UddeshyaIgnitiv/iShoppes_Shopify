@@ -166,31 +166,6 @@
     },
     "travel_exclusives": {
       "type": "travel-exclusives",
-      "blocks": {
-        "product_jjXJqy": {
-          "type": "product",
-          "settings": {
-            "product": "the-macallan-no6-257438"
-          }
-        },
-        "product_Wm66Be": {
-          "type": "product",
-          "settings": {
-            "product": "har-happy-cola-pouch-300g"
-          }
-        },
-        "product_AwykRD": {
-          "type": "product",
-          "settings": {
-            "product": "har-dinosaur-pouch-300g"
-          }
-        }
-      },
-      "block_order": [
-        "product_jjXJqy",
-        "product_Wm66Be",
-        "product_AwykRD"
-      ],
       "name": "Travel Exclusives",
       "settings": {
         "heading": "TRAVEL EXCLUSIVES",
@@ -200,38 +175,6 @@
     },
     "new_arrivals": {
       "type": "new-arrivals",
-      "blocks": {
-        "product_Wm66Be": {
-          "type": "product",
-          "settings": {
-            "product": "har-happy-cola-pouch-300g"
-          }
-        },
-        "product_AwykRD": {
-          "type": "product",
-          "settings": {
-            "product": "har-dinosaur-pouch-300g"
-          }
-        },
-        "product_AwykRS": {
-          "type": "product",
-          "settings": {
-            "product": "har-dinosaur-pouch-300g"
-          }
-        },
-        "product_AwykRP": {
-          "type": "product",
-          "settings": {
-            "product": "har-dinosaur-pouch-300g"
-          }
-        }
-      },
-      "block_order": [
-        "product_Wm66Be",
-        "product_AwykRD",
-        "product_AwykRS",
-        "product_AwykRP"
-      ],
       "name": "New Arrivals",
       "settings": {
         "heading": "NEW ARRIVALS",

@@ -163,7 +163,7 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h4>THE MASTERS DECANTER SERIES</h4>",
+            "text": "<h3>THE MASTERS DECANTER SERIES</h3>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -215,6 +215,10 @@
       "block_order": [
         "text_7ji7iL",
         "text_9JQp9w"
+      ],
+      "custom_css": [
+        "h3 {font-family: \"NewFrank\", sans-serif;}",
+        "p {font-family: \"NewFrank\", sans-serif;}"
       ],
       "name": "Video hero banner",
       "settings": {

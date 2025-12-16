@@ -60,81 +60,29 @@
         "padding-block-end": 20
       }
     },
-    "1765822097bccbbe06": {
-      "type": "_blocks",
+    "slideshow_WW7UAn": {
+      "type": "slideshow",
       "blocks": {
-        "ai_gen_block_a27b661_JG8qH4": {
-          "type": "ai_gen_block_a27b661",
+        "slide_rz9cDa": {
+          "type": "_slide",
           "settings": {
-            "youtube_url": "https://www.youtube.com/watch?v=gDxoQ7RzWOM",
-            "min_height_desktop": 600,
-            "min_height_mobile": 400,
-            "background_color": "#000000",
-            "overlay_color": "#000000",
-            "overlay_opacity": 30,
-            "heading": "",
-            "heading_size": 56,
-            "subheading": "",
-            "subheading_size": 12,
-            "text_alignment": "center",
-            "content_max_width": 400,
-            "text_color": "#ffffff",
-            "button_text": "",
-            "button_link": "",
-            "button_font_size": 12,
-            "button_border_radius": 0,
-            "button_background": "#ffffff",
-            "button_text_color": "#000000",
-            "button_hover_background": "#f5f5f5",
-            "desktop_width_percent": 100
-          },
-          "blocks": {}
-        },
-        "text_9i8JDL": {
-          "type": "text",
-          "name": "t:names.heading",
-          "settings": {
-            "text": "<p><strong>INTRODUCING THE MACALLAN COLOUR COLLECTION</strong></p>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "custom",
-            "font": "var(--font-body--family)",
-            "font_size": "2rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "uppercase",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "text_nghDmh": {
-          "type": "text",
-          "name": "t:names.text",
-          "settings": {
-            "text": "<p>The Colour Collection is a range of exceptional whiskies that celebrates two of the pillars upon which The Macallan legacy is built: the Natural Colour of the whisky, and the Sherry Seasoned oak casks used to mature it. The return of the age statement graces a distinctive global travel retail exclusive collection.</p>",
-            "width": "100%",
-            "max_width": "none",
-            "alignment": "center",
-            "type_preset": "custom",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/aboutus_banner_d.webp",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
@@ -144,73 +92,66 @@
         }
       },
       "block_order": [
-        "ai_gen_block_a27b661_JG8qH4",
-        "text_9i8JDL",
-        "text_nghDmh"
+        "slide_rz9cDa"
       ],
-      "custom_css": [
-        "p {font-family: \"NewFrank\", sans-serif;}"
-      ],
+      "name": "Desktop Slider",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
+        "icons_style": "arrows_large",
+        "slideshow_controls_style": "dots",
         "color_scheme": "",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
+        "autoplay": false,
+        "autoplay_speed": 4,
+        "section_width": "full-width",
+        "slide_height": "small",
         "padding-block-start": 0,
-        "padding-block-end": 20
+        "padding-block-end": 0
       }
     },
-    "macallan_collection_list_PjML8W": {
-      "type": "macallan-collection-list",
+    "slideshow_QtVp3L": {
+      "type": "slideshow",
       "blocks": {
-        "product_TBAdUA": {
-          "type": "product",
+        "slide_Uygc4A": {
+          "type": "_slide",
           "settings": {
-            "product": "the-macallan-colour-collection-12-years-old-828268"
-          }
-        },
-        "product_iRWQhQ": {
-          "type": "product",
-          "settings": {
-            "product": "the-macallan-colour-collection-15-years-old-828269"
-          }
-        },
-        "product_nwaiBW": {
-          "type": "product",
-          "settings": {
-            "product": "the-macallan-colour-collection-18-years-old-828270"
-          }
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/aboutus_banner_m.webp",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
-        "product_TBAdUA",
-        "product_iRWQhQ",
-        "product_nwaiBW"
+        "slide_Uygc4A"
       ],
-      "name": "Macallan Collection List",
+      "name": "Mobile Slider",
       "settings": {
-        "heading": "THE MACALLAN COLOUR COLLECTION",
-        "tag": "macallan",
-        "product_limit": 4
+        "icons_style": "arrows_large",
+        "slideshow_controls_style": "dots",
+        "color_scheme": "",
+        "autoplay": false,
+        "autoplay_speed": 4,
+        "section_width": "full-width",
+        "slide_height": "medium",
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     },
     "macallan_features_tWHNbL": {
@@ -219,25 +160,45 @@
         "feature_row_kB6Gdz": {
           "type": "feature_row",
           "settings": {
-            "image": "shopify://shop_images/grid_oak_cask_macallan.webp",
-            "heading": "SHERRY SEASONED OAK CASK",
-            "text": "The exceptional oak casks are meticulously seasoned with the finest sherry from Jerez de la Frontera, Spain. Once perfectly matured, they embark on a tranquil journey to Speyside, Scotland, where they are then filled with the new make spirit.",
+            "image": "shopify://shop_images/aboutus_grid_macallan.webp",
+            "heading": "A DEDICATION TO MASTERY",
+            "text": "The Macallan's 485-acre Estate houses their award-winning Distillery, with the historic Easter Elchies House at its heart. Integral to the brand is The Macallan's commitment to their oak casks. From acorn to glass every step is carefully safeguarded by The Macallan Master of Wood, Stuart McPherson.   \n\nThese hand-picked casks are then delivered to the specifications of The Macallan Whisky Mastery Team and filled with their new make spirit. The Whisky Mastery Team works together to create and maintain this exceptional portfolio of single malt whiskies, building a legacy for the future.",
             "layout": "left"
           }
         },
         "feature_row_t7iNYW": {
           "type": "feature_row",
           "settings": {
-            "image": "shopify://shop_images/natural_color.webp",
-            "heading": "NATURAL COLOUR",
-            "text": "As the whisky ages in The Macallan's sherry seasoned oak casks, they take on a spectrum of natural hues and tones that deepen with age.",
+            "image": "shopify://shop_images/aboutus_grid_mws_macallan_2.webp",
+            "heading": "THE MASTERY OF WOOD AND SPIRIT",
+            "text": "Our reputation for the extraordinary is characterised by the exceptional oak casks for which The Macallan is renowned. Sourced, crafted, toasted and seasoned under the watchful eye of The Macallan Master of Wood, the hand-picked casks are delivered to the demanding specifications of The Macallan Whisky Mastery Team. For every expression of The Macallan, the quality of the whisky is largely dependent on the quality of the oak casks it is matured in, as well as the quality of our 'new make' spirit distilled from water, yeast and barley. With up to 80% of The Macallan’s final character and flavour determined by cask quality, the oak cask is the most prominent factor in ensuring and delivering the quality and style of our single malt.",
+            "layout": "right"
+          }
+        },
+        "feature_row_jHCz8N": {
+          "type": "feature_row",
+          "settings": {
+            "image": "shopify://shop_images/aboutus_grid_cc_macallan_3.webp",
+            "heading": "CHARACTERISED BY COLOUR",
+            "text": "All of our whiskies take 100% of their colour from the wood in which they are matured. As wood is a natural product, each tree is different and in turn, imparts different flavours and colours to the whisky during maturation. The skill of the whisky makers ensures colour is as consistent as possible from bottling to bottling, through the management and selection of the casks which provide the spectrum of natural colour essential to The Macallan single malt.",
+            "layout": "left"
+          }
+        },
+        "feature_row_jtfgmP": {
+          "type": "feature_row",
+          "settings": {
+            "image": "shopify://shop_images/aboutus_grid_jtd_macallan_4.webp",
+            "heading": "A JOURNEY OF TIME, DISTANCE AND KNOW-HOW",
+            "text": "The Macallan works closely with fully integrated ‘tree to finished seasoned cask’ companies in Spain; to identify the oak trees in the forests of northern Spain, fell the trees, saw and air dry the oak staves before shipping them to the south for further air-drying to reduce the moisture even more. The casks are then seasoned for 18 months before making the journey to Scotland where they are filled with The Macallan ‘new make’ spirit.",
             "layout": "right"
           }
         }
       },
       "block_order": [
         "feature_row_kB6Gdz",
-        "feature_row_t7iNYW"
+        "feature_row_t7iNYW",
+        "feature_row_jHCz8N",
+        "feature_row_jtfgmP"
       ],
       "name": "Macallan Features",
       "settings": {
@@ -250,8 +211,8 @@
   "order": [
     "main",
     "navigation",
-    "1765822097bccbbe06",
-    "macallan_collection_list_PjML8W",
+    "slideshow_WW7UAn",
+    "slideshow_QtVp3L",
     "macallan_features_tWHNbL"
   ]
 }

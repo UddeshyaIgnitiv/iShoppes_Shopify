@@ -164,6 +164,26 @@
         "button_label": "START SHOPPING"
       }
     },
+    "travel_exclusives_yqVdin": {
+      "type": "travel-exclusives",
+      "blocks": {
+        "product_6PWUA3": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-no6-257438"
+          }
+        }
+      },
+      "block_order": [
+        "product_6PWUA3"
+      ],
+      "name": "Travel Exclusives",
+      "settings": {
+        "heading": "TRAVEL EXCLUSIVES",
+        "tag": "travel exclusives",
+        "product_limit": 4
+      }
+    },
     "new_arrivals": {
       "type": "new-arrivals",
       "blocks": {
@@ -303,6 +323,7 @@
     "slideshow_ifejig",
     "slideshow_8X8D3Y",
     "duty_free_works",
+    "travel_exclusives_yqVdin",
     "new_arrivals",
     "promotion_banners",
     "content_image_info_banner",

@@ -68,5 +68,12 @@
     {% if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add-modal' %}
     {% endif %}
+    <script>
+      document.querySelectorAll('.terminal-selection').forEach(el => {
+        el.addEventListener('click', function () {
+          document.getElementById('terminal-selection-div').style.display = 'block';
+        });
+    });
+    </script>
   </body>
 </html>

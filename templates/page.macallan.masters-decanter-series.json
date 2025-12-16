@@ -163,7 +163,7 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h1>THE MASTERS DECANTER SERIES</h1>",
+            "text": "<h4>THE MASTERS DECANTER SERIES</h4>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",

@@ -59,17 +59,6 @@
         "padding-block-end": 20
       }
     },
-    "custom_liquid_M46Bkk": {
-      "type": "custom-liquid",
-      "name": "t:names.custom_liquid",
-      "settings": {
-        "custom_liquid": "",
-        "color_scheme": "",
-        "section_width": "page-width",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
     "1765822097bccbbe06": {
       "type": "_blocks",
       "blocks": {
@@ -193,7 +182,6 @@
   "order": [
     "main",
     "navigation",
-    "custom_liquid_M46Bkk",
     "1765822097bccbbe06"
   ]
 }

@@ -4437,12 +4437,12 @@ text-component {
   text-align: center;
 }
 .macallan-section-title {
-  font-family: 'NewFrank', sans-serif;
-  font-size: 24px;
+  font-family: 'NewFrank', sans-serif !important;
+  font-size: 1.5rem !important;
   text-transform: uppercase;
   margin-bottom: 30px;
   letter-spacing: 0.1em;
-  font-weight: 500;
+  font-weight: bold;
 }
 .macallan-whisky-grid {
   display: grid;

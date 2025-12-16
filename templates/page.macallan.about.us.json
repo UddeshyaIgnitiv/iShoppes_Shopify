@@ -206,6 +206,17 @@
         "padding_bottom": 60,
         "bg_color": "#ffffff"
       }
+    },
+    "custom_liquid_gkRFFc": {
+      "type": "custom-liquid",
+      "name": "t:names.custom_liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <a href=\"/pages/macallan\"><img src=\"{{ 'our-whisky-1.webp?v=1765817906' | file_url }}\" alt=\"Colour Collection\"></a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-2.webp?v=1765817906' | file_url }}\" alt=\"Rare Cask Black\">\n      </div>\n    </div>\n  </div>\n</div>",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -213,6 +224,7 @@
     "navigation",
     "slideshow_WW7UAn",
     "slideshow_QtVp3L",
-    "macallan_features_tWHNbL"
+    "macallan_features_tWHNbL",
+    "custom_liquid_gkRFFc"
   ]
 }

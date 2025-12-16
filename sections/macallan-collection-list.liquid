@@ -1,0 +1,275 @@
+{% schema %}
+{
+  "name": "Macallan Collection List",
+  "tag": "section",
+  "class": "macallan-collection-list",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THE MACALLAN COLOUR COLLECTION"
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Product Tag",
+      "default": "macallan",
+      "info": "Products with this tag will be displayed"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Maximum products to show",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Macallan Collection List",
+      "category": "Custom",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+  .macallan-collection-list {
+    padding: 60px 20px;
+    background: #fff;
+  }
+  
+  .macallan-collection-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .macallan-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 60px;
+    row-gap: 80px;
+  }
+
+  .macallan-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+  }
+  
+  .macallan-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 10px;
+  }
+  
+  .macallan-image-wrapper {
+    flex: 0 0 40%;
+    max-width: 200px;
+  }
+
+  .macallan-image-wrapper img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .macallan-title {
+    font-family: "NewFrank", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #111;
+    line-height: 1.2;
+    margin: 0 0 20px 0;
+    letter-spacing: 0.5px;
+  }
+
+  .macallan-description {
+    font-family: "NewFrank", sans-serif;
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 25px;
+  }
+
+  .macallan-price {
+    font-family: "NewFrank", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 30px;
+    color: #111;
+  }
+
+  .macallan-btn {
+    display: inline-block;
+    background-color: #a6192e;
+    color: #fff !important;
+    padding: 12px 28px;
+    text-transform: uppercase;
+    font-family: "NewFrank", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: fit-content;
+    letter-spacing: 1px;
+  }
+  
+  .macallan-btn:hover {
+    background-color: #800000;
+  }
+
+  .no-products-message {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    grid-column: 1 / -1;
+  }
+
+  @media screen and (max-width: 768px) {
+    .macallan-grid {
+      grid-template-columns: 1fr;
+      row-gap: 50px;
+    }
+    
+    .macallan-card {
+      gap: 20px;
+    }
+    
+    .macallan-title {
+        font-size: 1.3rem;
+    }
+  }
+{% endstyle %}
+
+<div class="macallan-collection-container">
+    {% assign tag_to_filter = section.settings.tag | default: 'macallan' %}
+    {% assign product_limit = section.settings.product_limit | default: 4 %}
+    
+    {% assign tagged_products = '' | split: '' %}
+    
+    {% assign collection_handle = tag_to_filter | handleize %}
+    {% assign target_collection = collections[collection_handle] %}
+    
+    {% if target_collection != blank and target_collection.products.size > 0 %}
+      {% assign tagged_products = target_collection.products %}
+    {% else %}
+      {% for product in collections.all.products %}
+        {% if product.tags contains tag_to_filter %}
+          {% assign tagged_products = tagged_products | push: product %}
+        {% endif %}
+        {% if tagged_products.size >= product_limit %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+    <div class="macallan-grid">
+      {% if tagged_products.size == 0 and section.blocks.size == 0 %}
+          <div class="no-products-message">
+            <p>No products found with the "{{ tag_to_filter }}" tag or manually added.</p>
+          </div>
+      {% else %}
+          {% comment %} Render Blocks if available, otherwise render Tagged Products {% endcomment %}
+          {% if section.blocks.size > 0 %}
+            {%- for block in section.blocks -%}
+              {%- assign product = all_products[block.settings.product] -%}
+              {% if product != blank %}
+                <div class="macallan-card">
+                  <div class="macallan-content">
+                      <h3 class="macallan-title">{{ product.title }}</h3>
+                      <div class="macallan-description">
+                        {% if product.description != blank %}
+                           {{ product.description | strip_html | truncatewords: 25 }}
+                        {% else %}
+                           With flavours of citrus, orchard fruits and nutmeg, The Macallan Colour Collection 12 years old is a natural, golden colour.
+                        {% endif %}
+                      </div>
+                      <div class="macallan-price">{{ product.price | money_without_trailing_zeros }}</div>
+                      <a href="{{ product.url }}" class="macallan-btn">EXPLORE</a>
+                  </div>
+                  <div class="macallan-image-wrapper">
+                    <a href="{{ product.url }}">
+                      {% if product.featured_image %}
+                        <img
+                          src="{{ product.featured_image | image_url: width: 400 }}"
+                          alt="{{ product.featured_image.alt | escape }}"
+                          width="400"
+                          height="400"
+                          loading="lazy"
+                        >
+                      {% else %}
+                        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; color: #ccc;">
+                          No Image
+                        </div>
+                      {% endif %}
+                    </a>
+                  </div>
+                </div>
+              {% endif %}
+            {%- endfor -%}
+          {% else %}
+            {% for product in tagged_products limit: product_limit %}
+                <div class="macallan-card">
+                  <div class="macallan-content">
+                      <h3 class="macallan-title">{{ product.title }}</h3>
+                      <div class="macallan-description">
+                        {% if product.description != blank %}
+                           {{ product.description | strip_html | truncatewords: 25 }}
+                        {% else %}
+                           With flavours of citrus, orchard fruits and nutmeg, The Macallan Colour Collection 12 years old is a natural, golden colour.
+                        {% endif %}
+                      </div>
+                      <div class="macallan-price">{{ product.price | money_without_trailing_zeros }}</div>
+                      <a href="{{ product.url }}" class="macallan-btn">EXPLORE</a>
+                  </div>
+                  <div class="macallan-image-wrapper">
+                    <a href="{{ product.url }}">
+                      {% if product.featured_image %}
+                        <img
+                          src="{{ product.featured_image | image_url: width: 400 }}"
+                          alt="{{ product.featured_image.alt | escape }}"
+                          width="400"
+                          height="400"
+                          loading="lazy"
+                        >
+                      {% else %}
+                        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; color: #ccc;">
+                          No Image
+                        </div>
+                      {% endif %}
+                    </a>
+                  </div>
+                </div>
+            {% endfor %}
+          {% endif %}
+      {% endif %}
+    </div>
+</div>

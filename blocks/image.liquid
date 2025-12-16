@@ -24,6 +24,12 @@
 
 {% capture style %}
   --ratio: {{ ratio }};
+  --horizontal-alignment: {{ block_settings.horizontal_alignment }};
+  {% if block_settings.horizontal_alignment == 'center' %}
+    align-self: center;
+  {% elsif block_settings.horizontal_alignment == 'flex-end' %}
+    align-self: flex-end;
+  {% endif %}
   {% render 'size-style', settings: block_settings %}
   {% render 'spacing-style', settings: block_settings %}
 {% endcapture %}
@@ -123,6 +129,26 @@
       "type": "url",
       "id": "link",
       "label": "t:settings.link"
+    },
+    {
+      "type": "select",
+      "id": "horizontal_alignment",
+      "label": "Horizontal alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "t:options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        },
+        {
+          "value": "flex-end",
+          "label": "t:options.right"
+        }
+      ],
+      "default": "flex-start"
     },
     {
       "type": "header",

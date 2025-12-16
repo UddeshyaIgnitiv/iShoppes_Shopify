@@ -16,11 +16,12 @@
           "type": "image",
           "name": "Top Logo",
           "settings": {
+            "horizontal_alignment": "center",
             "image": "shopify://shop_images/macallan_logo.webp",
             "link": "",
             "image_ratio": "adapt",
             "width": "custom",
-            "custom_width": 100,
+            "custom_width": 55,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
             "height": "fit",

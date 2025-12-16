@@ -100,15 +100,30 @@
     style="{% render 'spacing-style', settings: block_settings %}"
     {{ block.shopify_attributes }}
   >
-    <div
-      class="group-block-content
-      layout-panel-flex
-      layout-panel-flex--{{ block_settings.content_direction }}
-      {% if block_settings.vertical_on_mobile %}mobile-column{% endif %}"
-      style="{% render 'layout-panel-style', settings: block_settings %}"
-    >
+    {%- if block_settings.link != blank -%}
+      <a
+        href="{{ block_settings.link }}"
+        class="group-block-content
+        layout-panel-flex
+        layout-panel-flex--{{ block_settings.content_direction }}
+        {% if block_settings.vertical_on_mobile %}mobile-column{% endif %}"
+        style="{% render 'layout-panel-style', settings: block_settings %}"
+      >
+    {%- else -%}
+      <div
+        class="group-block-content
+        layout-panel-flex
+        layout-panel-flex--{{ block_settings.content_direction }}
+        {% if block_settings.vertical_on_mobile %}mobile-column{% endif %}"
+        style="{% render 'layout-panel-style', settings: block_settings %}"
+      >
+    {%- endif -%}
       {% content_for 'blocks' %}
-    </div>
+      {%- if block_settings.link != blank -%}
+      </a>
+    {%- else -%}
+      </div>
+    {%- endif -%}
   </div>
 {% endcapture %}
 

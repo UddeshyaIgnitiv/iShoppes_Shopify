@@ -53,7 +53,7 @@
       "type": "custom-liquid",
       "name": "Navigation Menu",
       "settings": {
-        "custom_liquid": "<style>\n  @font-face {\n      font-family: 'NewFrank';\n      src: url('https://cdn.shopify.com/s/files/1/0725/3553/9901/files/newfrankregular.otf?v=1765805314') format('opentype');\n}\n  .macallan-nav {\n    display: flex;\n    justify-content: center;\n    gap: 50px;\n    padding: 10px 0;\n    text-transform: uppercase;\n    font-family: var(--font-heading-family), serif;\n    letter-spacing: 0.05em;\n  }\n  .macallan-nav a {\n    text-decoration: none;\n    color: #000;\n    position: relative;\n    transition: opacity 0.3s;\n font-family: 'NewFrank', sans-serif;\n  font-size: 18px;\n  }\n  .macallan-nav a:hover {\n    opacity: 0.7;\n  }\n  \n  @media screen and (max-width: 768px) {\n    .macallan-nav {\n      flex-direction: column;\n      gap: 0;\n      align-items: stretch;\n      padding: 0;\n      width: 100%;\n    }\n    .macallan-nav a {\n      padding: 20px 0;\n      text-align: center;\n      border-bottom: 1px solid #000;\n      width: 100%;\n      display: block;\n    }\n    .macallan-nav a:first-child {\n      border-top: 1px solid #000;\n    }\n  }\n</style>\n<div class=\"macallan-nav\">\n  <a href=\"#\">COLOUR COLLECTION</a>\n  <a href=\"#shopify-section-rare_cask\">RARE CASK BLACK</a>\n  <a href=\"#shopify-section-masters_decanter\">MASTERS DECANTER SERIES</a>\n  <a href=\"#shopify-section-bottom_section\">ABOUT THE MACALLAN</a>\n</div>",
+        "custom_liquid": "<style>\n  @font-face {\n      font-family: 'NewFrank';\n      src: url('https://cdn.shopify.com/s/files/1/0725/3553/9901/files/newfrankregular.otf?v=1765805314') format('opentype');\n}\n  .macallan-nav {\n    display: flex;\n    justify-content: center;\n    gap: 50px;\n    padding: 10px 0;\n    text-transform: uppercase;\n    font-family: var(--font-heading-family), serif;\n    letter-spacing: 0.05em;\n  }\n  .macallan-nav a {\n    text-decoration: none;\n    color: #000;\n    position: relative;\n    transition: opacity 0.3s;\n font-family: 'NewFrank', sans-serif;\n  font-size: 18px;\n  }\n  .macallan-nav a:hover {\n    opacity: 0.7;\n  }\n  \n  @media screen and (max-width: 768px) {\n    .macallan-nav {\n      flex-direction: column;\n      gap: 0;\n      align-items: stretch;\n      padding: 0;\n      width: 100%;\n    }\n    .macallan-nav a {\n      padding: 20px 0;\n      text-align: center;\n      border-bottom: 1px solid #000;\n      width: 100%;\n      display: block;\n    }\n    .macallan-nav a:first-child {\n      border-top: 1px solid #000;\n    }\n  }\n</style>\n<div class=\"macallan-nav\">\n  <a href=\"/pages/colour-collection\">COLOUR COLLECTION</a>\n  <a href=\"/pages/rare-cask-black\">RARE CASK BLACK</a>\n  <a href=\"/pages/masters-decanter-series\">MASTERS DECANTER SERIES</a>\n  <a href=\"#\">ABOUT THE MACALLAN</a>\n</div>",
         "color_scheme": "",
         "section_width": "page-width",
         "padding-block-start": 0,
@@ -68,7 +68,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/aboutus_banner_d.webp",
-            "link": "",
+            "link": "shopify://pages/macallan",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -115,7 +115,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/aboutus_banner_m.webp",
-            "link": "",
+            "link": "shopify://pages/macallan",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -211,7 +211,7 @@
       "type": "custom-liquid",
       "name": "Bottom Collections",
       "settings": {
-        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <a href=\"/pages/macallan\"><img src=\"{{ 'our-whisky-1.webp?v=1765817906' | file_url }}\" alt=\"Colour Collection\"></a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <img src=\"{{ 'our-whisky-2.webp?v=1765817906' | file_url }}\" alt=\"Rare Cask Black\">\n      </div>\n    </div>\n  </div>\n</div>",
+        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <a href=\"/pages/colour-collection\"><img src=\"{{ 'our-whisky-1.webp?v=1765817906' | file_url }}\" alt=\"Colour Collection\"></a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <a href=\"/pages/rare-cask-black\"><img src=\"{{ 'our-whisky-2.webp?v=1765817906' | file_url }}\" alt=\"Rare Cask Black\"></a>\n      </div>\n    </div>\n  </div>\n</div>",
         "color_scheme": "",
         "section_width": "page-width",
         "padding-block-start": 0,

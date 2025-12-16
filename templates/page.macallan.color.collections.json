@@ -212,12 +212,46 @@
         "tag": "macallan",
         "product_limit": 4
       }
+    },
+    "macallan_features_tWHNbL": {
+      "type": "macallan-features",
+      "blocks": {
+        "feature_row_kB6Gdz": {
+          "type": "feature_row",
+          "settings": {
+            "image": "shopify://shop_images/grid_oak_cask_macallan.webp",
+            "heading": "SHERRY SEASONED OAK CASK",
+            "text": "The exceptional oak casks are meticulously seasoned with the finest sherry from Jerez de la Frontera, Spain. Once perfectly matured, they embark on a tranquil journey to Speyside, Scotland, where they are then filled with the new make spirit.",
+            "layout": "left"
+          }
+        },
+        "feature_row_t7iNYW": {
+          "type": "feature_row",
+          "settings": {
+            "image": "shopify://shop_images/natural_color.webp",
+            "heading": "NATURAL COLOUR",
+            "text": "As the whisky ages in The Macallan's sherry seasoned oak casks, they take on a spectrum of natural hues and tones that deepen with age.",
+            "layout": "right"
+          }
+        }
+      },
+      "block_order": [
+        "feature_row_kB6Gdz",
+        "feature_row_t7iNYW"
+      ],
+      "name": "Macallan Features",
+      "settings": {
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "bg_color": "#ffffff"
+      }
     }
   },
   "order": [
     "main",
     "navigation",
     "1765822097bccbbe06",
-    "macallan_collection_list_PjML8W"
+    "macallan_collection_list_PjML8W",
+    "macallan_features_tWHNbL"
   ]
 }

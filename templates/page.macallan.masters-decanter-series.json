@@ -1,0 +1,341 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "top_logo": {
+          "type": "image",
+          "name": "Top Logo",
+          "settings": {
+            "image": "shopify://shop_images/macallan_logo.webp",
+            "link": "",
+            "horizontal_alignment": "center",
+            "image_ratio": "adapt",
+            "width": "custom",
+            "custom_width": 50,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 0,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 38,
+            "padding-block-end": 38,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "top_logo"
+      ],
+      "custom_css": [],
+      "settings": {
+        "content_direction": "column",
+        "gap": 0,
+        "color_scheme": "",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "navigation": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>\n  @font-face {\n      font-family: 'NewFrank';\n      src: url('https://cdn.shopify.com/s/files/1/0725/3553/9901/files/newfrankregular.otf?v=1765805314') format('opentype');\n}\n  .macallan-nav {\n    display: flex;\n    justify-content: center;\n    gap: 50px;\n    padding: 10px 0;\n    text-transform: uppercase;\n    font-family: var(--font-heading-family), serif;\n    letter-spacing: 0.05em;\n  }\n  .macallan-nav a {\n    text-decoration: none;\n    color: #000;\n    position: relative;\n    transition: opacity 0.3s;\n font-family: 'NewFrank', sans-serif;\n  font-size: 18px;\n  }\n  .macallan-nav a:hover {\n    opacity: 0.7;\n  }\n  \n  @media screen and (max-width: 768px) {\n    .macallan-nav {\n      flex-direction: column;\n      gap: 0;\n      align-items: stretch;\n      padding: 0;\n      width: 100%;\n    }\n    .macallan-nav a {\n      padding: 20px 0;\n      text-align: center;\n      border-bottom: 1px solid #000;\n      width: 100%;\n      display: block;\n    }\n    .macallan-nav a:first-child {\n      border-top: 1px solid #000;\n    }\n  }\n</style>\n<div class=\"macallan-nav\">\n  <a href=\"/pages/colour-collection\">COLOUR COLLECTION</a>\n  <a href=\"\">RARE CASK BLACK</a>\n  <a href=\"#shopify-section-masters_decanter\">MASTERS DECANTER SERIES</a>\n  <a href=\"#shopify-section-bottom_section\">ABOUT THE MACALLAN</a>\n</div>",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 20
+      }
+    },
+    "desktop_slider": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_mUQXrK": {
+          "type": "_slide",
+          "name": "t:names.slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/rbc_banner_macallan_d.webp",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slide_mUQXrK"
+      ],
+      "custom_css": [],
+      "name": "Desktop Slider",
+      "settings": {
+        "icons_style": "chevron",
+        "slideshow_controls_style": "dots",
+        "color_scheme": "scheme-1",
+        "autoplay": false,
+        "autoplay_speed": 4,
+        "section_width": "full-width",
+        "slide_height": "medium",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mobile_slider": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_aqHeQc": {
+          "type": "_slide",
+          "name": "t:names.slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/rbc_banner_macallan_m.webp",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slide_aqHeQc"
+      ],
+      "name": "Mobile Slider",
+      "settings": {
+        "icons_style": "arrows_large",
+        "slideshow_controls_style": "dots",
+        "color_scheme": "",
+        "autoplay": false,
+        "autoplay_speed": 4,
+        "section_width": "page-width",
+        "slide_height": "medium",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "blocks_jJNgdx": {
+      "type": "_blocks",
+      "blocks": {
+        "text_7ji7iL": {
+          "type": "text",
+          "name": "t:names.heading",
+          "settings": {
+            "text": "<h3>RARE CASK BLACK</h3>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_9JQp9w": {
+          "type": "text",
+          "name": "t:names.text",
+          "settings": {
+            "text": "<p>This spirit matures in American and European oak sherry-seasoned casks, with its peat smoke character gained from exceptionally rare, aged stocks of peated distillation. Unexpected and distinctive in flavour with full bodied richness from The Macallan spirit, Rare Cask Black is an unusual smoky single malt that tells a story of creativity and innovation.</p>",
+            "width": "100%",
+            "max_width": "none",
+            "alignment": "center",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_7ji7iL",
+        "text_9JQp9w"
+      ],
+      "name": "Video hero banner",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 20,
+        "padding-block-end": 20
+      }
+    },
+    "macallan_collection_list_UDBwpH": {
+      "type": "macallan-collection-list",
+      "blocks": {
+        "product_kBy6xR": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-rare-cask-black-224707"
+          }
+        }
+      },
+      "block_order": [
+        "product_kBy6xR"
+      ],
+      "name": "Macallan Collection List",
+      "settings": {
+        "heading": "THE MACALLAN COLOUR COLLECTION",
+        "tag": "macallan",
+        "product_limit": 4
+      }
+    },
+    "blocks_gNcAy3": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_a27b661_nGD3Mw": {
+          "type": "ai_gen_block_a27b661",
+          "settings": {
+            "youtube_url": "https://www.youtube.com/watch?v=JlxmtLs2TSQ",
+            "min_height_desktop": 600,
+            "min_height_mobile": 400,
+            "background_color": "#000000",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "heading": "",
+            "heading_size": 24,
+            "subheading": "",
+            "subheading_size": 12,
+            "text_alignment": "center",
+            "content_max_width": 800,
+            "text_color": "#ffffff",
+            "button_text": "",
+            "button_link": "",
+            "button_font_size": 16,
+            "button_border_radius": 8,
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "button_hover_background": "#f5f5f5",
+            "desktop_width_percent": 100
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_a27b661_nGD3Mw"
+      ],
+      "name": "Video hero banner",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      }
+    }
+  },
+  "order": [
+    "main",
+    "navigation",
+    "desktop_slider",
+    "mobile_slider",
+    "blocks_jJNgdx",
+    "macallan_collection_list_UDBwpH",
+    "blocks_gNcAy3"
+  ]
+}

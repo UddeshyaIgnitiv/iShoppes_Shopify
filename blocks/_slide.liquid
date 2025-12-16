@@ -24,7 +24,11 @@
     {% endstyle %}
   {% endif %}
 
-  <div class="slide__image-container">
+  {%- if block_settings.link != blank -%}
+    <a href="{{ block_settings.link }}" class="slide__image-container">
+  {%- else -%}
+    <div class="slide__image-container">
+  {%- endif -%}
     {%- if block_settings.toggle_overlay -%}
       {% render 'overlay', settings: block_settings %}
     {%- endif -%}
@@ -86,7 +90,11 @@
       -%}
       {{ placeholder_name | placeholder_svg_tag: 'slide__image' }}
     {%- endif -%}
-  </div>
+  {%- if block_settings.link != blank -%}
+    </a>
+  {%- else -%}
+    </div>
+  {%- endif -%}
   <div
     class="spacing-style slide__content{% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }}{% endif %}{% if preview_image or block_settings.toggle_overlay %} background-transparent{% endif %}"
     style="{% render 'spacing-style', settings: block_settings %}"
@@ -200,6 +208,11 @@
       "id": "video_1",
       "label": "t:settings.video",
       "visible_if": "{{ block.settings.media_type_1 == 'video' }}"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:settings.link"
     },
     {
       "type": "header",

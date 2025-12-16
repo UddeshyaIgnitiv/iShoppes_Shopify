@@ -220,7 +220,7 @@
         "h3 {font-family: \"NewFrank\", sans-serif;}",
         "p {font-family: \"NewFrank\", sans-serif;}"
       ],
-      "name": "Video hero banner",
+      "name": "Main Content",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,

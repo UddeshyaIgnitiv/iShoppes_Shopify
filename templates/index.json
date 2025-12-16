@@ -167,6 +167,12 @@
     "travel_exclusives": {
       "type": "travel-exclusives",
       "blocks": {
+        "product_jjXJqy": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-no6-257438"
+          }
+        },
         "product_Wm66Be": {
           "type": "product",
           "settings": {
@@ -181,6 +187,7 @@
         }
       },
       "block_order": [
+        "product_jjXJqy",
         "product_Wm66Be",
         "product_AwykRD"
       ],

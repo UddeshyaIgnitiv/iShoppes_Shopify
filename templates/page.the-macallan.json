@@ -16,9 +16,9 @@
           "type": "image",
           "name": "Top Logo",
           "settings": {
-            "horizontal_alignment": "center",
             "image": "shopify://shop_images/macallan_logo.webp",
             "link": "",
+            "horizontal_alignment": "center",
             "image_ratio": "adapt",
             "width": "custom",
             "custom_width": 50,
@@ -173,7 +173,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/macallan_banner_m1.webp",
-            "link": "",
+            "link": "https://ash101-1g.myshopify.com/pages/colour-collection",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",

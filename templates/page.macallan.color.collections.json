@@ -16,9 +16,9 @@
           "type": "image",
           "name": "Top Logo",
           "settings": {
-            "horizontal_alignment": "center",
             "image": "shopify://shop_images/macallan_logo.webp",
             "link": "",
+            "horizontal_alignment": "center",
             "image_ratio": "adapt",
             "width": "custom",
             "custom_width": 50,
@@ -178,11 +178,46 @@
         "padding-block-start": 0,
         "padding-block-end": 20
       }
+    },
+    "macallan_collection_list_PjML8W": {
+      "type": "macallan-collection-list",
+      "blocks": {
+        "product_TBAdUA": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-colour-collection-12-years-old-828268"
+          }
+        },
+        "product_iRWQhQ": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-colour-collection-15-years-old-828269"
+          }
+        },
+        "product_nwaiBW": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-colour-collection-18-years-old-828270"
+          }
+        }
+      },
+      "block_order": [
+        "product_TBAdUA",
+        "product_iRWQhQ",
+        "product_nwaiBW"
+      ],
+      "name": "Macallan Collection List",
+      "settings": {
+        "heading": "THE MACALLAN COLOUR COLLECTION",
+        "tag": "macallan",
+        "product_limit": 4
+      }
     }
   },
   "order": [
     "main",
     "navigation",
-    "1765822097bccbbe06"
+    "1765822097bccbbe06",
+    "macallan_collection_list_PjML8W"
   ]
 }

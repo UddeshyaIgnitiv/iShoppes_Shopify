@@ -1,0 +1,280 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "top_logo": {
+          "type": "image",
+          "name": "Top Logo",
+          "settings": {
+            "image": "shopify://shop_images/macallan_logo.webp",
+            "link": "",
+            "horizontal_alignment": "center",
+            "image_ratio": "adapt",
+            "width": "custom",
+            "custom_width": 50,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 0,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 38,
+            "padding-block-end": 38,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "top_logo"
+      ],
+      "custom_css": [],
+      "settings": {
+        "content_direction": "column",
+        "gap": 0,
+        "color_scheme": "",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "navigation": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>\n  @font-face {\n      font-family: 'NewFrank';\n      src: url('https://cdn.shopify.com/s/files/1/0725/3553/9901/files/newfrankregular.otf?v=1765805314') format('opentype');\n}\n  .macallan-nav {\n    display: flex;\n    justify-content: center;\n    gap: 50px;\n    padding: 10px 0;\n    text-transform: uppercase;\n    font-family: var(--font-heading-family), serif;\n    letter-spacing: 0.05em;\n  }\n  .macallan-nav a {\n    text-decoration: none;\n    color: #000;\n    position: relative;\n    transition: opacity 0.3s;\n font-family: 'NewFrank', sans-serif;\n  font-size: 18px;\n  }\n  .macallan-nav a:hover {\n    opacity: 0.7;\n  }\n  \n  @media screen and (max-width: 768px) {\n    .macallan-nav {\n      flex-direction: column;\n      gap: 0;\n      align-items: stretch;\n      padding: 0;\n      width: 100%;\n    }\n    .macallan-nav a {\n      padding: 20px 0;\n      text-align: center;\n      border-bottom: 1px solid #000;\n      width: 100%;\n      display: block;\n    }\n    .macallan-nav a:first-child {\n      border-top: 1px solid #000;\n    }\n  }\n</style>\n<div class=\"macallan-nav\">\n  <a href=\"/pages/colour-collection\">COLOUR COLLECTION</a>\n  <a href=\"\">RARE CASK BLACK</a>\n  <a href=\"#shopify-section-masters_decanter\">MASTERS DECANTER SERIES</a>\n  <a href=\"#shopify-section-bottom_section\">ABOUT THE MACALLAN</a>\n</div>",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 20
+      }
+    },
+    "desktop_slider": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_1": {
+          "type": "_slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/macallan_banner_d1.webp",
+            "link": "https://ash101-1g.myshopify.com/pages/colour-collection",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 0,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "slide_bjC7b3": {
+          "type": "_slide",
+          "name": "t:names.slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/macallan_banner_d2.webp",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "slide_mUQXrK": {
+          "type": "_slide",
+          "name": "t:names.slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/macallan_banner_d3.webp",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_bjC7b3",
+        "slide_mUQXrK"
+      ],
+      "custom_css": [],
+      "name": "Desktop Slider",
+      "settings": {
+        "icons_style": "chevron",
+        "slideshow_controls_style": "dots",
+        "color_scheme": "scheme-1",
+        "autoplay": false,
+        "autoplay_speed": 4,
+        "section_width": "full-width",
+        "slide_height": "medium",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mobile_slider": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_1": {
+          "type": "_slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/macallan_banner_m1.webp",
+            "link": "https://ash101-1g.myshopify.com/pages/colour-collection",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "slide_jXgy3P": {
+          "type": "_slide",
+          "name": "t:names.slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/macallan_banner_m2.webp",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "slide_aqHeQc": {
+          "type": "_slide",
+          "name": "t:names.slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/macallan_banner_m3.webp",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_jXgy3P",
+        "slide_aqHeQc"
+      ],
+      "name": "Mobile Slider",
+      "settings": {
+        "icons_style": "arrows_large",
+        "slideshow_controls_style": "dots",
+        "color_scheme": "",
+        "autoplay": false,
+        "autoplay_speed": 4,
+        "section_width": "page-width",
+        "slide_height": "medium",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+  },
+  "order": [
+    "main",
+    "navigation",
+    "desktop_slider",
+    "mobile_slider"
+  ]
+}

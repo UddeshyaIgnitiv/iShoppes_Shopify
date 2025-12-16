@@ -17,7 +17,7 @@
           "name": "Top Logo",
           "settings": {
             "image": "shopify://shop_images/macallan_logo.webp",
-            "link": "",
+            "link": "/pages/macallan",
             "horizontal_alignment": "center",
             "image_ratio": "adapt",
             "width": "custom",

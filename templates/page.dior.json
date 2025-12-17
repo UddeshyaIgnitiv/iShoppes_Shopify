@@ -2,8 +2,44 @@
   "sections": {
     "main": {
       "type": "dior-page",
+      "blocks": {
+        "slide1": {
+          "type": "slide_default",
+          "settings": {
+            "heading": "Welcome to Dior",
+            "subheading": "Discover our latest collection"
+          }
+        },
+        "slide2": {
+            "type": "slide_default",
+            "settings": {
+              "heading": "New Season",
+              "subheading": "Explore the new arrivals"
+            }
+        },
+        "custom_slide1": {
+          "type": "slide_custom",
+          "settings": {
+          }
+        },
+        "video_slide1": {
+          "type": "video_slide",
+          "settings": {
+             "caption": "Backstage at Dior"
+          }
+        }
+      },
+      "block_order": [
+        "slide1",
+        "slide2",
+        "custom_slide1",
+        "video_slide1"
+      ],
       "settings": {
-        "design_mode": "default"
+        "design_mode": "default",
+        "heading_1": "Dior Store",
+        "description_1": "<p>Experience the luxury.</p>",
+        "store_details": "<p>123 Dior Ave, Paris, France</p>"
       }
     }
   },

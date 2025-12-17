@@ -1,0 +1,242 @@
+{% schema %}
+{
+  "name": "Dior Shop (Content)",
+  "settings": [
+    {
+      "type": "select",
+      "id": "design_group",
+      "label": "Show on Design",
+      "options": [
+        { "value": "default", "label": "Default Design" },
+        { "value": "custom", "label": "Custom Design" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dior Shop (Content)"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="dior-design-group dior-design-group-{{ section.settings.design_group }}">
+  <div class="dior-shop-layout page-width">
+    
+    <!-- Sidebar / Filter -->
+    <div class="dior-shop-sidebar">
+      <div class="dior-filter-box">
+        <div class="filter-header">Categories <span class="icon-filter">&#8964;</span></div>
+        <ul class="filter-list">
+          <li class="filter-item">WOMEN'S FRAGRANCE <span class="icon-arrow">&#8964;</span></li>
+          <li class="filter-item">MEN'S FRAGRANCE <span class="icon-arrow">&#8964;</span></li>
+          <li class="filter-item">MAKEUP <span class="icon-arrow">&#8964;</span></li>
+          <li class="filter-item">SKINCARE <span class="icon-arrow">&#8964;</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dior-shop-main">
+      
+      <!-- Hero -->
+      <div class="dior-hero-container">
+        <img src="{{ 'dior-shop-hero.png' | asset_url }}" alt="Dior Sauvage" class="dior-img-desktop">
+        <img src="{{ 'dior-shop-hero-m.png' | asset_url }}" alt="Dior Sauvage" class="dior-img-mobile">
+      </div>
+
+      <!-- Best Sellers -->
+      <div class="dior-section-inner">
+        <h2 class="dior-title">BEST SELLERS</h2>
+        <div class="dior-product-grid">
+           <!-- Mock Products -->
+            <div class="dior-product-card">
+              <div class="img-wrapper">
+                <img src="https://cdn.shopify.com/s/files/1/0662/0581/0933/products/Sauvage_Elixir_100ml.jpg?v=1664912345&width=533" alt="Sauvage">
+                <button class="wishlist-btn">&#9825;</button>
+              </div>
+              <div class="dior-product-info">
+                <div class="dior-product-brand">Dior</div>
+                <div class="dior-product-title">Sauvage Elixir</div>
+                <div class="dior-product-price">$180.00</div>
+              </div>
+            </div>
+             <div class="dior-product-card">
+              <div class="img-wrapper">
+                <img src="https://cdn.shopify.com/s/files/1/0662/0581/0933/products/Miss_Dior_Blooming_Bouquet_100ml.jpg?v=1664912345&width=533" alt="Miss Dior">
+                <button class="wishlist-btn">&#9825;</button>
+              </div>
+              <div class="dior-product-info">
+                <div class="dior-product-brand">Dior</div>
+                <div class="dior-product-title">Miss Dior Blooming Bouquet</div>
+                <div class="dior-product-price">$135.00</div>
+              </div>
+            </div>
+             <div class="dior-product-card">
+              <div class="img-wrapper">
+                <img src="https://cdn.shopify.com/s/files/1/0662/0581/0933/products/Jadore_Parfum_d_eau_100ml.jpg?v=1664912345&width=533" alt="J'adore">
+                <button class="wishlist-btn">&#9825;</button>
+              </div>
+              <div class="dior-product-info">
+                <div class="dior-product-brand">Dior</div>
+                <div class="dior-product-title">J'adore Parfum d'eau</div>
+                <div class="dior-product-price">$160.00</div>
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- Novelties -->
+      <div class="dior-section-inner">
+        <h2 class="dior-title">NOVELTIES</h2>
+         <div class="dior-product-grid" style="grid-template-columns: repeat(2, 1fr);">
+           <!-- Novelty Items -->
+            <div class="dior-product-card">
+              <div class="img-wrapper">
+                 <img src="https://cdn.shopify.com/s/files/1/0662/0581/0933/products/Sauvage_Eau_de_Toilette_100ml.jpg?v=1664912345&width=533" alt="Sauvage EDT">
+              </div>
+               <div class="dior-product-info">
+                <div class="dior-product-brand">Dior</div>
+                <div class="dior-product-title">Sauvage Eau Forte Alcohol-Free</div>
+                <div class="dior-product-price">$155-$185</div>
+              </div>
+            </div>
+             <div class="dior-product-card">
+               <div class="img-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0662/0581/0933/products/Jadore_Parfum_d_eau_100ml.jpg?v=1664912345&width=533" alt="J'adore">
+               </div>
+               <div class="dior-product-info">
+                <div class="dior-product-brand">Dior</div>
+                <div class="dior-product-title">J'adore l'Or Fragrance</div>
+                <div class="dior-product-price">$255</div>
+              </div>
+            </div>
+         </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .dior-shop-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr; /* Sidebar + Content */
+    gap: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  /* Sidebar */
+  .dior-shop-sidebar {
+    border-right: 1px solid #f0f0f0;
+    padding-right: 20px;
+  }
+  .dior-filter-box {
+    text-align: left;
+  }
+  .filter-header {
+    font-weight: bold;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .filter-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  /* Main */
+  .dior-hero-container {
+    margin-bottom: 40px;
+  }
+  .dior-hero-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .dior-img-desktop { display: block; }
+  .dior-img-mobile { display: none; }
+
+  /* Products */
+  .dior-section-inner {
+    margin-bottom: 60px;
+    text-align: center;
+  }
+  .dior-title {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .dior-product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .dior-product-card {
+    text-align: left;
+  }
+  .dior-product-card .img-wrapper {
+    position: relative;
+    background: #f9f9f9;
+    margin-bottom: 15px;
+  }
+  .dior-product-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .wishlist-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  .dior-product-brand {
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .dior-product-title {
+    font-size: 0.9rem;
+    margin: 5px 0;
+    min-height: 40px; /* align titles */
+  }
+  .dior-product-price {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .dior-shop-layout {
+      grid-template-columns: 1fr; /* Stack on mobile */
+    }
+    .dior-shop-sidebar {
+      border-right: none;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+    .dior-img-desktop { display: none; }
+    .dior-img-mobile { display: block; }
+    .dior-product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

@@ -1,49 +1,45 @@
 {
   "sections": {
-    "main": {
-      "type": "dior-page",
-      "blocks": {
-        "slide1": {
-          "type": "slide_default",
-          "settings": {
-            "heading": "Welcome to Dior",
-            "subheading": "Discover our latest collection"
-          }
-        },
-        "slide2": {
-            "type": "slide_default",
-            "settings": {
-              "heading": "New Season",
-              "subheading": "Explore the new arrivals"
-            }
-        },
-        "custom_slide1": {
-          "type": "slide_custom",
-          "settings": {
-          }
-        },
-        "video_slide1": {
-          "type": "video_slide",
-          "settings": {
-             "caption": "Backstage at Dior"
-          }
-        }
-      },
-      "block_order": [
-        "slide1",
-        "slide2",
-        "custom_slide1",
-        "video_slide1"
-      ],
+    "hero_banner": {
+      "type": "hero",
       "settings": {
-        "design_mode": "default",
-        "heading_1": "Dior Store",
-        "description_1": "<p>Experience the luxury.</p>",
-        "store_details": "<p>123 Dior Ave, Paris, France</p>"
+        "media_type_1": "image",
+        "image_1": "shopify://shop_images/image-c3cf7701-33a9-4bc3-81bd-b7ee4053d180.png",
+        "responsive_media": true,
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "center",
+        "vertical_alignment": "center",
+        "section_width": "full-width",
+        "section_height": "auto",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "locations_section": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>\n  .dior-page-container {\n    padding: 40px 20px;\n    font-family: var(--font-body-family);\n  }\n  .dior-headline {\n    text-align: center;\n    font-family: var(--font-heading-family);\n    font-size: 24px;\n    margin-bottom: 40px;\n    line-height: 1.4;\n    color: #000;\n    max-width: 800px;\n    margin-left: auto;\n    margin-right: auto;\n    font-weight: 600;\n  }\n  .dior-locations-grid {\n    display: flex;\n    gap: 20px;\n    justify-content: center;\n    max-width: 1000px;\n    margin: 0 auto;\n  }\n  .dior-location-card {\n    flex: 1;\n    background-color: #dcdcdc;\n    padding: 40px;\n    text-align: left;\n    border-radius: 4px;\n  }\n  .dior-location-card h3 {\n    font-size: 14px;\n    font-weight: bold;\n    margin-bottom: 5px;\n    text-transform: uppercase;\n    letter-spacing: 1px;\n    color: #000;\n    margin-top: 0;\n  }\n  .location-subtitle {\n    font-size: 14px;\n    margin-bottom: 20px;\n    color: #000;\n    margin-top: 0;\n  }\n  .terminal-list p {\n    font-size: 13px;\n    margin-bottom: 5px;\n    font-weight: 500;\n    color: #000;\n    margin-top: 0;\n  }\n  @media (max-width: 768px) {\n    .dior-locations-grid {\n      flex-direction: column;\n    }\n  }\n</style>\n\n<div class=\"page-width dior-page-container\">\n  <h2 class=\"dior-headline\">Dior Parfums Available in John F. Kennedy International Airport and George Bush Intercontinental Airport Stores</h2>\n  \n  <div class=\"dior-locations-grid\">\n    <div class=\"dior-location-card\">\n      <h3>QUEENS, NEW YORK</h3>\n      <p class=\"location-subtitle\">John F. Kennedy International Airport</p>\n      \n      <div class=\"terminal-list\">\n        <p>Terminal 1 Beauty Store</p>\n        <p>Terminal 1 Dior La Collection Privée</p>\n        <p>Terminal 5 Beauty Store</p>\n      </div>\n    </div>\n    \n    <div class=\"dior-location-card\">\n      <h3>HOUSTON, TEXAS</h3>\n      <p class=\"location-subtitle\">George Bush Intercontinental Airport</p>\n      \n      <div class=\"terminal-list\">\n        <p>Terminal A Duty Free Store</p>\n        <p>Terminal C Duty Free Store</p>\n        <p>Terminal D Duty Free Store</p>\n      </div>\n    </div>\n  </div>\n</div>",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "brand_story": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>\n  .dior-brand-story {\n    text-align: center;\n    padding: 40px 20px 80px;\n  }\n  .dior-brand-story h2 {\n    font-family: var(--font-heading-family);\n    font-size: 28px;\n    margin-bottom: 30px;\n    color: #000;\n    font-weight: 600;\n  }\n  .dior-story-text p {\n    margin-bottom: 20px;\n    color: #000;\n    line-height: 1.6;\n    font-size: 16px;\n  }\n  .dior-auth-retailer {\n    margin-top: 50px;\n    display: flex;\n    justify-content: center;\n  }\n  .dior-logo-box {\n    border: 1px solid #ccc;\n    padding: 15px 30px;\n    display: inline-block;\n    text-align: center;\n  }\n  .dior-logo-title {\n    margin: 0;\n    font-size: 32px;\n    letter-spacing: 2px;\n    font-family: serif;\n    font-weight: 400;\n    color: #000;\n    line-height: 1;\n  }\n  .dior-logo-subtitle {\n    margin: 5px 0 0;\n    font-size: 10px;\n    letter-spacing: 2px;\n    text-transform: uppercase;\n    color: #000;\n  }\n</style>\n\n<div class=\"page-width dior-brand-story\">\n  <h2>Discover the Dior Brand</h2>\n  \n  <div class=\"dior-story-text\">\n    <p>DIOR was born of a dream.</p>\n    \n    <p>The dream of a man who revolutionized couture<br>and beauty with timeless creations that have<br>become icons.</p>\n    \n    <p>Each of the Maison’s creations carries a part of<br>his dream for a happier and more beautiful<br>world.</p>\n  </div>\n  \n  <div class=\"dior-auth-retailer\">\n    <div class=\"dior-logo-box\">\n      <h3 class=\"dior-logo-title\">DIOR</h3>\n      <p class=\"dior-logo-subtitle\">AUTHORIZED RETAILER</p>\n    </div>\n  </div>\n</div>",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     }
   },
   "order": [
-    "main"
+    "hero_banner",
+    "locations_section",
+    "brand_story"
   ]
 }

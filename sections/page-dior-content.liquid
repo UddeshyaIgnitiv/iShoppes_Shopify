@@ -1,0 +1,346 @@
+{% comment %} Dior Page Content Section {% endcomment %}
+
+{% style %}
+  .dior-page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Default Design Styles */
+  .dior-default-design .dior-hero img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .dior-default-content {
+    max-width: 800px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  .dior-default-content h1 {
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+  }
+  .dior-location {
+    margin-top: 30px;
+    font-weight: bold;
+  }
+
+  /* Custom Design Styles */
+  .dior-custom-design {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .dior-sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .dior-main-content {
+    width: 100%;
+  }
+
+  .dior-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .dior-menu li {
+    margin-bottom: 10px;
+  }
+  .dior-menu a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+  .dior-menu a:hover {
+    text-decoration: underline;
+  }
+
+  .dior-custom-hero {
+    margin-bottom: 40px;
+  }
+  .dior-custom-hero img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .dior-carousel-section {
+    margin-bottom: 40px;
+  }
+  .dior-carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .dior-product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .dior-product-card {
+    position: relative;
+  }
+  .dior-product-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 10px;
+  }
+  .dior-product-title {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .dior-product-price {
+    font-weight: bold;
+  }
+
+  .dior-video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    margin-top: 40px;
+  }
+  .dior-video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    .dior-sidebar {
+      width: calc(25% - 10px);
+      position: sticky;
+      top: 20px;
+      align-self: flex-start;
+    }
+    .dior-main-content {
+      width: calc(75% - 10px);
+    }
+    .dior-product-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstyle %}
+
+<div class="dior-page-container">
+  {% if section.settings.design_mode == 'default' %}
+    
+    {% comment %} === DEFAULT DESIGN === {% endcomment %}
+    <div class="dior-default-design">
+      {% if section.settings.default_image %}
+        <div class="dior-hero">
+          {{ section.settings.default_image | image_url: width: 2000 | image_tag: loading: 'lazy' }}
+        </div>
+      {% endif %}
+      
+      <div class="dior-default-content">
+        {% if section.settings.default_heading != blank %}
+           <h1>{{ section.settings.default_heading }}</h1>
+        {% endif %}
+        
+        {% if section.settings.default_description != blank %}
+           <div class="rte">{{ section.settings.default_description }}</div>
+        {% endif %}
+        
+        {% if section.settings.default_location != blank %}
+           <div class="dior-location">{{ section.settings.default_location }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+  {% else %}
+    
+    {% comment %} === CUSTOM DESIGN === {% endcomment %}
+    <div class="dior-custom-design">
+      
+      {% comment %} Left Column (25%) {% endcomment %}
+      <div class="dior-sidebar">
+        {% if section.settings.custom_menu != blank %}
+           <ul class="dior-menu">
+             {% for link in section.settings.custom_menu.links %}
+               <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+             {% endfor %}
+           </ul>
+        {% else %}
+           <p>Select a menu in section settings.</p>
+        {% endif %}
+      </div>
+
+      {% comment %} Right Column (75%) {% endcomment %}
+      <div class="dior-main-content">
+         
+         {% comment %} Slider/Hero {% endcomment %}
+         {% if section.settings.custom_hero_image %}
+            <div class="dior-custom-hero">
+               {{ section.settings.custom_hero_image | image_url: width: 1500 | image_tag: loading: 'lazy' }}
+            </div>
+         {% endif %}
+
+         {% comment %} Product Carousel 1 {% endcomment %}
+         {% if section.settings.custom_collection_1 != blank %}
+           <div class="dior-carousel-section">
+             <div class="dior-carousel-header">
+                <h3>{{ section.settings.custom_collection_title_1 | default: section.settings.custom_collection_1.title }}</h3>
+                <a href="{{ section.settings.custom_collection_1.url }}">View All</a>
+             </div>
+             <div class="dior-product-grid">
+               {% for product in section.settings.custom_collection_1.products limit: 4 %}
+                 <div class="dior-product-card">
+                   <a href="{{ product.url }}">
+                     {% if product.featured_media %}
+                        {{ product.featured_media | image_url: width: 400 | image_tag: loading: 'lazy' }}
+                     {% else %}
+                        {{ 'product-1' | placeholder_svg_tag }}
+                     {% endif %}
+                   </a>
+                   <a href="{{ product.url }}" class="dior-product-title">{{ product.title }}</a>
+                   <div class="dior-product-price">{{ product.price | money }}</div>
+                 </div>
+               {% endfor %}
+             </div>
+           </div>
+         {% endif %}
+
+         {% comment %} Product Carousel 2 {% endcomment %}
+         {% if section.settings.custom_collection_2 != blank %}
+           <div class="dior-carousel-section">
+             <div class="dior-carousel-header">
+                <h3>{{ section.settings.custom_collection_title_2 | default: section.settings.custom_collection_2.title }}</h3>
+                <a href="{{ section.settings.custom_collection_2.url }}">View All</a>
+             </div>
+             <div class="dior-product-grid">
+               {% for product in section.settings.custom_collection_2.products limit: 4 %}
+                 <div class="dior-product-card">
+                   <a href="{{ product.url }}">
+                     {% if product.featured_media %}
+                        {{ product.featured_media | image_url: width: 400 | image_tag: loading: 'lazy' }}
+                     {% else %}
+                        {{ 'product-1' | placeholder_svg_tag }}
+                     {% endif %}
+                   </a>
+                   <a href="{{ product.url }}" class="dior-product-title">{{ product.title }}</a>
+                   <div class="dior-product-price">{{ product.price | money }}</div>
+                 </div>
+               {% endfor %}
+             </div>
+           </div>
+         {% endif %}
+
+         {% comment %} Youtube Video {% endcomment %}
+         {% if section.settings.custom_video_url != blank %}
+            <div class="dior-video-container">
+              {% if section.settings.custom_video_url.type == 'youtube' %}
+                <iframe src="https://www.youtube.com/embed/{{ section.settings.custom_video_url.id }}?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
+              {% elsif section.settings.custom_video_url.type == 'vimeo' %}
+                 <iframe src="https://player.vimeo.com/video/{{ section.settings.custom_video_url.id }}" frameborder="0" allowfullscreen></iframe>
+              {% endif %}
+            </div>
+         {% endif %}
+
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Dior Page Content",
+  "settings": [
+    {
+      "type": "select",
+      "id": "design_mode",
+      "label": "Page Design Mode",
+      "options": [
+        { "value": "default", "label": "Default Design" },
+        { "value": "custom", "label": "Custom Design" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "header",
+      "content": "Default Design Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "default_image",
+      "label": "Hero Image (Default)"
+    },
+    {
+      "type": "text",
+      "id": "default_heading",
+      "label": "Heading",
+      "default": "Dior"
+    },
+    {
+      "type": "richtext",
+      "id": "default_description",
+      "label": "Description",
+      "default": "<p>When Christian Dior created his fashion house in 1946, he imagined a new femininity...</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "default_location",
+      "label": "Location / Extra Info"
+    },
+    {
+      "type": "header",
+      "content": "Custom Design Settings"
+    },
+    {
+      "type": "link_list",
+      "id": "custom_menu",
+      "label": "Sidebar Menu"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_hero_image",
+      "label": "Hero Image (Custom)"
+    },
+    {
+      "type": "collection",
+      "id": "custom_collection_1",
+      "label": "First Product Collection"
+    },
+    {
+      "type": "text",
+      "id": "custom_collection_title_1",
+      "label": "First Collection Title"
+    },
+    {
+      "type": "collection",
+      "id": "custom_collection_2",
+      "label": "Second Product Collection"
+    },
+    {
+      "type": "text",
+      "id": "custom_collection_title_2",
+      "label": "Second Collection Title"
+    },
+    {
+      "type": "video_url",
+      "id": "custom_video_url",
+      "label": "Video Link",
+      "accept": ["youtube", "vimeo"]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dior Page Content"
+    }
+  ]
+}
+{% endschema %}

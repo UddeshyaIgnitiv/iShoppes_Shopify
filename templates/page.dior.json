@@ -1,28 +1,13 @@
 {
   "sections": {
-    "switch": {
-      "type": "dior-design-switch",
+    "content": {
+      "type": "page-dior-content",
       "settings": {
-        "label_default": "Default Design",
-        "label_custom": "Custom Design"
-      }
-    },
-    "shop": {
-      "type": "dior-shop",
-      "settings": {
-        "design_group": "default"
-      }
-    },
-    "brand": {
-      "type": "dior-brand",
-      "settings": {
-        "design_group": "custom"
+        "design_mode": "default"
       }
     }
   },
   "order": [
-    "switch",
-    "shop",
-    "brand"
+    "content"
   ]
 }

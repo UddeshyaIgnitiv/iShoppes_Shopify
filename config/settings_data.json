@@ -104,6 +104,29 @@
         "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
         "disabled": false,
         "settings": {}
+      },
+      "2883025457459210873": {
+        "type": "shopify://apps/wishlist-power/blocks/embed-wishlist-setup/c6cb23f2-39d1-403f-9967-53314ebdad10",
+        "disabled": false,
+        "settings": {
+          "selected_theme": "none",
+          "access_to_wishlist": "login_to_use",
+          "shared_wishlist": true,
+          "use_variants": false
+        }
+      },
+      "13997699835324413730": {
+        "type": "shopify://apps/wishlist-power/blocks/embed-wishlist-product-card/c6cb23f2-39d1-403f-9967-53314ebdad10",
+        "disabled": false,
+        "settings": {
+          "position": "top-end",
+          "border_radius": 0,
+          "icon_name": "heart",
+          "icon_size": 18,
+          "icon_thickness": 1,
+          "button_background": "#000000",
+          "icon_color": "#FFFFFF"
+        }
       }
     },
     "color_schemes": {

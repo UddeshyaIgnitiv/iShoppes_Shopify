@@ -1,6 +1,801 @@
+{% doc %}
+  @prompt
+    i want yo create section. in a section I want two column with 1fr 3fr(width) . in first column we can add the slider and second column we can add slider, in first column we need filter like category sub category. not slider, Dont need the checkbox just onclick on categories and subcategoried
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-filter-slider-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+  }
+
+  .ai-filter-slider__container-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: {{ block.settings.column_gap }}px;
+    padding: {{ block.settings.section_padding }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-filter-slider__filters-{{ ai_gen_id }} {
+    background-color: {{ block.settings.filter_background }};
+    padding: {{ block.settings.filter_padding }}px;
+    border-radius: {{ block.settings.border_radius }}px;
+    height: fit-content;
+  }
+
+  .ai-filter-slider__filter-group-{{ ai_gen_id }} {
+    margin-bottom: 30px;
+  }
+
+  .ai-filter-slider__filter-group-{{ ai_gen_id }}:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-filter-slider__filter-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.filter_title_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.filter_title_color }};
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid {{ block.settings.filter_border_color }};
+  }
+
+  .ai-filter-slider__filter-list-{{ ai_gen_id }} {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ai-filter-slider__filter-item-{{ ai_gen_id }} {
+    margin-bottom: 8px;
+  }
+
+  .ai-filter-slider__filter-button-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+    background-color: transparent;
+    border: 1px solid {{ block.settings.filter_border_color }};
+    border-radius: {{ block.settings.filter_item_radius }}px;
+    cursor: pointer;
+    font-size: {{ block.settings.filter_text_size }}px;
+    color: {{ block.settings.filter_text_color }};
+    transition: all 0.3s ease;
+  }
+
+  .ai-filter-slider__filter-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.filter_hover_background }};
+    color: {{ block.settings.filter_text_hover_color }};
+    border-color: {{ block.settings.filter_hover_border }};
+  }
+
+  .ai-filter-slider__filter-button-{{ ai_gen_id }}.active {
+    background-color: {{ block.settings.filter_active_background }};
+    color: {{ block.settings.filter_active_text_color }};
+    border-color: {{ block.settings.filter_active_border }};
+  }
+
+  .ai-filter-slider__slider-column-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-filter-slider__slider-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: {{ block.settings.slider_height }}px;
+  }
+
+  .ai-filter-slider__slides-{{ ai_gen_id }} {
+    display: flex;
+    transition: transform 0.5s ease;
+    height: 100%;
+  }
+
+  .ai-filter-slider__slide-{{ ai_gen_id }} {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ block.settings.slide_background }};
+    border-radius: {{ block.settings.border_radius }}px;
+  }
+
+  .ai-filter-slider__slide-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: {{ block.settings.border_radius }}px;
+  }
+
+  .ai-filter-slider__placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    border-radius: {{ block.settings.border_radius }}px;
+  }
+
+  .ai-filter-slider__placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .ai-filter-slider__controls-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 2;
+  }
+
+  .ai-filter-slider__button-{{ ai_gen_id }} {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_icon_color }};
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+  }
+
+  .ai-filter-slider__button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+  }
+
+  .ai-filter-slider__button-{{ ai_gen_id }} svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ai-filter-slider__dots-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .ai-filter-slider__dot-{{ ai_gen_id }} {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: {{ block.settings.dot_color }};
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-filter-slider__dot-{{ ai_gen_id }}.active {
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-filter-slider__container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: {{ block.settings.column_gap | times: 0.5 }}px;
+    }
+
+    .ai-filter-slider__slider-{{ ai_gen_id }} {
+      height: {{ block.settings.slider_height | times: 0.7 }}px;
+    }
+  }
+{% endstyle %}
+
+<filter-slider-{{ ai_gen_id }} class="ai-filter-slider-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-filter-slider__container-{{ ai_gen_id }}">
+    <div class="ai-filter-slider__filters-{{ ai_gen_id }}">
+      <div class="ai-filter-slider__filter-group-{{ ai_gen_id }}">
+        <h3 class="ai-filter-slider__filter-title-{{ ai_gen_id }}">{{ block.settings.category_title }}</h3>
+        <ul class="ai-filter-slider__filter-list-{{ ai_gen_id }}">
+          {% for i in (1..8) %}
+            {% liquid
+              assign category_key = 'category_' | append: i
+              assign category_name = block.settings[category_key]
+            %}
+            {% if category_name != blank %}
+              <li class="ai-filter-slider__filter-item-{{ ai_gen_id }}">
+                <button
+                  class="ai-filter-slider__filter-button-{{ ai_gen_id }}"
+                  data-filter-type="category"
+                  data-filter-value="{{ category_name }}"
+                >
+                  {{ category_name }}
+                </button>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="ai-filter-slider__filter-group-{{ ai_gen_id }}">
+        <h3 class="ai-filter-slider__filter-title-{{ ai_gen_id }}">{{ block.settings.subcategory_title }}</h3>
+        <ul class="ai-filter-slider__filter-list-{{ ai_gen_id }}">
+          {% for i in (1..8) %}
+            {% liquid
+              assign subcategory_key = 'subcategory_' | append: i
+              assign subcategory_name = block.settings[subcategory_key]
+            %}
+            {% if subcategory_name != blank %}
+              <li class="ai-filter-slider__filter-item-{{ ai_gen_id }}">
+                <button
+                  class="ai-filter-slider__filter-button-{{ ai_gen_id }}"
+                  data-filter-type="subcategory"
+                  data-filter-value="{{ subcategory_name }}"
+                >
+                  {{ subcategory_name }}
+                </button>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-filter-slider__slider-column-{{ ai_gen_id }}">
+      <div class="ai-filter-slider__slider-{{ ai_gen_id }}">
+        <div class="ai-filter-slider__slides-{{ ai_gen_id }}" data-slides>
+          {% for i in (1..5) %}
+            {% liquid
+              assign image_key = 'slider_image_' | append: i
+              assign image = block.settings[image_key]
+            %}
+            {% if image != blank %}
+              <div class="ai-filter-slider__slide-{{ ai_gen_id }}">
+                <img
+                  src="{{ image | image_url: width: 1600 }}"
+                  alt="{{ image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ image.width }}"
+                  height="{{ image.height }}"
+                  class="ai-filter-slider__slide-image-{{ ai_gen_id }}"
+                >
+              </div>
+            {% endif %}
+          {% endfor %}
+          {% if block.settings.slider_image_1 == blank and block.settings.slider_image_2 == blank and block.settings.slider_image_3 == blank and block.settings.slider_image_4 == blank and block.settings.slider_image_5 == blank %}
+            <div class="ai-filter-slider__slide-{{ ai_gen_id }}">
+              <div class="ai-filter-slider__placeholder-{{ ai_gen_id }}">
+                {{ 'image' | placeholder_svg_tag }}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        {% if block.settings.show_controls %}
+          <div class="ai-filter-slider__controls-{{ ai_gen_id }}">
+            <button class="ai-filter-slider__button-{{ ai_gen_id }}" data-prev aria-label="Previous slide">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button class="ai-filter-slider__button-{{ ai_gen_id }}" data-next aria-label="Next slide">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        {% endif %}
+        {% if block.settings.show_dots %}
+          <div class="ai-filter-slider__dots-{{ ai_gen_id }}" data-dots></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</filter-slider-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FilterSlider{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.autoplayInterval = null;
+        this.selectedFilters = {
+          category: [],
+          subcategory: []
+        };
+      }
+
+      connectedCallback() {
+        this.slidesContainer = this.querySelector('[data-slides]');
+        this.slides = this.slidesContainer.querySelectorAll('.ai-filter-slider__slide-{{ ai_gen_id }}');
+        this.prevButton = this.querySelector('[data-prev]');
+        this.nextButton = this.querySelector('[data-next]');
+        this.dotsContainer = this.querySelector('[data-dots]');
+        this.filterButtons = this.querySelectorAll('.ai-filter-slider__filter-button-{{ ai_gen_id }}');
+
+        if (this.slides.length === 0) return;
+
+        this.setupSlider();
+        this.setupFilters();
+
+        {% if block.settings.autoplay %}
+          this.startAutoplay();
+        {% endif %}
+      }
+
+      setupSlider() {
+        if (this.dotsContainer) {
+          for (let i = 0; i < this.slides.length; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('ai-filter-slider__dot-{{ ai_gen_id }}');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => this.goToSlide(i));
+            this.dotsContainer.appendChild(dot);
+          }
+          this.dots = this.dotsContainer.querySelectorAll('.ai-filter-slider__dot-{{ ai_gen_id }}');
+        }
+
+        if (this.prevButton) {
+          this.prevButton.addEventListener('click', () => this.prevSlide());
+        }
+
+        if (this.nextButton) {
+          this.nextButton.addEventListener('click', () => this.nextSlide());
+        }
+      }
+
+      setupFilters() {
+        this.filterButtons.forEach((button) => {
+          button.addEventListener('click', () => this.handleFilterClick(button));
+        });
+      }
+
+      handleFilterClick(button) {
+        const filterType = button.getAttribute('data-filter-type');
+        const filterValue = button.getAttribute('data-filter-value');
+        
+        button.classList.toggle('active');
+        
+        if (button.classList.contains('active')) {
+          if (!this.selectedFilters[filterType].includes(filterValue)) {
+            this.selectedFilters[filterType].push(filterValue);
+          }
+        } else {
+          const index = this.selectedFilters[filterType].indexOf(filterValue);
+          if (index > -1) {
+            this.selectedFilters[filterType].splice(index, 1);
+          }
+        }
+
+        console.log('Selected Categories:', this.selectedFilters.category);
+        console.log('Selected Subcategories:', this.selectedFilters.subcategory);
+      }
+
+      goToSlide(index) {
+        this.currentIndex = index;
+        const offset = -index * 100;
+        this.slidesContainer.style.transform = `translateX(${offset}%)`;
+
+        if (this.dots) {
+          this.dots.forEach((dot, i) => {
+            if (i === index) {
+              dot.classList.add('active');
+            } else {
+              dot.classList.remove('active');
+            }
+          });
+        }
+      }
+
+      nextSlide() {
+        this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+        this.goToSlide(this.currentIndex);
+      }
+
+      prevSlide() {
+        this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+        this.goToSlide(this.currentIndex);
+      }
+
+      startAutoplay() {
+        this.autoplayInterval = setInterval(() => {
+          this.nextSlide();
+        }, {{ block.settings.autoplay_speed }} * 1000);
+      }
+
+      disconnectedCallback() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+        }
+      }
+    }
+
+    customElements.define('filter-slider-{{ ai_gen_id }}', FilterSlider{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Filter with slider",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "slider_height",
+      "min": 200,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "label": "Slider height",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Column gap",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Categories"
+    },
+    {
+      "type": "text",
+      "id": "category_title",
+      "label": "Category title",
+      "default": "Categories"
+    },
+    {
+      "type": "text",
+      "id": "category_1",
+      "label": "Category 1",
+      "default": "Electronics"
+    },
+    {
+      "type": "text",
+      "id": "category_2",
+      "label": "Category 2",
+      "default": "Clothing"
+    },
+    {
+      "type": "text",
+      "id": "category_3",
+      "label": "Category 3",
+      "default": "Home & Garden"
+    },
+    {
+      "type": "text",
+      "id": "category_4",
+      "label": "Category 4"
+    },
+    {
+      "type": "text",
+      "id": "category_5",
+      "label": "Category 5"
+    },
+    {
+      "type": "text",
+      "id": "category_6",
+      "label": "Category 6"
+    },
+    {
+      "type": "text",
+      "id": "category_7",
+      "label": "Category 7"
+    },
+    {
+      "type": "text",
+      "id": "category_8",
+      "label": "Category 8"
+    },
+    {
+      "type": "header",
+      "content": "Subcategories"
+    },
+    {
+      "type": "text",
+      "id": "subcategory_title",
+      "label": "Subcategory title",
+      "default": "Subcategories"
+    },
+    {
+      "type": "text",
+      "id": "subcategory_1",
+      "label": "Subcategory 1",
+      "default": "Smartphones"
+    },
+    {
+      "type": "text",
+      "id": "subcategory_2",
+      "label": "Subcategory 2",
+      "default": "Laptops"
+    },
+    {
+      "type": "text",
+      "id": "subcategory_3",
+      "label": "Subcategory 3",
+      "default": "Accessories"
+    },
+    {
+      "type": "text",
+      "id": "subcategory_4",
+      "label": "Subcategory 4"
+    },
+    {
+      "type": "text",
+      "id": "subcategory_5",
+      "label": "Subcategory 5"
+    },
+    {
+      "type": "text",
+      "id": "subcategory_6",
+      "label": "Subcategory 6"
+    },
+    {
+      "type": "text",
+      "id": "subcategory_7",
+      "label": "Subcategory 7"
+    },
+    {
+      "type": "text",
+      "id": "subcategory_8",
+      "label": "Subcategory 8"
+    },
+    {
+      "type": "header",
+      "content": "Slider images"
+    },
+    {
+      "type": "image_picker",
+      "id": "slider_image_1",
+      "label": "Image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "slider_image_2",
+      "label": "Image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "slider_image_3",
+      "label": "Image 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "slider_image_4",
+      "label": "Image 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "slider_image_5",
+      "label": "Image 5"
+    },
+    {
+      "type": "header",
+      "content": "Slider controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show navigation buttons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Filter style"
+    },
+    {
+      "type": "color",
+      "id": "filter_background",
+      "label": "Background",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "range",
+      "id": "filter_padding",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "filter_title_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "filter_title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "filter_text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "filter_text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "filter_text_hover_color",
+      "label": "Text hover color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "filter_border_color",
+      "label": "Border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "range",
+      "id": "filter_item_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Item border radius",
+      "default": 6
+    },
+    {
+      "type": "color",
+      "id": "filter_hover_background",
+      "label": "Hover background",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
+      "id": "filter_hover_border",
+      "label": "Hover border",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "filter_active_background",
+      "label": "Active background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "filter_active_text_color",
+      "label": "Active text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "filter_active_border",
+      "label": "Active border",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Slider colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "slide_background",
+      "label": "Slide background",
+      "default": "#f4f4f4"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover background",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_icon_color",
+      "label": "Button icon",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Dot color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Filter with slider"
+    }
+  ]
+}
 {% endschema %}

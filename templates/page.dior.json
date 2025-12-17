@@ -1,46 +1,49 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "1765966283087177af": {
-      "type": "_blocks",
+    "main": {
+      "type": "dior-page",
+      "blocks": {
+        "slide1": {
+          "type": "slide_default",
+          "settings": {
+            "heading": "Welcome to Dior",
+            "subheading": "Discover our latest collection"
+          }
+        },
+        "slide2": {
+            "type": "slide_default",
+            "settings": {
+              "heading": "New Season",
+              "subheading": "Explore the new arrivals"
+            }
+        },
+        "custom_slide1": {
+          "type": "slide_custom",
+          "settings": {
+          }
+        },
+        "video_slide1": {
+          "type": "video_slide",
+          "settings": {
+             "caption": "Backstage at Dior"
+          }
+        }
+      },
+      "block_order": [
+        "slide1",
+        "slide2",
+        "custom_slide1",
+        "video_slide1"
+      ],
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "full-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "design_mode": "default",
+        "heading_1": "Dior Store",
+        "description_1": "<p>Experience the luxury.</p>",
+        "store_details": "<p>123 Dior Ave, Paris, France</p>"
       }
     }
   },
   "order": [
-    "1765966283087177af"
+    "main"
   ]
 }

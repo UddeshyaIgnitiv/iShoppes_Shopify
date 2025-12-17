@@ -1,0 +1,458 @@
+{% schema %}
+{
+  "name": "Dior Page",
+  "tag": "section",
+  "class": "dior-page-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "design_mode",
+      "label": "Design Mode",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "header",
+      "content": "Custom Design Settings",
+      "info": "Settings for the Custom layout (25% / 75%)"
+    },
+    {
+      "type": "link_list",
+      "id": "custom_menu",
+      "label": "Side Menu"
+    },
+    {
+      "type": "collection",
+      "id": "new_arrival_collection",
+      "label": "New Arrival Collection"
+    },
+    {
+      "type": "collection",
+      "id": "new_arrival_collection_2",
+      "label": "Second New Arrival Collection (Optional)"
+    },
+    {
+      "type": "header",
+      "content": "Default Design Settings",
+      "info": "Settings for the Default layout (Full Width)"
+    },
+    {
+      "type": "text",
+      "id": "heading_1",
+      "label": "Heading 1"
+    },
+    {
+      "type": "richtext",
+      "id": "description_1",
+      "label": "Description 1"
+    },
+    {
+      "type": "html",
+      "id": "store_details",
+      "label": "Store Details (Dynamic)"
+    },
+    {
+      "type": "text",
+      "id": "heading_2",
+      "label": "Heading 2"
+    },
+    {
+      "type": "richtext",
+      "id": "description_2",
+      "label": "Description 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide_custom",
+      "name": "Custom Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "slide_default",
+      "name": "Default Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "video_slide",
+      "name": "Video Slide",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "Video URL (Youtube/Vimeo)",
+          "accept": ["youtube", "vimeo"]
+        },
+        {
+            "type": "text",
+            "id": "caption",
+            "label": "Caption"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dior Page"
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+  .dior-page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Custom Layout */
+  .dior-custom-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 30px;
+  }
+  
+  .dior-col-25 {
+    width: 25%;
+    flex: 0 0 25%;
+  }
+  
+  .dior-col-75 {
+    width: calc(75% - 30px);
+    flex: 0 0 calc(75% - 30px);
+  }
+  
+  .dior-side-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .dior-side-menu li {
+    margin-bottom: 10px;
+  }
+  
+  .dior-side-menu a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 16px;
+    display: block;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .dior-side-menu a:hover {
+    opacity: 0.7;
+  }
+
+  /* Sliders */
+  .dior-section-group {
+    margin-bottom: 40px;
+    position: relative;
+  }
+  
+  /* Ensure slideshow takes height */
+  slideshow-component {
+    display: block;
+    width: 100%;
+    position: relative;
+  }
+
+  .dior-col-75 slideshow-component {
+    min-height: 400px;
+  }
+  
+  .dior-slider-full slideshow-component {
+     min-height: 600px;
+  }
+
+  /* Slide Content */
+  .dior-slide-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f4f4;
+  }
+  
+  .dior-slide-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .dior-slide-text {
+     position: absolute;
+     bottom: 40px;
+     left: 40px;
+     color: #fff;
+     background: rgba(0,0,0,0.4);
+     padding: 20px;
+     max-width: 400px;
+  }
+
+  /* New Arrivals Grid */
+  .dior-new-arrivals {
+    margin-bottom: 40px;
+  }
+  
+  .dior-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  /* Default Layout */
+  .dior-default-layout {
+    width: 100%;
+  }
+  
+  .dior-default-content {
+    max-width: 800px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  
+  .dior-store-details {
+    margin: 30px 0;
+    padding: 20px;
+    background: #f9f9f9;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .dior-custom-layout {
+      flex-direction: column;
+    }
+    .dior-col-25, .dior-col-75 {
+      width: 100%;
+      flex: 0 0 100%;
+    }
+  }
+{% endstyle %}
+
+<div class="dior-page-container">
+  {% if section.settings.design_mode == 'custom' %}
+    <!-- Custom Design: 25% Menu | 75% Content -->
+    <div class="dior-custom-layout">
+      
+      <!-- Column 1: Menu -->
+      <aside class="dior-col-25">
+        {% if section.settings.custom_menu != blank %}
+          <ul class="dior-side-menu">
+            {% for link in section.settings.custom_menu.links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </aside>
+
+      <!-- Column 2: Slider, Arrivals, Video -->
+      <div class="dior-col-75">
+        
+        <!-- Slider Custom -->
+        {% assign custom_blocks = section.blocks | where: 'type', 'slide_custom' %}
+        {% if custom_blocks.size > 0 %}
+          <div class="dior-section-group dior-slider-custom">
+            {% capture slides_html %}
+               {% for block in custom_blocks %}
+                 {% capture slide_content %}
+                   <div class="dior-slide-wrapper">
+                     {% if block.settings.link %}<a href="{{ block.settings.link }}" style="width:100%;height:100%;display:block;">{% endif %}
+                     {% if block.settings.image %}
+                       {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy' }}
+                     {% else %}
+                       {{ 'lifestyle-1' | placeholder_svg_tag }}
+                     {% endif %}
+                     {% if block.settings.link %}</a>{% endif %}
+                   </div>
+                 {% endcapture %}
+                 {% render 'slideshow-slide', index: forloop.index0, children: slide_content, media_fit: 'cover' %}
+               {% endfor %}
+            {% endcapture %}
+            {% render 'slideshow', slides: slides_html, slide_count: custom_blocks.size, show_arrows: true, autoplay: true, autoplay_speed: 4, slide_size: 'medium' %}
+          </div>
+        {% endif %}
+
+        <!-- New Arrivals -->
+        <div class="dior-section-group dior-new-arrivals">
+          <h2>New Arrivals</h2>
+          <div class="dior-products-grid">
+            {% assign collection = section.settings.new_arrival_collection %}
+            {% if collection != blank %}
+              {% for product in collections[collection].products limit: 4 %}
+                <div class="dior-product-card">
+                   {% render 'product-card', product_card_product: product %}
+                </div>
+              {% endfor %}
+            {% else %}
+               <p>Select a collection to display new arrivals.</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- New Arrivals 2 -->
+        {% if section.settings.new_arrival_collection_2 != blank %}
+        <div class="dior-section-group dior-new-arrivals-2">
+          <h2>New Arrivals</h2>
+          <div class="dior-products-grid">
+            {% assign collection2 = section.settings.new_arrival_collection_2 %}
+            {% for product in collections[collection2].products limit: 4 %}
+               <div class="dior-product-card">
+                  {% render 'product-card', product_card_product: product %}
+               </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Video Slider -->
+        {% assign video_blocks = section.blocks | where: 'type', 'video_slide' %}
+        {% if video_blocks.size > 0 %}
+          <div class="dior-section-group dior-video-slider-section">
+             <h2>Videos</h2>
+             {% capture video_slides_html %}
+               {% for block in video_blocks %}
+                 {% capture slide_content %}
+                   <div class="dior-slide-wrapper" style="background:#000;">
+                      {% if block.settings.video %}
+                        {{ block.settings.video | video_tag: autoplay: false, loop: false, muted: false, controls: true, style: "width:100%;height:100%;" }}
+                      {% elsif block.settings.video_url %}
+                        {% if block.settings.video_url.type == 'youtube' %}
+                          <iframe src="https://www.youtube.com/embed/{{ block.settings.video_url.id }}" frameborder="0" allowfullscreen style="width:100%;height:100%;"></iframe>
+                        {% elsif block.settings.video_url.type == 'vimeo' %}
+                          <iframe src="https://player.vimeo.com/video/{{ block.settings.video_url.id }}" frameborder="0" allowfullscreen style="width:100%;height:100%;"></iframe>
+                        {% endif %}
+                      {% endif %}
+                      {% if block.settings.caption != blank %}
+                        <div class="dior-slide-text">{{ block.settings.caption }}</div>
+                      {% endif %}
+                   </div>
+                 {% endcapture %}
+                 {% render 'slideshow-slide', index: forloop.index0, children: slide_content, media_fit: 'contain' %}
+               {% endfor %}
+             {% endcapture %}
+             {% render 'slideshow', slides: video_slides_html, slide_count: video_blocks.size, show_arrows: true, slide_size: 'medium' %}
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+
+  {% else %}
+    <!-- Default Design: Full Width -->
+    <div class="dior-default-layout">
+      
+      <!-- Full Width Slider -->
+      {% assign default_blocks = section.blocks | where: 'type', 'slide_default' %}
+      {% if default_blocks.size > 0 %}
+        <div class="dior-slider-full">
+           {% capture slides_html %}
+              {% for block in default_blocks %}
+                 {% capture slide_content %}
+                    <div class="dior-slide-wrapper">
+                       {% if block.settings.link %}<a href="{{ block.settings.link }}" style="width:100%;height:100%;display:block;">{% endif %}
+                       {% if block.settings.image %}
+                         {{ block.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy' }}
+                       {% else %}
+                         {{ 'lifestyle-2' | placeholder_svg_tag }}
+                       {% endif %}
+                       {% if block.settings.heading != blank %}
+                         <div class="dior-slide-text">
+                           <h3>{{ block.settings.heading }}</h3>
+                           <p>{{ block.settings.subheading }}</p>
+                         </div>
+                       {% endif %}
+                       {% if block.settings.link %}</a>{% endif %}
+                    </div>
+                 {% endcapture %}
+                 {% render 'slideshow-slide', index: forloop.index0, children: slide_content, media_fit: 'cover' %}
+              {% endfor %}
+           {% endcapture %}
+           {% render 'slideshow', slides: slides_html, slide_count: default_blocks.size, show_arrows: true, autoplay: true, autoplay_speed: 5, slide_size: 'large' %}
+        </div>
+      {% endif %}
+
+      <!-- Content -->
+      <div class="dior-default-content">
+         {% if section.settings.heading_1 != blank %}
+           <h1>{{ section.settings.heading_1 }}</h1>
+         {% endif %}
+         
+         {% if section.settings.description_1 != blank %}
+           <div class="rte">{{ section.settings.description_1 }}</div>
+         {% endif %}
+
+         {% if section.settings.store_details != blank %}
+           <div class="dior-store-details">
+             {{ section.settings.store_details }}
+           </div>
+         {% endif %}
+
+         {% if section.settings.heading_2 != blank %}
+           <h2>{{ section.settings.heading_2 }}</h2>
+         {% endif %}
+
+         {% if section.settings.description_2 != blank %}
+           <div class="rte">{{ section.settings.description_2 }}</div>
+         {% endif %}
+
+         {% if section.settings.logo_image != blank %}
+           <div class="dior-logo-footer">
+             {{ section.settings.logo_image | image_url: width: 300 | image_tag }}
+           </div>
+         {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>

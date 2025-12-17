@@ -1,0 +1,92 @@
+{% schema %}
+{
+  "name": "Dior Design Switch",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label_default",
+      "label": "Button Label (Default)",
+      "default": "Default Design"
+    },
+    {
+      "type": "text",
+      "id": "label_custom",
+      "label": "Button Label (Custom)",
+      "default": "Custom Design"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dior Design Switch"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .dior-design-switch {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+    gap: 20px;
+    background-color: #fff;
+  }
+
+  .dior-switch-btn {
+    padding: 12px 30px;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    font-family: inherit;
+  }
+
+  .dior-switch-btn.active,
+  .dior-switch-btn:hover {
+    background-color: #000;
+    color: #fff;
+  }
+</style>
+
+<div class="dior-design-switch">
+  <button id="btn-default" class="dior-switch-btn active" onclick="switchDiorDesign('default')">
+    {{ section.settings.label_default }}
+  </button>
+  <button id="btn-custom" class="dior-switch-btn" onclick="switchDiorDesign('custom')">
+    {{ section.settings.label_custom }}
+  </button>
+</div>
+
+<script>
+  function switchDiorDesign(design) {
+    // Buttons
+    document.querySelectorAll('.dior-switch-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + design).classList.add('active');
+    
+    // Sections (toggled by class)
+    // We expect sections to have classes like 'dior-design-group-default' or 'dior-design-group-custom'
+    
+    // Hide all groups
+    document.querySelectorAll('.dior-design-group').forEach(el => {
+      el.style.display = 'none';
+    });
+
+    // Show selected group
+    document.querySelectorAll('.dior-design-group-' + design).forEach(el => {
+      el.style.display = 'block';
+    });
+    
+    // Also trigger window resize to handle any grid/slider recalcs
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initial state
+    switchDiorDesign('default');
+  });
+</script>

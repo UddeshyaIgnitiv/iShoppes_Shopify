@@ -1,0 +1,216 @@
+{% schema %}
+{
+  "name": "Dior Brand (Content)",
+  "settings": [
+    {
+      "type": "select",
+      "id": "design_group",
+      "label": "Show on Design",
+      "options": [
+        { "value": "default", "label": "Default Design" },
+        { "value": "custom", "label": "Custom Design" }
+      ],
+      "default": "custom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dior Brand (Content)"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="dior-design-group dior-design-group-{{ section.settings.design_group }}">
+  
+  <!-- Hero -->
+  <div class="dior-brand-hero">
+    <img src="{{ 'dior-brand-hero.png' | asset_url }}" alt="Dior Locations" class="dior-img-desktop">
+    <img src="{{ 'dior-brand-hero-m.png' | asset_url }}" alt="Dior Locations" class="dior-img-mobile">
+  </div>
+
+  <div class="page-width">
+    <div class="dior-brand-content">
+      
+      <!-- Locations Section -->
+      <div class="dior-section-inner">
+        <h2 class="dior-subtitle">Dior Parfums Available in John F. Kennedy International Airport and George Bush Intercontinental Airport Stores</h2>
+        
+        <div class="locations-grid">
+           <div class="location-box">
+              <h3>QUEENS, NEW YORK</h3>
+              <p>John F. Kennedy International Airport</p>
+              <p>Terminal 1 Beauty Store</p>
+              <p>Terminal 1 Dior La Collection Privée</p>
+              <p>Terminal 5 Beauty Store</p>
+           </div>
+           
+           <!-- Add second location box if needed based on design -->
+           <div class="location-box">
+              <h3>HOUSTON, TEXAS</h3>
+              <p>George Bush Intercontinental Airport</p>
+              <p>Terminal A Duty Free Store</p>
+              <p>Terminal C Duty Free Store</p>
+              <p>Terminal D Duty Free Store</p>
+           </div>
+        </div>
+      </div>
+
+      <hr class="dior-divider">
+
+      <!-- Brand Story -->
+      <div class="dior-section-inner">
+        <h2 class="dior-title">Discover the Dior Brand</h2>
+        <div class="brand-story-text">
+            <p>DIOR was born of a dream.</p>
+            <p>The dream of a man who revolutionized couture and beauty with timeless creations that have become icons.</p>
+            <p>Each of the Maison's creations carries a part of his dream for a happier and more beautiful world.</p>
+        </div>
+
+        <div class="brand-logo-large">
+           <span style="font-family: serif; font-size: 3rem; letter-spacing: 5px;">DIOR</span>
+           <div style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 10px;">Authorized Retailer</div>
+        </div>
+        
+        <!-- Video if needed -->
+        <div class="video-container">
+          <div class="video-overlay-text">
+             <h3>J'ADORE, THE FILM</h3>
+             <p>Christian Dior</p>
+          </div>
+          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" style="width:100%; display:block;" alt="Video Placeholder"> 
+          <!-- Use iframe for real video -->
+        </div>
+      </div>
+
+      <!-- Newsletter Footer -->
+      <div class="dior-newsletter-section">
+          <h3>GET IN TOUCH</h3>
+          <p>Sign up for our newsletter and promotions.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Email" class="newsletter-input">
+            <button type="button" class="newsletter-btn">SUBSCRIBE</button>
+          </form>
+          <div class="social-icons">
+             <span class="icon-instagram"></span>
+             <span class="icon-facebook"></span>
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .dior-brand-hero img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .dior-brand-content {
+    padding: 60px 0;
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .dior-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    line-height: 1.4;
+  }
+  .locations-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+  }
+  .location-box {
+    background: #e6e6e6;
+    padding: 40px;
+    width: 45%;
+    min-width: 300px;
+    text-align: left;
+  }
+  .location-box h3 {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+  .location-box p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }
+  .dior-divider {
+    width: 60%;
+    margin: 60px auto;
+    border-top: 1px solid #ddd;
+  }
+  .brand-story-text p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  .brand-logo-large {
+    margin: 60px 0;
+  }
+  
+  .video-container {
+    position: relative;
+    margin-top: 40px;
+  }
+  .video-overlay-text {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #fff;
+    text-align: left;
+    z-index: 2;
+  }
+
+  .dior-newsletter-section {
+    background: #000;
+    color: #fff;
+    padding: 60px 20px;
+    margin-top: 60px;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%); /* Full width break out */
+  }
+  .newsletter-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    margin: 20px auto;
+  }
+  .newsletter-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    color: #fff;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .newsletter-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    .locations-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+    .location-box {
+      width: 100%;
+    }
+  }
+</style>

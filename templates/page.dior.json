@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "switch": {
@@ -6,23 +15,9 @@
         "label_default": "Default Design",
         "label_custom": "Custom Design"
       }
-    },
-    "shop": {
-      "type": "dior-shop",
-      "settings": {
-        "design_group": "default"
-      }
-    },
-    "brand": {
-      "type": "dior-brand",
-      "settings": {
-        "design_group": "custom"
-      }
     }
   },
   "order": [
-    "switch",
-    "shop",
-    "brand"
+    "switch"
   ]
 }

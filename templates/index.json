@@ -17,6 +17,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/chanel_banner_desktop_b67af92b3d.jpg",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -43,6 +44,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/brugal_home_desktop_77929ced8d.jpg",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -90,6 +92,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/chanel_banner_m.jpg",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": false,
             "horizontal_alignment": "flex-start",
@@ -116,6 +119,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/brugal_banner_m.jpg",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -164,23 +168,30 @@
         "button_label": "START SHOPPING"
       }
     },
-    "travel_exclusives_yqVdin": {
-      "type": "travel-exclusives",
+    "new_arrivals_ft7BJ4": {
+      "type": "new-arrivals",
       "blocks": {
-        "product_6PWUA3": {
+        "product_3NU8Wb": {
           "type": "product",
           "settings": {
             "product": "the-macallan-no6-257438"
           }
+        },
+        "product_GEJjDp": {
+          "type": "product",
+          "settings": {
+            "product": ""
+          }
         }
       },
       "block_order": [
-        "product_6PWUA3"
+        "product_3NU8Wb",
+        "product_GEJjDp"
       ],
-      "name": "Travel Exclusives",
+      "name": "TRAVEL EXCLUSIVES",
       "settings": {
         "heading": "TRAVEL EXCLUSIVES",
-        "tag": "travel exclusives",
+        "tag": "TRAVEL EXCLUSIVESS",
         "product_limit": 4
       }
     },
@@ -323,7 +334,7 @@
     "slideshow_ifejig",
     "slideshow_8X8D3Y",
     "duty_free_works",
-    "travel_exclusives_yqVdin",
+    "new_arrivals_ft7BJ4",
     "new_arrivals",
     "promotion_banners",
     "content_image_info_banner",

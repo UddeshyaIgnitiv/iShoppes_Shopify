@@ -42,37 +42,134 @@
         "padding-block-end": 0
       }
     },
-    "hero_TTRFyF": {
-      "type": "hero",
-      "name": "Custom Dior Banner 1",
+    "slideshow_WjxLM6": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_VAHQ6g": {
+          "type": "_slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/dior_custom_banner_d.jpg",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "slide_t4WCaV": {
+          "type": "_slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/dior_custom_banner_d2.jpg",
+            "link": "",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slide_VAHQ6g",
+        "slide_t4WCaV"
+      ],
+      "name": "Dior Custom Slider",
       "settings": {
-        "responsive_media": true,
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/dior_custom_banner_d.jpg",
-        "media_type_2": "image",
-        "image_2": "shopify://shop_images/dior_custom_banner_m.jpg",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": false,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
+        "icons_style": "arrows_large",
+        "slideshow_controls_style": "dots",
+        "color_scheme": "",
+        "autoplay": false,
+        "autoplay_speed": 4,
         "section_width": "full-width",
-        "section_height": "large",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-1",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "gradient",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "slide_height": "medium",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "new_arrivals_LN7X8H": {
+      "type": "new-arrivals",
+      "blocks": {
+        "product_ie4hba": {
+          "type": "product",
+          "settings": {
+            "product": "miss-dior-blooming-bouquet-eau-de-toilette-fresh-and-tender-notes-819846"
+          }
+        },
+        "product_mfFHiF": {
+          "type": "product",
+          "settings": {
+            "product": "jadore-lor-253272"
+          }
+        },
+        "product_VwaCFU": {
+          "type": "product",
+          "settings": {
+            "product": "jadore-eau-de-parfum-19614"
+          }
+        },
+        "product_BVjcXU": {
+          "type": "product",
+          "settings": {
+            "product": "sauvage-eau-de-toilette-221101"
+          }
+        },
+        "product_qjhPJG": {
+          "type": "product",
+          "settings": {
+            "product": "sauvage-eau-de-parfum-refillable-eau-de-parfum-citrus-and-vanilla-notes-256596"
+          }
+        },
+        "product_EpU77n": {
+          "type": "product",
+          "settings": {
+            "product": "miss-dior-eau-de-parfum-808033"
+          }
+        }
+      },
+      "block_order": [
+        "product_ie4hba",
+        "product_mfFHiF",
+        "product_VwaCFU",
+        "product_BVjcXU",
+        "product_qjhPJG",
+        "product_EpU77n"
+      ],
+      "name": "Dior Custom Best Seller",
+      "settings": {
+        "heading": "BEST SELLERS",
+        "tag": "New Arrivals",
+        "product_limit": 4
       }
     }
   },
@@ -80,6 +177,7 @@
     "hero_banner",
     "locations_section",
     "brand_story",
-    "hero_TTRFyF"
+    "slideshow_WjxLM6",
+    "new_arrivals_LN7X8H"
   ]
 }

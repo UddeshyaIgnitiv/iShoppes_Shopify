@@ -13,7 +13,7 @@
       "type": "custom-liquid",
       "name": "Dior Default Banner",
       "settings": {
-        "custom_liquid": "<style>\n  .dior-hero-section {\n    width: 100%;\n    padding-bottom: 20px;\n    padding-top: 32px;\n  }\n  .dior-hero-container {\n    max-width: 625px;\n    margin: 0 auto;\n    padding: 0 20px;\n  }\n  .dior-hero-image {\n    width: 100%;\n    height: auto;\n    display: block;\n  }\n  @media (max-width: 768px) {\n    .dior-hero-section {\n      padding-top: 10px;\n    }\n    .dior-hero-container {\n      padding: 0 5px;\n    }\n  }\n</style>\n<div class=\"dior-hero-section\">\n  <div class=\"dior-hero-container\">\n    <img src=\"{{ 'dior_banner.jpg' | file_img_url: 'master' }}\" alt=\"Dior Banner\" class=\"dior-hero-image\" loading=\"eager\">\n  </div>\n</div>",
+        "custom_liquid": "<style>\n  .dior-hero-section {\n    width: 100%;\n    padding-bottom: 32px;\n    padding-top: 32px;\n  }\n  .dior-hero-container {\n    max-width: 625px;\n    margin: 0 auto;\n    padding: 0 20px;\n  }\n  .dior-hero-image {\n    width: 100%;\n    height: auto;\n    display: block;\n  }\n  @media (max-width: 768px) {\n    .dior-hero-section {\n      padding-top: 10px;\n    }\n    .dior-hero-container {\n      padding: 0 5px;\n    }\n  }\n</style>\n<div class=\"dior-hero-section\">\n  <div class=\"dior-hero-container\">\n    <img src=\"{{ 'dior_banner.jpg' | file_img_url: 'master' }}\" alt=\"Dior Banner\" class=\"dior-hero-image\" loading=\"eager\">\n  </div>\n</div>",
         "color_scheme": "",
         "section_width": "full-width",
         "padding-block-start": 0,

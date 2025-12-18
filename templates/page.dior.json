@@ -23,7 +23,7 @@
         "horizontal_alignment": "center",
         "vertical_alignment": "center",
         "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
+        "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 12,
         "section_width": "full-width",
@@ -36,7 +36,7 @@
         "gradient_direction": "to top",
         "blurred_reflection": false,
         "reflection_opacity": 75,
-        "padding-block-start": 0,
+        "padding-block-start": 30,
         "padding-block-end": 0
       }
     },

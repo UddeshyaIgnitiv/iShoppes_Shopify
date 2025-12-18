@@ -104,6 +104,7 @@
         "slide_VAHQ6g",
         "slide_t4WCaV"
       ],
+      "disabled": true,
       "name": "Dior Custom Slider",
       "settings": {
         "icons_style": "arrows_large",
@@ -165,11 +166,12 @@
         "product_qjhPJG",
         "product_EpU77n"
       ],
+      "disabled": true,
       "name": "Dior Custom Best Seller",
       "settings": {
         "heading": "BEST SELLERS",
         "tag": "New Arrivals",
-        "product_limit": 4
+        "product_limit": 3
       }
     }
   },

@@ -10,40 +10,19 @@
 {
   "sections": {
     "hero_banner": {
-      "type": "hero",
+      "type": "custom-liquid",
       "settings": {
-        "responsive_media": false,
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/dior_banner.jpg",
-        "media_type_2": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 0,
-        "section_width": "full-width",
-        "section_height": "custom",
-        "section_height_custom": 100,
+        "custom_liquid": "<style>\n  .dior-hero-section {\n    width: 100%;\n    padding-bottom: 20px;\n    padding-top: 32px;\n  }\n  .dior-hero-container {\n    max-width: 625px;\n    margin: 0 auto;\n    padding: 0 20px;\n  }\n  .dior-hero-image {\n    width: 100%;\n    height: auto;\n    display: block;\n  }\n</style>\n<div class=\"dior-hero-section\">\n  <div class=\"dior-hero-container\">\n    <img src=\"{{ 'dior_banner.jpg' | file_img_url: 'master' }}\" alt=\"Dior Banner\" class=\"dior-hero-image\" loading=\"eager\">\n  </div>\n</div>",
         "color_scheme": "",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 30,
+        "section_width": "full-width",
+        "padding-block-start": 0,
         "padding-block-end": 0
       }
     },
     "locations_section": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "<style>\n  .dior-page-container {\n    padding: 40px 20px;\n    font-family: var(--font-body-family);\n  }\n  .dior-headline {\n    text-align: center;\n    font-family: var(--font-heading-family);\n    font-size: 24px;\n    margin-bottom: 40px;\n    line-height: 1.4;\n    color: #000;\n    max-width: 800px;\n    margin-left: auto;\n    margin-right: auto;\n    font-weight: 600;\n  }\n  .dior-locations-grid {\n    display: flex;\n    gap: 20px;\n    justify-content: center;\n    max-width: 1000px;\n    margin: 0 auto;\n  }\n  .dior-location-card {\n    flex: 1;\n    background-color: #dcdcdc;\n    padding: 40px;\n    text-align: left;\n    border-radius: 4px;\n  }\n  .dior-location-card h3 {\n    font-size: 14px;\n    font-weight: bold;\n    margin-bottom: 5px;\n    text-transform: uppercase;\n    letter-spacing: 1px;\n    color: #000;\n    margin-top: 0;\n  }\n  .location-subtitle {\n    font-size: 14px;\n    margin-bottom: 20px;\n    color: #000;\n    margin-top: 0;\n  }\n  .terminal-list p {\n    font-size: 13px;\n    margin-bottom: 5px;\n    font-weight: 500;\n    color: #000;\n    margin-top: 0;\n  }\n  @media (max-width: 768px) {\n    .dior-locations-grid {\n      flex-direction: column;\n    }\n  }\n</style>\n\n<div class=\"page-width dior-page-container\">\n  <h2 class=\"dior-headline\">Dior Parfums Available in John F. Kennedy International Airport and George Bush Intercontinental Airport Stores</h2>\n  \n  <div class=\"dior-locations-grid\">\n    <div class=\"dior-location-card\">\n      <h3>QUEENS, NEW YORK</h3>\n      <p class=\"location-subtitle\">John F. Kennedy International Airport</p>\n      \n      <div class=\"terminal-list\">\n        <p>Terminal 1 Beauty Store</p>\n        <p>Terminal 1 Dior La Collection Privée</p>\n        <p>Terminal 5 Beauty Store</p>\n      </div>\n    </div>\n    \n    <div class=\"dior-location-card\">\n      <h3>HOUSTON, TEXAS</h3>\n      <p class=\"location-subtitle\">George Bush Intercontinental Airport</p>\n      \n      <div class=\"terminal-list\">\n        <p>Terminal A Duty Free Store</p>\n        <p>Terminal C Duty Free Store</p>\n        <p>Terminal D Duty Free Store</p>\n      </div>\n    </div>\n  </div>\n</div>",
+        "custom_liquid": "<style>\n  .dior-page-container {\n    padding: 40px 20px;\n    font-family: var(--font-body-family);\n  }\n  .dior-headline {\n    text-align: center;\n    font-family: var(--font-heading-family);\n    font-size: 24px;\n    margin-bottom: 40px;\n    line-height: 1.4;\n    color: #000;\n    max-width: 800px;\n    margin-left: auto;\n    margin-right: auto;\n    font-weight: 600;\n  }\n  .dior-locations-grid {\n    display: flex;\n    gap: 20px;\n    justify-content: center;\n    max-width: 1000px;\n    margin: 0 auto;\n  }\n  .dior-location-card {\n    flex: 1;\n    background-color: #dcdcdc;\n    padding: 40px;\n    text-align: left;\n    border-radius: 4px;\n  }\n  .dior-location-card h3 {\n    font-size: 14px;\n    font-weight: bold;\n    margin-bottom: 5px;\n    text-transform: uppercase;\n    letter-spacing: 1px;\n    color: #000;\n    margin-top: 0;\n  }\n  .location-subtitle {\n    font-size: 14px;\n    margin-bottom: 20px;\n    color: #000;\n    margin-top: 0;\n  }\n  .terminal-list p {\n    font-size: 13px;\n    margin-bottom: 5px;\n    font-weight: 500;\n    color: #000;\n    margin-top: 0;\n  }\n  @media (max-width: 768px) {\n    .dior-locations-grid {\n      flex-direction: column;\n    }\n  }\n</style>\n\n<div class=\"page-width dior-page-container\">\n  <h2 class=\"dior-headline\">Dior Parfums Available in John F. Kennedy<br>International Airport and George Bush<br>Intercontinental Airport Stores</h2>\n  \n  <div class=\"dior-locations-grid\">\n    <div class=\"dior-location-card\">\n      <h3>QUEENS, NEW YORK</h3>\n      <p class=\"location-subtitle\">John F. Kennedy International Airport</p>\n      \n      <div class=\"terminal-list\">\n        <p>Terminal 1 Beauty Store</p>\n        <p>Terminal 1 Dior La Collection Privée</p>\n        <p>Terminal 5 Beauty Store</p>\n      </div>\n    </div>\n    \n    <div class=\"dior-location-card\">\n      <h3>HOUSTON, TEXAS</h3>\n      <p class=\"location-subtitle\">George Bush Intercontinental Airport</p>\n      \n      <div class=\"terminal-list\">\n        <p>Terminal A Duty Free Store</p>\n        <p>Terminal C Duty Free Store</p>\n        <p>Terminal D Duty Free Store</p>\n      </div>\n    </div>\n  </div>\n</div>",
         "color_scheme": "",
         "section_width": "page-width",
         "padding-block-start": 0,

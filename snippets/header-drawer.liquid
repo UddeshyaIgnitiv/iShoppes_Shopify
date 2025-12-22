@@ -141,7 +141,7 @@
                         id="HeaderDrawer-{{ link.handle }}"
                         class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
                       >
-                        <span class="menu-drawer__menu-item-text">{{ link.title | escape }}</span>
+                        <a href="{{ link.url }}" class="menu-drawer__menu-item-text" style="color: inherit; text-decoration: none;">{{ link.title | escape }}</a>
                         <span class="svg-wrapper icon-caret">
                           {{- 'icon-caret.svg' | inline_asset_content -}}
                         </span>
@@ -388,7 +388,7 @@
                                         id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
                                         class="menu-drawer__menu-item menu-drawer__menu-item--parent focus-inset"
                                       >
-                                        <span class="menu-drawer__menu-item-text">{{ childlink.title | escape }}</span>
+                                        <a href="{{ childlink.url }}" class="menu-drawer__menu-item-text" style="color: inherit; text-decoration: none;">{{ childlink.title | escape }}</a>
                                         <span class="svg-wrapper icon-caret">
                                           {{- 'icon-caret.svg' | inline_asset_content -}}
                                         </span>

@@ -13,6 +13,17 @@
 
 {% liquid
   assign block_settings = block.settings
+  
+  assign drawer_accordion = true
+  if block_settings != nil
+    assign drawer_accordion = block_settings.drawer_accordion
+  endif
+
+  assign drawer_accordion_expand_first = false
+  if block_settings != nil
+    assign drawer_accordion_expand_first = block_settings.drawer_accordion_expand_first
+  endif
+
   assign max_featured_items = 4
   assign image_border_radius = block_settings.image_corner_radius
 
@@ -108,15 +119,15 @@
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
-                class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
+                class="{%- if drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
               >
-                {% if block_settings.drawer_accordion and link.links != blank %}
+                {% if drawer_accordion and link.links != blank %}
                   {%- comment -%}
                     Accordion for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
                   {% liquid
                     assign accordion_state = ''
-                    if first_accordion_open == false and block_settings.drawer_accordion_expand_first
+                    if first_accordion_open == false and drawer_accordion_expand_first
                       assign first_accordion_open = true
                       assign accordion_state = 'open'
                     endif
@@ -131,8 +142,8 @@
                         class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset"
                       >
                         <span class="menu-drawer__menu-item-text">{{ link.title | escape }}</span>
-                        <span class="svg-wrapper icon-plus">
-                          {{- 'icon-plus.svg' | inline_asset_content -}}
+                        <span class="svg-wrapper icon-caret">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
                         </span>
                       </summary>
                       {% liquid
@@ -178,7 +189,7 @@
                       </ul>
                     </details>
                   </accordion-custom>
-                {% elsif block_settings.drawer_accordion == false and link.links != blank %}
+                {% elsif drawer_accordion == false and link.links != blank %}
                   {%- comment -%}
                     Flat menus for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
@@ -327,7 +338,7 @@
                               class="
                                 menu-drawer__list-item
                                 {% if childlink.links != blank -%}
-                                  {% if block_settings.drawer_accordion -%} menu-drawer__list-item--deep{% else -%} menu-drawer__list-item--flat{%- endif -%}
+                                  {% if drawer_accordion -%} menu-drawer__list-item--deep{% else -%} menu-drawer__list-item--flat{%- endif -%}
                                 {%- endif -%}
                                 {% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}
                               "
@@ -359,12 +370,12 @@
                               {%- else -%}
                                 {% liquid
                                   assign accordion_state = ''
-                                  if first_accordion_open == false and block_settings.drawer_accordion and block_settings.drawer_accordion_expand_first
+                                  if first_accordion_open == false and drawer_accordion and drawer_accordion_expand_first
                                     assign first_accordion_open = true
                                     assign accordion_state = 'open'
                                   endif
                                 %}
-                                {% if block_settings.drawer_accordion %}
+                                {% if drawer_accordion %}
                                   {%- comment -%}
                                     Accordion for links with children, in menus with 3 levels of links
                                   {%- endcomment -%}
@@ -378,8 +389,8 @@
                                         class="menu-drawer__menu-item menu-drawer__menu-item--parent focus-inset"
                                       >
                                         <span class="menu-drawer__menu-item-text">{{ childlink.title | escape }}</span>
-                                        <span class="svg-wrapper icon-plus">
-                                          {{- 'icon-plus.svg' | inline_asset_content -}}
+                                        <span class="svg-wrapper icon-caret">
+                                          {{- 'icon-caret.svg' | inline_asset_content -}}
                                         </span>
                                       </summary>
                                       {% liquid
@@ -1211,7 +1222,12 @@
     height: 16px;
     width: 16px;
     /* transform: rotate(-90deg); - original might be pointing down */
-    transform: rotate(-90deg); /* If original points down, -90 makes it point right. If original points right, 0. */
+   /* transform: rotate(-90deg); *//* If original points down, -90 makes it point right. If original points right, 0. */
+    transition: transform 0.2s ease;
+  }
+  
+  details[open] > .menu-drawer__menu-item .icon-caret {
+    transform: rotate(90deg);
   }
   
   /* Reset some default styles */
@@ -1226,4 +1242,10 @@
     margin: 0;
     padding: 15px 20px;
   }
+  @media screen and (max-width: 750px) {
+    .menu-drawer__menu-item > .svg-wrapper {
+      padding-inline-start: 0;
+    }
+  }
+
 {% endstylesheet %}

@@ -9,7 +9,7 @@
   {% endif %}
 >
   <details
-    class="details"
+    class="details{% if template.name == 'product' %} details--pdp{% endif %}"
     data-testid="accordion-details"
     {{ block.shopify_attributes }}
   >
@@ -46,7 +46,7 @@
     font-weight: 500 !important;
     margin-bottom: 0rem !important;
   }
-  details{
+  .details--pdp {
     padding: 0 20px;
   }
   .icon-caret{

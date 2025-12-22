@@ -74,16 +74,19 @@
         color-{{ settings.drawer_color_scheme }}
       "
     >
-      <button
-        class="button button-unstyled close-button menu-drawer__close-button"
-        type="button"
-        aria-label="{{ 'actions.close' | t }}"
-        on:click="/close"
-      >
-        <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-          {{- 'icon-close.svg' | inline_asset_content -}}
-        </span>
-      </button>
+      <div class="menu-drawer__header-custom">
+        <h2 class="menu-drawer__title">MENU</h2>
+        <button
+          class="button button-unstyled close-button menu-drawer__close-button"
+          type="button"
+          aria-label="{{ 'actions.close' | t }}"
+          on:click="/close"
+        >
+          <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
       <nav
         class="menu-drawer__navigation"
         style="
@@ -1155,5 +1158,72 @@
       opacity: 0;
       transform: translateX(-1rem);
     }
+  }
+
+  /* Custom Menu Drawer Styles */
+  .menu-drawer__header-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  .menu-drawer__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #000;
+    text-transform: uppercase;
+  }
+  .menu-drawer__close-button {
+    padding: 0;
+    margin: 0;
+    width: auto;
+    height: auto;
+  }
+  .menu-drawer__close-button .header-drawer-icon {
+    width: 24px;
+    height: 24px;
+    color: #000;
+  }
+
+  /* List Items */
+  .menu-drawer__menu {
+    padding-inline: 0; /* Remove default padding */
+  }
+  
+  .menu-drawer__menu-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e5e5e5;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    color: #000;
+  }
+  
+  .menu-drawer__list-item {
+    border-bottom: 1px solid #e5e5e5; /* Ensure divider */
+  }
+
+  /* Icons */
+  .menu-drawer__menu-item .icon-caret {
+    height: 16px;
+    width: 16px;
+    /* transform: rotate(-90deg); - original might be pointing down */
+    transform: rotate(-90deg); /* If original points down, -90 makes it point right. If original points right, 0. */
+  }
+  
+  /* Reset some default styles */
+  .menu-drawer__menu-item--mainlist {
+    font-weight: 400;
+  }
+  
+  /* Hide utility links if not needed or style them */
+  .menu-drawer__utility-links {
+    background-color: transparent;
+    border-top: 1px solid #e5e5e5;
+    margin: 0;
+    padding: 15px 20px;
   }
 {% endstylesheet %}

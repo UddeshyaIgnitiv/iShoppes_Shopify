@@ -281,7 +281,7 @@
                       class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}"
                       on:click="header-drawer/open"
                     >
-                      <span class="menu-drawer__menu-item-text">{{ link.title | escape }}</span>
+                      <a href="{{ link.url }}" class="menu-drawer__menu-item-text" style="color: inherit; text-decoration: none;">{{ link.title | escape }}</a>
                       <span class="svg-wrapper icon-caret icon-caret--forward">
                         {{- 'icon-caret.svg' | inline_asset_content -}}
                       </span>

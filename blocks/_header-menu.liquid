@@ -374,6 +374,10 @@
       font-size: var(--font-size--xl);
       opacity: var(--submenu-content-opacity);
       transition: var(--submenu-content-animation);
+
+      @media screen and (max-width: 800px) {
+        font-size: 12px;
+      } 
     }
 
     .menu-list__submenu {
@@ -442,6 +446,10 @@
 
     &:hover {
       color: var(--menu-child-active-font-color);
+    }
+
+    @media screen and (max-width: 800px) {
+      font-size: 12px;
     }
   }
 

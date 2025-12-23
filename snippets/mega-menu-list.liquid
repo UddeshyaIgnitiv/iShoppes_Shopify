@@ -279,6 +279,11 @@
       --menu-columns-tablet: {{ max_menu_columns_tablet }};
     {% endif %}
   }
+  @media screen and (max-width: 800px) {
+    .mega-menu__link-title {
+      font-size: 12px;
+    }
+  }
 {% endstyle %}
 {% comment %} 
 {% case menu_content_type %}

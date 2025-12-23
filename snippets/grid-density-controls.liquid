@@ -7,7 +7,7 @@
   {% render 'grid-density-controls', viewport: 'desktop' %}
 {%- enddoc -%}
 
-<div class="column-options-wrapper">
+{% comment %} <div class="column-options-wrapper">
   <fieldset class="column-options">
     <legend class="column-options__legend visually-hidden">
       {{ 'content.grid_view.grid_fieldset' | t }}
@@ -78,7 +78,7 @@
       </label>
     {% endif %}
   </fieldset>
-</div>
+</div> {% endcomment %}
 
 {% stylesheet %}
   .column-options-wrapper {

@@ -171,6 +171,12 @@
     "new_arrivals_ft7BJ4": {
       "type": "new-arrivals",
       "blocks": {
+        "product_GU4p4x": {
+          "type": "product",
+          "settings": {
+            "product": ""
+          }
+        },
         "product_3NU8Wb": {
           "type": "product",
           "settings": {
@@ -179,6 +185,7 @@
         }
       },
       "block_order": [
+        "product_GU4p4x",
         "product_3NU8Wb"
       ],
       "name": "TRAVEL EXCLUSIVES",
@@ -238,7 +245,7 @@
             "subtext": "LIMITED TIME OFFER",
             "title": "Product Promo Title 1",
             "banner_image": "shopify://shop_images/johnnie_walker_f304aecda0.webp",
-            "link": "https://ishoppes.com/products/product-1"
+            "link": "/products/johnnie-walker-red-label-blended-scotch-whisky-1l-10745"
           }
         },
         "offer_Y8Tc3Q": {
@@ -247,7 +254,7 @@
             "subtext": "LIMITED TIME OFFER",
             "title": "Product Promo Title 2",
             "banner_image": "shopify://shop_images/greygoose_9bc4387a3e.webp",
-            "link": "https://ishoppes.com/products/product-2"
+            "link": "/products/grey-goose-liter-13565"
           }
         }
       },

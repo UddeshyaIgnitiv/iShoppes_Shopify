@@ -110,7 +110,7 @@
             "text_color": "#000000",
             "trail_divider_style": "forward_slash",
             "home_display_type": "text",
-            "label_home": "<strong>Home</strong>",
+            "label_home": "HomeE",
             "label_list_collections": "Collections",
             "label_catalog": "---",
             "custom_catalog_link": ""

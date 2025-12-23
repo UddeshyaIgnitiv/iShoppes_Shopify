@@ -164,7 +164,7 @@
       "name": "Duty Free Works",
       "settings": {
         "heading": "How Duty Free Works",
-        "button_link": "https://www.ishoppes.com/special-offer.html?page=1",
+        "button_link": "/collections/special-offers",
         "button_label": "START SHOPPING"
       }
     },

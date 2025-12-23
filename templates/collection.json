@@ -59,6 +59,7 @@
     },
     "wishlist_6hagBc": {
       "type": "wishlist",
+      "disabled": true,
       "name": "Wishlist",
       "settings": {
         "enable_floating_button": true,

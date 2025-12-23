@@ -266,7 +266,7 @@
       "settings": {
         "title": "SPECIAL OFFERS",
         "description": "IS Duty Free provides exclusive deals you won’t find anywhere else!",
-        "view_all_link": "shopify://products/the-collection-snowboard-hydrogen"
+        "view_all_link": "/collections/special-offers"
       }
     },
     "content_image_info_banner": {

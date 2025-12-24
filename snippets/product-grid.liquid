@@ -132,7 +132,33 @@
       {% else %}
         {% if paginate.pages > 1 %}
           <div class="pagination-wrapper">
-            {{ paginate | default_pagination: next: '→', previous: '←' }}
+            <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+              <div class="pagination__list">
+              {%- if paginate.previous -%}
+                <a href="{{ paginate.previous.url }}" class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce" aria-label="{{ 'general.pagination.previous' | t }}">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" class="icon icon-arrow-left" style="transform: rotate(180deg); width: 1.5rem; height: 1.5rem;"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.25 10h11.5m0 0-4-4m4 4-4 4"/></svg>
+                </a>
+              {%- endif -%}
+
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="pagination__item link motion-reduce" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+                {%- else -%}
+                  {%- if part.title == paginate.current_page -%}
+                    <span class="pagination__item pagination__item--current" aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
+                  {%- else -%}
+                    <span class="pagination__item pagination__item--gap">{{ part.title }}</span>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- if paginate.next -%}
+                <a href="{{ paginate.next.url }}" class="pagination__item pagination__item--next pagination__item-arrow link motion-reduce" aria-label="{{ 'general.pagination.next' | t }}">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" class="icon icon-arrow-right" style="width: 1.5rem; height: 1.5rem;"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.25 10h11.5m0 0-4-4m4 4-4 4"/></svg>
+                </a>
+              {%- endif -%}
+              </div>
+            </nav>
           </div>
         {% endif %}
       {% endif %}
@@ -142,73 +168,98 @@
 
 <style>
   .pagination-wrapper {
-    margin-top: 5rem;
-    margin-bottom: 3rem;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
     display: flex;
     justify-content: center;
   }
 
-  .pagination-wrapper .pagination {
-    display: inline-flex;
+  .pagination__list {
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    list-style: none;
+    align-items: center;
+    gap: 0.4rem; /* Reduced gap */
     padding: 0;
     margin: 0;
-    gap: 0.8rem;
-    align-items: center;
+    list-style: none;
   }
 
-  .pagination-wrapper .pagination li {
-    display: inline-flex;
-    margin: 0;
-  }
-
-  /* Base style for all pagination items */
-  .pagination-wrapper .pagination a,
-  .pagination-wrapper .pagination .page.current {
+  .pagination__item {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 4rem;
-    height: 4rem;
+    width: 3.2rem; /* Reduced size */
+    height: 3.2rem;   /* Reduced size */
     padding: 0;
     font-family: var(--font-body-family);
-    font-size: 1.4rem;
+    font-size: 1rem; /* Slightly smaller text */
     font-weight: 500;
     text-decoration: none;
-    color: rgb(var(--color-foreground));
+    color: #015EB8;
     background-color: transparent;
-    border: 1px solid rgba(var(--color-foreground), 0.2);
+    border: 1px solid transparent;
     border-radius: 50%;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  /* Gap style (...) */
+  .pagination__item--gap {
+    cursor: default;
+    opacity: 0.5;
+    min-width: 2rem;
+    font-size: 1.2rem;
   }
 
   /* Hover state for links */
-  .pagination-wrapper .pagination a:hover {
-    background-color: rgba(var(--color-foreground), 0.08);
-    border-color: rgb(var(--color-foreground));
-    color: rgb(var(--color-foreground));
-    transform: translateY(-2px);
+  a.pagination__item:hover {
+    background-color: rgba(var(--color-foreground), 0.04);
+    border-color: rgba(var(--color-foreground), 0.1);
+    color: #015EB8;
+    transform: translateY(-1px); /* Subtle lift */
   }
 
-  /* Active Page Style */
-  .pagination-wrapper .pagination .page.current {
+  /* Active/Current Page Style */
+  .pagination__item--current {
     background-color: rgb(var(--color-foreground));
-    color: rgb(var(--color-background));
+    color: #015EB8;
     border-color: rgb(var(--color-foreground));
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Softer shadow */
     cursor: default;
+    font-weight: 600;
   }
 
-  /* Previous and Next Buttons */
-  .pagination-wrapper .pagination .prev a,
-  .pagination-wrapper .pagination .next a {
-    width: auto;
-    min-width: 4rem;
-    padding: 0 1.5rem;
-    border-radius: 3rem; /* Pill shape for arrows/text */
-    font-size: 1.6rem;
+  /* Arrow specific styles */
+  .pagination__item-arrow {
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    color: rgba(var(--color-foreground), 0.7); /* Slightly muted arrows by default */
+  }
+  
+  .pagination__item-arrow:hover {
+    color: rgb(var(--color-foreground));
+    background-color: rgba(var(--color-foreground), 0.08);
+  }
+
+  .pagination__item-arrow svg {
+    width: 1.4rem; /* Adjusted icon size */
+    height: 1.4rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .pagination__item-arrow:hover svg {
+    transform: scale(1.1);
+  }
+  
+  .pagination__item--prev:hover svg {
+    transform: translateX(-2px); /* Move arrow slightly */
+  }
+
+  .pagination__item--next:hover svg {
+    transform: translateX(2px); /* Move arrow slightly */
   }
 
   /* Mobile Responsiveness */
@@ -217,21 +268,13 @@
       margin-top: 3rem;
     }
     
-    .pagination-wrapper .pagination {
-      gap: 0.5rem;
-    }
-
-    .pagination-wrapper .pagination a,
-    .pagination-wrapper .pagination .page.current {
-      width: 3.6rem;
-      height: 3.6rem;
-      font-size: 1.3rem;
+    .pagination__list {
+      gap: 0.3rem;
     }
     
-    .pagination-wrapper .pagination .prev a,
-    .pagination-wrapper .pagination .next a {
-      min-width: 3.6rem;
-      padding: 0 1rem;
+    .pagination__item-arrow {
+       min-width: 3rem;
+       height: 3rem;
     }
   }
 </style>

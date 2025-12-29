@@ -42,7 +42,12 @@
       results_size: collection.products_count
     %}
 
-    {% paginate collection.products by section.settings.products_per_page %}
+    {% assign products_per_page = section.settings.products_per_page %}
+    {% if cart.attributes.pagination_limit %}
+      {% assign products_per_page = cart.attributes.pagination_limit | plus: 0 %}
+    {% endif %}
+
+    {% paginate collection.products by products_per_page %}
       {% capture children %}
         {% for product in collection.products %}
           <li

@@ -98,6 +98,34 @@
           should_use_select_on_mobile: false,
           section_id: section.id
         %}
+        {% if request.page_type == 'collection' %}
+          {% assign products_per_page = section.settings.products_per_page | default: 12 %}
+          {% if cart.attributes.pagination_limit %}
+            {% assign products_per_page = cart.attributes.pagination_limit | plus: 0 %}
+          {% endif %}
+          <div class="pagination-limit-wrapper" style="display: flex; align-items: center; margin-left: 20px;">
+            <label for="PaginationLimit-Vertical-{{ section.id }}" style="font-size: 14px; color: #555; margin-right: 10px;">show</label>
+            <select id="PaginationLimit-Vertical-{{ section.id }}" onchange="updatePaginationLimit(this.value)" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="12" {% if products_per_page == 12 %}selected{% endif %}>12</option>
+              <option value="20" {% if products_per_page == 20 %}selected{% endif %}>20</option>
+              <option value="50" {% if products_per_page == 50 %}selected{% endif %}>50</option>
+            </select>
+            <label for="PaginationLimit-Vertical-{{ section.id }}" style="font-size: 14px; color: #555; margin-left: 10px;">per page</label>
+          </div>
+          <script>
+            if (typeof updatePaginationLimit === 'undefined') {
+              function updatePaginationLimit(limit) {
+                fetch('/cart/update.js', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ attributes: { 'pagination_limit': limit } })
+                })
+                .then(response => { if (response.ok) window.location.reload(); })
+                .catch(error => console.error('Error updating pagination limit:', error));
+              }
+            }
+          </script>
+        {% endif %}
       {% endif %}
 
       {% if block_settings.enable_grid_density %}
@@ -236,6 +264,34 @@
                   should_use_select_on_mobile: false,
                   section_id: section.id
                 %}
+                {% if request.page_type == 'collection' %}
+                  {% assign products_per_page = section.settings.products_per_page | default: 12 %}
+                  {% if cart.attributes.pagination_limit %}
+                    {% assign products_per_page = cart.attributes.pagination_limit | plus: 0 %}
+                  {% endif %}
+                  <div class="pagination-limit-wrapper" style="display: flex; align-items: center; margin-left: 20px;">
+                    <label for="PaginationLimit-Horizontal-{{ section.id }}" style="font-size: 14px; color: #555; margin-right: 10px;">show</label>
+                    <select id="PaginationLimit-Horizontal-{{ section.id }}" onchange="updatePaginationLimit(this.value)" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                      <option value="12" {% if products_per_page == 12 %}selected{% endif %}>12</option>
+                      <option value="20" {% if products_per_page == 20 %}selected{% endif %}>20</option>
+                      <option value="50" {% if products_per_page == 50 %}selected{% endif %}>50</option>
+                    </select>
+                    <label for="PaginationLimit-Horizontal-{{ section.id }}" style="font-size: 14px; color: #555; margin-left: 10px;">per page</label>
+                  </div>
+                  <script>
+                    if (typeof updatePaginationLimit === 'undefined') {
+                      function updatePaginationLimit(limit) {
+                        fetch('/cart/update.js', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ attributes: { 'pagination_limit': limit } })
+                        })
+                        .then(response => { if (response.ok) window.location.reload(); })
+                        .catch(error => console.error('Error updating pagination limit:', error));
+                      }
+                    }
+                  </script>
+                {% endif %}
               {% endif %}
 
               {% if block_settings.enable_grid_density %}

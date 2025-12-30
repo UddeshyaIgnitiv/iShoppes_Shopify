@@ -508,7 +508,7 @@
             "horizontal_alignment": "center",
             "image_ratio": "adapt",
             "width": "custom",
-            "custom_width": 70,
+            "custom_width": 40,
             "width_mobile": "fit-content",
             "custom_width_mobile": 100,
             "height": "fill",

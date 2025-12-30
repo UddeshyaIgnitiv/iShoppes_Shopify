@@ -171,6 +171,12 @@
     "new_arrivals_ft7BJ4": {
       "type": "new-arrivals",
       "blocks": {
+        "product_tRgBmU": {
+          "type": "product",
+          "settings": {
+            "product": "tr-advanced-nigt-repair-face-serum-and-eye-matrix-set"
+          }
+        },
         "product_3NU8Wb": {
           "type": "product",
           "settings": {
@@ -179,6 +185,7 @@
         }
       },
       "block_order": [
+        "product_tRgBmU",
         "product_3NU8Wb"
       ],
       "name": "TRAVEL EXCLUSIVES",

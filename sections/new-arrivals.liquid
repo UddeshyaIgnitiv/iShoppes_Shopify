@@ -95,6 +95,9 @@
     .card {
       width: 100%;
     }
+    .new-arrivals h2 {
+      text-align: center;
+    }
   }
   .card {
     background: #fff;
@@ -218,10 +221,10 @@
 
   .slider-controls-desktop {
     display: none;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 12px;
-    margin-bottom: 20px;
-    padding-right: 20px;
+    margin-top: 20px;
+    padding-left: 20px;
   }
 
   .slider-active ~ .slider-controls-desktop {
@@ -229,11 +232,11 @@
   }
 
   .slider-btn {
-    background: #fff;
-    border: 1px solid #e5e5e5;
+    background: transparent;
+    border: 1px solid #000;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -245,13 +248,13 @@
   }
   
   .slider-btn:hover {
-    background: #f5f5f5;
-    border-color: #000;
+    background: #000;
+    color: #fff;
   }
   
   .slider-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
 
   @media screen and (max-width: 749px) {
@@ -265,15 +268,6 @@
   <div class="page-width">
     <h2>{{ section.settings.heading }}</h2>
     
-    <div class="slider-controls-desktop" id="Controls-{{ section.id }}">
-        <button class="slider-btn slider-prev" type="button" aria-label="Previous">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="slider-btn slider-next" type="button" aria-label="Next">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-    </div>
-
     {% comment %} Get products with the specified tag {% endcomment %}
     {% assign tag_to_filter = section.settings.tag | default: 'new arrivals' %}
     {% assign product_limit = section.settings.product_limit | default: 4 %}
@@ -400,6 +394,15 @@
         {% endfor %}
       {% endif %}
     </div>
+
+    <div class="slider-controls-desktop" id="Controls-{{ section.id }}">
+        <button class="slider-btn slider-prev" type="button" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="slider-btn slider-next" type="button" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+    </div>
     
     <div class="mobile-dots-container">
       {% if tagged_products.size > 0 %}
@@ -447,6 +450,7 @@
 
           // Autoplay functionality
           function startAutoplay() {
+            // Mobile Autoplay
             if (window.innerWidth <= 749) {
               autoplayInterval = setInterval(() => {
                 const scrollLeft = container.scrollLeft;
@@ -464,6 +468,22 @@
                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
                 }
               }, 3000); // 3 seconds interval
+            } 
+            // Desktop Autoplay (if slider is active)
+            else if (container.classList.contains('slider-active')) {
+               autoplayInterval = setInterval(() => {
+                 const card = container.querySelector('.card');
+                 const cardWidth = card ? card.offsetWidth : 320;
+                 const gap = 30; // 30px gap from CSS
+                 const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                 
+                 // If near end, scroll to start, else scroll next
+                 if (container.scrollLeft >= maxScrollLeft - 10) { // Tolerance
+                   container.scrollTo({ left: 0, behavior: 'smooth' });
+                 } else {
+                   container.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
+                 }
+               }, 3000); // 3 seconds interval
             }
           }
 
@@ -475,9 +495,13 @@
           // Start autoplay initially
           startAutoplay();
 
-          // Pause on interaction
+          // Pause on interaction (Touch)
           container.addEventListener('touchstart', () => clearInterval(autoplayInterval));
           container.addEventListener('touchend', () => resetAutoplay());
+          
+          // Pause on interaction (Mouse Hover for Desktop)
+          container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+          container.addEventListener('mouseleave', () => resetAutoplay());
           
           // Re-check on resize
           window.addEventListener('resize', () => {
@@ -493,18 +517,33 @@
 
             if (prevBtn && nextBtn) {
                prevBtn.addEventListener('click', () => {
+                 clearInterval(autoplayInterval); // Stop autoplay on interaction
                  const card = container.querySelector('.card');
                  const cardWidth = card ? card.offsetWidth : 320;
                  const gap = 30; // 30px gap from CSS
                  container.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
+                 startAutoplay(); // Restart autoplay
                });
 
                nextBtn.addEventListener('click', () => {
+                 clearInterval(autoplayInterval); // Stop autoplay on interaction
                  const card = container.querySelector('.card');
                  const cardWidth = card ? card.offsetWidth : 320;
                  const gap = 30; // 30px gap from CSS
-                 container.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
+                 
+                 // Logic for next button: loop back to start if at end
+                 const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                 if (container.scrollLeft >= maxScrollLeft - 10) {
+                    container.scrollTo({ left: 0, behavior: 'smooth' });
+                 } else {
+                    container.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
+                 }
+                 startAutoplay(); // Restart autoplay
                });
+               
+               // Pause on hover over controls too
+               desktopControls.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+               desktopControls.addEventListener('mouseleave', () => resetAutoplay());
             }
           }
         }

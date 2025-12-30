@@ -410,8 +410,49 @@
       "name": "New Arrivals",
       "settings": {
         "heading": "BEST SELLERS",
-        "tag": "New Arrivals",
+        "tag": "BEST SELLERS",
         "product_limit": 6
+      }
+    },
+    "new_arrivals_fMRPkH": {
+      "type": "new-arrivals",
+      "blocks": {
+        "product_tVXWCf": {
+          "type": "product",
+          "settings": {
+            "product": "glenfiddich-project-xx-47-264325"
+          }
+        },
+        "product_BFwqCL": {
+          "type": "product",
+          "settings": {
+            "product": "glenfiddich-ipa-43-259224"
+          }
+        },
+        "product_6JHwwr": {
+          "type": "product",
+          "settings": {
+            "product": "glenfiddich-grand-cru-23-years-43-800333"
+          }
+        },
+        "product_gdEiR8": {
+          "type": "product",
+          "settings": {
+            "product": "glenfiddich-gran-reserva-21-years-432-161205"
+          }
+        }
+      },
+      "block_order": [
+        "product_tVXWCf",
+        "product_BFwqCL",
+        "product_6JHwwr",
+        "product_gdEiR8"
+      ],
+      "name": "New Arrivals",
+      "settings": {
+        "heading": "RECOMMENDED",
+        "tag": "RECOMMENDED",
+        "product_limit": 4
       }
     },
     "17655151207a207f97": {
@@ -637,6 +678,7 @@
     "slideshow_xzAehT",
     "slideshow_dUXCc6",
     "new_arrivals_TpCHBr",
+    "new_arrivals_fMRPkH",
     "17655151207a207f97",
     "blocks_66Tynm",
     "blocks_BETV7a"

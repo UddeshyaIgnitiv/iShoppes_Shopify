@@ -582,6 +582,54 @@
         "padding-block-start": 0,
         "padding-block-end": 20
       }
+    },
+    "new_arrivals_TpCHBr": {
+      "type": "new-arrivals",
+      "blocks": {
+        "product_69zQGW": {
+          "type": "product",
+          "settings": {
+            "product": "glenfiddich-perpetual-collection-vat-4-478-abv-817566"
+          }
+        },
+        "product_NNtwje": {
+          "type": "product",
+          "settings": {
+            "product": "glenfiddich-perpetual-collection-vat-3-502-817565"
+          }
+        },
+        "product_NcLXnU": {
+          "type": "product",
+          "settings": {
+            "product": "glenfiddich-perpetual-collection-vat-2-43-817564"
+          }
+        },
+        "product_3FybAP": {
+          "type": "product",
+          "settings": {
+            "product": "glenfiddich-perpetual-collection-vat-1-40-abv-817563"
+          }
+        },
+        "product_dxVa6R": {
+          "type": "product",
+          "settings": {
+            "product": "glenfiddich-19-f1-aston-ltd-700ml-848860"
+          }
+        }
+      },
+      "block_order": [
+        "product_69zQGW",
+        "product_NNtwje",
+        "product_NcLXnU",
+        "product_3FybAP",
+        "product_dxVa6R"
+      ],
+      "name": "New Arrivals",
+      "settings": {
+        "heading": "BEST SELLERS",
+        "tag": "New Arrivals",
+        "product_limit": 6
+      }
     }
   },
   "order": [
@@ -590,6 +638,7 @@
     "slideshow_dUXCc6",
     "17655151207a207f97",
     "blocks_66Tynm",
-    "blocks_BETV7a"
+    "blocks_BETV7a",
+    "new_arrivals_TpCHBr"
   ]
 }

@@ -171,12 +171,6 @@
     "new_arrivals_ft7BJ4": {
       "type": "new-arrivals",
       "blocks": {
-        "product_GU4p4x": {
-          "type": "product",
-          "settings": {
-            "product": ""
-          }
-        },
         "product_3NU8Wb": {
           "type": "product",
           "settings": {
@@ -185,7 +179,6 @@
         }
       },
       "block_order": [
-        "product_GU4p4x",
         "product_3NU8Wb"
       ],
       "name": "TRAVEL EXCLUSIVES",

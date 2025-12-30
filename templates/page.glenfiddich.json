@@ -505,10 +505,10 @@
           "settings": {
             "image": "shopify://shop_images/geln_logo.webp",
             "link": "",
-            "horizontal_alignment": "flex-start",
+            "horizontal_alignment": "center",
             "image_ratio": "adapt",
             "width": "custom",
-            "custom_width": 46,
+            "custom_width": 70,
             "width_mobile": "fit-content",
             "custom_width_mobile": 100,
             "height": "fill",
@@ -516,8 +516,8 @@
             "border_width": 0,
             "border_opacity": 100,
             "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
+            "padding-block-start": 38,
+            "padding-block-end": 38,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },

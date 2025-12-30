@@ -236,7 +236,7 @@
           "type": "offer",
           "settings": {
             "subtext": "LIMITED TIME OFFER",
-            "title": "Product Promo Title 1",
+            "title": "Buy 2 Johnnie Walker Gold Reserve save 20%",
             "banner_image": "shopify://shop_images/johnnie_walker_f304aecda0.webp",
             "link": "/products/johnnie-walker-gold-label-reserve-blended-scotch-whisky-1l-21856"
           }
@@ -245,7 +245,7 @@
           "type": "offer",
           "settings": {
             "subtext": "LIMITED TIME OFFER",
-            "title": "Product Promo Title 2",
+            "title": "Buy 2 Save 15%, Buy 3 Save 20%",
             "banner_image": "shopify://shop_images/greygoose_9bc4387a3e.webp",
             "link": "/products/grey-goose-liter-13565"
           }

@@ -18,8 +18,9 @@
           "settings": {
             "image": "shopify://shop_images/geln_logo.webp",
             "link": "",
+            "horizontal_alignment": "center",
             "image_ratio": "adapt",
-            "width": "fill",
+            "width": "fit-content",
             "custom_width": 46,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
@@ -55,6 +56,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-d1.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -81,6 +83,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-d2.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -107,6 +110,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-d3.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -133,6 +137,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-d4.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -159,6 +164,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-d5.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -209,6 +215,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-m1_eb15bd1e-15e7-4823-945d-df1456382261.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -235,6 +242,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-m2.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -261,6 +269,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-m3.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -287,6 +296,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-m4.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -313,6 +323,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/glen-banner-m5.webp",
+            "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
@@ -494,6 +505,7 @@
           "settings": {
             "image": "shopify://shop_images/geln_logo.webp",
             "link": "",
+            "horizontal_alignment": "flex-start",
             "image_ratio": "adapt",
             "width": "custom",
             "custom_width": 46,

@@ -127,6 +127,88 @@
       >
         {{ children }}
       </ul>
+
+      <div class="mobile-dots-container" id="MobileDots-{{ section.id }}">
+        {% for product in products %}
+          <button class="mobile-dot {% if forloop.first %}active{% endif %}" aria-label="Go to slide {{ forloop.index }}"></button>
+        {% endfor %}
+      </div>
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const grid = document.querySelector('.product-grid--{{ section.id }}');
+          const dotsContainer = document.getElementById('MobileDots-{{ section.id }}');
+          const dots = dotsContainer ? dotsContainer.querySelectorAll('.mobile-dot') : [];
+          let autoplayInterval;
+          
+          if (grid && dots.length > 0) {
+            grid.addEventListener('scroll', function() {
+              const scrollLeft = grid.scrollLeft;
+              const cardWidth = grid.querySelector('.product-grid__item').offsetWidth;
+              const gap = 16; // approximate gap or use getComputedStyle
+              const index = Math.round(scrollLeft / (cardWidth + gap));
+              
+              dots.forEach((dot, i) => {
+                if (i === index) {
+                  dot.classList.add('active');
+                } else {
+                  dot.classList.remove('active');
+                }
+              });
+            });
+            
+            dots.forEach((dot, i) => {
+              dot.addEventListener('click', function() {
+                const card = grid.children[i];
+                if (card) {
+                  card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                  resetAutoplay();
+                }
+              });
+            });
+
+            // Autoplay functionality
+            function startAutoplay() {
+              if (window.innerWidth <= 749) {
+                autoplayInterval = setInterval(() => {
+                  const scrollLeft = grid.scrollLeft;
+                  const cardWidth = grid.querySelector('.product-grid__item').offsetWidth;
+                  const gap = 16;
+                  let currentIndex = Math.round(scrollLeft / (cardWidth + gap));
+                  let nextIndex = currentIndex + 1;
+                  
+                  if (nextIndex >= dots.length) {
+                    nextIndex = 0;
+                  }
+                  
+                  const card = grid.children[nextIndex];
+                  if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                  }
+                }, 3000); // 3 seconds interval
+              }
+            }
+
+            function resetAutoplay() {
+              clearInterval(autoplayInterval);
+              startAutoplay();
+            }
+            
+            // Start autoplay initially
+            startAutoplay();
+
+            // Pause on interaction
+            grid.addEventListener('touchstart', () => clearInterval(autoplayInterval));
+            grid.addEventListener('touchend', () => resetAutoplay());
+            
+            // Re-check on resize
+            window.addEventListener('resize', () => {
+              clearInterval(autoplayInterval);
+              startAutoplay();
+            });
+          }
+        });
+      </script>
       {% if section.settings.pagination_type == 'infinite_scroll' %}
         <span ref="viewMoreNext"></span>
       {% else %}
@@ -363,6 +445,62 @@
   .collection-wrapper--full-width-on-mobile .main-collection-grid__title {
     @media screen and (max-width: 749px) {
       margin-left: var(--page-margin);
+    }
+  }
+
+  .mobile-dots-container {
+    display: none;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  .mobile-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #ccc;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .mobile-dot.active {
+    background-color: #333;
+    width: 20px;
+    border-radius: 4px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .mobile-dots-container {
+      display: flex;
+    }
+
+    ul.product-grid {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 1rem;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+      gap: 1rem; /* Fallback gap */
+      gap: var(--product-grid-gap);
+      grid-template-columns: none !important;
+    }
+
+    ul.product-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    ul.product-grid > * {
+      flex: 0 0 100% !important;
+      width: 100% !important;
+      min-width: 100% !important;
+      max-width: 100% !important;
+      scroll-snap-align: start;
     }
   }
 {% endstylesheet %}

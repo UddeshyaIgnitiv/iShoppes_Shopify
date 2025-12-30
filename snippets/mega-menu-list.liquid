@@ -158,6 +158,11 @@
               <a
                 href="{{ childLink.url }}"
                 class="mega-menu__link"
+                {% if link.title == 'Featured Brands' or 'Beauty Brands' or 'Liquor & Wine Brands' %}
+                  {% unless boldTitles contains childLink.title %}
+                    target="_blank"
+                  {% endunless %}
+                {% endif %}
               >
                 <span class="mega-menu__link-title" 
                   {% if boldTitles contains childLink.title %}

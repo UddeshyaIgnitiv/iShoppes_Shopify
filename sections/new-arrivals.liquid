@@ -95,6 +95,9 @@
     .card {
       width: 100%;
     }
+    .new-arrivals h2 {
+      text-align: center;
+    }
   }
   .card {
     background: #fff;
@@ -194,11 +197,77 @@
       display: flex;
     }
   }
+
+  /* Desktop Slider Styles */
+  .product-grid.slider-active {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+  
+  .product-grid.slider-active::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-grid.slider-active .card {
+    flex: 0 0 calc((100% - 90px) / 4); /* 30px gap * 3 = 90px */
+    width: auto;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .slider-controls-desktop {
+    display: none;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-top: 20px;
+    padding-left: 20px;
+  }
+
+  .slider-active ~ .slider-controls-desktop {
+    display: flex;
+  }
+
+  .slider-btn {
+    background: transparent;
+    border: 1px solid #000;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #000;
+    padding: 0;
+    z-index: 2;
+  }
+  
+  .slider-btn:hover {
+    background: #000;
+    color: #fff;
+  }
+  
+  .slider-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .slider-controls-desktop {
+      display: none !important;
+    }
+  }
 {% endstyle %}
 
 <section class="new-arrivals">
   <div class="page-width">
     <h2>{{ section.settings.heading }}</h2>
+    
     {% comment %} Get products with the specified tag {% endcomment %}
     {% assign tag_to_filter = section.settings.tag | default: 'new arrivals' %}
     {% assign product_limit = section.settings.product_limit | default: 4 %}
@@ -222,8 +291,28 @@
         {% endif %}
       {% endfor %}
     {% endif %}
+
+    {% liquid
+      assign display_limit = section.settings.product_limit
+      assign actual_count = 0
+      if tagged_products.size > 0
+        assign actual_count = tagged_products.size
+      else
+        assign actual_count = section.blocks.size
+      endif
+      
+      assign show_count = actual_count
+      if actual_count > display_limit
+        assign show_count = display_limit
+      endif
+
+      assign enable_slider = false
+      if show_count > 4
+        assign enable_slider = true
+      endif
+    %}
     
-    <div class="product-grid" id="NewArrivals-{{ section.id }}">
+    <div class="product-grid {% if enable_slider %}slider-active{% endif %}" id="NewArrivals-{{ section.id }}">
       {% if tagged_products.size == 0 %}
         {% comment %} Fallback to manually added products if no tagged products found {% endcomment %}
         {% if section.blocks.size == 0 %}
@@ -305,6 +394,15 @@
         {% endfor %}
       {% endif %}
     </div>
+
+    <div class="slider-controls-desktop" id="Controls-{{ section.id }}">
+        <button class="slider-btn slider-prev" type="button" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="slider-btn slider-next" type="button" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+    </div>
     
     <div class="mobile-dots-container">
       {% if tagged_products.size > 0 %}
@@ -352,6 +450,7 @@
 
           // Autoplay functionality
           function startAutoplay() {
+            // Mobile Autoplay
             if (window.innerWidth <= 749) {
               autoplayInterval = setInterval(() => {
                 const scrollLeft = container.scrollLeft;
@@ -369,6 +468,22 @@
                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
                 }
               }, 3000); // 3 seconds interval
+            } 
+            // Desktop Autoplay (if slider is active)
+            else if (container.classList.contains('slider-active')) {
+               autoplayInterval = setInterval(() => {
+                 const card = container.querySelector('.card');
+                 const cardWidth = card ? card.offsetWidth : 320;
+                 const gap = 30; // 30px gap from CSS
+                 const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                 
+                 // If near end, scroll to start, else scroll next
+                 if (container.scrollLeft >= maxScrollLeft - 10) { // Tolerance
+                   container.scrollTo({ left: 0, behavior: 'smooth' });
+                 } else {
+                   container.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
+                 }
+               }, 3000); // 3 seconds interval
             }
           }
 
@@ -380,15 +495,57 @@
           // Start autoplay initially
           startAutoplay();
 
-          // Pause on interaction
+          // Pause on interaction (Touch)
           container.addEventListener('touchstart', () => clearInterval(autoplayInterval));
           container.addEventListener('touchend', () => resetAutoplay());
+          
+          // Pause on interaction (Mouse Hover for Desktop)
+          container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+          container.addEventListener('mouseleave', () => resetAutoplay());
           
           // Re-check on resize
           window.addEventListener('resize', () => {
              clearInterval(autoplayInterval);
              startAutoplay();
           });
+
+          // Desktop Slider Navigation
+          const desktopControls = document.getElementById('Controls-{{ section.id }}');
+          if (desktopControls && container.classList.contains('slider-active')) {
+            const prevBtn = desktopControls.querySelector('.slider-prev');
+            const nextBtn = desktopControls.querySelector('.slider-next');
+
+            if (prevBtn && nextBtn) {
+               prevBtn.addEventListener('click', () => {
+                 clearInterval(autoplayInterval); // Stop autoplay on interaction
+                 const card = container.querySelector('.card');
+                 const cardWidth = card ? card.offsetWidth : 320;
+                 const gap = 30; // 30px gap from CSS
+                 container.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
+                 startAutoplay(); // Restart autoplay
+               });
+
+               nextBtn.addEventListener('click', () => {
+                 clearInterval(autoplayInterval); // Stop autoplay on interaction
+                 const card = container.querySelector('.card');
+                 const cardWidth = card ? card.offsetWidth : 320;
+                 const gap = 30; // 30px gap from CSS
+                 
+                 // Logic for next button: loop back to start if at end
+                 const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                 if (container.scrollLeft >= maxScrollLeft - 10) {
+                    container.scrollTo({ left: 0, behavior: 'smooth' });
+                 } else {
+                    container.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
+                 }
+                 startAutoplay(); // Restart autoplay
+               });
+               
+               // Pause on hover over controls too
+               desktopControls.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+               desktopControls.addEventListener('mouseleave', () => resetAutoplay());
+            }
+          }
         }
       });
     </script>

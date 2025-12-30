@@ -68,6 +68,34 @@
     gap: 30px;
     justify-content: center;
   }
+  @media screen and (max-width: 749px) {
+    .product-grid {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 1rem;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      gap: 1rem;
+      justify-content: flex-start;
+    }
+    .product-grid::-webkit-scrollbar {
+      display: none;
+    }
+    .product-grid > * {
+      flex: 0 0 100% !important;
+      width: 100% !important;
+      min-width: 100% !important;
+      max-width: 100% !important;
+      scroll-snap-align: start;
+    }
+    .card {
+      width: 100%;
+    }
+  }
   .card {
     background: #fff;
     width: 320px;
@@ -140,6 +168,32 @@
     color: #666;
     font-size: 18px;
   }
+  .mobile-dots-container {
+    display: none;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+  }
+  .mobile-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #ccc;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .mobile-dot.active {
+    background-color: #333;
+    width: 20px;
+    border-radius: 4px;
+  }
+  @media screen and (max-width: 749px) {
+    .mobile-dots-container {
+      display: flex;
+    }
+  }
 {% endstyle %}
 
 <section class="new-arrivals">
@@ -169,7 +223,7 @@
       {% endfor %}
     {% endif %}
     
-    <div class="product-grid">
+    <div class="product-grid" id="NewArrivals-{{ section.id }}">
       {% if tagged_products.size == 0 %}
         {% comment %} Fallback to manually added products if no tagged products found {% endcomment %}
         {% if section.blocks.size == 0 %}
@@ -182,7 +236,7 @@
           {%- for block in section.blocks -%}
             {%- assign product = all_products[block.settings.product] -%}
             {% if product != blank %}
-              <div class="card" {{ block.shopify_attributes }}>
+              <div class="card" {{ block.shopify_attributes }} data-index="{{ forloop.index0 }}">
                 <a href="{{ product.url }}">
                   <div class="card-header">
                     <div class="vendor">{{ product.vendor | default: "Brand" }}</div>
@@ -218,7 +272,7 @@
       {% else %}
         {% comment %} Display tagged products {% endcomment %}
         {% for product in tagged_products limit: product_limit %}
-          <div class="card">
+          <div class="card" data-index="{{ forloop.index0 }}">
             <a href="{{ product.url }}">
               <div class="card-header">
                 <div class="vendor">{{ product.vendor | default: "Brand" }}</div>
@@ -251,5 +305,92 @@
         {% endfor %}
       {% endif %}
     </div>
+    
+    <div class="mobile-dots-container">
+      {% if tagged_products.size > 0 %}
+        {% for product in tagged_products limit: product_limit %}
+          <button class="mobile-dot {% if forloop.first %}active{% endif %}" aria-label="Go to slide {{ forloop.index }}"></button>
+        {% endfor %}
+      {% elsif section.blocks.size > 0 %}
+         {%- for block in section.blocks -%}
+            <button class="mobile-dot {% if forloop.first %}active{% endif %}" aria-label="Go to slide {{ forloop.index }}"></button>
+         {%- endfor -%}
+      {% endif %}
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const container = document.querySelector('#NewArrivals-{{ section.id }}');
+        const dots = document.querySelectorAll('#NewArrivals-{{ section.id }} ~ .mobile-dots-container .mobile-dot');
+        let autoplayInterval;
+        
+        if (container && dots.length > 0) {
+          container.addEventListener('scroll', function() {
+             const scrollLeft = container.scrollLeft;
+             const cardWidth = container.querySelector('.card').offsetWidth;
+             const gap = 16; // approximate gap
+             const index = Math.round(scrollLeft / (cardWidth + gap));
+             
+             dots.forEach((dot, i) => {
+               if (i === index) {
+                 dot.classList.add('active');
+               } else {
+                 dot.classList.remove('active');
+               }
+             });
+          });
+          
+          dots.forEach((dot, i) => {
+            dot.addEventListener('click', function() {
+              const card = container.querySelector(`.card[data-index="${i}"]`);
+              if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                resetAutoplay();
+              }
+            });
+          });
+
+          // Autoplay functionality
+          function startAutoplay() {
+            if (window.innerWidth <= 749) {
+              autoplayInterval = setInterval(() => {
+                const scrollLeft = container.scrollLeft;
+                const cardWidth = container.querySelector('.card').offsetWidth;
+                const gap = 16;
+                let currentIndex = Math.round(scrollLeft / (cardWidth + gap));
+                let nextIndex = currentIndex + 1;
+                
+                if (nextIndex >= dots.length) {
+                  nextIndex = 0;
+                }
+                
+                const card = container.querySelector(`.card[data-index="${nextIndex}"]`);
+                if (card) {
+                   card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                }
+              }, 3000); // 3 seconds interval
+            }
+          }
+
+          function resetAutoplay() {
+            clearInterval(autoplayInterval);
+            startAutoplay();
+          }
+          
+          // Start autoplay initially
+          startAutoplay();
+
+          // Pause on interaction
+          container.addEventListener('touchstart', () => clearInterval(autoplayInterval));
+          container.addEventListener('touchend', () => resetAutoplay());
+          
+          // Re-check on resize
+          window.addEventListener('resize', () => {
+             clearInterval(autoplayInterval);
+             startAutoplay();
+          });
+        }
+      });
+    </script>
   </div>
 </section>

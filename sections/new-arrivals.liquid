@@ -219,6 +219,12 @@
     scroll-snap-align: start;
   }
 
+  @media screen and (max-width: 800px) {
+    .product-grid.slider-active .card {
+      flex: 0 0 calc((100% - 60px) / 3); /* 30px gap * 2 = 60px */
+    }
+  }
+
   .slider-controls-desktop {
     display: none;
     justify-content: flex-start;
@@ -469,7 +475,7 @@
                 }
               }, 3000); // 3 seconds interval
             } 
-            // Desktop Autoplay (if slider is active)
+            // Desktop/Tablet Autoplay (if slider is active)
             else if (container.classList.contains('slider-active')) {
                autoplayInterval = setInterval(() => {
                  const card = container.querySelector('.card');
@@ -504,9 +510,11 @@
           container.addEventListener('mouseleave', () => resetAutoplay());
           
           // Re-check on resize
+          let resizeTimeout;
           window.addEventListener('resize', () => {
              clearInterval(autoplayInterval);
-             startAutoplay();
+             clearTimeout(resizeTimeout);
+             resizeTimeout = setTimeout(startAutoplay, 200);
           });
 
           // Desktop Slider Navigation

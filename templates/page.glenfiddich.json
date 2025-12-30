@@ -491,6 +491,7 @@
       "block_order": [
         "ai_gen_block_f724762_zwaW3G"
       ],
+      "disabled": true,
       "name": "BEST SELLERS",
       "settings": {
         "content_direction": "row",
@@ -556,6 +557,7 @@
       "block_order": [
         "ai_gen_block_f724762_BhUJJJ"
       ],
+      "disabled": true,
       "name": "RECOMMENDED",
       "settings": {
         "content_direction": "row",

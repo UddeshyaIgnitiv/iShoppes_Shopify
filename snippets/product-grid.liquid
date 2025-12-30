@@ -8,6 +8,13 @@
   @param {string} children - List or grid of product cards
 {%- enddoc -%}
 
+{% liquid
+  assign enable_slider = false
+  if products.size > 4 and paginate == blank
+    assign enable_slider = true
+  endif
+%}
+
 {% capture product_card_size %}
   {% render 'util-product-grid-card-size' section: section %}
 {% endcapture %}
@@ -71,6 +78,75 @@
       padding-block-end: var(--zoom-out-padding-block-end, 0);
     }
   }
+
+  {% if enable_slider %}
+    .product-grid--slider.product-grid {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: var(--product-grid-gap-desktop);
+      padding-bottom: 20px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    
+    .product-grid--slider.product-grid::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .product-grid--slider.product-grid .product-grid__item {
+      flex: 0 0 calc((100% - var(--product-grid-gap-desktop) * 3) / 4);
+      scroll-snap-align: start;
+      max-width: none !important;
+      grid-column: auto !important;
+    }
+    
+    @media screen and (max-width: 990px) {
+      .product-grid--slider.product-grid .product-grid__item {
+        flex: 0 0 40%;
+      }
+    }
+    
+    @media screen and (max-width: 750px) {
+      .product-grid--slider.product-grid .product-grid__item {
+        flex: 0 0 75%;
+      }
+    }
+    
+    .slider-controls {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-right: var(--padding-inline-end);
+    }
+    
+    .slider-btn {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #000;
+      padding: 0;
+    }
+    
+    .slider-btn:hover {
+      background: #f5f5f5;
+      border-color: #000;
+    }
+    
+    .slider-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+  {% endif %}
 {% endstyle %}
 
 <div
@@ -117,8 +193,20 @@
       {% if title %}
         <h4 class="main-collection-grid__title">{{ title }}</h4>
       {% endif %}
+      
+      {% if enable_slider %}
+        <div class="slider-controls">
+          <button class="slider-btn slider-prev" type="button" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="slider-btn slider-next" type="button" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      {% endif %}
+
       <ul
-        class="product-grid product-grid--{{ section.id }} product-grid--{{ section.settings.layout_type }} {% if section.settings.mobile_product_card_size == 'large' %} product-grid-mobile--large{% endif %}"
+        class="product-grid product-grid--{{ section.id }} product-grid--{{ section.settings.layout_type }} {% if section.settings.mobile_product_card_size == 'large' %} product-grid-mobile--large{% endif %} {% if enable_slider %}product-grid--slider{% endif %}"
         product-grid-view="default"
         ref="grid"
         role="list"
@@ -127,6 +215,39 @@
       >
         {{ children }}
       </ul>
+
+      {% if enable_slider %}
+        <script>
+          (function() {
+            const currentScript = document.currentScript;
+            const slider = currentScript.previousElementSibling;
+            
+            if (!slider) return;
+            
+            const controls = slider.previousElementSibling;
+            if (!controls || !controls.classList.contains('slider-controls')) return;
+            
+            const prevBtn = controls.querySelector('.slider-prev');
+            const nextBtn = controls.querySelector('.slider-next');
+            
+            if (prevBtn && nextBtn) {
+              prevBtn.addEventListener('click', () => {
+                const item = slider.querySelector('.product-grid__item');
+                const cardWidth = item ? item.getBoundingClientRect().width : 300;
+                let gap = parseFloat(getComputedStyle(slider).gap) || 0;
+                slider.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
+              });
+              
+              nextBtn.addEventListener('click', () => {
+                const item = slider.querySelector('.product-grid__item');
+                const cardWidth = item ? item.getBoundingClientRect().width : 300;
+                let gap = parseFloat(getComputedStyle(slider).gap) || 0;
+                slider.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
+              });
+            }
+          })();
+        </script>
+      {% endif %}
 
 {% comment %} Mobile dots and slider script removed {% endcomment %}
       {% if section.settings.pagination_type == 'infinite_scroll' %}

@@ -446,11 +446,11 @@
           
           dots.forEach((dot, i) => {
             dot.addEventListener('click', function() {
-              const card = container.querySelector(`.card[data-index="${i}"]`);
-              if (card) {
-                card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-                resetAutoplay();
-              }
+              const cardWidth = container.querySelector('.card').offsetWidth;
+              const gap = 16;
+              const targetScrollLeft = i * (cardWidth + gap);
+              container.scrollTo({ left: targetScrollLeft, behavior: 'smooth' });
+              resetAutoplay();
             });
           });
 
@@ -469,10 +469,11 @@
                   nextIndex = 0;
                 }
                 
-                const card = container.querySelector(`.card[data-index="${nextIndex}"]`);
-                if (card) {
-                   card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-                }
+                const targetScrollLeft = nextIndex * (cardWidth + gap);
+                container.scrollTo({
+                  left: targetScrollLeft,
+                  behavior: 'smooth'
+                });
               }, 3000); // 3 seconds interval
             } 
             // Desktop/Tablet Autoplay (if slider is active)

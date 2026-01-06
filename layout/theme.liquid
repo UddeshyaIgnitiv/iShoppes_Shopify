@@ -75,10 +75,75 @@
         });
     });
     document.querySelectorAll('.modal-close-dep').forEach(el => {
-        el.addEventListener('click', function () {
-          document.getElementById('terminal-selection-div').style.display = 'none';
-        });
+      el.addEventListener('click', function () {
+        document.getElementById('terminal-selection-div').style.display = 'none';
       });
+    });
+    
     </script>
+    <script>
+    const API_BASE = 'https://ignitiv.axiomconsulting.in';
+
+    const airportSelect     = document.getElementById('airportselect');
+    const airlineSelect     = document.getElementById('airlineselect');
+    const flightSelect      = document.getElementById('flightselect');
+    const destinationSelect = document.getElementById('destinationselect');
+
+    function resetSelect(select, placeholder = '--') {
+        select.innerHTML = `<option value="">${placeholder}</option>`;
+        select.disabled = true;
+    }
+
+    function populateSelect(select, items, valueKey, labelKey) {
+        resetSelect(select);
+        items.forEach(item => {
+            const opt = document.createElement('option');
+            opt.value = item[valueKey];
+            opt.textContent = item[labelKey];
+            select.appendChild(opt);
+        });
+        select.disabled = false;
+    }
+
+    /* Airport → Airlines */
+    airportSelect.addEventListener('change', async () => {
+        resetSelect(airlineSelect);
+        resetSelect(flightSelect);
+        resetSelect(destinationSelect);
+
+        if (!airportSelect.value) return;
+
+        const res = await fetch(`${API_BASE}/airports/${airportSelect.value}/airlines`);
+        const airlines = await res.json();
+
+        populateSelect(airlineSelect, airlines, 'id', 'airline_name');
+    });
+
+    /* Airline → Flights */
+    airlineSelect.addEventListener('change', async () => {
+        resetSelect(flightSelect);
+        resetSelect(destinationSelect);
+
+        if (!airlineSelect.value) return;
+
+        const res = await fetch(`${API_BASE}/airlines/${airlineSelect.value}/flights`);
+        const flights = await res.json();
+
+        populateSelect(flightSelect, flights, 'id', 'flight_number');
+    });
+
+    /* Flight → Destinations */
+    flightSelect.addEventListener('change', async () => {
+        resetSelect(destinationSelect);
+
+        if (!flightSelect.value) return;
+
+        const res = await fetch(`${API_BASE}/flights/${flightSelect.value}/destinations`);
+        const destinations = await res.json();
+
+        populateSelect(destinationSelect, destinations, 'id', 'name');
+    });
+    </script>
+
   </body>
 </html>

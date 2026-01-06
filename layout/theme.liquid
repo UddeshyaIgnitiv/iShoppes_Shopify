@@ -74,6 +74,11 @@
           document.getElementById('terminal-selection-div').style.display = 'block';
         });
     });
+    document.querySelectorAll('.modal-close-dep').forEach(el => {
+        el.addEventListener('click', function () {
+          document.getElementById('terminal-selection-div').style.display = 'none';
+        });
+      });
     </script>
   </body>
 </html>

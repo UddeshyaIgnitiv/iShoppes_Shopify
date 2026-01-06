@@ -21,7 +21,7 @@
             "horizontal_alignment": "center",
             "image_ratio": "adapt",
             "width": "custom",
-            "custom_width": 65,
+            "custom_width": 60,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
             "height": "fit",

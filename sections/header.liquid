@@ -274,6 +274,15 @@
 
 <!-- Overlay for mobile navigation -->
 <div class="nav-overlay"></div>
+  {%- if section.settings.menu -%}
+    {% render 'header-drawer', 
+      linklist: section.settings.menu, 
+      class: 'header-drawer--mobile',
+      data_header_drawer_type: 'mobile-drawer',
+      block: block,
+      section: section
+    %}
+  {%- endif -%}
       <div class="mobile-logo">
         <a href="{{ routes.root_url }}" class="header__heading-link">
             <img alt="{{ shop.name }}" class="header__heading-logo" src="{{ settings.logo | image_url }}"  />
@@ -345,19 +354,11 @@
     
     <!-- Menu - Connected to Header Drawer -->
     {%- if section.settings.menu -%}
-
-    {% render 'header-drawer', 
-      linklist: section.settings.menu, 
-      class: 'header-drawer--mobile',
-      data_header_drawer_type: 'mobile-drawer',
-      block: block,
-      section: section
-    %}
-      {% comment %} <button type="button" class="mobile-nav-toggle header-actions__action focus-inset" aria-label="{{ 'accessibility.menu' | t }}" aria-controls="Details-menu-drawer-container" aria-expanded="false">
+      <button type="button" class="mobile-nav-toggle header-actions__action focus-inset" aria-label="{{ 'accessibility.menu' | t }}" aria-controls="Details-menu-drawer-container" aria-expanded="false">
         <span class="svg-wrapper">
           {{- 'icon-menu.svg' | inline_asset_content -}}
         </span>
-      </button> {% endcomment %}
+      </button>
   {%- endif -%}
   </div>
 </div>
@@ -394,7 +395,7 @@
                 ><span class="fieldIcons-input-ZvA items-center flex"
                     ><select
                         class="header-departureFormSelect-oog"
-                        id="89c605b5-93d4-41c1-b59b-471c2c32eea4"
+                        id="airportselect"
                         name="Airport"
                     >
                         <option>Select your Airport terminal</option>
@@ -415,7 +416,7 @@
                 ><span class="fieldIcons-input-ZvA items-center flex"
                     ><select
                         class="header-departureFormSelect-oog"
-                        id="de4f1e29-86ae-48a4-af50-2e57702ed739"
+                        id="airlineselect"
                         name="Airline"
                     >
                         <option>--</option>
@@ -431,7 +432,7 @@
                 ><span class="fieldIcons-input-ZvA items-center flex"
                     ><select
                         class="header-departureFormSelect-oog"
-                        id="5505ecca-5115-45e2-9439-5604d8748185"
+                        id="flightselect"
                         name="Airflight"
                     >
                         <option>--</option>
@@ -449,7 +450,7 @@
                         type="text"
                         autocomplete="seat"
                         class="textInput-input-alx field-input-pZc appearance-none bg-white flex-textInput inline-flex m-0 max-w-full w-full disabled_text-subtle"
-                        id="75d30bbe-ebad-43f9-a1aa-87561b949c22"
+                        id="seatno"
                         name="seat"
                         value="" /></span
                 ><span
@@ -470,7 +471,7 @@
                 ><span class="fieldIcons-input-ZvA items-center flex"
                     ><select
                         class="header-departureFormSelect-oog"
-                        id="ad6b7d78-4fff-4979-90f4-ad9ea9637e7c"
+                        id="destinationselect"
                         name="destination"
                     ></select></span
                 ></span>
@@ -487,7 +488,7 @@
                         type="date"
                         autocomplete="departureDate"
                         class="textInput-input-alx field-input-pZc appearance-none bg-white flex-textInput inline-flex m-0 max-w-full w-full disabled_text-subtle"
-                        id="9d585319-e2b3-4cd2-a9c6-167a36a1f224"
+                        id="departuredate"
                         name="departureDate"
                         value=""
                         style="display: block; text-align: left" /></span
@@ -499,6 +500,11 @@
                 ></span
             ></span>
             <p class="message-root-6k6 font-normal leading-none pb-0.5 pt-2.5 px-0.5 text-colorDefault text-sm"></p>
+            <p id="departureDateError"
+              class="message-root-6k6 font-normal leading-none pb-0.5 pt-2.5 px-0.5 text-sm"
+              style="color:#ff4d4f; display:none;">
+            </p>
+
         </div>
         <div class="field-root-b-C content-start grid text-colorDefault">
             <label class="field-label-oLB flex items-center justify-between px-0.5 py-2.5"
@@ -512,7 +518,7 @@
                         ><span class="fieldIcons-input-ZvA items-center flex"
                             ><select
                                 class="header-departureFormSelect-oog"
-                                id="9aef5f09-eb6f-41fd-acb0-d8d3ee9b830d"
+                                id="departurehours"
                                 name="departureHours"
                             >
                                 <option value="">--</option>
@@ -559,7 +565,7 @@
                         ><span class="fieldIcons-input-ZvA items-center flex"
                             ><select
                                 class="header-departureFormSelect-oog"
-                                id="f6f3a5e8-5e3a-4c9d-8b3c-86380dfa838b"
+                                id="departureminutes"
                                 name="departureMinutes"
                             >
                                 <option value="">--</option>
@@ -606,7 +612,7 @@
                         ><span class="fieldIcons-input-ZvA items-center flex"
                             ><select
                                 class="header-departureFormSelect-oog"
-                                id="67595d98-99dd-42b0-93e7-816a5590e0f8"
+                                id="departuremeridiem"
                                 name="meridiem"
                             >
                                 <option value="AM">AM</option>
@@ -1070,8 +1076,7 @@ if (navOverlay) {
     padding-top: 40px;
   }
   .header__row--bottom {
-    padding-bottom: 40px;
-    padding-top: 1rem;
+    padding-bottom: 54px;
   }
 
   .header-section {
@@ -1480,14 +1485,14 @@ if (navOverlay) {
 /* Mobile Bottom Row - Sticky */
 .mobile-bottom-row {
   background: #ffffff;
-  /* border-top: 1px solid #e5e5e5; */
+  border-top: 1px solid #e5e5e5;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 1003;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
 }
 
 .mobile-bottom-container {
@@ -1511,7 +1516,7 @@ if (navOverlay) {
   align-items: center;
   gap: 4px;
   flex: 1;
-  max-width: 100%;
+  max-width: 60px;
   position: relative;
   transition: color 0.3s ease;
   min-height: 50px;
@@ -1549,7 +1554,7 @@ if (navOverlay) {
   align-items: center;
   gap: 4px;
   flex: 1;
-  max-width: 100%;
+  max-width: 60px;
 }
 
 .icon-label {

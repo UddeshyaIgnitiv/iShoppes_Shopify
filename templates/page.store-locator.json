@@ -1,4 +1,12 @@
-
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -10,7 +18,7 @@
           "settings": {
             "text": "<h1>{{ closest.page.title }}</h1>",
             "width": "100%",
-            "max_width": "normal",
+            "max_width": "none",
             "alignment": "left",
             "type_preset": "h2",
             "font": "var(--font-primary--family)",
@@ -48,13 +56,11 @@
         "padding-block-end": 40
       }
     },
-
     "store_locator": {
       "type": "store-locator",
       "settings": {}
     }
   },
-
   "order": [
     "main",
     "store_locator"

@@ -74,15 +74,34 @@
           {% content_for 'block', type: 'quantity', id: 'quantity' %}
         </div>
         <div style="padding-top:30px">
-          <div class="age-verification-wrapper" style="width: 100%; margin-top: 15px; margin-bottom: 10px;">
-             <div style="display: flex; align-items: flex-start; gap: 8px;">
-                <input type="checkbox" id="age-verification-{{ section.id }}" name="properties[Age Verification]" required form="{{ product_form_id }}" style="margin-top: 4px; width: 18px; height: 18px; accent-color: black;">
-                <label for="age-verification-{{ section.id }}" style="font-size: 16px; line-height: 1.4; color: #000;">
-                   <span style="font-weight: 500; display: block; margin-bottom: 4px;">Age Verification<span style="color: #e32c2b;">*</span></span>
-                   <span style="font-weight: 400;">Yes, I confirm that I am 21 years of age or older.</span>
-                </label>
-             </div>
-          </div>
+          {%- liquid
+            assign show_age_verification = false
+            assign product_type_downcased = product.type | downcase
+            if product_type_downcased contains 'tobacco' or product_type_downcased contains 'liquor'
+              assign show_age_verification = true
+            endif
+
+            unless show_age_verification
+              for tag in product.tags
+                assign tag_downcased = tag | downcase
+                if tag_downcased contains 'tobacco' or tag_downcased contains 'liquor'
+                  assign show_age_verification = true
+                  break
+                endif
+              endfor
+            endunless
+          -%}
+          {%- if show_age_verification -%}
+            <div class="age-verification-wrapper" style="width: 100%; margin-top: 15px; margin-bottom: 10px;">
+              <div style="display: flex; align-items: flex-start; gap: 8px;">
+                  <input type="checkbox" id="age-verification-{{ section.id }}" name="properties[Age Verification]" required form="{{ product_form_id }}" style="margin-top: 4px; width: 18px; height: 18px; accent-color: black;">
+                  <label for="age-verification-{{ section.id }}" style="font-size: 16px; line-height: 1.4; color: #000;">
+                    <span style="font-weight: 500; display: block; margin-bottom: 4px;">Age Verification<span style="color: #e32c2b;">*</span></span>
+                    <span style="font-weight: 400;">Yes, I confirm that I am 21 years of age or older.</span>
+                  </label>
+              </div>
+            </div>
+          {%- endif -%}
 
           {% content_for 'block',
             type: 'add-to-cart',

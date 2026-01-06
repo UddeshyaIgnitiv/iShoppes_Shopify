@@ -4407,7 +4407,7 @@ text-component {
   display: none !important;
 }
 
-@media screen and (max-width: 749px) {
+@media screen and (max-width: 800px) {
   [id$="slideshow_xzAehT"] {
     display: none !important;
   }

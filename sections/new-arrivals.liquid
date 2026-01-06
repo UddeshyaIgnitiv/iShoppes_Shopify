@@ -68,7 +68,7 @@
     gap: 30px;
     justify-content: center;
   }
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 800px) {
     .product-grid {
       display: flex !important;
       flex-wrap: nowrap !important;
@@ -86,11 +86,23 @@
       display: none;
     }
     .product-grid > * {
-      flex: 0 0 100% !important;
-      width: 100% !important;
-      min-width: 100% !important;
-      max-width: 100% !important;
       scroll-snap-align: start;
+    }
+    @media screen and (max-width: 599px) {
+      .product-grid > * {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
+    @media screen and (min-width: 600px) and (max-width: 800px) {
+      .product-grid > * {
+        flex: 0 0 calc((100% - 2rem) / 3) !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+      }
     }
     .card {
       width: 100%;
@@ -192,7 +204,7 @@
     width: 20px;
     border-radius: 4px;
   }
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 800px) {
     .mobile-dots-container {
       display: flex;
     }
@@ -263,7 +275,7 @@
     height: 24px;
   }
 
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 800px) {
     .slider-controls-desktop {
       display: none !important;
     }
@@ -427,13 +439,61 @@
         const container = document.querySelector('#NewArrivals-{{ section.id }}');
         const dots = document.querySelectorAll('#NewArrivals-{{ section.id }} ~ .mobile-dots-container .mobile-dot');
         let autoplayInterval;
+        let resizeTimeout;
         
         if (container && dots.length > 0) {
-          container.addEventListener('scroll', function() {
-             const scrollLeft = container.scrollLeft;
-             const cardWidth = container.querySelector('.card').offsetWidth;
-             const gap = 16; // approximate gap
-             const index = Math.round(scrollLeft / (cardWidth + gap));
+          
+          function getGap() {
+             const style = window.getComputedStyle(container);
+             const gap = parseInt(style.gap) || 16;
+             return gap;
+          }
+
+          function getMaxIndex() {
+             // Calculate how many items are fully visible
+             const card = container.querySelector('.card');
+             if (!card) return dots.length - 1;
+             
+             const cardWidth = card.offsetWidth;
+             const containerWidth = container.clientWidth;
+             const gap = getGap();
+             
+             // Rough estimate of visible items
+             // The container width is roughly (visibleItems * cardWidth) + ((visibleItems - 1) * gap)
+             // Solving for visibleItems: (W + gap) / (cw + gap)
+             const visibleItems = Math.round((containerWidth + gap) / (cardWidth + gap));
+             
+             return Math.max(0, dots.length - visibleItems);
+          }
+
+          function updateDotsVisibility() {
+            // Only apply this logic for tablet/mobile slider view
+            if (window.innerWidth <= 800) {
+              const maxIndex = getMaxIndex();
+              
+              dots.forEach((dot, index) => {
+                if (index > maxIndex) {
+                  dot.style.display = 'none';
+                } else {
+                  dot.style.display = ''; 
+                }
+              });
+            } else {
+               // Desktop view - reset (though container is hidden via CSS usually)
+               dots.forEach((dot) => {
+                 dot.style.display = ''; 
+               });
+            }
+          }
+
+          function setActiveDot(index) {
+             let maxIndex = dots.length - 1;
+             if (window.innerWidth <= 800) {
+                maxIndex = getMaxIndex();
+             }
+             
+             // Clamp index
+             if (index > maxIndex) index = maxIndex;
              
              dots.forEach((dot, i) => {
                if (i === index) {
@@ -442,12 +502,27 @@
                  dot.classList.remove('active');
                }
              });
+          }
+
+          container.addEventListener('scroll', function() {
+             const scrollLeft = container.scrollLeft;
+             const card = container.querySelector('.card');
+             if (!card) return;
+             
+             const cardWidth = card.offsetWidth;
+             const gap = getGap();
+             const index = Math.round(scrollLeft / (cardWidth + gap));
+             
+             setActiveDot(index);
           });
           
           dots.forEach((dot, i) => {
             dot.addEventListener('click', function() {
-              const cardWidth = container.querySelector('.card').offsetWidth;
-              const gap = 16;
+              const card = container.querySelector('.card');
+              if (!card) return;
+              
+              const cardWidth = card.offsetWidth;
+              const gap = getGap();
               const targetScrollLeft = i * (cardWidth + gap);
               container.scrollTo({ left: targetScrollLeft, behavior: 'smooth' });
               resetAutoplay();
@@ -456,16 +531,21 @@
 
           // Autoplay functionality
           function startAutoplay() {
-            // Mobile Autoplay
-            if (window.innerWidth <= 749) {
+            // Mobile/Tablet Autoplay
+            if (window.innerWidth <= 800) {
               autoplayInterval = setInterval(() => {
                 const scrollLeft = container.scrollLeft;
-                const cardWidth = container.querySelector('.card').offsetWidth;
-                const gap = 16;
+                const card = container.querySelector('.card');
+                if (!card) return;
+                
+                const cardWidth = card.offsetWidth;
+                const gap = getGap();
+                
                 let currentIndex = Math.round(scrollLeft / (cardWidth + gap));
+                let maxIndex = getMaxIndex();
                 let nextIndex = currentIndex + 1;
                 
-                if (nextIndex >= dots.length) {
+                if (nextIndex > maxIndex) {
                   nextIndex = 0;
                 }
                 
@@ -476,12 +556,12 @@
                 });
               }, 3000); // 3 seconds interval
             } 
-            // Desktop/Tablet Autoplay (if slider is active)
+            // Desktop Autoplay (if slider is active)
             else if (container.classList.contains('slider-active')) {
                autoplayInterval = setInterval(() => {
                  const card = container.querySelector('.card');
                  const cardWidth = card ? card.offsetWidth : 320;
-                 const gap = 30; // 30px gap from CSS
+                 const gap = 30; // 30px gap from CSS for desktop
                  const maxScrollLeft = container.scrollWidth - container.clientWidth;
                  
                  // If near end, scroll to start, else scroll next
@@ -490,7 +570,7 @@
                  } else {
                    container.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
                  }
-               }, 3000); // 3 seconds interval
+               }, 3000); 
             }
           }
 
@@ -499,23 +579,23 @@
             startAutoplay();
           }
           
-          // Start autoplay initially
+          // Initial setup
+          updateDotsVisibility();
           startAutoplay();
 
-          // Pause on interaction (Touch)
+          // Pause on interaction
           container.addEventListener('touchstart', () => clearInterval(autoplayInterval));
           container.addEventListener('touchend', () => resetAutoplay());
-          
-          // Pause on interaction (Mouse Hover for Desktop)
           container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
           container.addEventListener('mouseleave', () => resetAutoplay());
           
-          // Re-check on resize
-          let resizeTimeout;
           window.addEventListener('resize', () => {
              clearInterval(autoplayInterval);
              clearTimeout(resizeTimeout);
-             resizeTimeout = setTimeout(startAutoplay, 200);
+             resizeTimeout = setTimeout(() => {
+               updateDotsVisibility();
+               startAutoplay();
+             }, 200);
           });
 
           // Desktop Slider Navigation
@@ -526,31 +606,29 @@
 
             if (prevBtn && nextBtn) {
                prevBtn.addEventListener('click', () => {
-                 clearInterval(autoplayInterval); // Stop autoplay on interaction
+                 clearInterval(autoplayInterval);
                  const card = container.querySelector('.card');
                  const cardWidth = card ? card.offsetWidth : 320;
-                 const gap = 30; // 30px gap from CSS
+                 const gap = 30;
                  container.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
-                 startAutoplay(); // Restart autoplay
+                 startAutoplay();
                });
 
                nextBtn.addEventListener('click', () => {
-                 clearInterval(autoplayInterval); // Stop autoplay on interaction
+                 clearInterval(autoplayInterval);
                  const card = container.querySelector('.card');
                  const cardWidth = card ? card.offsetWidth : 320;
-                 const gap = 30; // 30px gap from CSS
+                 const gap = 30;
                  
-                 // Logic for next button: loop back to start if at end
                  const maxScrollLeft = container.scrollWidth - container.clientWidth;
                  if (container.scrollLeft >= maxScrollLeft - 10) {
                     container.scrollTo({ left: 0, behavior: 'smooth' });
                  } else {
                     container.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
                  }
-                 startAutoplay(); // Restart autoplay
+                 startAutoplay();
                });
                
-               // Pause on hover over controls too
                desktopControls.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
                desktopControls.addEventListener('mouseleave', () => resetAutoplay());
             }

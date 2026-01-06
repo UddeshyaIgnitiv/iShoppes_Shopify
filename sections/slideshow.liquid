@@ -87,17 +87,20 @@
 }
 
 /* Mobile: reduce margins to 15px */
-@media screen and (max-width: 767px) {
-  .slideshow-margin-wrapper {
-    margin-left: 0px !important;
-    margin-right: 0px !important;
-    height: 340px;
-  }
-}
 @media screen and (max-width: 800px) {
   .slideshow-margin-wrapper {
     margin-left: 0px !important;
     margin-right: 0px !important;
+    height: auto !important;
+    min-height: 200px;
+  }
+  .slideshow-margin-wrapper .slideshow__slide {
+    height: auto !important;
+  }
+  .slideshow-margin-wrapper .slideshow__slide img,
+  .slideshow-margin-wrapper .slideshow__media img {
+    height: auto !important;
+    object-fit: contain !important;
   }
 }
 {% endstylesheet %}
@@ -403,3 +406,4 @@
   ]
 }
 {% endschema %}
+

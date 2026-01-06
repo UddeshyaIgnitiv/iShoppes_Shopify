@@ -83,10 +83,9 @@
     </script>
     <script>
     const API_BASE = 'https://ignitiv.axiomconsulting.in';
-
-    const airportSelect     = document.getElementById('airportselect');
-    const airlineSelect     = document.getElementById('airlineselect');
-    const flightSelect      = document.getElementById('flightselect');
+    const airportSelect = document.getElementById('airportselect');
+    const airlineSelect = document.getElementById('airlineselect');
+    const flightSelect = document.getElementById('flightselect');
     const destinationSelect = document.getElementById('destinationselect');
 
     function resetSelect(select, placeholder = '--') {
@@ -105,7 +104,7 @@
         select.disabled = false;
     }
 
-    /* Airport → Airlines */
+    // Load airlines when airport changes
     airportSelect.addEventListener('change', async () => {
         resetSelect(airlineSelect);
         resetSelect(flightSelect);
@@ -119,7 +118,7 @@
         populateSelect(airlineSelect, airlines, 'id', 'airline_name');
     });
 
-    /* Airline → Flights */
+    // Load flights when airline changes
     airlineSelect.addEventListener('change', async () => {
         resetSelect(flightSelect);
         resetSelect(destinationSelect);
@@ -132,7 +131,7 @@
         populateSelect(flightSelect, flights, 'id', 'flight_number');
     });
 
-    /* Flight → Destinations */
+    // Load destinations when flight changes
     flightSelect.addEventListener('change', async () => {
         resetSelect(destinationSelect);
 
@@ -143,16 +142,14 @@
 
         populateSelect(destinationSelect, destinations, 'id', 'name');
     });
-    </script>
-    <script>
-    /* ==== DEPARTURE DATE + TIME VALIDATION ==== */
 
-    const dateInput     = document.getElementById('departuredate');
-    const hoursSelect   = document.getElementById('departurehours');
-    const minsSelect    = document.getElementById('departureminutes');
-    const meridiemSel   = document.getElementById('departuremeridiem');
-    const errorBox      = document.getElementById('departureDateError');
-    const form          = document.querySelector('#terminal-selection-div form');
+    // Departure time validation
+    const dateInput = document.getElementById('departuredate');
+    const hoursSelect = document.getElementById('departurehours');
+    const minsSelect = document.getElementById('departureminutes');
+    const meridiemSelect = document.getElementById('departuremeridiem');
+    const errorBox = document.getElementById('departureDateError');
+    const form = document.querySelector('#terminal-selection-div form');
 
     function parseMinutes(val) {
         if (!val) return 0;
@@ -160,18 +157,19 @@
     }
 
     function getDepartureDateTime() {
-        if (!dateInput.value || !hoursSelect.value || !meridiemSel.value) {
+        if (!dateInput.value || !hoursSelect.value || !meridiemSelect.value) {
             return null;
         }
 
-        let hours = parseInt(hoursSelect.value, 10);
-        const minutes = parseMinutes(minsSelect.value);
+        let hrs = parseInt(hoursSelect.value, 10);
+        const mins = parseMinutes(minsSelect.value);
 
-        if (meridiemSel.value === 'PM' && hours !== 12) hours += 12;
-        if (meridiemSel.value === 'AM' && hours === 12) hours = 0;
+        // Convert to 24hr format
+        if (meridiemSelect.value === 'PM' && hrs !== 12) hrs += 12;
+        if (meridiemSelect.value === 'AM' && hrs === 12) hrs = 0;
 
         const dt = new Date(dateInput.value);
-        dt.setHours(hours, minutes, 0, 0);
+        dt.setHours(hrs, mins, 0, 0);
 
         return dt;
     }
@@ -183,13 +181,12 @@
         if (!departureDT) return true;
 
         const now = new Date();
-        const diffMs = departureDT - now;
+        const diff = departureDT - now;
+        const hoursUntilDeparture = diff / (1000 * 60 * 60);
 
-        const diffHours = diffMs / (1000 * 60 * 60);
-
-        if (diffHours < 2 || diffHours > 72) {
-            errorBox.textContent =
-                'Ordering is available for flights departing in 2 hours from order placement and up to 72 hours.';
+        // Must be between 2-72 hours from now
+        if (hoursUntilDeparture < 2 || hoursUntilDeparture > 72) {
+            errorBox.textContent = 'Ordering is available for flights departing in 2 hours from order placement and up to 72 hours.';
             errorBox.style.display = 'block';
             return false;
         }
@@ -197,46 +194,36 @@
         return true;
     }
 
-    /* Revalidate on any change */
-    [
-        dateInput,
-        hoursSelect,
-        minsSelect,
-        meridiemSel
-    ].forEach(el => el.addEventListener('change', validateDepartureTime));
+    // Check validation on field changes
+    [dateInput, hoursSelect, minsSelect, meridiemSelect].forEach(el => {
+        el.addEventListener('change', validateDepartureTime);
+    });
 
-    /* Block submit if invalid */
-    form.addEventListener('submit', function (e) {
+    // Prevent submit if validation fails
+    form.addEventListener('submit', function(e) {
         if (!validateDepartureTime()) {
             e.preventDefault();
         }
     });
-    </script>
-    <script>
-    /* ==== SAVE DEPARTURE SELECTION TO COOKIES & RELOAD ==== */
 
-    function setCookie(name, value, hours = 24) {
+    // Save to cookies and reload
+    function setCookie(name, value, hrs = 24) {
         const d = new Date();
-        d.setTime(d.getTime() + (hours * 60 * 60 * 1000));
-        document.cookie =
-            name + "=" + encodeURIComponent(value) +
-            ";expires=" + d.toUTCString() +
-            ";path=/";
+        d.setTime(d.getTime() + (hrs * 60 * 60 * 1000));
+        document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + d.toUTCString() + ";path=/";
     }
 
-    form.addEventListener('submit', function (e) {
-
-        // if validation fails, submission is already prevented
+    form.addEventListener('submit', function(e) {
         if (!validateDepartureTime()) return;
 
-        e.preventDefault(); // stop normal submit
+        e.preventDefault();
 
+        // Save departure details to cookies
         setCookie('departure_date', dateInput.value);
         setCookie('departure_hours', hoursSelect.value);
         setCookie('departure_minutes', minsSelect.value);
-        setCookie('departure_meridiem', meridiemSel.value);
+        setCookie('departure_meridiem', meridiemSelect.value);
 
-        // reload page
         window.location.reload();
     });
     </script>

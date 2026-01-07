@@ -158,10 +158,10 @@
               <a
                 href="{{ childLink.url }}"
                 class="mega-menu__link"
-                {% if link.title == 'Featured Brands' or 'Beauty Brands' or 'Liquor & Wine Brands' %}
-                  {% unless boldTitles contains childLink.title %}
-                    target="_blank"
-                  {% endunless %}
+                {% assign target_brands = 'dior,chanel,glenfiddich,the macallan' | split: ',' %}
+                {% assign child_title_down = childLink.title | downcase %}
+                {% if target_brands contains child_title_down %}
+                  target="_blank"
                 {% endif %}
               >
                 <span class="mega-menu__link-title" 

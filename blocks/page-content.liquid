@@ -1,12 +1,38 @@
 
 
-<rte-formatter>
+<rte-formatter style="display: block; text-align: {{ block.settings.alignment }};">
   {{ page.content }}
 </rte-formatter>
 
 {% schema %}
 {
   "name": "t:names.page_content",
-  "class": "rte"
+  "class": "rte",
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        },
+        {
+          "value": "right",
+          "label": "t:options.right"
+        },
+        {
+          "value": "justify",
+          "label": "Justify"
+        }
+      ],
+      "default": "left"
+    }
+  ]
 }
 {% endschema %}

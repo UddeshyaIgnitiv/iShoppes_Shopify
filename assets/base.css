@@ -402,6 +402,10 @@ main[data-template="index"] .shopify-section:not(.header-section) :is(.section, 
   padding-right: 0;
   padding-left: 0;
 }
+main[data-template="page"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+  padding-right: 30px;
+  padding-left: 30px;
+}
 main[data-template="page.glenfiddich"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
   padding-right: 0;
   padding-left: 0;
@@ -431,6 +435,10 @@ main[data-template="page.macallan.about.us"] .shopify-section:not(.header-sectio
   padding-left: 0;
 }
 main[data-template="page.aboutus"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+  padding-right: 30px;
+  padding-left: 30px;
+}
+main[data-template="page.career"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
   padding-right: 30px;
   padding-left: 30px;
 }

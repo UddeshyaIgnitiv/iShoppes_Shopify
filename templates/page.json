@@ -40,7 +40,9 @@
         },
         "page-content": {
           "type": "page-content",
-          "settings": {},
+          "settings": {
+            "alignment": "justify",
+          },
           "blocks": {}
         }
       },

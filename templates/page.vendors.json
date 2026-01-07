@@ -18,10 +18,32 @@
             "brand_logo": "shopify://shop_images/dior_logo_80bf28d122.webp",
             "link": "/pages/dior"
           }
+        },
+        "logo_L4EMnr": {
+          "type": "logo",
+          "settings": {
+            "brand_logo": "shopify://shop_images/geln_logo_3069bc83eb.webp",
+            "link": "/pages/glenfiddich"
+          }
+        },
+        "logo_TaNRWV": {
+          "type": "logo",
+          "settings": {
+            "link": ""
+          }
+        },
+        "logo_hE7U4t": {
+          "type": "logo",
+          "settings": {
+            "link": ""
+          }
         }
       },
       "block_order": [
-        "logo_Yn46Qe"
+        "logo_Yn46Qe",
+        "logo_L4EMnr",
+        "logo_TaNRWV",
+        "logo_hE7U4t"
       ],
       "settings": {
         "title": "OFFICIAL STORES",

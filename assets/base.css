@@ -2633,14 +2633,14 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
   display: grid;
   line-height: normal;
   place-content: center;
-  color: var(--color-primary-button-text);
+  color: #ffffff;
   padding-inline: var(--cart-padding);
 }
 
 .cart-bubble__background {
   position: absolute;
   inset: 0;
-  background-color: var(--color-primary-button-background);
+  background-color:#015EB8;
   border-radius: var(--style-border-radius-lg);
 }
 

@@ -50,6 +50,7 @@
       ],
       "settings": {
         "content_direction": "column",
+        "page_width": "section--full-width",
         "gap": 32,
         "color_scheme": "",
         "padding-block-start": 40,

@@ -49,6 +49,7 @@
         "page-content"
       ],
       "settings": {
+        "page_width": "section--full-width",
         "content_direction": "column",
         "gap": 32,
         "color_scheme": "",

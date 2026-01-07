@@ -124,7 +124,7 @@
         resetSelect(flightSelect);
         resetSelect(destinationSelect);
     
-        if (!airlineSelect.value || !currentTerminalId) return;
+        if (!airlineSelect.value || !airportSelect.value) return;
     
         const res = await fetch(
             `${API_BASE}/airlines/${airlineSelect.value}/terminals/${airportSelect.value}/flights`

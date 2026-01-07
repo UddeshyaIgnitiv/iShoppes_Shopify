@@ -1,7 +1,7 @@
 
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="section page-width-content color-{{ section.settings.color_scheme }}">
+<div class="section {{ section.settings.page_width | default: 'page-width-content' }} color-{{ section.settings.color_scheme }}">
   <div
     class="
       spacing-style
@@ -50,6 +50,26 @@
       ],
       "default": "column",
       "visible_if": "{{ section.settings.gap < 0 }}"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page width",
+      "options": [
+        {
+          "value": "page-width-content",
+          "label": "Content"
+        },
+        {
+          "value": "page-width-wide",
+          "label": "Wide"
+        },
+        {
+          "value": "section--full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width-content"
     },
     {
       "type": "range",

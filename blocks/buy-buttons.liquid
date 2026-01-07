@@ -35,6 +35,22 @@
       assign add_to_cart_text = 'products.product.unavailable' | t
     endif
   endif
+
+  assign show_age_verification = false
+  assign product_type_downcased = product.type | downcase
+  if product_type_downcased contains 'tobacco' or product_type_downcased contains 'liquor'
+    assign show_age_verification = true
+  endif
+
+  unless show_age_verification
+    for tag in product.tags
+      assign tag_downcased = tag | downcase
+      if tag_downcased contains 'tobacco' or tag_downcased contains 'liquor'
+        assign show_age_verification = true
+        break
+      endif
+    endfor
+  endunless
 %}
 
 <span
@@ -74,24 +90,13 @@
           {% content_for 'block', type: 'quantity', id: 'quantity' %}
         </div>
         <div style="padding-top:30px">
-          {%- liquid
-            assign show_age_verification = false
-            assign product_type_downcased = product.type | downcase
-            if product_type_downcased contains 'tobacco' or product_type_downcased contains 'liquor'
-              assign show_age_verification = true
-            endif
-
-            unless show_age_verification
-              for tag in product.tags
-                assign tag_downcased = tag | downcase
-                if tag_downcased contains 'tobacco' or tag_downcased contains 'liquor'
-                  assign show_age_verification = true
-                  break
-                endif
-              endfor
-            endunless
-          -%}
           {%- if show_age_verification -%}
+            <style>
+              #{{ product_form_id }} [name="add"],
+              #{{ product_form_id }} .shopify-payment-button {
+                display: none;
+              }
+            </style>
             <div class="age-verification-wrapper" style="width: 100%; margin-top: 15px; margin-bottom: 10px;">
               <div style="display: flex; align-items: flex-start; gap: 8px;">
                   <input type="checkbox" id="age-verification-{{ section.id }}" name="properties[Age Verification]" required form="{{ product_form_id }}" style="margin-top: 4px; width: 18px; height: 18px; accent-color: black;">
@@ -101,6 +106,28 @@
                   </label>
               </div>
             </div>
+            <script>
+              (function() {
+                var checkbox = document.getElementById('age-verification-{{ section.id }}');
+                var form = document.getElementById('{{ product_form_id }}');
+                if (!checkbox || !form) return;
+
+                function toggleButtons() {
+                  var buttons = form.querySelectorAll('[name="add"], .shopify-payment-button');
+                  var isChecked = checkbox.checked;
+                  buttons.forEach(function(btn) {
+                    if (isChecked) {
+                      btn.style.display = 'block';
+                    } else {
+                      btn.style.display = '';
+                    }
+                  });
+                }
+                
+                checkbox.addEventListener('change', toggleButtons);
+                if (checkbox.checked) toggleButtons();
+              })();
+            </script>
           {%- endif -%}
 
           {% content_for 'block',

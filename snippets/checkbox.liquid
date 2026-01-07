@@ -53,6 +53,15 @@
     role="checkbox"
   >
     {{ 'icon-checkmark.svg' | inline_asset_content }}
-    <span class="checkbox__label-text">{{- label -}}</span>
+    <span class="checkbox__label-text">
+      {%- liquid
+        assign prefix = label | slice: 0, 2
+        if prefix == 'c-'
+          echo label | slice: 2, label.size
+        else
+          echo label
+        endif
+      -%}
+    </span>
   </label>
 </div>

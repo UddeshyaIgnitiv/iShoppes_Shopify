@@ -274,15 +274,6 @@
 
 <!-- Overlay for mobile navigation -->
 <div class="nav-overlay"></div>
-  {%- if section.settings.menu -%}
-    {% render 'header-drawer', 
-      linklist: section.settings.menu, 
-      class: 'header-drawer--mobile',
-      data_header_drawer_type: 'mobile-drawer',
-      block: block,
-      section: section
-    %}
-  {%- endif -%}
       <div class="mobile-logo">
         <a href="{{ routes.root_url }}" class="header__heading-link">
             <img alt="{{ shop.name }}" class="header__heading-logo" src="{{ settings.logo | image_url }}"  />
@@ -354,11 +345,18 @@
     
     <!-- Menu - Connected to Header Drawer -->
     {%- if section.settings.menu -%}
-      <button type="button" class="mobile-nav-toggle header-actions__action focus-inset" aria-label="{{ 'accessibility.menu' | t }}" aria-controls="Details-menu-drawer-container" aria-expanded="false">
+      {% render 'header-drawer', 
+        linklist: section.settings.menu, 
+        class: 'header-drawer--mobile',
+        data_header_drawer_type: 'mobile-drawer',
+        block: block,
+        section: section
+      %}
+      {% comment %} <button type="button" class="mobile-nav-toggle header-actions__action focus-inset" aria-label="{{ 'accessibility.menu' | t }}" aria-controls="Details-menu-drawer-container" aria-expanded="false">
         <span class="svg-wrapper">
           {{- 'icon-menu.svg' | inline_asset_content -}}
         </span>
-      </button>
+      </button> {% endcomment %}
   {%- endif -%}
   </div>
 </div>
@@ -1485,14 +1483,14 @@ if (navOverlay) {
 /* Mobile Bottom Row - Sticky */
 .mobile-bottom-row {
   background: #ffffff;
-  border-top: 1px solid #e5e5e5;
+  /* border-top: 1px solid #e5e5e5; */
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 1003;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
 }
 
 .mobile-bottom-container {
@@ -1516,7 +1514,7 @@ if (navOverlay) {
   align-items: center;
   gap: 4px;
   flex: 1;
-  max-width: 60px;
+  max-width: 100%;
   position: relative;
   transition: color 0.3s ease;
   min-height: 50px;
@@ -1554,7 +1552,7 @@ if (navOverlay) {
   align-items: center;
   gap: 4px;
   flex: 1;
-  max-width: 60px;
+  max-width: 100%;
 }
 
 .icon-label {

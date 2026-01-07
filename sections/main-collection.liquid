@@ -253,11 +253,22 @@
     padding-bottom: 25px;
   }
   @media screen and (max-width: 749px) {
+    .collection-wrapper.grid {
+      display: block;
+      gap: 0 !important;
+    }
     .card {
       width: 100%;
     }
     .product-grid__item {
-      padding: 0 30px;
+      padding: 0 30px 0 0;
+      margin: 0 !important;
+      border-radius: 30px !important;
+
+    }
+    .main-collection-grid {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
     }
   }
   @media screen and (max-width: 1920px) {

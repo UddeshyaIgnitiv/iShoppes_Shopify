@@ -123,12 +123,14 @@
     airlineSelect.addEventListener('change', async () => {
         resetSelect(flightSelect);
         resetSelect(destinationSelect);
-
-        if (!airlineSelect.value) return;
-
-        const res = await fetch(`${API_BASE}/airlines/${airlineSelect.value}/flights`);
+    
+        if (!airlineSelect.value || !currentTerminalId) return;
+    
+        const res = await fetch(
+            `${API_BASE}/airlines/${airlineSelect.value}/terminals/${airportSelect.value}/flights`
+        );
+    
         const flights = await res.json();
-
         populateSelect(flightSelect, flights, 'id', 'flight_number');
     });
 

@@ -521,7 +521,7 @@ main[data-template="page.macallan.about.us"] .shopify-section:not(.header-sectio
     display: none !important;
   }
 }
-@media screen and (max-width: 1920px) {
+@media screen and (min-width: 1920px) {
   main[data-template="page.chanel"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
     padding-right: 185px;
     padding-left: 185px;

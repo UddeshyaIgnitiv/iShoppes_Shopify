@@ -1,0 +1,168 @@
+<style>
+  #popup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 9999;
+  }
+
+  #newsletter-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    width: 90%;
+    max-width: 420px;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    z-index: 10000;
+    display: none;
+    font-family: Arial, sans-serif;
+  }
+
+  #popup-close {
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #555;
+  }
+
+  #newsletter-popup h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  #newsletter-popup p {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  .popup-input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  #popup-submit {
+    width: 100%;
+    padding: 14px;
+    background: #3a48d4;
+    color: white;
+    border: none;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+
+  #popup-no-thanks {
+    margin-top: 15px;
+    text-align: center;
+    color: #8a8a8a;
+    cursor: pointer;
+  }
+
+  #popup-message {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    display: none;
+  }
+
+  #popup-message.success {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  #popup-message.error {
+    background: #f8d7da;
+    color: #721c24;
+  }
+</style>
+
+<div id="popup-overlay"></div>
+
+<div id="newsletter-popup">
+  <div id="popup-close">&times;</div>
+
+  <h2>FIRST TIME OFFER!</h2>
+  <p>Get 10% off on your first order.</p>
+
+  <form method="post" action="/contact">
+    <input type="hidden" name="form_type" value="customer">
+    <input type="hidden" name="utf8" value="✓">
+    <input type="hidden" name="contact[tags]" value="newsletter,popup">
+
+    <input type="text" name="contact[name]" class="popup-input" placeholder="Name" required>
+    <input type="email" name="contact[email]" class="popup-input" placeholder="Email" required>
+
+    <button type="submit" id="popup-submit">GET MY 10% OFFER</button>
+  </form>
+
+  <div id="popup-message"></div>
+  <div id="popup-no-thanks">NO THANKS</div>
+</div>
+
+<script>
+  function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + (days * 86400000));
+    document.cookie = name + "=" + value + ";expires=" + d.toUTCString() + ";path=/";
+  }
+
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  function showPopup() {
+    document.getElementById("popup-overlay").style.display = "block";
+    document.getElementById("newsletter-popup").style.display = "block";
+  }
+
+  function closePopup() {
+    document.getElementById("popup-overlay").style.display = "none";
+    document.getElementById("newsletter-popup").style.display = "none";
+    setCookie("popup_closed", "yes", 1);
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const posted = getParam("contact_posted");
+    const errors = getParam("errors");
+    const popupClosed = document.cookie.includes("popup_closed=yes");
+
+    if (posted === "true") {
+      showPopup();
+      const msg = document.getElementById("popup-message");
+      msg.textContent = "Thank you! Your 10% offer is on the way";
+      msg.className = "success";
+      msg.style.display = "block";
+      setCookie("popup_closed", "yes", 1);
+    } 
+    else if (errors) {
+      showPopup();
+      const msg = document.getElementById("popup-message");
+      msg.textContent = "Something went wrong. Please try again.";
+      msg.className = "error";
+      msg.style.display = "block";
+    } 
+    else if (!popupClosed) {
+      setTimeout(showPopup, 5000);
+    }
+  });
+
+  document.getElementById("popup-close").onclick = closePopup;
+  document.getElementById("popup-no-thanks").onclick = closePopup;
+  document.getElementById("popup-overlay").onclick = closePopup;
+</script>

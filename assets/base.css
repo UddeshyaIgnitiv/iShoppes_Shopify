@@ -4432,6 +4432,11 @@ text-component {
   [id$="slideshow_dUXCc6"] {
     display: block !important;
   }
+  .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+    /* background: transparent; */
+    padding-right: 0px;
+    padding-left: 0px;
+  }
 }
 
 /* Home Page Slider Visibility */

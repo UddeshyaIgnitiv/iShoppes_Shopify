@@ -27,7 +27,13 @@
         .product-grid--{{ section.id }}:is(.product-grid--grid) {
           /* fix for listing 3 products in a row, dynamically its not working for collection pages from admin */
           /* --product-grid-columns-desktop: repeat(auto-fill, minmax({{ product_card_size }}, 1fr)); */
-          --product-grid-columns-desktop: repeat(3, 1fr);
+          --product-grid-columns-desktop: repeat(2, 1fr);
+        }
+
+        @media screen and (min-width: 990px) {
+          .product-grid--{{ section.id }}:is(.product-grid--grid) {
+            --product-grid-columns-desktop: repeat(3, 1fr);
+          }
         }
       {% when 'organic' %}
         {% assign large_span = 2 %}

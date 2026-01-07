@@ -29,7 +29,8 @@
         "logo_TaNRWV": {
           "type": "logo",
           "settings": {
-            "link": ""
+            "brand_logo": "shopify://shop_images/macallan_logo_d79a2ecfde.webp",
+            "link": "/pages/macallan"
           }
         },
         "logo_hE7U4t": {

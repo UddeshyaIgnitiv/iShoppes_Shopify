@@ -430,6 +430,10 @@ main[data-template="page.macallan.about.us"] .shopify-section:not(.header-sectio
   padding-right: 0;
   padding-left: 0;
 }
+main[data-template="page.aboutus"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+  padding-right: 30px;
+  padding-left: 30px;
+}
 
 .shopify-section:not(.header-section):has(.section) {
   position: relative;

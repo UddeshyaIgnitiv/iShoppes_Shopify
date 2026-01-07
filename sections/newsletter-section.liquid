@@ -137,7 +137,6 @@
   }
 
   .newsletter-section p {
-    margin-bottom: 40px;
     font-size: 16px;
     color: {{ section.settings.subtext_color }};
   }
@@ -178,21 +177,48 @@
     text-decoration: none;
     transition: all 0.3s ease;
     box-shadow: 0px 0px 0px 8px {{ section.settings.button_shadow_color }};
+    cursor: pointer;
   }
 
   .newsletter-section button:hover {
     background-color: {{ section.settings.button_hover_bg }};
     box-shadow: 0px 0px 0px 8px rgba(6, 0, 0, 0.1);
   }
+
+  .newsletter-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+  }
+
+  .newsletter-success {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+  }
+
+  .newsletter-error {
+    background-color: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+  }
 {% endstyle %}
 
 <section class="newsletter-section">
   <h2>{{ section.settings.heading }}</h2>
   <p>{{ section.settings.subtext }}</p>
-  <form method="post" action="{{ routes.newsletter_subscribe_url }}">
-    <input type="hidden" name="form_type" value="customer">
-    <input type="hidden" name="utf8" value="✓">
+  
+  {% form 'customer', class: 'contact-form' %}
+    <input type="hidden" name="contact[tags]" value="newsletter">
     <input type="email" name="contact[email]" placeholder="Email" required>
     <button type="submit">{{ section.settings.button_text }}</button>
-  </form>
+    
+    {% if form.posted_successfully? %}
+      <div class="newsletter-message newsletter-success">
+        <p>Thanks for subscribing!</p>
+      </div>
+    {% elsif form.errors %}
+      <div class="newsletter-message newsletter-error">
+        <p>{{ form.errors | default_errors }}</p>
+      </div>
+    {% endif %}
+  {% endform %}
 </section>

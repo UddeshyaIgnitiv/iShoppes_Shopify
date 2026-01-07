@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "featured_brands": {
+      "type": "official-stores",
+      "settings": {
+        "title": "OFFICIAL STORES"
+      }
+    },
+    "all_vendors": {
+      "type": "all-vendors",
+      "settings": {
+        "title": "ALL BRANDS"
+      }
+    }
+  },
+  "order": [
+    "featured_brands",
+    "all_vendors"
+  ]
+}
+

@@ -58,6 +58,7 @@
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 15px;
+    box-sizing: border-box;
   }
 
   /* Button */
@@ -93,6 +94,28 @@
     text-align: center;
     line-height: 1.4;
   }
+
+  /* Message Box */
+  #popup-message {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 14px;
+    display: none;
+  }
+
+  #popup-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  #popup-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
 </style>
 
 <!-- Overlay -->
@@ -108,10 +131,17 @@
     Join our list and we'll send your special offer and exclusive promotions.
   </p>
 
-  <input type="text" id="popup-name" class="popup-input" placeholder="Name">
-  <input type="email" id="popup-email"  name="contact[email]" class="popup-input" placeholder="Email">
+  <form id="popup-form">
+    <input type="text" id="popup-name" class="popup-input" placeholder="Name" required>
+    <input type="email" id="popup-email" name="contact[email]" class="popup-input" placeholder="Email" required>
+    <input type="hidden" name="form_type" value="customer">
+    <input type="hidden" name="utf8" value="✓">
+    <input type="hidden" name="contact[tags]" value="newsletter,popup">
 
-  <button id="popup-submit">GET MY 10% OFFER</button>
+    <button type="submit" id="popup-submit">GET MY 10% OFFER</button>
+  </form>
+
+  <div id="popup-message"></div>
 
   <div id="popup-no-thanks">NO, THANKS</div>
 
@@ -122,7 +152,6 @@
 </div>
 
 <script>
-
   function setCookie(name, value, days) {
     const d = new Date();
     d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -149,92 +178,75 @@
   function closePopup() {
     document.getElementById("popup-overlay").style.display = "none";
     document.getElementById("newsletter-popup").style.display = "none";
-    setCookie("popup_shown", "yes", 30); // Prevent showing again for 30 days
+    setCookie("popup_shown", "yes", 30);
   }
 
+  function showMessage(message, type) {
+    const messageBox = document.getElementById("popup-message");
+    messageBox.textContent = message;
+    messageBox.className = type;
+    messageBox.style.display = "block";
+  }
 
   document.addEventListener("DOMContentLoaded", function () {
     const alreadyShown = getCookie("popup_shown");
 
     if (!alreadyShown) {
-      // Show after 5 seconds
       setTimeout(showPopup, 5000);
     }
   });
-
 
   document.getElementById("popup-close").onclick = closePopup;
   document.getElementById("popup-no-thanks").onclick = closePopup;
   document.getElementById("popup-overlay").onclick = closePopup;
 
-  // On submit
-  document.getElementById("popup-submit").onclick = function () {
+  // Form submission
+  document.getElementById("popup-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
     const name = document.getElementById("popup-name").value.trim();
     const email = document.getElementById("popup-email").value.trim();
 
     if (!name || !email) {
-      alert("Please enter both name and email.");
+      showMessage("Please enter both name and email.", "error");
       return;
     }
 
-    // Save subscriber to Shopify
-    fetch('/contact', {
+    // Disable submit button
+    const submitBtn = document.getElementById("popup-submit");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "SUBMITTING...";
+
+    // Create form data
+    const formData = new URLSearchParams();
+    formData.append('form_type', 'customer');
+    formData.append('utf8', '✓');
+    formData.append('contact[tags]', 'newsletter,popup');
+    formData.append('contact[name]', name);
+    formData.append('contact[email]', email);
+
+    fetch('/contact#contact_form', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `form_type=customer&contact[name]=${name}&contact[email]=${email}`
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData.toString()
     })
-      .then(() => {
-        alert("Thank you! Your 10% offer is on the way.");
-        closePopup();
-      })
-      .catch(() => {
-        alert("Something went wrong. Please try again.");
-      });
-  };
-
-
-// for sending email using Klaviyo
-  document.getElementById("subscribeBtn").addEventListener("click", async () => {
-    const email = document.getElementById("emailInput").value;
-    const msgBox = document.getElementById("klaviyo-msg");
-
-    if (!email) {
-      msgBox.innerText = "Please enter an email.";
-      msgBox.style.color = "red";
-      return;
-    }
-
-    const payload = {
-      data: {
-        type: "subscription",
-        attributes: {
-          list_id: "",   // OPTIONAL: Only if you want to add to a specific Klaviyo list
-          profiles: [{ email: email }]
-        }
-      }
-    };
-
-    try {
-      const response = await fetch("https://a.klaviyo.com/api/profile-subscriptions/?company_id=YOUR_KLAVIYO_PUBLIC_API_KEY", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "revision": "2024-07-15"
-        },
-        body: JSON.stringify(payload)
-      });
-
+    .then(response => {
       if (response.ok) {
-        msgBox.innerText = "Successfully subscribed!";
-        msgBox.style.color = "green";
-        document.getElementById("emailInput").value = "";
+        showMessage("Thank you! Your 10% offer is on the way.", "success");
+        document.getElementById("popup-form").reset();
+        setTimeout(closePopup, 3000);
       } else {
-        msgBox.innerText = "Failed to subscribe. Try again.";
-        msgBox.style.color = "red";
+        showMessage("Something went wrong. Please try again.", "error");
       }
-    } catch (error) {
-      msgBox.innerText = "Network error.";
-      msgBox.style.color = "red";
-    }
+    })
+    .catch(() => {
+      showMessage("Network error. Please try again.", "error");
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "GET MY 10% OFFER";
+    });
   });
 </script>

@@ -1,26 +1,48 @@
-<div class="store-locator-section container" style="display:flex;">
+<div class="store-locator-section container" style="display:flex; padding-bottom:20px;">
   <div id="airportList"></div>
   <div id="airportmap">
     <img src="https://ishoppes.com/usa_map-e7A.png">
+    <div id="locationSelector"></div>
   </div>
 </div>
 
+<!-- TERMINAL VIEW -->
 <div id="terminalDetailSection" class="terminal-section" style="display:none;">
   <h4 id="terminalAirportTitle"></h4>
   <div id="terminalCards" class="terminal-card-container"></div>
 </div>
 
+<!-- STORE VIEW -->
 <div id="storeDetailSection" class="terminal-section" style="display:none;">
-  <h2 id="storeTerminalTitle"></h2>
+  <h4 id="storeTerminalTitle"></h4>
   <div id="storeCards" class="store-card-container"></div>
 </div>
 
 <style>
 .container { width:95%; margin:auto; }
-#airportList { width:34%; }
-#airportmap { width:66%; text-align:center; }
-#airportmap img { width:90%; }
-
+#airportList {
+    width: 34%;
+    height: 550px;
+    overflow: auto;
+    padding:0 15px;
+}
+#airportmap {
+  width:66%;
+  text-align:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position: relative;
+  padding: 20px;
+ }
+#airportmap img { 
+  width:100%;
+  height: 100%;
+  object-fit: contain;
+}
+.airport-card h4 {
+    margin-bottom: 20px;
+}
 .airport-card {
   border:1px solid #000;
   padding:16px;
@@ -66,6 +88,7 @@
   width:100%;
   height:100%;
   object-fit:cover;
+  border-radius: 5px;
 }
 
 .card-name {
@@ -76,12 +99,146 @@
   font-size:18px;
   font-weight:bold;
   text-shadow:2px 2px 4px #000;
+  padding-left:10px;
 }
 
 /* Carousel when >5 */
 .carousel {
   overflow-x:auto;
   flex-wrap:nowrap;
+}
+.locationImage img{
+ width: 28px !important;
+ cursor:pointer;
+ border-radius:50%;
+}
+.locationImage{
+position:absolute;
+}
+.locationImage.locatioBDL {
+    top: 27%;
+    left: 88%;
+}
+.locationImage.locatioBWI {
+    top: 38%;
+    left: 82%;
+}
+.locationImage.locatioIAD {
+    top: 39%;
+    left: 87%;
+}
+.locationImage.locatioJFK {
+    top: 31%;
+    left: 85%;
+}
+.locationImage.locatioIAH {
+    top: 78%;
+    left: 49%;
+}
+.tooltip{
+    position: absolute;
+    top: 2px;
+    left: 4em;
+    background: #000;
+    z-index: 111;
+    color: #fff;
+    font-weight: 600;
+    padding: 2px 13px;
+    border-radius: 0 3px 3px 0;
+    font-size: 12px;
+    display:none;
+}
+span.tooltip:before {
+    content: ' ';
+    height: 0;
+    position: absolute;
+    width: 0;
+    left: -24px;
+    border: 12px solid transparent;
+    border-right-color: #000;
+    top: 0;
+}
+.locationImage:hover .tooltip{
+  display:block !important;
+}
+.locationImage:hover img {
+    transform: scale(1.2);
+    box-shadow: 3px 3px 3px #000;
+}
+.locationImage img.active {
+    transform: scale(1.2);
+    box-shadow: 3px 3px 3px #000;
+}
+
+.store-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  width: 100%;
+}
+
+.store-card {
+  min-width: 200px;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.carousel-btn {
+  border: none;
+  background: #000;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin: 0 10px;
+}
+
+.carousel-btn:hover {
+  background: #444;
+}
+@media(max-width:1200px){
+.locationImage img{
+ width: 22px !important;
+}
+.locationImage.locatioIAH {
+    top: 70%;
+}
+.locationImage.locatioBDL {
+    top: 33%;
+}
+.locationImage.locatioJFK {
+    top: 36%;
+}
+.locationImage.locatioIAD {
+    top: 42%;
+}
+.locationImage.locatioBWI {
+    top: 41%;
+}
+}
+@media(max-width:992px){
+  .store-locator-section{
+    flex-wrap: wrap;
+  }
+  #airportList {
+    width: 100%;
+    height:auto;
+}
+#airportmap {
+  display:none;
+ }
 }
 </style>
 
@@ -197,6 +354,7 @@ const airports = [
 ];
 
 const airportList = document.getElementById("airportList");
+const locationSelector = document.getElementById('locationSelector')
 
 airports.forEach((a,i)=>{
 airportList.innerHTML+=`
@@ -207,31 +365,131 @@ airportList.innerHTML+=`
 </div>`;
 });
 
-window.showTerminals=(i)=>{
-const a=airports[i];
-document.getElementById("terminalAirportTitle").innerText=`${a.code} Terminals`;
-document.getElementById("terminalCards").innerHTML=a.terminals.map((t,j)=>`
-<div class="terminal-card" onclick="showStores(${i},${j})">
-<img src="${t.image}">
-<div class="card-name">${t.name}</div>
-</div>`).join("");
-document.getElementById("terminalDetailSection").style.display="block";
-document.getElementById("storeDetailSection").style.display="none";
+airports.forEach((a, i) => {
+  locationSelector.innerHTML += `
+    <div class="locationImage locatio${a.code}">
+      <img onclick="showTerminals(${i})" data-value="${a.code}" src="https://ishoppes.com/media/catalog/product/placeholder/default/iShoppesLogoFixed_1.png">
+      <span class="tooltip">${a.code}</span>
+    </div>
+  `;
+});
+
+window.showTerminals = (i) => {
+
+  const a = airports[i];
+
+  const wrappers = document.querySelectorAll(".locationImage");
+
+  wrappers.forEach(w => {
+    w.querySelector("img").classList.remove("active");
+    w.querySelector(".tooltip").style.display = "none";
+  });
+
+  const target = document.querySelector(`.locationImage.locatio${a.code}`);
+
+  if (target) {
+    const img = target.querySelector("img");
+    const tooltip = target.querySelector(".tooltip");
+
+    img.classList.add("active");
+    tooltip.style.display = "block";
+  }
+
+  document.getElementById("terminalAirportTitle").innerText =
+    `${a.code} Terminals`;
+
+  document.getElementById("terminalCards").innerHTML =
+    a.terminals.map((t, j) => `
+      <div class="terminal-card" onclick="showStores(${i},${j})">
+        <img src="${t.image}">
+        <div class="card-name">${t.name}</div>
+      </div>
+    `).join("");
+
+  const terminalSection = document.getElementById("terminalDetailSection");
+  terminalSection.style.display = "block";
+
+  document.getElementById("storeDetailSection").style.display = "none";
+  const offset = -200; 
+
+  const y =
+    terminalSection.getBoundingClientRect().top +
+    window.pageYOffset +
+    offset;
+
+  window.scrollTo({
+    top: y,
+    behavior: "smooth"
+  });
 };
 
-window.showStores=(i,j)=>{
-const t=airports[i].terminals[j];
-document.getElementById("storeTerminalTitle").innerText=t.name+" Stores";
-const wrapClass = t.stores.length>5 ? "carousel" : "";
-document.getElementById("storeCards").className="store-card-container "+wrapClass;
-document.getElementById("storeCards").innerHTML=t.stores.map(s=>`
-<div class="store-card">
-<img src="${s.image}">
-<div class="card-name">${s.name}</div>
-</div>`).join("");
-document.getElementById("storeDetailSection").style.display="block";
-document.getElementById("storeDetailSection").scrollIntoView({behavior:"smooth"});
+window.showStores = (i, j) => {
+  const t = airports[i].terminals[j];
+
+  document.getElementById("storeTerminalTitle").innerText =
+    t.name + " Stores";
+
+  const storeCards = document.getElementById("storeCards");
+  storeCards.innerHTML = "";
+
+  if (t.stores.length > 5) {
+    storeCards.className = "store-carousel";
+
+    storeCards.innerHTML = `
+      <div class="carousel-track">
+        ${t.stores.map(s => `
+          <div class="store-card">
+            <img src="${s.image}">
+            <div class="card-name">${s.name}</div>
+          </div>
+        `).join("")}
+      </div>
+     <div>
+      <button class="carousel-btn prev">‹</button>
+      <button class="carousel-btn next">›</button>
+     </div>
+    `;
+
+    const track = storeCards.querySelector(".carousel-track");
+    const prevBtn = storeCards.querySelector(".prev");
+    const nextBtn = storeCards.querySelector(".next");
+
+    const cardWidth = 220; 
+
+    prevBtn.onclick = () => {
+      track.scrollBy({ left: -cardWidth, behavior: "smooth" });
+    };
+
+    nextBtn.onclick = () => {
+      track.scrollBy({ left: cardWidth, behavior: "smooth" });
+    };
+
+  } else {
+    storeCards.className = "store-card-container";
+
+    storeCards.innerHTML = t.stores.map(s => `
+      <div class="store-card">
+        <img src="${s.image}">
+        <div class="card-name">${s.name}</div>
+      </div>
+    `).join("");
+  }
+
+const storeSection = document.getElementById("storeDetailSection");
+storeSection.style.display = "block";
+
+const offset = -200; // keep 100px space on top
+const y =
+  storeSection.getBoundingClientRect().top +
+  window.pageYOffset +
+  offset;
+
+window.scrollTo({
+  top: y,
+  behavior: "smooth"
+});
 };
+
 </script>
 
 {% schema %}

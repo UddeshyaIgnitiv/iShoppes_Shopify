@@ -36,7 +36,8 @@
         "logo_hE7U4t": {
           "type": "logo",
           "settings": {
-            "link": ""
+            "brand_logo": "shopify://shop_images/chanel_logo2_9760e7bdbd.jpg",
+            "link": "/pages/chanel"
           }
         }
       },

@@ -5,13 +5,11 @@
   </div>
 </div>
 
-<!-- TERMINAL VIEW -->
 <div id="terminalDetailSection" class="terminal-section" style="display:none;">
-  <h2 id="terminalAirportTitle"></h2>
+  <h4 id="terminalAirportTitle"></h4>
   <div id="terminalCards" class="terminal-card-container"></div>
 </div>
 
-<!-- STORE VIEW -->
 <div id="storeDetailSection" class="terminal-section" style="display:none;">
   <h2 id="storeTerminalTitle"></h2>
   <div id="storeCards" class="store-card-container"></div>
@@ -145,12 +143,12 @@ const airports = [
         { name: "Estee Lauder", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/estee_lauder_2d4ccdc91c.jpg?v=1767764358" },
         { name: "Hermes", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/t1_hermes_0aa8d4d864.webp?v=1767764371" },
         { name: "iS Beauty", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/t1_beauty_04701dff6d.jpg?v=1767764385" },
-        { name: "iS Duty Free", image: "IS_DUTY_FREE_IMAGE_URL" },
-        { name: "Longchamp", image: "LONGCHAMP_IMAGE_URL" },
-        { name: "Salvatore Ferragamo", image: "FERRAGAMO_IMAGE_URL" },
-        { name: "Chanel", image: "CHANEL_IMAGE_URL" },
-        { name: "Dior", image: "DIOR_IMAGE_URL" },
-        { name: "Beauty Concept", image: "BEAUTY_CONCEPT_IMAGE_URL" }
+        { name: "iS Duty Free", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/t1_duty_free_ee190535d5.webp?v=1767764760" },
+        { name: "Longchamp", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/Longchamp_2f3610cac7.jpg?v=1767764770" },
+        { name: "Salvatore Ferragamo", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/t1_ferragamo_5131da00f7.webp?v=1767764793" },
+        { name: "Chanel", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/T1_CHANEL_new_6aca5767ff.webp?v=1767765016" },
+        { name: "Dior", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/t1_dior_c1dcbd56e7_1.jpg?v=1767765182" },
+        { name: "Beauty Concept", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/Photo_Jul_31_2024_4_42_32_PM_1_f1a6adc74f_1.jpg?v=1767765249" }
       ]
     },
     {
@@ -203,7 +201,7 @@ const airportList = document.getElementById("airportList");
 airports.forEach((a,i)=>{
 airportList.innerHTML+=`
 <div class="airport-card">
-  <h3>${a.code} - ${a.city}</h3>
+  <h4>${a.code} - ${a.city}</h4>
   <p>${a.name}</p>
   <button onclick="showTerminals(${i})">View Terminals</button>
 </div>`;

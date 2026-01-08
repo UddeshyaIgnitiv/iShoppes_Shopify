@@ -146,6 +146,9 @@
         "slide_CDdX4W",
         "slide_VzzQtB"
       ],
+      "custom_css": [
+        "@media screen and (max-width: 430px) {.slideshow-margin-wrapper .slide__image-container {height: 932px !important;}}"
+      ],
       "name": "MobileSlideShow",
       "settings": {
         "icons_style": "arrow",

@@ -45,7 +45,13 @@
     assign scroll_mode = 'horizontal'
   endif
 -%}
-
+{% stylesheet %}
+  @media screen and (max-width: 800px) {
+    .slideshow-controls__dots{
+      display: none;
+    }
+  }
+{% endstylesheet %}
 <slideshow-controls
   class="slideshow-controls {{ class }}"
   pagination-position="{{ pagination_position }}"

@@ -72,8 +72,8 @@
         "slide_9dnNhV"
       ],
       "custom_css": [
-        "@media screen and (max-width: 1920px) {.slideshow-margin-wrapper .slide__image-container {height: 640px !important; }}",
-        "@media screen and (max-width: 800px) {.slideshow-margin-wrapper .slide__image-container {height: 488px !important; }}"
+        "@media screen and (max-width: 1920px) {.slideshow-margin-wrapper .slide__image-container {height: 640px; }}",
+        "@media screen and (max-width: 800px) {.slideshow-margin-wrapper .slide__image-container {height: 488px; }}"
       ],
       "name": "t:names.slideshow",
       "settings": {

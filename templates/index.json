@@ -99,7 +99,7 @@
             "vertical_alignment": "center",
             "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "center",
-            "vertical_alignment_flex_direction_column": "space-between",
+            "vertical_alignment_flex_direction_column": "center",
             "gap": 12,
             "inherit_color_scheme": true,
             "color_scheme": "",
@@ -108,7 +108,7 @@
             "overlay_style": "gradient",
             "gradient_direction": "to bottom",
             "padding-block-start": 0,
-            "padding-block-end": 20,
+            "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },

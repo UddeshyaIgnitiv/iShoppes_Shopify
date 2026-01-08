@@ -73,7 +73,7 @@
       ],
       "custom_css": [
         "@media screen and (min-width: 1920px) {.slideshow-margin-wrapper .slide__image-container {height: 640px; }}",
-        "@media screen and (max-width: 800px) {.slideshow-margin-wrapper .slide__image-container {height: 488px; }}"
+        "@media screen and (max-width: 800px) {.slideshow-margin-wrapper .slide__image-container {height: 265px; }}"
       ],
       "name": "t:names.slideshow",
       "settings": {

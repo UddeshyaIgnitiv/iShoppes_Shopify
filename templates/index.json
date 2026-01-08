@@ -72,7 +72,7 @@
         "slide_9dnNhV"
       ],
       "custom_css": [
-        "@media screen and (max-width: 1920px) {.slideshow-margin-wrapper .slide__image-container {height: 932px !important; }}"
+        "@media screen and (max-width: 1920px) {.slideshow-margin-wrapper .slide__image-container {height: 640px !important; }}"
       ],
       "name": "t:names.slideshow",
       "settings": {

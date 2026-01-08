@@ -51,7 +51,7 @@
   </div>
 </div>
 
-{% stylesheet %}
+{% style %}
 /* 45px margin left & right for slideshow container */
 .slideshow-margin-wrapper {
   margin-left: 33px !important;
@@ -88,12 +88,22 @@
 
 /* Mobile: reduce margins to 15px */
 @media screen and (max-width: 800px) {
-  .slideshow-margin-wrapper {
-    margin-left: 0px !important;
-    margin-right: 0px !important;
-    height: auto !important;
-    min-height: 200px;
-  }
+  {% if request.page_type == 'index' %}
+    .slideshow-margin-wrapper {
+      margin-left: 0px !important;
+      margin-right: 0px !important;
+      height: auto !important;
+      min-height: 200px;
+      max-height: 265px;
+    }
+  {% else %}
+    .slideshow-margin-wrapper {
+      margin-left: 0px !important;
+      margin-right: 0px !important;
+      height: auto !important;
+      min-height: 200px;
+    }
+  {% endif %}
   .slideshow-margin-wrapper .slideshow__slide {
     height: auto !important;
   }
@@ -103,7 +113,7 @@
     object-fit: contain !important;
   }
 }
-{% endstylesheet %}
+{% endstyle %}
 
 {% if request.page_type == 'index' %}
   {% style %}
@@ -303,14 +313,14 @@
     {
       "name": "t:names.slideshow",
       "category": "t:categories.storytelling",
-      "blocks": {
-        "slide_1": {
+      "blocks": [
+        {
           "type": "_slide",
           "settings": {
             "horizontal_alignment_flex_direction_column": "center"
           },
-          "blocks": {
-            "group": {
+          "blocks": [
+            {
               "type": "group",
               "settings": {
                 "horizontal_alignment_flex_direction_column": "center",
@@ -325,40 +335,38 @@
                 "padding-block-start": 48,
                 "padding-block-end": 48
               },
-              "blocks": {
-                "heading": {
+              "blocks": [
+                {
                   "type": "text",
                   "settings": {
                     "text": "<h2>New arrivals</h2>"
                   }
                 },
-                "text": {
+                {
                   "type": "text",
                   "settings": {
                     "text": "<p>Introducing our latest products, made especially for the season. Shop your favorites before they're gone!</p>",
                     "padding-block-end": 20
                   }
                 },
-                "button": {
+                {
                   "type": "button",
                   "settings": {
                     "label": "Shop now",
                     "link": "shopify://collections/all"
                   }
                 }
-              },
-              "block_order": ["heading", "text", "button"]
+              ]
             }
-          },
-          "block_order": ["group"]
+          ]
         },
-        "slide_2": {
+        {
           "type": "_slide",
           "settings": {
             "horizontal_alignment_flex_direction_column": "center"
           },
-          "blocks": {
-            "group": {
+          "blocks": [
+            {
               "type": "group",
               "settings": {
                 "horizontal_alignment_flex_direction_column": "center",
@@ -373,35 +381,32 @@
                 "padding-block-start": 48,
                 "padding-block-end": 48
               },
-              "blocks": {
-                "heading": {
+              "blocks": [
+                {
                   "type": "text",
                   "settings": {
                     "text": "<h2>Bestsellers</h2>"
                   }
                 },
-                "text": {
+                {
                   "type": "text",
                   "settings": {
                     "text": "<p>Discover the bestsellers that have captured the hearts of our customers with their perfect blend of functionality and style.</p>",
                     "padding-block-end": 20
                   }
                 },
-                "button": {
+                {
                   "type": "button",
                   "settings": {
                     "label": "Shop now",
                     "link": "shopify://collections/all"
                   }
                 }
-              },
-              "block_order": ["heading", "text", "button"]
+              ]
             }
-          },
-          "block_order": ["group"]
+          ]
         }
-      },
-      "block_order": ["slide_1", "slide_2"]
+      ]
     }
   ]
 }

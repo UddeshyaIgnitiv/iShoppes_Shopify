@@ -2,7 +2,7 @@
 {
   "name": "Duty Free Steps",
   "tag": "section",
-  "class": "duty-free-steps",
+  "class": "duty-free-steps-section",
   "settings": [
     {
       "type": "text",
@@ -39,6 +39,13 @@
     text-align: center;
     margin:0 33px;
   }
+  .duty-free-steps-section {
+    background-color: #000;
+    color: #fff;
+    padding: 40px 0px;
+    text-align: center;
+    margin:0 33px;
+  }
   .banner-wrapper {
     position:relative;
   }
@@ -57,6 +64,13 @@
   }
 
   .duty-free-steps h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 20px 0px 20px 33px;
+    text-align: left;
+    color: #fff;
+  }
+  .duty-free-steps-section h2 {
     font-size: 20px;
     font-weight: 500;
     margin: 20px 0px 20px 33px;
@@ -130,6 +144,11 @@
       margin: 0;
       width: 100%;
     }
+    .duty-free-steps-section {
+      padding: 50px 0px 0px 8px;
+      margin: 0;
+      width: 100%;
+    }
     .homepage-banner-heading {
       width: 300px;
     }
@@ -138,6 +157,12 @@
     }
     .start-shopping-btn {
       margin-bottom: 25px;
+    }
+  }
+  @media screen and (max-width: 800px) {
+    .duty-free-steps-section {
+      margin: 0;
+      width: 100%;
     }
   }
 {% endstyle %}

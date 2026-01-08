@@ -71,12 +71,15 @@
         "slide_EVEiXg",
         "slide_9dnNhV"
       ],
+      "custom_css": [
+        "@media screen and (max-width: 768px) {.slideshow-margin-wrapper .slide__image-container {height: 932px !important; }}"
+      ],
       "name": "t:names.slideshow",
       "settings": {
         "icons_style": "arrows_large",
         "slideshow_controls_style": "dots",
         "color_scheme": "",
-        "autoplay": true,
+        "autoplay": false,
         "autoplay_speed": 4,
         "section_width": "full-width",
         "slide_height": "medium",

@@ -99,7 +99,7 @@
             "vertical_alignment": "center",
             "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "center",
-            "vertical_alignment_flex_direction_column": "flex-end",
+            "vertical_alignment_flex_direction_column": "flex-start",
             "gap": 12,
             "inherit_color_scheme": true,
             "color_scheme": "",
@@ -156,7 +156,7 @@
         "section_width": "full-width",
         "slide_height": "auto",
         "padding-block-start": 0,
-        "padding-block-end": 10
+        "padding-block-end": 0
       }
     },
     "duty_free_works": {

@@ -43,6 +43,7 @@
       "custom_css": [],
       "settings": {
         "content_direction": "column",
+        "page_width": "page-width-content",
         "gap": 0,
         "color_scheme": "",
         "padding-block-start": 0,
@@ -160,7 +161,7 @@
         "autoplay": false,
         "autoplay_speed": 4,
         "section_width": "full-width",
-        "slide_height": "medium",
+        "slide_height": "small",
         "padding-block-start": 0,
         "padding-block-end": 0
       }

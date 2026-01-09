@@ -158,7 +158,7 @@
         "icons_style": "none",
         "slideshow_controls_style": "dots",
         "color_scheme": "scheme-1",
-        "autoplay": true,
+        "autoplay": false,
         "autoplay_speed": 4,
         "section_width": "full-width",
         "slide_height": "large",

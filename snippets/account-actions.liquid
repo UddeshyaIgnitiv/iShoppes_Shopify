@@ -25,18 +25,21 @@
               {{ 'content.account_orders' | t }}
             </a>
           </li>
+
           <li class="account-actions__list-item">
             <a href="{{ routes.account_addresses_url }}" class="account-actions__links button-secondarys">
               <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_favorites' | t }}
             </a>
           </li>
+
           <li class="account-actions__list-item">
             <a href="{{ routes.account_addresses_url }}" class="account-actions__links button-secondarys">
               <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_profile' | t }}
             </a>
           </li>
+
           <li class="account-actions__list-item">
             <a href="{{ routes.account_logout_url }}" class="account-actions__links button-secondarys">
               <span class="account-actions__icon" aria-hidden="true"></span>
@@ -122,7 +125,7 @@
           {% endif %}
 
           <div class="form-actions">
-            <button type="submit" class="button">SEND RESET LINK</button>
+            <button type="submit" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
             <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
         {% endform %}
@@ -219,11 +222,8 @@
 
       <script>
         (function () {
-          // ============ HEADER ============
+          // ================= HEADER =================
           const headerTitleEl = document.getElementById('AccountHeaderTitle');
-
-          // These headings are for guest (not logged in) UI only.
-          // You can change them to match your theme exactly.
           const HEADER_DEFAULT = 'Sign-in or Create an Account';
           const HEADER_FORGOT  = 'Forgot password';
 
@@ -231,14 +231,13 @@
             if (headerTitleEl) headerTitleEl.textContent = text;
           }
 
-          // ============ BLOCKS ============
+          // ================= BLOCKS =================
           const loginBlock = document.getElementById('LoginBlock');
           const registerBlock = document.getElementById('RegisterBlock');
           const recoverBlock = document.getElementById('RecoverBlock');
 
           const showRegisterBtn = document.getElementById('ShowRegisterBtn');
           const cancelRegisterBtn = document.getElementById('CancelRegisterBtn');
-
           const showRecoverBtn = document.getElementById('ShowRecoverBtn');
           const backToLoginBtn = document.getElementById('BackToLoginBtn');
 
@@ -247,6 +246,9 @@
             block?.classList.remove('is-hidden');
             block?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
+
+          // Default header (guest)
+          setHeader(HEADER_DEFAULT);
 
           // LOGIN -> REGISTER
           showRegisterBtn?.addEventListener('click', (e) => {
@@ -280,27 +282,64 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // Default header on load (guest)
-          setHeader(HEADER_DEFAULT);
+          // ==========================================================
+          // ✅ OPTION 1 (WORKING): Shopify WILL redirect to /account/login
+          // We "bounce back" to the original page and re-open Recover UI
+          // ==========================================================
+          const RETURN_KEY = 'recover_return_to_url';
 
-          // ============ OPTION 1: KEEP USER ON RECOVER SCREEN AFTER SHOPIFY REDIRECT ============
-          // Shopify redirects recover form POST to /account/login?reset_password_success=true
-          // We'll detect that param and automatically show Recover screen again.
-          (function keepRecoverOpenAfterRedirect() {
+          // Save the page URL BEFORE the recover form submits
+          const recoverForm = document.getElementById('RecoverPasswordForm');
+          recoverForm?.addEventListener('submit', () => {
+            const currentUrl = window.location.href.split('#')[0];
+            sessionStorage.setItem(RETURN_KEY, currentUrl);
+          });
+
+          // Handle Shopify redirect + bounce-back
+          (function handleShopifyRecoverRedirect() {
             const params = new URLSearchParams(window.location.search);
-            const isResetSuccess = params.has('reset_password_success');
+            const onAccountLogin = window.location.pathname.indexOf('/account/login') === 0;
 
-            if (isResetSuccess && recoverBlock) {
-              showOnly(recoverBlock);
+            const isResetSuccess =
+              params.has('reset_password_success') ||
+              params.get('reset_password_success') === 'true' ||
+              params.get('reset_password_success') === '1';
+
+            // A) We landed on /account/login?reset_password_success=true (Shopify forced)
+            if (onAccountLogin && isResetSuccess) {
+              const returnTo = sessionStorage.getItem(RETURN_KEY);
+
+              if (returnTo) {
+                sessionStorage.removeItem(RETURN_KEY);
+
+                // Send back to the original page with a flag to open recover UI
+                const sep = returnTo.includes('?') ? '&' : '?';
+                window.location.replace(returnTo + sep + 'recover=success');
+                return;
+              }
+
+              // Fallback: if no return URL stored, at least show recover UI here
               setHeader(HEADER_FORGOT);
+              showOnly(recoverBlock);
+              window.history.replaceState({}, document.title, window.location.pathname);
+              return;
+            }
+
+            // B) We are back on the original page with ?recover=success
+            if (params.get('recover') === 'success') {
+              setHeader(HEADER_FORGOT);
+              showOnly(recoverBlock);
               document.getElementById('RecoverEmail')?.focus();
 
-              // Optional: clean URL so refresh doesn't keep forcing recover mode
-              window.history.replaceState({}, document.title, window.location.pathname);
+              // Clean the URL (remove recover param)
+              params.delete('recover');
+              const newQs = params.toString();
+              const cleanUrl = window.location.pathname + (newQs ? '?' + newQs : '');
+              window.history.replaceState({}, document.title, cleanUrl);
             }
           })();
 
-          // ============ REGISTER VALIDATIONS + CONTROLLED SUBMIT ============
+          // ================= REGISTER VALIDATIONS + CONTROLLED SUBMIT =================
           const form = document.getElementById('ClassicRegisterForm');
           const submitBtn = document.getElementById('RegisterSubmitBtn');
 
@@ -393,8 +432,8 @@
           submitBtn?.addEventListener('click', () => {
             const ok = validateRegisterForm();
             if (!ok) return;
-            packNote();
 
+            packNote();
             submitBtn.disabled = true;
             submitBtn.textContent = 'PLEASE WAIT...';
             form.submit();
@@ -406,9 +445,8 @@
 </div>
 
 {% stylesheet %}
-  #account-popover{
-    width: 25%;
-  }
+  #account-popover{ width: 25%; }
+
   .account-actions {
     background-color: var(--color-background);
     display: flex;
@@ -493,12 +531,7 @@
     margin-block: -4px;
   }
 
-  .form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 1rem;
-  }
+  .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
   .form-field label { font-weight: 600; font-size: 0.9rem; }
 
   .form-field .input {

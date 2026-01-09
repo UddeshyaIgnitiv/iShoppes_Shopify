@@ -202,14 +202,13 @@
         el.addEventListener('change', validateDepartureTime);
     });
 
-    // Prevent submit if validation fails
     form.addEventListener('submit', function(e) {
         if (!validateDepartureTime()) {
             e.preventDefault();
         }
     });
 
-    // Save to cookies and reload
+    // Save in cookies and reload
     function setCookie(name, value, hrs = 24) {
         const d = new Date();
         d.setTime(d.getTime() + (hrs * 60 * 60 * 1000));
@@ -230,5 +229,120 @@
         window.location.reload();
     });
     </script>
+    <script>
+      (function () {
+        try {
+          function setCookie(name, value, hrs = 24) {
+            try {
+              const d = new Date();
+              d.setTime(d.getTime() + hrs * 60 * 60 * 1000);
+              document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + d.toUTCString() + ";path=/";
+            } catch (e) {}
+          }
+
+          function getCookie(name) {
+            try {
+              const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+              return match ? decodeURIComponent(match[2]) : null;
+            } catch (e) {
+              return null;
+            }
+          }
+          
+          //SAVE DATA TO SHOPIFY CART
+          function saveToShopifyCart(properties) {
+            try {
+              fetch('/cart/update.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  attributes: properties
+                })
+              });
+            } catch (e) {}
+          }
+
+          function collectDepartureData() {
+            try {
+              return {
+                Airport: airportSelect?.options[airportSelect.selectedIndex]?.text || '',
+                Airline: airlineselect?.options[airlineselect.selectedIndex]?.text || '',
+                Flight: flightselect?.options[flightselect.selectedIndex]?.text || '',
+                Destination: destinationselect?.options[destinationselect.selectedIndex]?.text || '',
+                DepartureDate: departuredate?.value || '',
+                DepartureTime: `${departurehours?.value || ''}:${departureminutes?.value || ''} ${departuremeridiem?.value || ''}`,
+                Seat: seatno?.value || ''
+              };
+            } catch (e) {
+              return {};
+            }
+          }
+
+          const form = document.querySelector('#terminal-selection-div form');
+
+          if (form) {
+            form.addEventListener('submit', function () {
+              try {
+                const data = collectDepartureData();
+
+                Object.keys(data).forEach(key => {
+                  if (data[key]) setCookie(key, data[key], 48);
+                });
+
+                saveToShopifyCart(data);
+
+              } catch (e) {}
+            });
+          }
+
+          function updateHeaderTerminalInfo() {
+            try {
+              const airport = getCookie('Airport');
+              if (!airport) return;
+
+              const container = document.querySelector('.header-terminalInfoDefault.terminal-select-btn');
+              if (!container) return;
+
+              const img = container.querySelector('img');
+              if (img) img.remove();
+
+              let label = container.querySelector('.airport-label');
+              if (!label) {
+                label = document.createElement('span');
+                label.className = 'airport-label';
+                label.style.fontWeight = '600';
+                container.appendChild(label);
+              }
+
+              label.textContent = airport;
+            } catch (e) {}
+          }
+
+          (function () {
+            let raf = null;
+
+            const observer = new MutationObserver(() => {
+              cancelAnimationFrame(raf);
+              raf = requestAnimationFrame(updateHeaderTerminalInfo);
+            });
+
+            observer.observe(document.documentElement, {
+              childList: true,
+              subtree: true
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+              updateHeaderTerminalInfo();
+            });
+          })();
+
+          {% comment %} document.addEventListener('DOMContentLoaded', updateHeaderTerminalInfo); {% endcomment %}
+
+        } catch (e) {
+          // Absolute fail-safe
+          console.warn('Departure script skipped safely');
+        }
+      })();
+      </script>
   </body>
 </html>

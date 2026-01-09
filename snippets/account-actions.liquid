@@ -21,28 +21,51 @@
                 autofocus
               {% endif %}
             >
-              <span class="account-actions__icons" aria-hidden="true"></span>
+              <span
+                class="account-actions__icons"
+                aria-hidden="true"
+              >
+              </span>
               {{ 'content.account_orders' | t }}
             </a>
           </li>
-
           <li class="account-actions__list-item">
-            <a href="{{ routes.account_addresses_url }}" class="account-actions__links button-secondarys">
-              <span class="account-actions__icon" aria-hidden="true"></span>
+            <a
+              href="{{ routes.account_addresses_url }}"
+              class="account-actions__links button-secondarys"
+            >
+              <span
+                class="account-actions__icon"
+                aria-hidden="true"
+              >
+              </span>
               {{ 'content.account_favorites' | t }}
             </a>
           </li>
-
           <li class="account-actions__list-item">
-            <a href="{{ routes.account_addresses_url }}" class="account-actions__links button-secondarys">
-              <span class="account-actions__icon" aria-hidden="true"></span>
+            <a
+              href="{{ routes.account_addresses_url }}"
+              class="account-actions__links button-secondarys"
+            >
+              <span
+                class="account-actions__icon"
+                aria-hidden="true"
+              >
+              </span>
               {{ 'content.account_profile' | t }}
             </a>
           </li>
 
           <li class="account-actions__list-item">
-            <a href="{{ routes.account_logout_url }}" class="account-actions__links button-secondarys">
-              <span class="account-actions__icon" aria-hidden="true"></span>
+            <a
+              href="{{ routes.account_logout_url }}"
+              class="account-actions__links button-secondarys"
+            >
+              <span
+                class="account-actions__icon"
+                aria-hidden="true"
+              >
+              </span>
               {{ 'actions.log_out' | t }}
             </a>
           </li>
@@ -66,29 +89,14 @@
 
           <div class="form-field">
             <label for="LoginEmail">Email address*</label>
-            <input
-              id="LoginEmail"
-              class="input"
-              type="email"
-              name="customer[email]"
-              value="{{ form.email | escape }}"
-              autocomplete="email"
-              required
-              aria-required="true"
-            >
+            <input id="LoginEmail" class="input" type="email" name="customer[email]"
+              value="{{ form.email | escape }}" autocomplete="email" required aria-required="true">
           </div>
 
           <div class="form-field">
             <label for="LoginPassword">Password*</label>
-            <input
-              id="LoginPassword"
-              class="input"
-              type="password"
-              name="customer[password]"
-              autocomplete="current-password"
-              required
-              aria-required="true"
-            >
+            <input id="LoginPassword" class="input" type="password" name="customer[password]"
+              autocomplete="current-password" required aria-required="true">
           </div>
 
           <a href="#" id="ShowRecoverBtn" class="link" style="margin-inline-start:auto;">Forgot password?</a>
@@ -125,7 +133,7 @@
           {% endif %}
 
           <div class="form-actions">
-            <button type="submit" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
+            <button type="submit" class="button">SEND RESET LINK</button>
             <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
         {% endform %}
@@ -169,18 +177,8 @@
 
           <div class="form-field">
             <label for="RegMobile">Mobile Number*</label>
-            <input
-              id="RegMobile"
-              class="input"
-              type="text"
-              name="reg_mobile"
-              required
-              aria-required="true"
-              inputmode="numeric"
-              autocomplete="tel"
-              minlength="7"
-              maxlength="15"
-            >
+            <input id="RegMobile" class="input" type="text" name="reg_mobile" required aria-required="true"
+              inputmode="numeric" autocomplete="tel" minlength="7" maxlength="15">
             <p id="RegMobileError" class="field-error is-hidden" role="alert" aria-live="polite">
               Mobile Number is not valid
             </p>
@@ -222,8 +220,11 @@
 
       <script>
         (function () {
-          // ================= HEADER =================
+          // ===== Header title switching =====
           const headerTitleEl = document.getElementById('AccountHeaderTitle');
+
+          // Put whatever your default heading should be:
+          // If your theme text is "Sign-in or Create an Account", set it here.
           const HEADER_DEFAULT = 'Sign-in or Create an Account';
           const HEADER_FORGOT  = 'Forgot password';
 
@@ -231,13 +232,14 @@
             if (headerTitleEl) headerTitleEl.textContent = text;
           }
 
-          // ================= BLOCKS =================
+          // ===== Blocks =====
           const loginBlock = document.getElementById('LoginBlock');
           const registerBlock = document.getElementById('RegisterBlock');
           const recoverBlock = document.getElementById('RecoverBlock');
 
           const showRegisterBtn = document.getElementById('ShowRegisterBtn');
           const cancelRegisterBtn = document.getElementById('CancelRegisterBtn');
+
           const showRecoverBtn = document.getElementById('ShowRecoverBtn');
           const backToLoginBtn = document.getElementById('BackToLoginBtn');
 
@@ -246,9 +248,6 @@
             block?.classList.remove('is-hidden');
             block?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
-
-          // Default header (guest)
-          setHeader(HEADER_DEFAULT);
 
           // LOGIN -> REGISTER
           showRegisterBtn?.addEventListener('click', (e) => {
@@ -266,7 +265,7 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // LOGIN -> RECOVER
+          // LOGIN -> RECOVER (change header)
           showRecoverBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_FORGOT);
@@ -274,7 +273,7 @@
             document.getElementById('RecoverEmail')?.focus();
           });
 
-          // RECOVER -> LOGIN
+          // RECOVER -> LOGIN (restore header)
           backToLoginBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -282,64 +281,10 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // ==========================================================
-          // ✅ OPTION 1 (WORKING): Shopify WILL redirect to /account/login
-          // We "bounce back" to the original page and re-open Recover UI
-          // ==========================================================
-          const RETURN_KEY = 'recover_return_to_url';
+          // Ensure initial header is default
+          setHeader(HEADER_DEFAULT);
 
-          // Save the page URL BEFORE the recover form submits
-          const recoverForm = document.getElementById('RecoverPasswordForm');
-          recoverForm?.addEventListener('submit', () => {
-            const currentUrl = window.location.href.split('#')[0];
-            sessionStorage.setItem(RETURN_KEY, currentUrl);
-          });
-
-          // Handle Shopify redirect + bounce-back
-          (function handleShopifyRecoverRedirect() {
-            const params = new URLSearchParams(window.location.search);
-            const onAccountLogin = window.location.pathname.indexOf('/account/login') === 0;
-
-            const isResetSuccess =
-              params.has('reset_password_success') ||
-              params.get('reset_password_success') === 'true' ||
-              params.get('reset_password_success') === '1';
-
-            // A) We landed on /account/login?reset_password_success=true (Shopify forced)
-            if (onAccountLogin && isResetSuccess) {
-              const returnTo = sessionStorage.getItem(RETURN_KEY);
-
-              if (returnTo) {
-                sessionStorage.removeItem(RETURN_KEY);
-
-                // Send back to the original page with a flag to open recover UI
-                const sep = returnTo.includes('?') ? '&' : '?';
-                window.location.replace(returnTo + sep + 'recover=success');
-                return;
-              }
-
-              // Fallback: if no return URL stored, at least show recover UI here
-              setHeader(HEADER_FORGOT);
-              showOnly(recoverBlock);
-              window.history.replaceState({}, document.title, window.location.pathname);
-              return;
-            }
-
-            // B) We are back on the original page with ?recover=success
-            if (params.get('recover') === 'success') {
-              setHeader(HEADER_FORGOT);
-              showOnly(recoverBlock);
-              document.getElementById('RecoverEmail')?.focus();
-
-              // Clean the URL (remove recover param)
-              params.delete('recover');
-              const newQs = params.toString();
-              const cleanUrl = window.location.pathname + (newQs ? '?' + newQs : '');
-              window.history.replaceState({}, document.title, cleanUrl);
-            }
-          })();
-
-          // ================= REGISTER VALIDATIONS + CONTROLLED SUBMIT =================
+          // ===== Register validations + controlled submit =====
           const form = document.getElementById('ClassicRegisterForm');
           const submitBtn = document.getElementById('RegisterSubmitBtn');
 
@@ -421,10 +366,8 @@
             if (RegNote) RegNote.value = parts.filter(Boolean).join(' | ');
           }
 
-          // Prevent native submit (we submit only after validation)
           form?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
 
-          // Prevent Enter key from triggering submit without our checks
           form?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); submitBtn?.click(); }
           });
@@ -432,7 +375,6 @@
           submitBtn?.addEventListener('click', () => {
             const ok = validateRegisterForm();
             if (!ok) return;
-
             packNote();
             submitBtn.disabled = true;
             submitBtn.textContent = 'PLEASE WAIT...';
@@ -445,8 +387,9 @@
 </div>
 
 {% stylesheet %}
-  #account-popover{ width: 25%; }
-
+  #account-popover{
+    width: 25%;
+  }
   .account-actions {
     background-color: var(--color-background);
     display: flex;
@@ -500,36 +443,21 @@
     opacity: 0;
     pointer-events: none;
   }
-
   .account-actions__nav {
     padding: var(--padding-xl);
     padding-block-start: 0;
   }
 
   .account-actions__list {
-    display: block;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--gap-sm);
-    width: 100%;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm);
+    width: 100%; list-style: none; margin: 0; padding: 0;
   }
   @media (max-width: 300px) { .account-actions__list { grid-template-columns: 1fr; } }
 
   .account-actions__link {
-    width: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--gap-2xs);
+    width: auto; display: flex; justify-content: center; align-items: center; gap: var(--gap-2xs);
   }
-  .account-actions__icon {
-    display: flex;
-    width: var(--icon-size-sm);
-    height: var(--icon-size-sm);
-    margin-block: -4px;
-  }
+  .account-actions__icon { display: flex; width: var(--icon-size-sm); height: var(--icon-size-sm); margin-block: -4px; }
 
   .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
   .form-field label { font-weight: 600; font-size: 0.9rem; }

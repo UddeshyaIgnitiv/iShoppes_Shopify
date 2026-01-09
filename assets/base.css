@@ -3236,8 +3236,8 @@ slideshow-slides {
   width: 100%;
   position: relative;
   display: flex;
-  overflow-x: hidden;
-  overflow-y: visible;
+  overflow-x: scroll;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-color: transparent transparent;
@@ -3296,6 +3296,8 @@ slideshow-component[disabled='true'] slideshow-slides {
 slideshow-component[mobile-disabled] slideshow-slides {
   @media screen and (max-width: 749px) {
     overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
 }
 

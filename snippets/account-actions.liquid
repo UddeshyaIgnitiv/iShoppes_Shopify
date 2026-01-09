@@ -21,51 +21,25 @@
                 autofocus
               {% endif %}
             >
-              <span
-                class="account-actions__icons"
-                aria-hidden="true"
-              >
-              </span>
+              <span class="account-actions__icons" aria-hidden="true"></span>
               {{ 'content.account_orders' | t }}
             </a>
           </li>
           <li class="account-actions__list-item">
-            <a
-              href="{{ routes.account_addresses_url }}"
-              class="account-actions__links button-secondarys"
-            >
-              <span
-                class="account-actions__icon"
-                aria-hidden="true"
-              >
-              </span>
+            <a href="{{ routes.account_addresses_url }}" class="account-actions__links button-secondarys">
+              <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_favorites' | t }}
             </a>
           </li>
           <li class="account-actions__list-item">
-            <a
-              href="{{ routes.account_addresses_url }}"
-              class="account-actions__links button-secondarys"
-            >
-              <span
-                class="account-actions__icon"
-                aria-hidden="true"
-              >
-              </span>
+            <a href="{{ routes.account_addresses_url }}" class="account-actions__links button-secondarys">
+              <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_profile' | t }}
             </a>
           </li>
-
           <li class="account-actions__list-item">
-            <a
-              href="{{ routes.account_logout_url }}"
-              class="account-actions__links button-secondarys"
-            >
-              <span
-                class="account-actions__icon"
-                aria-hidden="true"
-              >
-              </span>
+            <a href="{{ routes.account_logout_url }}" class="account-actions__links button-secondarys">
+              <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'actions.log_out' | t }}
             </a>
           </li>
@@ -89,14 +63,29 @@
 
           <div class="form-field">
             <label for="LoginEmail">Email address*</label>
-            <input id="LoginEmail" class="input" type="email" name="customer[email]"
-              value="{{ form.email | escape }}" autocomplete="email" required aria-required="true">
+            <input
+              id="LoginEmail"
+              class="input"
+              type="email"
+              name="customer[email]"
+              value="{{ form.email | escape }}"
+              autocomplete="email"
+              required
+              aria-required="true"
+            >
           </div>
 
           <div class="form-field">
             <label for="LoginPassword">Password*</label>
-            <input id="LoginPassword" class="input" type="password" name="customer[password]"
-              autocomplete="current-password" required aria-required="true">
+            <input
+              id="LoginPassword"
+              class="input"
+              type="password"
+              name="customer[password]"
+              autocomplete="current-password"
+              required
+              aria-required="true"
+            >
           </div>
 
           <a href="#" id="ShowRecoverBtn" class="link" style="margin-inline-start:auto;">Forgot password?</a>
@@ -177,8 +166,18 @@
 
           <div class="form-field">
             <label for="RegMobile">Mobile Number*</label>
-            <input id="RegMobile" class="input" type="text" name="reg_mobile" required aria-required="true"
-              inputmode="numeric" autocomplete="tel" minlength="7" maxlength="15">
+            <input
+              id="RegMobile"
+              class="input"
+              type="text"
+              name="reg_mobile"
+              required
+              aria-required="true"
+              inputmode="numeric"
+              autocomplete="tel"
+              minlength="7"
+              maxlength="15"
+            >
             <p id="RegMobileError" class="field-error is-hidden" role="alert" aria-live="polite">
               Mobile Number is not valid
             </p>
@@ -220,11 +219,11 @@
 
       <script>
         (function () {
-          // ===== Header title switching =====
+          // ============ HEADER ============
           const headerTitleEl = document.getElementById('AccountHeaderTitle');
 
-          // Put whatever your default heading should be:
-          // If your theme text is "Sign-in or Create an Account", set it here.
+          // These headings are for guest (not logged in) UI only.
+          // You can change them to match your theme exactly.
           const HEADER_DEFAULT = 'Sign-in or Create an Account';
           const HEADER_FORGOT  = 'Forgot password';
 
@@ -232,7 +231,7 @@
             if (headerTitleEl) headerTitleEl.textContent = text;
           }
 
-          // ===== Blocks =====
+          // ============ BLOCKS ============
           const loginBlock = document.getElementById('LoginBlock');
           const registerBlock = document.getElementById('RegisterBlock');
           const recoverBlock = document.getElementById('RecoverBlock');
@@ -265,7 +264,7 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // LOGIN -> RECOVER (change header)
+          // LOGIN -> RECOVER
           showRecoverBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_FORGOT);
@@ -273,7 +272,7 @@
             document.getElementById('RecoverEmail')?.focus();
           });
 
-          // RECOVER -> LOGIN (restore header)
+          // RECOVER -> LOGIN
           backToLoginBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -281,10 +280,27 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // Ensure initial header is default
+          // Default header on load (guest)
           setHeader(HEADER_DEFAULT);
 
-          // ===== Register validations + controlled submit =====
+          // ============ OPTION 1: KEEP USER ON RECOVER SCREEN AFTER SHOPIFY REDIRECT ============
+          // Shopify redirects recover form POST to /account/login?reset_password_success=true
+          // We'll detect that param and automatically show Recover screen again.
+          (function keepRecoverOpenAfterRedirect() {
+            const params = new URLSearchParams(window.location.search);
+            const isResetSuccess = params.has('reset_password_success');
+
+            if (isResetSuccess && recoverBlock) {
+              showOnly(recoverBlock);
+              setHeader(HEADER_FORGOT);
+              document.getElementById('RecoverEmail')?.focus();
+
+              // Optional: clean URL so refresh doesn't keep forcing recover mode
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }
+          })();
+
+          // ============ REGISTER VALIDATIONS + CONTROLLED SUBMIT ============
           const form = document.getElementById('ClassicRegisterForm');
           const submitBtn = document.getElementById('RegisterSubmitBtn');
 
@@ -366,8 +382,10 @@
             if (RegNote) RegNote.value = parts.filter(Boolean).join(' | ');
           }
 
+          // Prevent native submit (we submit only after validation)
           form?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
 
+          // Prevent Enter key from triggering submit without our checks
           form?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); submitBtn?.click(); }
           });
@@ -376,6 +394,7 @@
             const ok = validateRegisterForm();
             if (!ok) return;
             packNote();
+
             submitBtn.disabled = true;
             submitBtn.textContent = 'PLEASE WAIT...';
             form.submit();
@@ -443,23 +462,43 @@
     opacity: 0;
     pointer-events: none;
   }
+
   .account-actions__nav {
     padding: var(--padding-xl);
     padding-block-start: 0;
   }
 
   .account-actions__list {
-    display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm);
-    width: 100%; list-style: none; margin: 0; padding: 0;
+    display: block;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap-sm);
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
   @media (max-width: 300px) { .account-actions__list { grid-template-columns: 1fr; } }
 
   .account-actions__link {
-    width: auto; display: flex; justify-content: center; align-items: center; gap: var(--gap-2xs);
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-2xs);
   }
-  .account-actions__icon { display: flex; width: var(--icon-size-sm); height: var(--icon-size-sm); margin-block: -4px; }
+  .account-actions__icon {
+    display: flex;
+    width: var(--icon-size-sm);
+    height: var(--icon-size-sm);
+    margin-block: -4px;
+  }
 
-  .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
   .form-field label { font-weight: 600; font-size: 0.9rem; }
 
   .form-field .input {

@@ -155,7 +155,7 @@
       ],
       "name": "MobileSlideShow",
       "settings": {
-        "icons_style": "none",
+        "icons_style": "arrow",
         "slideshow_controls_style": "dots",
         "color_scheme": "scheme-1",
         "autoplay": true,

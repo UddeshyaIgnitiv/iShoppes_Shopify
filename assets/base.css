@@ -3295,9 +3295,7 @@ slideshow-component[disabled='true'] slideshow-slides {
 
 slideshow-component[mobile-disabled] slideshow-slides {
   @media screen and (max-width: 749px) {
-    /* overflow: hidden; */
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden;
   }
 }
 
@@ -3341,6 +3339,10 @@ slideshow-slide.product-media-container--tallest {
     slideshow-component[actioned] & {
       content-visibility: visible;
     }
+  }
+  slideshow-slides {
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
 }
 

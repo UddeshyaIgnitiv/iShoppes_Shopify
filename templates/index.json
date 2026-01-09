@@ -151,7 +151,7 @@
         "slide_VzzQtB"
       ],
       "custom_css": [
-        "@media screen and (max-width: 768px) {.slideshow-margin-wrapper .slide__image-container {height: 932px !important; }}"
+        "@media screen and (max-width: 768px) {.slideshow-margin-wrapper .slide__image-container {height: 932px !important; min-height: 932px; }}"
       ],
       "name": "MobileSlideShow",
       "settings": {

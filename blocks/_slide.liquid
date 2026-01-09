@@ -140,6 +140,17 @@
   attributes: block.shopify_attributes
 %}
 
+{% if page.handle == 'glenfiddich' %}
+  {% style %}
+    @media screen and (min-width: 1920px) {
+      .slide__image-container > .slide__image {
+        object-fit: fill;
+        height: 485px;
+      }
+    }
+  {% endstyle %}
+{% endif %}
+
 {% stylesheet %}
   .slide__content {
     height: 100%;

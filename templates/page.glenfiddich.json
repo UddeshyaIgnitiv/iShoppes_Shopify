@@ -195,9 +195,7 @@
         "slide_iVpYeL",
         "slide_HbL8Dc"
       ],
-      "custom_css": [
-        "@media screen and (min-width: 1024px) {.slide__image-container>.slide__image {object-fit: cover; height: 649px; }}"
-      ],
+      "custom_css": [],
       "name": "desktopSlider",
       "settings": {
         "icons_style": "chevron",

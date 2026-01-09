@@ -3341,8 +3341,8 @@ slideshow-slide.product-media-container--tallest {
     }
   }
   slideshow-slides {
-    overflow-x: hidden;
-    overflow-y: scroll;
+    /* overflow-x: hidden;
+    overflow-y: scroll; */
   }
 }
 

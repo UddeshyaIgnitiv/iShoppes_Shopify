@@ -150,7 +150,21 @@
     }
   {% endstyle %}
 {% endif %}
-
+{% if page.handle == 'macallan' %}
+  {% style %}
+    @media screen and (min-width: 1920px) {
+      slideshow-slide > .slide__image-container {
+        /* object-fit: fill; */
+        height: 684px;
+      }
+      .slide__image-container > .slide__image {
+        /* object-fit: fill; */
+        height: 684px;
+      }
+    }
+  {% endstyle %}
+{% endif %}
+ 
 {% stylesheet %}
   .slide__content {
     height: 100%;

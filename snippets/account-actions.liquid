@@ -1,7 +1,7 @@
 <div class="account-actions">
   <div class="account-actions__main-menu">
     <header class="account-actions__header">
-      <span class="account-actions__title h5">
+      <span class="account-actions__title h5" id="AccountHeaderTitle">
         {% if customer and customer.first_name != blank %}
           {{ 'content.account_title_personalized' | t: first_name: customer.first_name }}
         {% else %}
@@ -9,6 +9,7 @@
         {% endif %}
       </span>
     </header>
+
     {% if customer.email %}
       <nav class="account-actions__nav">
         <ul class="account-actions__list">
@@ -88,38 +89,52 @@
 
           <div class="form-field">
             <label for="LoginEmail">Email address*</label>
-            <input
-              id="LoginEmail"
-              class="input"
-              type="email"
-              name="customer[email]"
-              value="{{ form.email | escape }}"
-              autocomplete="email"
-              required
-              aria-required="true"
-            >
+            <input id="LoginEmail" class="input" type="email" name="customer[email]"
+              value="{{ form.email | escape }}" autocomplete="email" required aria-required="true">
           </div>
 
           <div class="form-field">
             <label for="LoginPassword">Password*</label>
-            <input
-              id="LoginPassword"
-              class="input"
-              type="password"
-              name="customer[password]"
-              autocomplete="current-password"
-              required
-              aria-required="true"
-            >
+            <input id="LoginPassword" class="input" type="password" name="customer[password]"
+              autocomplete="current-password" required aria-required="true">
           </div>
 
-          <a href="{{ routes.account_recover_url }}" class="link" style="margin-inline-start:auto;">Forgot password?</a>
+          <a href="#" id="ShowRecoverBtn" class="link" style="margin-inline-start:auto;">Forgot password?</a>
 
           <div class="form-actions">
-            <!-- SIGN IN (white) -->
             <button type="submit" class="account-actions__link button">SIGN IN</button>
-            <!-- TOGGLE REGISTER (black) -->
             <button type="button" id="ShowRegisterBtn" class="account-actions__link button-secondary">CREATE AN ACCOUNT</button>
+          </div>
+        {% endform %}
+      </div>
+
+      <!-- ================= RECOVER BLOCK (HIDDEN) ================= -->
+      <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RecoverBlock">
+        {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
+          <div class="form-field">
+            <label for="RecoverEmail">Email*</label>
+            <input id="RecoverEmail" class="input" type="email" name="email" autocomplete="email" required aria-required="true">
+          </div>
+
+          {% if form.errors %}
+            <div class="form-errors" role="alert" aria-live="polite">
+              <ul class="errors">
+                {% for field in form.errors %}
+                  <li>{{ form.errors.messages[field] }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {% if form.posted_successfully? %}
+            <div class="form-success" role="status" aria-live="polite">
+              If an account exists for that email, you’ll receive a password reset email shortly.
+            </div>
+          {% endif %}
+
+          <div class="form-actions">
+            <button type="submit" class="button">SEND RESET LINK</button>
+            <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
         {% endform %}
       </div>
@@ -162,12 +177,19 @@
 
           <div class="form-field">
             <label for="RegMobile">Mobile Number*</label>
-            <input id="RegMobile" class="input" type="tel" required aria-required="true" inputmode="tel" placeholder="+91 98765 43210">
+            <input id="RegMobile" class="input" type="text" name="reg_mobile" required aria-required="true"
+              inputmode="numeric" autocomplete="tel" minlength="7" maxlength="15">
+            <p id="RegMobileError" class="field-error is-hidden" role="alert" aria-live="polite">
+              Mobile Number is not valid
+            </p>
           </div>
 
           <div class="form-field">
             <label for="RegPassword">Password*</label>
             <input id="RegPassword" class="input" type="password" name="customer[password]" required aria-required="true" autocomplete="new-password">
+            <p id="RegPasswordError" class="field-error is-hidden" role="alert" aria-live="polite">
+              Password must contain atleast 1 lowercase and 1 uppercase letter, 1 digit and a special character.
+            </p>
           </div>
 
           <div class="form-field">
@@ -187,13 +209,10 @@
             </label>
           </div>
 
-          <!-- Pack extra fields into note so they're saved -->
           <input type="hidden" id="RegNote" name="customer[note]" value="">
 
           <div class="form-actions">
-            <!-- CREATE (white) -->
-            <button type="submit" class="button">CREATE AN ACCOUNT</button>
-            <!-- CANCEL (black) -->
+            <button type="button" id="RegisterSubmitBtn" class="button">CREATE AN ACCOUNT</button>
             <button type="button" id="CancelRegisterBtn" class="button-secondary">CANCEL</button>
           </div>
         {% endform %}
@@ -201,63 +220,165 @@
 
       <script>
         (function () {
+          // ===== Header title switching =====
+          const headerTitleEl = document.getElementById('AccountHeaderTitle');
+
+          // Put whatever your default heading should be:
+          // If your theme text is "Sign-in or Create an Account", set it here.
+          const HEADER_DEFAULT = 'Sign-in or Create an Account';
+          const HEADER_FORGOT  = 'Forgot password';
+
+          function setHeader(text) {
+            if (headerTitleEl) headerTitleEl.textContent = text;
+          }
+
+          // ===== Blocks =====
           const loginBlock = document.getElementById('LoginBlock');
           const registerBlock = document.getElementById('RegisterBlock');
-          const showBtn = document.getElementById('ShowRegisterBtn');
-          const cancelBtn = document.getElementById('CancelRegisterBtn');
+          const recoverBlock = document.getElementById('RecoverBlock');
 
-          function showRegister(e) {
-            e?.preventDefault();
-            loginBlock?.classList.add('is-hidden');
-            registerBlock?.classList.remove('is-hidden');
+          const showRegisterBtn = document.getElementById('ShowRegisterBtn');
+          const cancelRegisterBtn = document.getElementById('CancelRegisterBtn');
+
+          const showRecoverBtn = document.getElementById('ShowRecoverBtn');
+          const backToLoginBtn = document.getElementById('BackToLoginBtn');
+
+          function showOnly(block) {
+            [loginBlock, registerBlock, recoverBlock].forEach(el => el?.classList.add('is-hidden'));
+            block?.classList.remove('is-hidden');
+            block?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+
+          // LOGIN -> REGISTER
+          showRegisterBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            setHeader(HEADER_DEFAULT);
+            showOnly(registerBlock);
             document.getElementById('RegFirst')?.focus();
-            registerBlock?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-          function showLogin(e) {
-            e?.preventDefault();
-            registerBlock?.classList.add('is-hidden');
-            loginBlock?.classList.remove('is-hidden');
+          });
+
+          // REGISTER -> LOGIN
+          cancelRegisterBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            setHeader(HEADER_DEFAULT);
+            showOnly(loginBlock);
             document.getElementById('LoginEmail')?.focus();
-            loginBlock?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
+          });
 
-          showBtn?.addEventListener('click', showRegister);
-          cancelBtn?.addEventListener('click', showLogin);
+          // LOGIN -> RECOVER (change header)
+          showRecoverBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            setHeader(HEADER_FORGOT);
+            showOnly(recoverBlock);
+            document.getElementById('RecoverEmail')?.focus();
+          });
 
-          // Required-field messages
-          function reqMsg(el, missingMsg, typeMsg) {
-            if (!el) return;
-            el.addEventListener('invalid', () => {
-              if (el.validity.valueMissing) el.setCustomValidity(missingMsg || 'This field is required.');
-              else if (typeMsg && el.validity.typeMismatch) el.setCustomValidity(typeMsg);
-            });
-            el.addEventListener('input', () => el.setCustomValidity(''));
-          }
-          ['RegFirst','RegLast','RegPassword','RegMobile'].forEach(id => reqMsg(document.getElementById(id)));
-          reqMsg(document.getElementById('RegEmail'), 'This field is required.', 'Please enter a valid email address.');
+          // RECOVER -> LOGIN (restore header)
+          backToLoginBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            setHeader(HEADER_DEFAULT);
+            showOnly(loginBlock);
+            document.getElementById('LoginEmail')?.focus();
+          });
+
+          // Ensure initial header is default
+          setHeader(HEADER_DEFAULT);
+
+          // ===== Register validations + controlled submit =====
+          const form = document.getElementById('ClassicRegisterForm');
+          const submitBtn = document.getElementById('RegisterSubmitBtn');
 
           const RegCountry = document.getElementById('RegCountry');
           const RegTerminal = document.getElementById('RegTerminal');
+          const RegMobile = document.getElementById('RegMobile');
+          const RegPassword = document.getElementById('RegPassword');
+          const RegNote = document.getElementById('RegNote');
+
+          const RegMobileError = document.getElementById('RegMobileError');
+          const RegPasswordError = document.getElementById('RegPasswordError');
+
+          function showInlineError(input, errorEl) {
+            if (errorEl) errorEl.classList.remove('is-hidden');
+            input?.setAttribute('aria-invalid', 'true');
+          }
+          function hideInlineError(input, errorEl) {
+            if (errorEl) errorEl.classList.add('is-hidden');
+            input?.removeAttribute('aria-invalid');
+          }
+
           RegCountry?.addEventListener('invalid', () => RegCountry.setCustomValidity('Please select a country.'));
           RegCountry?.addEventListener('change', () => RegCountry.setCustomValidity(''));
+
           RegTerminal?.addEventListener('invalid', () => RegTerminal.setCustomValidity('Please select a terminal.'));
           RegTerminal?.addEventListener('change', () => RegTerminal.setCustomValidity(''));
 
-          // Pack extra fields into customer[note] before submit
-          document.getElementById('ClassicRegisterForm')?.addEventListener('submit', () => {
-            const note = document.getElementById('RegNote');
+          RegMobile?.addEventListener('input', () => {
+            RegMobile.value = RegMobile.value.replace(/[^0-9]/g, '');
+            hideInlineError(RegMobile, RegMobileError);
+          });
+
+          RegPassword?.addEventListener('input', () => {
+            hideInlineError(RegPassword, RegPasswordError);
+          });
+
+          function isValidMobile(v) { return /^[0-9]{7,15}$/.test(v); }
+          function isValidPassword(v) {
+            return /[a-z]/.test(v) && /[A-Z]/.test(v) && /[0-9]/.test(v) && /[^A-Za-z0-9]/.test(v);
+          }
+
+          function validateRegisterForm() {
+            let ok = true;
+
+            hideInlineError(RegMobile, RegMobileError);
+            hideInlineError(RegPassword, RegPasswordError);
+
+            if (form && !form.checkValidity()) {
+              form.reportValidity();
+              ok = false;
+            }
+
+            const mobile = (RegMobile?.value || '').trim();
+            if (!isValidMobile(mobile)) { showInlineError(RegMobile, RegMobileError); ok = false; }
+
+            const pw = (RegPassword?.value || '');
+            if (!isValidPassword(pw)) { showInlineError(RegPassword, RegPasswordError); ok = false; }
+
+            if (!ok) {
+              if (RegMobile && !isValidMobile(mobile)) RegMobile.focus();
+              else if (RegPassword && !isValidPassword(pw)) RegPassword.focus();
+            }
+            return ok;
+          }
+
+          function packNote() {
             const first = (document.getElementById('RegFirst')?.value || '').trim();
-            const last = (document.getElementById('RegLast')?.value || '').trim();
+            const last  = (document.getElementById('RegLast')?.value || '').trim();
             const country = RegCountry?.value || '';
-            const mobile = (document.getElementById('RegMobile')?.value || '').trim();
             const terminal = RegTerminal?.value || '';
+            const mobile = (RegMobile?.value || '').trim();
+
             const parts = [
               `Country: ${country}`,
               `Mobile: ${mobile}`,
               `Terminal: ${terminal}`,
               `Name: ${first} ${last}`.trim()
             ];
-            if (note) note.value = parts.filter(Boolean).join(' | ');
+            if (RegNote) RegNote.value = parts.filter(Boolean).join(' | ');
+          }
+
+          form?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
+
+          form?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); submitBtn?.click(); }
+          });
+
+          submitBtn?.addEventListener('click', () => {
+            const ok = validateRegisterForm();
+            if (!ok) return;
+            packNote();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'PLEASE WAIT...';
+            form.submit();
           });
         })();
       </script>
@@ -266,13 +387,15 @@
 </div>
 
 {% stylesheet %}
+  #account-popover{
+    width: 25%;
+  }
   .account-actions {
     background-color: var(--color-background);
     display: flex;
     flex-direction: column;
     position: relative;
     transition: height var(--animation-values);
-
     &:has([data-active]) .account-actions__main-menu { visibility: hidden; }
   }
 
@@ -286,32 +409,40 @@
   .account-actions__title {
     --font-h5--size: var(--font-size--lg);
     margin: 0;
-    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-  }
-
-  .account-actions__email {
-    display: flex; align-items: center; gap: var(--gap-2xs);
-    color: rgb(var(--color-foreground-rgb) / var(--opacity-60));
-    max-width: var(--account-actions-max-width);
-    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .account-actions__sign-ins {
     padding: var(--padding-xl);
     padding-block-start: 0;
     padding-block-end: var(--padding-md);
-    display: flex; flex-direction: column; gap: var(--gap-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
 
-    /* Keep forms inside the frame */
     max-width: min(640px, 100%);
+    width: 100%;
+    box-sizing: border-box;
     margin-inline: auto;
+
     max-height: 75vh;
     overflow-y: auto;
 
     transition: opacity .25s ease;
+    scrollbar-gutter: stable;
   }
-  .account-actions__sign-ins.is-hidden { opacity: 0; pointer-events: none; display: none}
 
+  @supports not (scrollbar-gutter: stable) {
+    .account-actions__sign-ins { overflow-y: scroll; }
+  }
+
+  .account-actions__sign-ins.is-hidden {
+    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+  }
   .account-actions__nav {
     padding: var(--padding-xl);
     padding-block-start: 0;
@@ -328,15 +459,16 @@
   }
   .account-actions__icon { display: flex; width: var(--icon-size-sm); height: var(--icon-size-sm); margin-block: -4px; }
 
-  /* Inputs / fields */
   .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
   .form-field label { font-weight: 600; font-size: 0.9rem; }
+
   .form-field .input {
     padding: 0.6rem 0.8rem;
     border: 1px solid rgb(var(--color-foreground-rgb) / 0.3);
     border-radius: var(--style-border-radius-buttons-secondary);
     background: var(--color-background);
-    width: 100%; box-sizing: border-box;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .form-errors {
@@ -348,39 +480,61 @@
     margin-bottom: 1rem;
   }
 
-  /* Buttons stacked + themed */
-  .form-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; align-items: stretch; }
+  .form-success {
+    background: rgb(0 128 0 / 0.10);
+    border: 1px solid rgb(0 128 0 / 0.35);
+    color: rgb(0 80 0);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 1rem;
+    align-items: stretch;
+  }
+
   .form-actions .button,
   .form-actions .button-secondary {
-    width: 100%; text-align: center; padding: 0.75rem 1rem; font-weight: 600;
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
     border-radius: var(--style-border-radius-buttons-primary);
     transition: all 0.2s ease-in-out;
   }
 
-  /* SIGN IN / CREATE (white) */
   .form-actions .button {
-    background: #ffffff; color: #000000; border: 1px solid #000000;
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
   }
   .form-actions .button:hover { background: #f3f3f3; }
 
-  /* TOGGLE / CANCEL (black) */
   .form-actions .button-secondary {
-    background: #000000; color: #ffffff; border: 1px solid #000000;
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid #000000;
   }
   .form-actions .button-secondary:hover { background: #222222; }
 
-  .link { font-size: 0.9rem; text-decoration: underline; text-align: center; margin-top: .25rem; }
-
-  /* Focus workaround for older iOS (kept from your snippet) */
-  @supports not (background-color: rgb(from red 150 g b / alpha)) {
-    .account-actions :is(a.button, a.button-secondary):focus-visible {
-      outline: none; overflow: visible; position: relative;
-    }
-    .account-actions :is(a.button, a.button-secondary):focus-visible::after {
-      content: ''; position: absolute; inset: calc(-1 * var(--focus-outline-offset));
-      border: var(--focus-outline-width) solid currentColor;
-      border-radius: var(--style-border-radius-buttons-secondary);
-      display: inherit;
-    }
+  .link {
+    font-size: 0.9rem;
+    text-decoration: underline;
+    text-align: center;
+    margin-top: .25rem;
   }
+
+  .field-error {
+    margin: 6px 0 0;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    color: #d10000;
+  }
+  .field-error.is-hidden { display: none !important; }
+
+  .input[aria-invalid="true"] { border-color: #d10000; }
 {% endstylesheet %}

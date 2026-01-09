@@ -3237,7 +3237,7 @@ slideshow-slides {
   position: relative;
   display: flex;
   overflow-x: scroll;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-color: transparent transparent;

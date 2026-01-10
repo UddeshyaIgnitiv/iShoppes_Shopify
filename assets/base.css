@@ -2686,8 +2686,10 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  width: var(--minimum-touch-target);
-  height: var(--minimum-touch-target);
+  /* width: var(--minimum-touch-target);
+  height: var(--minimum-touch-target); */
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
   color: var(--color-input-text);
 }

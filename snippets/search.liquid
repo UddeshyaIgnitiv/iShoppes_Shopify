@@ -38,12 +38,12 @@
           if (parts.length == 2) return parts.pop().split(";").shift();
         }
         var airport = getCookie("Airport");
-        alert(airport);
         var displayDiv = document.getElementById("terminal-info-display");
         var defaultDiv = document.getElementById("terminal-info-default");
         var textSpan = document.getElementById("terminal-info-text");
 
         if (airport) {
+        alert(airport);
           if (textSpan) textSpan.textContent = decodeURIComponent(airport);
           if (displayDiv) displayDiv.style.display = "block";
           if (defaultDiv) defaultDiv.style.display = "none";

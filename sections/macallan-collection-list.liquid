@@ -160,11 +160,48 @@
     }
     
     .macallan-card {
-      gap: 20px;
+      gap: 0;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .macallan-content {
+      display: contents;
     }
     
     .macallan-title {
         font-size: 1.3rem;
+        order: 1;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .macallan-description {
+        order: 2;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .macallan-price {
+        order: 3;
+        margin-bottom: 20px;
+    }
+
+    .macallan-image-wrapper {
+        order: 4;
+        width: 100%;
+        max-width: none;
+        flex: auto;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .macallan-btn {
+        order: 5;
+        width: 100%;
+        text-align: center;
     }
   }
 {% endstyle %}

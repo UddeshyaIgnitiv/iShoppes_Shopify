@@ -101,32 +101,20 @@
           "pop_shopify_font": "montserrat_n4"
         }
       },
-      "855628211100114053": {
-        "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
-        "disabled": false,
-        "settings": {}
-      },
-      "2883025457459210873": {
-        "type": "shopify://apps/wishlist-power/blocks/embed-wishlist-setup/c6cb23f2-39d1-403f-9967-53314ebdad10",
+      "17680763915837727271": {
+        "type": "shopify://apps/wishlist-plus/blocks/wishlist-app-embed/80c3b1fc-3a8f-407e-8367-ffdeebb8b612",
         "disabled": false,
         "settings": {
-          "selected_theme": "none",
-          "access_to_wishlist": "login_to_use",
-          "shared_wishlist": true,
-          "use_variants": false
-        }
-      },
-      "13997699835324413730": {
-        "type": "shopify://apps/wishlist-power/blocks/embed-wishlist-product-card/c6cb23f2-39d1-403f-9967-53314ebdad10",
-        "disabled": false,
-        "settings": {
-          "position": "top-end",
-          "border_radius": 0,
-          "icon_name": "heart",
-          "icon_size": 18,
-          "icon_thickness": 1,
-          "button_background": "#000000",
-          "icon_color": "#FFFFFF"
+          "storefront_layout_enabled": false,
+          "storefront_layout_primary_bg_color": "#000000",
+          "storefront_layout_primary_text_color": "#ffffff",
+          "storefront_layout_secondary_bg_color": "#F4F8FE",
+          "storefront_layout_secondary_text_color": "#333333",
+          "storefront_layout_ui_border_radius": 6,
+          "storefront_layout_notification_position": "left",
+          "storefront_layout_action_popup_position": "left",
+          "storefront_layout_drawer_position": "left",
+          "storefront_layout_as_section_page": ""
         }
       }
     },

@@ -1,3 +1,8 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<div class="container locationPagetitle">
+  <h1>Locations</h1>
+</div>
 <div class="store-locator-section container" style="display:flex; padding-bottom:20px;">
   <div id="airportList"></div>
   <div id="airportmap">
@@ -20,9 +25,14 @@
 
 <style>
 .container { width:95%; margin:auto; }
+#shopify-section-template--18762730930259__main{
+display:none;
+}
+.locationPagetitle{
+ padding: 2rem 0 3rem 2rem;
+}
 #airportList {
     width: 34%;
-    height: 550px;
     overflow: auto;
     padding:0 15px;
 }
@@ -34,6 +44,7 @@
   align-items:center;
   position: relative;
   padding: 20px;
+  max-width: 860px;
  }
 #airportmap img { 
   width:100%;
@@ -42,6 +53,12 @@
 }
 .airport-card h4 {
     margin-bottom: 20px;
+    font-size: 18px;
+    text-transform:uppercase;
+}
+.airportName{
+  font-size: 16px;
+  text-transform: uppercase;
 }
 .airport-card {
   border:1px solid #000;
@@ -57,6 +74,7 @@
   border-radius:8px;
   border:none;
   cursor:pointer;
+  font-size: 15px;
 }
 
 .terminal-section {
@@ -75,7 +93,7 @@
 
 .terminal-card,
 .store-card {
-  width:280px;
+  width:260px;
   height:180px;
   position:relative;
   border-radius:10px;
@@ -94,12 +112,13 @@
 .card-name {
   position:absolute;
   bottom:10px;
-  left:10px;
+  {% comment %} left:10px; {% endcomment %}
   color:#fff;
   font-size:18px;
   font-weight:bold;
   text-shadow:2px 2px 4px #000;
-  padding-left:10px;
+  width:100%;
+  text-align:center;
 }
 
 /* Carousel when >5 */
@@ -116,24 +135,24 @@
 position:absolute;
 }
 .locationImage.locatioBDL {
-    top: 27%;
-    left: 88%;
+    top: 36%;
+    left: 89%;
 }
 .locationImage.locatioBWI {
-    top: 38%;
+    top: 43%;
     left: 82%;
 }
 .locationImage.locatioIAD {
-    top: 39%;
+    top: 44%;
     left: 87%;
 }
 .locationImage.locatioJFK {
-    top: 31%;
-    left: 85%;
+    top: 39%;
+    left: 86%;
 }
 .locationImage.locatioIAH {
-    top: 78%;
-    left: 49%;
+    top: 67%;
+    left: 50%;
 }
 .tooltip{
     position: absolute;
@@ -170,13 +189,58 @@ span.tooltip:before {
     box-shadow: 3px 3px 3px #000;
 }
 
-.store-carousel {
+{% comment %} .store-carousel {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+} {% endcomment %}
+/* 🔥 SWIPER FIX */
+.store-swiper {
+  width:100%;
+  padding:10px 0 40px;
+}
+.swiper-button-next:after, .swiper-button-prev:after {
+    font-size: 17px !important;
+    width: 30px;
+    color: #fff;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    border-radius: 50%;
+}
+.swiper_navbtn{
+  display:flex;
+  justify-content:center;
+  align-items: center;
+  gap:15px;
+  {% comment %} margin-top: 20px; {% endcomment %}
 }
 
+.store-swiper .swiper-slide {
+  width:260px; /* REQUIRED */
+}
+.swiper-button-next {
+    position: relative;
+    top: 0;
+     height: 30px;
+     width: 30px;
+     margin: 0 8px;
+}
+.swiper-button-prev {
+    position: relative;
+    top: 0;
+     height: 30px;
+     width: 30px;
+     margin: 0 8px;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color:#000;
+}
 .carousel-track {
   display: flex;
   gap: 16px;
@@ -190,7 +254,7 @@ span.tooltip:before {
   flex-shrink: 0;
   background: #fff;
   border-radius: 8px;
-  padding: 10px;
+  margin: 10px;
 }
 
 .carousel-btn {
@@ -213,19 +277,19 @@ span.tooltip:before {
  width: 22px !important;
 }
 .locationImage.locatioIAH {
-    top: 70%;
+    top: 61%;
 }
 .locationImage.locatioBDL {
-    top: 33%;
+    top: 40%;
 }
 .locationImage.locatioJFK {
-    top: 36%;
-}
-.locationImage.locatioIAD {
     top: 42%;
 }
+.locationImage.locatioIAD {
+    top: 45%;
+}
 .locationImage.locatioBWI {
-    top: 41%;
+    top: 45%;
 }
 }
 @media(max-width:992px){
@@ -240,9 +304,19 @@ span.tooltip:before {
   display:none;
  }
 }
+@media(max-width:600px){
+.terminal-card{
+ width: 155px;
+ height: 155px;
+}
+.terminal-card-container {
+ flex-wrap: wrap;
+}
+}
 </style>
 
 <script>
+  let storeSwiper = null;
 const airports = [
 {
   code:"BDL",
@@ -289,7 +363,7 @@ const airports = [
 {
   code: "JFK",
   city: "Queens, NY",
-  name: "John F. Kennedy International Airport",
+  name: "NY John F. Kennedy International Airport",
   terminals: [
     {
       name: "Terminal 1",
@@ -360,7 +434,7 @@ airports.forEach((a,i)=>{
 airportList.innerHTML+=`
 <div class="airport-card">
   <h4>${a.code} - ${a.city}</h4>
-  <p>${a.name}</p>
+  <p class="airportName">${a.name}</p>
   <button onclick="showTerminals(${i})">View Terminals</button>
 </div>`;
 });
@@ -396,7 +470,7 @@ window.showTerminals = (i) => {
   }
 
   document.getElementById("terminalAirportTitle").innerText =
-    `${a.code} Terminals`;
+    `${a.code} Terminal Details`;
 
   document.getElementById("terminalCards").innerHTML =
     a.terminals.map((t, j) => `
@@ -423,51 +497,53 @@ window.showTerminals = (i) => {
   });
 };
 
-window.showStores = (i, j) => {
+window.showStores = (i,j) => {
   const t = airports[i].terminals[j];
+  const storeCards = document.getElementById("storeCards");
+  const isMobile = window.innerWidth <= 600;
 
   document.getElementById("storeTerminalTitle").innerText =
-    t.name + " Stores";
+    t.name + " Store Details";
 
-  const storeCards = document.getElementById("storeCards");
-  storeCards.innerHTML = "";
+  if (storeSwiper) {
+    storeSwiper.destroy(true,true);
+    storeSwiper = null;
+  }
 
-  if (t.stores.length > 5) {
-    storeCards.className = "store-carousel";
+  if ((!isMobile && t.stores.length > 5) || (isMobile && t.stores.length > 1)) {
 
     storeCards.innerHTML = `
-      <div class="carousel-track">
-        ${t.stores.map(s => `
-          <div class="store-card">
-            <img src="${s.image}">
-            <div class="card-name">${s.name}</div>
-          </div>
-        `).join("")}
+      <div class="swiper store-swiper">
+        <div class="swiper-wrapper">
+          ${t.stores.map(s=>`
+            <div class="swiper-slide">
+              <div class="store-card">
+                <img src="${s.image}">
+                <div class="card-name">${s.name}</div>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+
+       <div class="swiper_navbtn">
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+       </div>
       </div>
-     <div>
-      <button class="carousel-btn prev">‹</button>
-      <button class="carousel-btn next">›</button>
-     </div>
     `;
 
-    const track = storeCards.querySelector(".carousel-track");
-    const prevBtn = storeCards.querySelector(".prev");
-    const nextBtn = storeCards.querySelector(".next");
-
-    const cardWidth = 220; 
-
-    prevBtn.onclick = () => {
-      track.scrollBy({ left: -cardWidth, behavior: "smooth" });
-    };
-
-    nextBtn.onclick = () => {
-      track.scrollBy({ left: cardWidth, behavior: "smooth" });
-    };
+    storeSwiper = new Swiper(".store-swiper", {
+      slidesPerView: "auto",
+      spaceBetween: 20,
+      grabCursor: true,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      }
+    });
 
   } else {
-    storeCards.className = "store-card-container";
-
-    storeCards.innerHTML = t.stores.map(s => `
+    storeCards.innerHTML = t.stores.map(s=>`
       <div class="store-card">
         <img src="${s.image}">
         <div class="card-name">${s.name}</div>
@@ -475,21 +551,8 @@ window.showStores = (i, j) => {
     `).join("");
   }
 
-const storeSection = document.getElementById("storeDetailSection");
-storeSection.style.display = "block";
-
-const offset = -200; // keep 100px space on top
-const y =
-  storeSection.getBoundingClientRect().top +
-  window.pageYOffset +
-  offset;
-
-window.scrollTo({
-  top: y,
-  behavior: "smooth"
-});
+  document.getElementById("storeDetailSection").style.display="block";
 };
-
 </script>
 
 {% schema %}

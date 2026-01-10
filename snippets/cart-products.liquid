@@ -15,7 +15,7 @@
 >
   {% if cart.empty? %}
     {%- if shop.customer_accounts_enabled and customer == null -%}
-      <p>
+      <p onclick="(function(e){var l=e.target.closest('a');if(!l)return;e.preventDefault();var cd=e.target.closest('cart-drawer-component')||document.querySelector('cart-drawer-component[open]');if(cd&&cd.close)cd.close();setTimeout(function(){var w=window.innerWidth;var btn=null;if(w<750){var mad=document.querySelector('.header-mobile dialog-component.account-drawer')||document.querySelector('.mobile-bottom-container dialog-component.account-drawer');if(mad&&typeof mad.showDialog==='function'){mad.showDialog();return;}var mb=document.querySelector('.header-mobile .account-button')||document.querySelector('.mobile-bottom-container .account-button');if(mb)btn=mb;}else{var db=document.querySelector('.account-popover .account-button');if(db)btn=db;}if(!btn){var all=document.querySelectorAll('.account-button');for(var i=0;i<all.length;i++){if(all[i].offsetWidth>0&&all[i].offsetHeight>0){btn=all[i];break;}}}if(btn)btn.click();else window.location.href=l.href;},600);})(event)">
         {{ 'actions.log_in_html' | t: link: routes.account_login_url }}
       </p>
     {%- endif -%}
@@ -420,14 +420,17 @@
     grid-area: details;
     color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
   }
-
+  .cart-items__details div {
+    display: none;
+  }
   .cart-items__details > * + *,
   .cart-items__bundle li {
     margin-block-start: var(--margin-2xs);
   }
 
   .cart-items__details * {
-    font-size: var(--cart-font-size--sm);
+    /* font-size: var(--cart-font-size--sm); */
+    font-size: 12px;
   }
 
   .cart-items__details a {
@@ -435,7 +438,8 @@
   }
 
   .cart-items__title {
-    font-size: var(--cart-font-size--md);
+    /* font-size: var(--cart-font-size--md); */
+    font-size: 14px;
     color: var(--color-foreground);
     text-transform: var(--product-title-case);
   }
@@ -446,9 +450,9 @@
 
   .cart-items__quantity {
     grid-area: quantity;
-    margin-block-start: var(--margin-xs);
+    /* margin-block-start: var(--margin-xs); */
     display: flex;
-    align-items: center;
+    align-items: top;
     justify-content: flex-start;
     gap: var(--gap-xs);
     width: fit-content;
@@ -465,7 +469,8 @@
     background-color: transparent;
     color: var(--color-foreground);
     width: var(--minimum-touch-target);
-    height: var(--minimum-touch-target);
+    /* height: var(--minimum-touch-target); */
+    height: 25px;
     justify-content: center;
     box-shadow: none;
     padding: 0;

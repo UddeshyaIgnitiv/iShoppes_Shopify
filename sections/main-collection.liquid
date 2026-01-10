@@ -47,7 +47,7 @@
       {% assign products_per_page = cart.attributes.pagination_limit | plus: 0 %}
     {% endif %}
 
-    {% paginate collection.products by 24 %}
+    {% paginate collection.products by products_per_page %}
       {% capture children %}
         {% for product in collection.products %}
           <li
@@ -57,9 +57,36 @@
             data-product-id="{{ product.id }}"
             ref="cards[]"
           >
-            {% # theme-check-disable %}
-            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-            {% # theme-check-enable %}
+              <div class="card">
+                <a href="{{ product.url }}">
+                  <div class="card-header">
+                    <div class="vendor">{{ product.vendor | default: "Brand" }}</div>
+                    {% comment %} <div class="arrow">→</div> {% endcomment %}
+                  </div>
+                  <div class="product-details">
+                    <div class="subtitle">{{ product.title }}</div>
+                    <div class="price">{{ product.price | money }}</div>
+                  </div>
+                  {% if product.featured_image %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 300 }}"
+                      alt="{{ product.featured_image.alt | escape }}"
+                      width="300"
+                      height="200"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                      No image
+                    </div>
+                  {% endif %}
+                </a>
+                <!--<div class="wishlist">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-icon-P1l">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </div>-->
+              </div>
           </li>
         {% endfor %}
       {% endcapture %}

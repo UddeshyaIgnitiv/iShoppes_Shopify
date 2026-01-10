@@ -44,12 +44,12 @@
 
         if (airport) {
         alert(airport);
-          if (textSpan) textSpan.textContent = decodeURIComponent(airport);
-          if (displayDiv) displayDiv.style.display = "block";
-          if (defaultDiv) defaultDiv.style.display = "none";
+          textSpan.textContent = decodeURIComponent(airport);
+          displayDiv.style.display = "block";
+          defaultDiv.style.display = "none";
         } else {
-          if (displayDiv) displayDiv.style.display = "none";
-          if (defaultDiv) defaultDiv.style.display = "block";
+          displayDiv.style.display = "none";
+          defaultDiv.style.display = "block";
         }
       })();
     </script>

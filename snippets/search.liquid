@@ -21,7 +21,7 @@
       >
         {{ 'icon-search.svg' | inline_asset_content }}
       </span>
-    </button>
+    </button>{{ cart.attributes.Airport }}
     {% if cart.attributes.Airport and cart.attributes.Airport != blank %}
     <div class="header-terminalInfo text-white terminal-update-btn font-medium js-terminal-info-display">
       <span class="js-terminal-info-text">{{ cart.attributes.Airport }}</span>

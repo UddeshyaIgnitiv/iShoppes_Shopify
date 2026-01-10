@@ -103,6 +103,30 @@
 </results-list>
 
 {% stylesheet %}
+.card {
+  position: relative;
+}
+
+/* place injected wishlist wrapper above card link */
+[class^="Vtl-WishlistIcon__Wrapper--Id-"] {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 50;
+}
+
+/* if your <a> covers the card, keep it under the wishlist */
+.card > a.card-link {
+  position: relative;
+  z-index: 1;
+}
+
+/* ensure the injected button can receive clicks */
+.Vtl-WishlistButton__WishlistIconButton,
+.Vtl-WishlistButton__WishlistIconButton * {
+  pointer-events: auto;
+  position: unset;
+}
 
   .main-collection-grid {
     grid-column: var(--grid-column--mobile);

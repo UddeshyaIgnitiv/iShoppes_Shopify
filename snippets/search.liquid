@@ -22,15 +22,17 @@
         {{ 'icon-search.svg' | inline_asset_content }}
       </span>
     </button>
-    nithin{{ cart.attributes.Airport }}
+    {% if cart.attributes.Airport %}
     <div class="header-terminalInfo text-white font-medium js-terminal-info-display" style="display: none;">
-      <span class="js-terminal-info-text"></span>
+      <span class="js-terminal-info-text">{{ cart.attributes.Airport }}</span>
     </div>
+    {% else %}
     <div class="header-terminalInfoDefault terminal-select-btn js-terminal-info-default">
       <span>
         <img src="{{ 'plan.png' | asset_url }}" alt="Flight" class="flight-icon" width="25px" height="25px">
       </span>
     </div>
+    {% endif %}
   </search-button>
   <script>
     (function() {

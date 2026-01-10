@@ -44,7 +44,7 @@
 
         if (airport) {
         alert(airport);
-          textSpan.textContent = decodeURIComponent(airport);
+          textSpan.innerHTML = decodeURIComponent(airport);
           displayDiv.style.display = "block";
           defaultDiv.style.display = "none";
         } else {

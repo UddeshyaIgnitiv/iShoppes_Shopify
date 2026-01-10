@@ -22,14 +22,36 @@
         {{ 'icon-search.svg' | inline_asset_content }}
       </span>
     </button>
-    {% comment %} <div class="header-terminalInfo text-white font-medium">
-      <span>IAH-TERMINALD</span>
-    </div> {% endcomment %}
-    <div class="header-terminalInfoDefault terminal-select-btn">
+    <div id="terminal-info-display" class="header-terminalInfo text-white font-medium" style="display: none;">
+      <span id="terminal-info-text"></span>
+    </div>
+    <div id="terminal-info-default" class="header-terminalInfoDefault terminal-select-btn">
       <span>
         <img src="{{ 'plan.png' | asset_url }}" alt="Flight" class="flight-icon" width="25px" height="25px">
       </span>
     </div>
+    <script>
+      (function() {
+        function getCookie(name) {
+          var value = "; " + document.cookie;
+          var parts = value.split("; " + name + "=");
+          if (parts.length == 2) return parts.pop().split(";").shift();
+        }
+        var airport = getCookie("Airport");
+        var displayDiv = document.getElementById("terminal-info-display");
+        var defaultDiv = document.getElementById("terminal-info-default");
+        var textSpan = document.getElementById("terminal-info-text");
+
+        if (airport) {
+          if (textSpan) textSpan.textContent = decodeURIComponent(airport);
+          if (displayDiv) displayDiv.style.display = "block";
+          if (defaultDiv) defaultDiv.style.display = "none";
+        } else {
+          if (displayDiv) displayDiv.style.display = "none";
+          if (defaultDiv) defaultDiv.style.display = "block";
+        }
+      })();
+    </script>
   </search-button>
 {% endunless %}
 

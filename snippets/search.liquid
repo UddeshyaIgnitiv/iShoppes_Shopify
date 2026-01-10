@@ -35,7 +35,7 @@
     {% endif %}
   </search-button>
   <script>
-    (function() {
+    {% comment %} (function() {
       function getCookie(name) {
         var value = "; " + document.cookie;
         var parts = value.split("; " + name + "=");
@@ -77,7 +77,7 @@
       
       // Also run on DOM content loaded
       document.addEventListener('DOMContentLoaded', updateTerminalInfo);
-    })();
+    })(); {% endcomment %}
   </script>
 {% endunless %}
 

@@ -1414,7 +1414,7 @@ input:not(:placeholder-shown)::placeholder {
 button.shopify-payment-button__button--unbranded {
   --button-color: var(--color-primary-button-text);
   --button-background-color: var(--color-primary-button-background);
-  --button-border-color: var(--color-primary-button-border);
+  /* --button-border-color: var(--color-primary-button-border); */
   --button-border-width: var(--style-border-width-primary);
 }
 

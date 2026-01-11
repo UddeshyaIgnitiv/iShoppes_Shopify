@@ -470,11 +470,17 @@
     background-color: transparent;
     color: var(--color-foreground);
     width: var(--minimum-touch-target);
-    /* height: var(--minimum-touch-target); */
-    height: 25px;
+    height: var(--minimum-touch-target);
+    display: flex;
+    align-items: center;
     justify-content: center;
     box-shadow: none;
     padding: 0;
+  }
+
+  .cart-items__remove svg {
+    width: 24px;
+    height: 24px;
   }
 
   .cart-items__media {

@@ -111,27 +111,6 @@
       text-align: center;
     }
   }
-
-  /* place injected wishlist wrapper above card link */
-  [class^="Vtl-WishlistIcon__Wrapper--Id-"] {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    z-index: 50;
-  }
-
-  /* if your <a> covers the card, keep it under the wishlist */
-  .card > a.card-link {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ensure the injected button can receive clicks */
-  .Vtl-WishlistButton__WishlistIconButton,
-  .Vtl-WishlistButton__WishlistIconButton * {
-    pointer-events: auto;
-    position: initial !important;
-  }
   .card {
     background: #fff;
     width: 320px;
@@ -155,6 +134,27 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 6px;
+  }
+
+  /* place injected wishlist wrapper above card link */
+  [class^="Vtl-WishlistIcon__Wrapper--Id-"] {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 50;
+  }
+
+  /* if your <a> covers the card, keep it under the wishlist */
+  .card > a.card-link {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ensure the injected button can receive clicks */
+  .Vtl-WishlistButton__WishlistIconButton,
+  .Vtl-WishlistButton__WishlistIconButton * {
+    pointer-events: auto;
+    position: initial !important;
   }
   .vendor {
     font-weight: 600;
@@ -380,11 +380,6 @@
                   {% endif %}
                 </a>
                 <div class="Vtl-WishlistIcon__Wrapper--Id-{{ product.id }}-{{ product.handle }}"></div>
-                <!--<div class="wishlist">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-icon-P1l">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                  </svg>
-                </div>-->
               </div>
             {% endif %}
           {%- endfor -%}
@@ -417,11 +412,6 @@
               {% endif %}
             </a>
             <div class="Vtl-WishlistIcon__Wrapper--Id-{{ product.id }}-{{ product.handle }}"></div>
-            <!--<div class="wishlist">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-icon-P1l">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-              </svg>
-            </div>-->
           </div>
         {% endfor %}
       {% endif %}

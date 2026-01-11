@@ -62,7 +62,6 @@
     }
   },
   "order": [
-    "main",
     "store_locator"
   ]
 }

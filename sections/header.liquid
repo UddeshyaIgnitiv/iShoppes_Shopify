@@ -1505,7 +1505,23 @@ if (navOverlay) {
   height: 70px;
 }
 
-.mobile-bottom-container button,
+.mobile-bottom-container button {
+  background: none;
+  border: none;
+  padding: 0px 12px 8px 12px;
+  cursor: pointer;
+  color: #333;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  /* flex: 1; */
+  max-width: 100%;
+  position: relative;
+  transition: color 0.3s ease;
+  /* min-height: 50px; */
+}
 .mobile-bottom-container a {
   background: none;
   border: none;

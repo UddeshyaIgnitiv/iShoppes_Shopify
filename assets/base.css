@@ -1742,7 +1742,8 @@ zoom-dialog dialog {
   justify-content: center;
 
   /* For the outline radius */
-  border-radius: 50%;
+  /* border-radius: 50%; */
+  border: none !important;
 }
 
 /* This triggers iOS < 16.4. The outline bug is not recognized as a lack of @supports */

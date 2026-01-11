@@ -22,15 +22,6 @@
     {% render 'account-popover' %}
     {% render 'account-drawer' %}
   {% endif %}
-  <a href="/pages/wishlist" class="header-actions__action wishlist-button">
-    {% comment %} <svg class="icon-wishlist" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
-      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" 
-            stroke-width="1.5" d="M10 16.875S3.125 12.5 3.125 7.5a3.438 3.438 0 0 1 6.25-1.992A3.438 3.438 0 0 1 15.625 7.5c0 5-6.875 9.375-6.875 9.375z"/>
-    </svg> {% endcomment %}
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-icon-P1l">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-    </svg>
-  </a>
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
     {% render 'cart-drawer' %}
   {% else %}

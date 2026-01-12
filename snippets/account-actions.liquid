@@ -72,6 +72,9 @@
         </ul>
       </nav>
     {% endif %}
+    <script>
+      window.__CUSTOMER_LOGGED_IN__ = {{ customer.id | default: 0 | json }} != 0;
+    </script>
 
     {% unless customer %}
       <!-- ================= LOGIN BLOCK ================= -->
@@ -380,6 +383,82 @@
             submitBtn.textContent = 'PLEASE WAIT...';
             form.submit();
           });
+
+          // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
+          (function wishlistAuthGuard() {
+            if (window.__CUSTOMER_LOGGED_IN__) return;
+
+            function isWishlistUrl(href) {
+              if (!href) return false;
+              try {
+                const url = new URL(href, window.location.origin);
+                return url.pathname.replace(/\/+$/, '') === '/apps/page/wishlist';
+              } catch (e) {
+                return href.indexOf('/apps/page/wishlist') !== -1;
+              }
+            }
+
+            function getToast() {
+              let toast = document.getElementById('WishlistAuthToast');
+              if (toast) return toast;
+
+              toast = document.createElement('div');
+              toast.id = 'WishlistAuthToast';
+              toast.setAttribute('role', 'status');
+              toast.setAttribute('aria-live', 'polite');
+              toast.className = 'wishlist-auth-toast';
+              document.body.appendChild(toast);
+              return toast;
+            }
+
+            function showToast(msg) {
+              const toast = getToast();
+              toast.textContent = msg;
+              toast.classList.add('is-visible');
+
+              clearTimeout(toast._t);
+              toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
+            }
+
+            const MSG = 'Please sign in to your account to see saved items.';
+
+            document.addEventListener('click', function (e) {
+              const t = e.target;
+
+              // A) Header wishlist link
+              const a = t?.closest?.('a');
+              if (a && isWishlistUrl(a.getAttribute('href') || '')) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                showToast(MSG);
+                return;
+              }
+
+              // B) PLP wishlist icon button (div)
+              const plpBtn = t?.closest?.(
+                '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
+              );
+              if (plpBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                showToast(MSG);
+                return;
+              }
+
+              // C) PDP wishlist add button (div)
+              const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
+              if (pdpBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                showToast(MSG);
+                return;
+              }
+            }, true);
+          })();
+
         })();
       </script>
     {% endunless %}
@@ -387,6 +466,35 @@
 </div>
 
 {% stylesheet %}
+
+  .wishlist-auth-toast{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999999;
+
+    max-width: 340px;
+    padding: 12px 14px;
+    border-radius: 8px;
+
+    background: #111;
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.4;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .wishlist-auth-toast.is-visible{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   #account-popover{
     width: 25%;
   }
@@ -534,12 +642,11 @@
     line-height: 1.2;
     color: #d10000;
   }
-  .Vtl-WishlistPage .Vtl-WishlistPage__Products button.Vtl-WishlistProduct__AddToCart{
+  .Vtl-WishlistProduct__AddToCart{
     display: none;
   }
-
   .Vtl-WishlistPage .Vtl-WishlistPage__Title{
-    font-size: 30px
+    font-size: 30px;
   }
   .field-error.is-hidden { display: none !important; }
 

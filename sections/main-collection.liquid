@@ -57,6 +57,9 @@
             data-product-id="{{ product.id }}"
             ref="cards[]"
           >
+              {% if product.tags contains 'c-New' %}
+              <span class="new-product-tag">NEW</span>
+             {% endif %}
               <div class="card">
                 <a href="{{ product.url }}">
                   <div class="card-header">
@@ -198,6 +201,18 @@
       margin-inline-start: calc(-1 * max(var(--padding-xs), var(--padding-inline-start)));
       margin-inline-end: calc(-1 * max(var(--padding-xs), var(--padding-inline-end)));
     }
+  }
+  .new-product-tag {
+    position: absolute;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1;
+    padding: 5px 5px;
+    border-radius: 5px 5px 0 0;
+    background-color: #015EB8;
+    text-transform: uppercase;
+    margin-left: 15px;
   }
 {% endstylesheet %}
 

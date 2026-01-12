@@ -481,6 +481,8 @@
           (function wishlistAuthGuard() {
             if (window.__CUSTOMER_LOGGED_IN__) return;
 
+            const MSG = 'Please sign in to your account to see saved items.';
+
             function isWishlistUrl(href) {
               if (!href) return false;
               try {
@@ -513,12 +515,24 @@
               toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
             }
 
-            const MSG = 'Please sign in to your account to see saved items.';
+            // ---- Hide header wishlist counter for guests ----
+            function hideCounters() {
+              document
+                .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
+                .forEach(el => el.style.display = 'none');
+            }
 
+            hideCounters();
+
+            // App injects later – keep watching
+            const mo = new MutationObserver(hideCounters);
+            mo.observe(document.documentElement, { childList: true, subtree: true });
+
+            // ---- Intercept clicks everywhere ----
             document.addEventListener('click', function (e) {
               const t = e.target;
 
-              // header wishlist link
+              // A) Header wishlist link
               const a = t?.closest?.('a');
               if (a && isWishlistUrl(a.getAttribute('href') || '')) {
                 e.preventDefault();
@@ -528,8 +542,10 @@
                 return;
               }
 
-              // PLP wishlist
-              const plpBtn = t?.closest?.('.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]');
+              // B) PLP wishlist icon
+              const plpBtn = t?.closest?.(
+                '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
+              );
               if (plpBtn) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -538,7 +554,7 @@
                 return;
               }
 
-              // PDP wishlist
+              // C) PDP wishlist button
               const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
               if (pdpBtn) {
                 e.preventDefault();

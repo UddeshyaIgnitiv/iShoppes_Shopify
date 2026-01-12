@@ -9,6 +9,10 @@
         {% endif %}
       </span>
     </header>
+    {%- assign is_logged_in = false -%}
+    {%- if customer and customer.email -%}
+      {%- assign is_logged_in = true -%}
+    {%- endif -%}
 
     {% if customer.email %}
       <nav class="account-actions__nav">
@@ -385,8 +389,78 @@
     {% endunless %}
   </div>
 </div>
+<!-- message placeholder -->
+<div class="wishlist-guard-msg" data-wishlist-msg aria-live="polite"></div>
+<script>
+(function () {
+  function initWishlistGuard(root) {
+    const link = root.querySelector('[data-wishlist-link]');
+    const msgEl = root.querySelector('[data-wishlist-msg]');
+    if (!link || !msgEl) return;
+
+    const isLoggedIn = (link.getAttribute('data-logged-in') === 'true');
+
+    function showMessage() {
+      msgEl.textContent = 'Please sign in to your account to see saved items.';
+      msgEl.classList.add('is-visible');
+
+      // auto-hide after 4s (optional)
+      window.clearTimeout(msgEl._t);
+      msgEl._t = window.setTimeout(() => {
+        msgEl.classList.remove('is-visible');
+        // keep text for screen readers? if you prefer remove:
+        // msgEl.textContent = '';
+      }, 4000);
+    }
+
+    link.addEventListener('click', function (e) {
+      if (isLoggedIn) return; // allow normal navigation
+      e.preventDefault();
+      e.stopPropagation();
+      showMessage();
+    });
+  }
+
+  // Support multiple wishlist icons if theme/app renders more than one
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.Vtl-WishlistHeaderWrapper').forEach(initWishlistGuard);
+  });
+})();
+</script>
+
 
 {% stylesheet %}
+<style>
+  .wishlist-guard-msg{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+
+    max-width: 320px;
+    padding: 12px 16px;
+    border-radius: 6px;
+
+    background: #111;
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.4;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+
+    transition: opacity .25s ease, transform .25s ease;
+  }
+
+  .wishlist-guard-msg.is-visible{
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
   #account-popover{
     width: 25%;
   }

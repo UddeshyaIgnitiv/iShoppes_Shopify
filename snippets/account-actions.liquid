@@ -417,7 +417,23 @@
 
             function showSuccess() {
               ajaxSuccess?.classList.remove('is-hidden');
-              if (emailField) emailField.style.display = 'none'; // ✅ hide email field
+              if (emailField) emailField.style.display = 'none';
+
+              // ⏱ Auto-reset after 4 seconds
+              clearTimeout(showSuccess._t);
+              showSuccess._t = setTimeout(() => {
+                // Reset form state
+                recoverForm.reset();
+
+                // Hide success message
+                ajaxSuccess?.classList.add('is-hidden');
+
+                // Show email field again
+                if (emailField) emailField.style.display = '';
+
+                // Optional: bring focus back
+                recoverEmail?.focus();
+              }, 4000);
             }
             function resetUI() {
               ajaxSuccess?.classList.add('is-hidden');
@@ -478,93 +494,93 @@
           })();
 
           // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
-          (function wishlistAuthGuard() {
-            if (window.__CUSTOMER_LOGGED_IN__) return;
+  (function wishlistAuthGuard() {
+    if (window.__CUSTOMER_LOGGED_IN__) return;
 
-            const MSG = 'Please sign in to your account to see saved items.';
+    const MSG = 'Please sign in to your account to see saved items.';
 
-            function isWishlistUrl(href) {
-              if (!href) return false;
-              try {
-                const url = new URL(href, window.location.origin);
-                return url.pathname.replace(/\/+$/, '') === '/apps/page/wishlist';
-              } catch (e) {
-                return href.indexOf('/apps/page/wishlist') !== -1;
-              }
-            }
+    function isWishlistUrl(href) {
+      if (!href) return false;
+      try {
+        const url = new URL(href, window.location.origin);
+        return url.pathname.replace(/\/+$/, '') === '/apps/page/wishlist';
+      } catch (e) {
+        return href.indexOf('/apps/page/wishlist') !== -1;
+      }
+    }
 
-            function getToast() {
-              let toast = document.getElementById('WishlistAuthToast');
-              if (toast) return toast;
+    function getToast() {
+      let toast = document.getElementById('WishlistAuthToast');
+      if (toast) return toast;
 
-              toast = document.createElement('div');
-              toast.id = 'WishlistAuthToast';
-              toast.setAttribute('role', 'status');
-              toast.setAttribute('aria-live', 'polite');
-              toast.className = 'wishlist-auth-toast';
-              document.body.appendChild(toast);
-              return toast;
-            }
+      toast = document.createElement('div');
+      toast.id = 'WishlistAuthToast';
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+      toast.className = 'wishlist-auth-toast';
+      document.body.appendChild(toast);
+      return toast;
+    }
 
-            function showToast(msg) {
-              const toast = getToast();
-              toast.textContent = msg;
-              toast.classList.add('is-visible');
+    function showToast(msg) {
+      const toast = getToast();
+      toast.textContent = msg;
+      toast.classList.add('is-visible');
 
-              clearTimeout(toast._t);
-              toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
-            }
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
+    }
 
-            // ---- Hide header wishlist counter for guests ----
-            function hideCounters() {
-              document
-                .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
-                .forEach(el => el.style.display = 'none');
-            }
+    // ---- Hide header wishlist counter for guests ----
+    function hideCounters() {
+      document
+        .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
+        .forEach(el => el.style.display = 'none');
+    }
 
-            hideCounters();
+    hideCounters();
 
-            // App injects later – keep watching
-            const mo = new MutationObserver(hideCounters);
-            mo.observe(document.documentElement, { childList: true, subtree: true });
+    // App injects later – keep watching
+    const mo = new MutationObserver(hideCounters);
+    mo.observe(document.documentElement, { childList: true, subtree: true });
 
-            // ---- Intercept clicks everywhere ----
-            document.addEventListener('click', function (e) {
-              const t = e.target;
+    // ---- Intercept clicks everywhere ----
+    document.addEventListener('click', function (e) {
+      const t = e.target;
 
-              // A) Header wishlist link
-              const a = t?.closest?.('a');
-              if (a && isWishlistUrl(a.getAttribute('href') || '')) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation?.();
-                showToast(MSG);
-                return;
-              }
+      // A) Header wishlist link
+      const a = t?.closest?.('a');
+      if (a && isWishlistUrl(a.getAttribute('href') || '')) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation?.();
+        showToast(MSG);
+        return;
+      }
 
-              // B) PLP wishlist icon
-              const plpBtn = t?.closest?.(
-                '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
-              );
-              if (plpBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation?.();
-                showToast(MSG);
-                return;
-              }
+      // B) PLP wishlist icon
+      const plpBtn = t?.closest?.(
+        '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
+      );
+      if (plpBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation?.();
+        showToast(MSG);
+        return;
+      }
 
-              // C) PDP wishlist button
-              const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
-              if (pdpBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation?.();
-                showToast(MSG);
-                return;
-              }
-            }, true);
-          })();
+      // C) PDP wishlist button
+      const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
+      if (pdpBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation?.();
+        showToast(MSG);
+        return;
+      }
+    }, true);
+  })();
 
         })();
       </script>

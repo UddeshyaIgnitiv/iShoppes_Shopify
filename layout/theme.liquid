@@ -287,9 +287,8 @@
                   if (data[key]) setCookie(key, data[key], 48);
                 });
 
-                saveToShopifyCart(data).then(() => {
-                  location.reload(true);
-                });
+                saveToShopifyCart(data);
+                {% comment %} location.reload(true); {% endcomment %}
               } catch (e) {}
             });
           }

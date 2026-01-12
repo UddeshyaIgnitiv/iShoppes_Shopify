@@ -21,37 +21,27 @@
                 autofocus
               {% endif %}
             >
-              <span
-                class="account-actions__icons"
-                aria-hidden="true"
-              >
-              </span>
+              <span class="account-actions__icons" aria-hidden="true"></span>
               {{ 'content.account_orders' | t }}
             </a>
           </li>
+
           <li class="account-actions__list-item">
             <a
-              href="{{ routes.account_addresses_url }}"
+              href="{{ routes.root_url }}apps/page/wishlist"
               class="account-actions__links button-secondarys"
             >
-              <span
-                class="account-actions__icon"
-                aria-hidden="true"
-              >
-              </span>
+              <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_favorites' | t }}
             </a>
           </li>
+
           <li class="account-actions__list-item">
             <a
               href="{{ routes.account_addresses_url }}"
               class="account-actions__links button-secondarys"
             >
-              <span
-                class="account-actions__icon"
-                aria-hidden="true"
-              >
-              </span>
+              <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_profile' | t }}
             </a>
           </li>
@@ -61,17 +51,18 @@
               href="{{ routes.account_logout_url }}"
               class="account-actions__links button-secondarys"
             >
-              <span
-                class="account-actions__icon"
-                aria-hidden="true"
-              >
-              </span>
+              <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'actions.log_out' | t }}
             </a>
           </li>
         </ul>
       </nav>
     {% endif %}
+
+    <!-- Global login flag for JS (works everywhere) -->
+    <script>
+      window.__CUSTOMER_LOGGED_IN__ = {{ customer.id | default: 0 | json }} != 0;
+    </script>
 
     {% unless customer %}
       <!-- ================= LOGIN BLOCK ================= -->
@@ -89,14 +80,29 @@
 
           <div class="form-field">
             <label for="LoginEmail">Email address*</label>
-            <input id="LoginEmail" class="input" type="email" name="customer[email]"
-              value="{{ form.email | escape }}" autocomplete="email" required aria-required="true">
+            <input
+              id="LoginEmail"
+              class="input"
+              type="email"
+              name="customer[email]"
+              value="{{ form.email | escape }}"
+              autocomplete="email"
+              required
+              aria-required="true"
+            >
           </div>
 
           <div class="form-field">
             <label for="LoginPassword">Password*</label>
-            <input id="LoginPassword" class="input" type="password" name="customer[password]"
-              autocomplete="current-password" required aria-required="true">
+            <input
+              id="LoginPassword"
+              class="input"
+              type="password"
+              name="customer[password]"
+              autocomplete="current-password"
+              required
+              aria-required="true"
+            >
           </div>
 
           <a href="#" id="ShowRecoverBtn" class="link" style="margin-inline-start:auto;">Forgot password?</a>
@@ -111,9 +117,23 @@
       <!-- ================= RECOVER BLOCK (HIDDEN) ================= -->
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RecoverBlock">
         {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
-          <div class="form-field">
+
+          <div class="form-field" id="RecoverEmailField">
             <label for="RecoverEmail">Email*</label>
-            <input id="RecoverEmail" class="input" type="email" name="email" autocomplete="email" required aria-required="true">
+            <input
+              id="RecoverEmail"
+              class="input"
+              type="email"
+              name="email"
+              autocomplete="email"
+              required
+              aria-required="true"
+            >
+          </div>
+
+          <!-- ✅ Ajax success message (shown without redirect) -->
+          <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
+            If an account exists for that email, you’ll receive a password reset email shortly.
           </div>
 
           {% if form.errors %}
@@ -126,14 +146,9 @@
             </div>
           {% endif %}
 
-          {% if form.posted_successfully? %}
-            <div class="form-success" role="status" aria-live="polite">
-              If an account exists for that email, you’ll receive a password reset email shortly.
-            </div>
-          {% endif %}
-
           <div class="form-actions">
-            <button type="submit" class="button">SEND RESET LINK</button>
+            <!-- ✅ IMPORTANT: button is NOT submit -->
+            <button type="button" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
             <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
         {% endform %}
@@ -177,8 +192,18 @@
 
           <div class="form-field">
             <label for="RegMobile">Mobile Number*</label>
-            <input id="RegMobile" class="input" type="text" name="reg_mobile" required aria-required="true"
-              inputmode="numeric" autocomplete="tel" minlength="7" maxlength="15">
+            <input
+              id="RegMobile"
+              class="input"
+              type="text"
+              name="reg_mobile"
+              required
+              aria-required="true"
+              inputmode="numeric"
+              autocomplete="tel"
+              minlength="7"
+              maxlength="15"
+            >
             <p id="RegMobileError" class="field-error is-hidden" role="alert" aria-live="polite">
               Mobile Number is not valid
             </p>
@@ -220,11 +245,8 @@
 
       <script>
         (function () {
-          // ===== Header title switching =====
+          // ================= HEADER =================
           const headerTitleEl = document.getElementById('AccountHeaderTitle');
-
-          // Put whatever your default heading should be:
-          // If your theme text is "Sign-in or Create an Account", set it here.
           const HEADER_DEFAULT = 'Sign-in or Create an Account';
           const HEADER_FORGOT  = 'Forgot password';
 
@@ -232,14 +254,13 @@
             if (headerTitleEl) headerTitleEl.textContent = text;
           }
 
-          // ===== Blocks =====
+          // ================= BLOCKS =================
           const loginBlock = document.getElementById('LoginBlock');
           const registerBlock = document.getElementById('RegisterBlock');
           const recoverBlock = document.getElementById('RecoverBlock');
 
           const showRegisterBtn = document.getElementById('ShowRegisterBtn');
           const cancelRegisterBtn = document.getElementById('CancelRegisterBtn');
-
           const showRecoverBtn = document.getElementById('ShowRecoverBtn');
           const backToLoginBtn = document.getElementById('BackToLoginBtn');
 
@@ -248,6 +269,9 @@
             block?.classList.remove('is-hidden');
             block?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
+
+          // Ensure initial header is default
+          setHeader(HEADER_DEFAULT);
 
           // LOGIN -> REGISTER
           showRegisterBtn?.addEventListener('click', (e) => {
@@ -265,7 +289,7 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // LOGIN -> RECOVER (change header)
+          // LOGIN -> RECOVER
           showRecoverBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_FORGOT);
@@ -273,18 +297,18 @@
             document.getElementById('RecoverEmail')?.focus();
           });
 
-          // RECOVER -> LOGIN (restore header)
+          // RECOVER -> LOGIN
           backToLoginBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
             showOnly(loginBlock);
+            // reset recover UI each time you go back
+            document.getElementById('RecoverAjaxSuccess')?.classList.add('is-hidden');
+            document.getElementById('RecoverEmailField')?.style && (document.getElementById('RecoverEmailField').style.display = '');
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // Ensure initial header is default
-          setHeader(HEADER_DEFAULT);
-
-          // ===== Register validations + controlled submit =====
+          // ================= REGISTER VALIDATION + CONTROLLED SUBMIT =================
           const form = document.getElementById('ClassicRegisterForm');
           const submitBtn = document.getElementById('RegisterSubmitBtn');
 
@@ -380,6 +404,257 @@
             submitBtn.textContent = 'PLEASE WAIT...';
             form.submit();
           });
+          /* ====================== FORGOT PASSWORD (NO REDIRECT + SAFE + AUTO RESET) ======================
+            - No redirect to /account/recover
+            - Shows success message in popup
+            - Hides email field after submit success
+            - Auto resets form after 4s (success)
+            - Handles 429 (Too many requests): shows error, then resets form + button after 4s
+            - Prevents double submit (inFlight)
+          ================================================================================================ */
+          (function recoverNoRedirect() {
+            const recoverForm  = document.getElementById('RecoverPasswordForm');
+            const recoverEmail = document.getElementById('RecoverEmail');
+            const recoverBtn   = document.getElementById('RecoverSubmitBtn');
+
+            const ajaxSuccess  = document.getElementById('RecoverAjaxSuccess');
+            const emailField   = document.getElementById('RecoverEmailField');
+
+            if (!recoverForm || !recoverBtn) return;
+
+            // Create/locate error box
+            let ajaxError = document.getElementById('RecoverAjaxError');
+            if (!ajaxError) {
+              ajaxError = document.createElement('div');
+              ajaxError.id = 'RecoverAjaxError';
+              ajaxError.className = 'form-errors is-hidden';
+              ajaxError.setAttribute('role', 'alert');
+              ajaxError.setAttribute('aria-live', 'polite');
+              ajaxError.textContent = '';
+              // place error above success (or at top of form)
+              if (ajaxSuccess && ajaxSuccess.parentNode) {
+                ajaxSuccess.parentNode.insertBefore(ajaxError, ajaxSuccess);
+              } else {
+                recoverForm.insertBefore(ajaxError, recoverForm.firstChild);
+              }
+            }
+
+            let inFlight = false;
+            let resetTimer = null;
+
+            function showError(msg) {
+              ajaxError.textContent = msg;
+              ajaxError.classList.remove('is-hidden');
+            }
+            function hideError() {
+              ajaxError.classList.add('is-hidden');
+              ajaxError.textContent = '';
+            }
+
+            function resetRecoverUI() {
+              clearTimeout(resetTimer);
+              recoverForm.reset();
+              hideError();
+              ajaxSuccess?.classList.add('is-hidden');
+              if (emailField) emailField.style.display = '';
+              recoverBtn.disabled = false;
+              recoverBtn.textContent = 'SEND RESET LINK';
+              inFlight = false;
+              recoverEmail?.focus();
+            }
+
+            function showSuccessThenReset() {
+              ajaxSuccess?.classList.remove('is-hidden');
+              if (emailField) emailField.style.display = 'none';
+
+              clearTimeout(resetTimer);
+              resetTimer = setTimeout(() => {
+                resetRecoverUI();
+              }, 4000);
+            }
+
+            // Block any native submit always
+            recoverForm.addEventListener('submit', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation?.();
+              return false;
+            }, true);
+
+            // Block Enter key
+            recoverForm.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                recoverBtn.click();
+              }
+            }, true);
+
+            // If user edits, clear messages/timers
+            recoverEmail?.addEventListener('input', function () {
+              clearTimeout(resetTimer);
+              hideError();
+              ajaxSuccess?.classList.add('is-hidden');
+              if (emailField) emailField.style.display = '';
+            });
+
+            // Click handler (AJAX)
+            recoverBtn.addEventListener('click', async function () {
+              if (inFlight) return;
+
+              clearTimeout(resetTimer);
+              hideError();
+              ajaxSuccess?.classList.add('is-hidden');
+              if (emailField) emailField.style.display = '';
+
+              if (!recoverForm.checkValidity()) {
+                recoverForm.reportValidity();
+                return;
+              }
+
+              inFlight = true;
+              recoverBtn.disabled = true;
+              recoverBtn.textContent = 'PLEASE WAIT...';
+
+              try {
+                const res = await fetch('/account/recover', {
+                  method: 'POST',
+                  body: new FormData(recoverForm),
+                  credentials: 'same-origin',
+                });
+
+                // 429 handling (rate limit)
+                if (res.status === 429) {
+                  showError('Too many reset requests. Please wait a few minutes and try again.');
+
+                  // restore button now
+                  recoverBtn.disabled = false;
+                  recoverBtn.textContent = 'SEND RESET LINK';
+
+                  // reset form after 4s
+                  clearTimeout(resetTimer);
+                  resetTimer = setTimeout(() => {
+                    resetRecoverUI();
+                  }, 4000);
+
+                  return;
+                }
+
+                if (!res.ok) {
+                  showError('Something went wrong. Please try again in a moment.');
+                  recoverBtn.disabled = false;
+                  recoverBtn.textContent = 'SEND RESET LINK';
+                  inFlight = false;
+                  return;
+                }
+
+                // Success (Shopify response is generic)
+                showSuccessThenReset();
+
+              } catch (err) {
+                showError('Network error. Please try again.');
+                recoverBtn.disabled = false;
+                recoverBtn.textContent = 'SEND RESET LINK';
+                inFlight = false;
+              }
+            });
+
+            // If user leaves recover popup to login, reset everything
+            document.getElementById('BackToLoginBtn')?.addEventListener('click', function () {
+              resetRecoverUI();
+            });
+          })();
+
+  // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
+  (function wishlistAuthGuard() {
+    if (window.__CUSTOMER_LOGGED_IN__) return;
+
+    const MSG = 'Please sign in to your account to see saved items.';
+
+    function isWishlistUrl(href) {
+      if (!href) return false;
+      try {
+        const url = new URL(href, window.location.origin);
+        return url.pathname.replace(/\/+$/, '') === '/apps/page/wishlist';
+      } catch (e) {
+        return href.indexOf('/apps/page/wishlist') !== -1;
+      }
+    }
+
+    function getToast() {
+      let toast = document.getElementById('WishlistAuthToast');
+      if (toast) return toast;
+
+      toast = document.createElement('div');
+      toast.id = 'WishlistAuthToast';
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+      toast.className = 'wishlist-auth-toast';
+      document.body.appendChild(toast);
+      return toast;
+    }
+
+    function showToast(msg) {
+      const toast = getToast();
+      toast.textContent = msg;
+      toast.classList.add('is-visible');
+
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
+    }
+
+    // ---- Hide header wishlist counter for guests ----
+    function hideCounters() {
+      document
+        .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
+        .forEach(el => el.style.display = 'none');
+    }
+
+    hideCounters();
+
+    // App injects later – keep watching
+    const mo = new MutationObserver(hideCounters);
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+
+    // ---- Intercept clicks everywhere ----
+    document.addEventListener('click', function (e) {
+      const t = e.target;
+
+      // A) Header wishlist link
+      const a = t?.closest?.('a');
+      if (a && isWishlistUrl(a.getAttribute('href') || '')) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation?.();
+        showToast(MSG);
+        return;
+      }
+
+      // B) PLP wishlist icon
+      const plpBtn = t?.closest?.(
+        '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
+      );
+      if (plpBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation?.();
+        showToast(MSG);
+        return;
+      }
+
+      // C) PDP wishlist button
+      const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
+      if (pdpBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation?.();
+        showToast(MSG);
+        return;
+      }
+    }, true);
+  })();
+
         })();
       </script>
     {% endunless %}
@@ -387,32 +662,44 @@
 </div>
 
 {% stylesheet %}
-  #account-popover{
-    width: 25%;
+  .form-errors.is-hidden { display: none !important; }
+
+  /* Toast for wishlist auth */
+  .wishlist-auth-toast{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999999;
+
+    max-width: 340px;
+    padding: 12px 14px;
+    border-radius: 8px;
+
+    background: #111;
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.4;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+
+    transition: opacity .25s ease, transform .25s ease;
   }
-  .account-actions {
-    background-color: var(--color-background);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    transition: height var(--animation-values);
-    &:has([data-active]) .account-actions__main-menu { visibility: hidden; }
+  .wishlist-auth-toast.is-visible{
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  .account-actions__header {
-    padding: var(--padding-xl);
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-2xs);
-  }
+  /* Needed for recover success message + hide helper */
+  .form-success.is-hidden { display: none !important; }
 
-  .account-actions__title {
-    --font-h5--size: var(--font-size--lg);
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+  #account-popover{ width: 25%; }
+  .account-actions { background-color: var(--color-background); display: flex; flex-direction: column; position: relative; transition: height var(--animation-values); &:has([data-active]) .account-actions__main-menu { visibility: hidden; } }
+  .account-actions__header { padding: var(--padding-xl); display: flex; flex-direction: column; gap: var(--gap-2xs); }
+  .account-actions__title { --font-h5--size: var(--font-size--lg); margin: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
   .account-actions__sign-ins {
     padding: var(--padding-xl);
@@ -421,119 +708,46 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-sm);
-
     max-width: min(640px, 100%);
     width: 100%;
     box-sizing: border-box;
     margin-inline: auto;
-
     max-height: 75vh;
     overflow-y: auto;
-
     transition: opacity .25s ease;
     scrollbar-gutter: stable;
   }
 
-  @supports not (scrollbar-gutter: stable) {
-    .account-actions__sign-ins { overflow-y: scroll; }
-  }
+  .account-actions__sign-ins.is-hidden { display: none !important; opacity: 0; pointer-events: none; }
+  .account-actions__nav { padding: var(--padding-xl); padding-block-start: 0; }
 
-  .account-actions__sign-ins.is-hidden {
-    display: none !important;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .account-actions__nav {
-    padding: var(--padding-xl);
-    padding-block-start: 0;
-  }
-
-  .account-actions__list {
-    display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm);
-    width: 100%; list-style: none; margin: 0; padding: 0;
-  }
-  @media (max-width: 300px) { .account-actions__list { grid-template-columns: 1fr; } }
-
-  .account-actions__link {
-    width: auto; display: flex; justify-content: center; align-items: center; gap: var(--gap-2xs);
-  }
+  .account-actions__list { display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); width: 100%; list-style: none; margin: 0; padding: 0; }
+  .account-actions__link { width: auto; display: flex; justify-content: center; align-items: center; gap: var(--gap-2xs); }
   .account-actions__icon { display: flex; width: var(--icon-size-sm); height: var(--icon-size-sm); margin-block: -4px; }
 
   .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
   .form-field label { font-weight: 600; font-size: 0.9rem; }
 
-  .form-field .input {
-    padding: 0.6rem 0.8rem;
-    border: 1px solid rgb(var(--color-foreground-rgb) / 0.3);
-    border-radius: var(--style-border-radius-buttons-secondary);
-    background: var(--color-background);
-    width: 100%;
-    box-sizing: border-box;
-  }
+  .form-field .input { padding: 0.6rem 0.8rem; border: 1px solid rgb(var(--color-foreground-rgb) / 0.3); border-radius: var(--style-border-radius-buttons-secondary); background: var(--color-background); width: 100%; box-sizing: border-box; }
 
-  .form-errors {
-    background: rgb(255 0 0 / 0.1);
-    border: 1px solid red;
-    color: red;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-  }
+  .form-errors { background: rgb(255 0 0 / 0.1); border: 1px solid red; color: red; padding: 0.5rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
 
-  .form-success {
-    background: rgb(0 128 0 / 0.10);
-    border: 1px solid rgb(0 128 0 / 0.35);
-    color: rgb(0 80 0);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-  }
+  .form-success { background: rgb(0 128 0 / 0.10); border: 1px solid rgb(0 128 0 / 0.35); color: rgb(0 80 0); padding: 0.5rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
 
-  .form-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 1rem;
-    align-items: stretch;
-  }
+  .form-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; align-items: stretch; }
 
   .form-actions .button,
-  .form-actions .button-secondary {
-    width: 100%;
-    text-align: center;
-    padding: 0.75rem 1rem;
-    font-weight: 600;
-    border-radius: var(--style-border-radius-buttons-primary);
-    transition: all 0.2s ease-in-out;
-  }
+  .form-actions .button-secondary { width: 100%; text-align: center; padding: 0.75rem 1rem; font-weight: 600; border-radius: var(--style-border-radius-buttons-primary); transition: all 0.2s ease-in-out; }
 
-  .form-actions .button {
-    background: #ffffff;
-    color: #000000;
-    border: 1px solid #000000;
-  }
+  .form-actions .button { background: #ffffff; color: #000000; border: 1px solid #000000; }
   .form-actions .button:hover { background: #f3f3f3; }
 
-  .form-actions .button-secondary {
-    background: #000000;
-    color: #ffffff;
-    border: 1px solid #000000;
-  }
+  .form-actions .button-secondary { background: #000000; color: #ffffff; border: 1px solid #000000; }
   .form-actions .button-secondary:hover { background: #222222; }
 
-  .link {
-    font-size: 0.9rem;
-    text-decoration: underline;
-    text-align: center;
-    margin-top: .25rem;
-  }
+  .link { font-size: 0.9rem; text-decoration: underline; text-align: center; margin-top: .25rem; }
 
-  .field-error {
-    margin: 6px 0 0;
-    font-size: 0.85rem;
-    line-height: 1.2;
-    color: #d10000;
-  }
+  .field-error { margin: 6px 0 0; font-size: 0.85rem; line-height: 1.2; color: #d10000; }
   .field-error.is-hidden { display: none !important; }
 
   .input[aria-invalid="true"] { border-color: #d10000; }

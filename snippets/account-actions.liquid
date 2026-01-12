@@ -386,27 +386,18 @@
 
           // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
           (function wishlistAuthGuard() {
-            // If logged in, do nothing
             if (window.__CUSTOMER_LOGGED_IN__) return;
-
-            const WISHLIST_PATHS = [
-              '/apps/page/wishlist',
-              '{{ routes.root_url }}apps/page/wishlist'
-            ];
 
             function isWishlistUrl(href) {
               if (!href) return false;
               try {
                 const url = new URL(href, window.location.origin);
-                const path = url.pathname.replace(/\/+$/, '');
-                return path === '/apps/page/wishlist';
+                return url.pathname.replace(/\/+$/, '') === '/apps/page/wishlist';
               } catch (e) {
-                // relative URL fallback
                 return href.indexOf('/apps/page/wishlist') !== -1;
               }
             }
 
-            // Create toast once
             function getToast() {
               let toast = document.getElementById('WishlistAuthToast');
               if (toast) return toast;
@@ -429,43 +420,43 @@
               toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
             }
 
-            // Click interceptor (works even if element appears later)
+            const MSG = 'Please sign in to your account to see saved items.';
+
             document.addEventListener('click', function (e) {
-              const target = e.target;
+              const t = e.target;
 
-              // Case 1: Header wishlist link (<a href="/apps/page/wishlist">)
-              const a = target && target.closest ? target.closest('a') : null;
-              if (a) {
-                const href = a.getAttribute('href') || '';
-                if (isWishlistUrl(href)) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  e.stopImmediatePropagation?.();
-                  showToast('Please sign in to your account to see saved items.');
-                  return;
-                }
-              }
-
-              // Case 2: PLP/PDP wishlist button (div based)
-              const wishlistBtn = target && target.closest
-                ? target.closest('.Vtl-WishlistButton__WishlistIconButton, .Vtl-WishlistIcon__Wrapper--Id')
-                : null;
-
-              if (wishlistBtn) {
+              // A) Header wishlist link
+              const a = t?.closest?.('a');
+              if (a && isWishlistUrl(a.getAttribute('href') || '')) {
                 e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation?.();
-                showToast('Please sign in to your account to see saved items.');
+                showToast(MSG);
                 return;
               }
 
+              // B) PLP wishlist icon button (div)
+              const plpBtn = t?.closest?.(
+                '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
+              );
+              if (plpBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                showToast(MSG);
+                return;
+              }
+
+              // C) PDP wishlist add button (div)
+              const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
+              if (pdpBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                showToast(MSG);
+                return;
+              }
             }, true);
-            
-            // Also guard direct navigation (optional):
-            // If someone lands on wishlist url while not logged-in, show toast and bounce to login section.
-            if (window.location.pathname.replace(/\/+$/, '') === '/apps/page/wishlist') {
-              showToast('Please sign in to your account to see saved items.');
-            }
           })();
 
         })();
@@ -498,7 +489,6 @@
 
   transition: opacity .25s ease, transform .25s ease;
 }
-
 .wishlist-auth-toast.is-visible{
   opacity: 1;
   transform: translateY(0);

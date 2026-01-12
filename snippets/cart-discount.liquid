@@ -212,4 +212,13 @@
   .cart-discount__error-text {
     margin-block-start: var(--margin-3xs);
   }
+  @media screen and (max-width: 749px) {
+    .cart-discount__pill-remove{
+      padding: 0px !important;
+    }
+    :is(.cart-discount__pill-remove, .cart-discount__pill-remove:hover) {
+      height: 70%;
+      width: auto;
+    }
+  }
 {% endstylesheet %}

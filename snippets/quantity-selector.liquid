@@ -96,6 +96,11 @@
       background-color: #000000 !important;
       color: #fff !important;
     }
+    @media screen and (max-width: 749px) {
+      .quantity-header {
+        padding-top: 7px;
+      }
+    }
   </style>
   <div class="quantity-selector-wrapper">
       <div class="quantity-header">Qty: <span class="quantity-display-text">{{ in_cart_quantity | default: 1 }}</span></div>

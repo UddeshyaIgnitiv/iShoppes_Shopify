@@ -40,9 +40,9 @@
   }
 
   #newsletter-popup p {
-    text-align: center;
+    text-align: left;
     font-size: 14px;
-    color: #555;
+    color: #000;
     margin-bottom: 20px;
   }
 
@@ -73,6 +73,10 @@
     cursor: pointer;
   }
 
+  .popup-notes {
+    margin-top: 12px;
+  }
+
   #popup-message {
     margin-top: 15px;
     padding: 12px;
@@ -98,7 +102,7 @@
   <div id="popup-close">&times;</div>
   <div id="newsLetterForm">
     <h2>FIRST TIME OFFER!</h2>
-  <p>Get 10% off on your first order.</p>
+    <p>Receive 10% off on your first order before you takeoff! Join our iShoppes list and we'll send you your special offer* and first-class access to the latest arrivals, travel exclusives and special promotions. </p>
 
   <form method="post" action="/contact">
     <input type="hidden" name="form_type" value="customer">
@@ -113,6 +117,15 @@
   </div>
   <div id="popup-message"></div>
   <div id="popup-no-thanks">NO THANKS</div>
+  <div class="popup-notes">
+    <span style="
+        font-size: 12px;
+        color: #000;
+        font-family: Montserrat, Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    ">*Offer will arrive via email approximately 24 hours from submission. Valid on first-time email addresses submissions only. One-time use.
+  You can unsubscribe anytime. For more details, review our Privacy Policy.
+    </span>
+  </div>
 </div>
 
 <script>

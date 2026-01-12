@@ -75,11 +75,6 @@
           document.getElementById('terminal-selection-div').style.display = 'block';
         });
     });
-    document.querySelectorAll('.terminal-update-btn').forEach(el => {
-      el.addEventListener('click', function () {
-        document.getElementById('terminal-selection-div').style.display = 'block';
-      });
-    });
     document.querySelectorAll('.modal-close-dep').forEach(el => {
       el.addEventListener('click', function () {
         document.getElementById('terminal-selection-div').style.display = 'none';
@@ -256,15 +251,13 @@
           
           //SAVE DATA TO SHOPIFY CART
           function saveToShopifyCart(properties) {
-            try {
-              fetch('/cart/update.js', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  attributes: properties
-                })
-              });
-            } catch (e) {}
+            return fetch('/cart/update.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                attributes: properties
+              })
+            });
           }
 
           function collectDepartureData() {
@@ -294,8 +287,9 @@
                   if (data[key]) setCookie(key, data[key], 48);
                 });
 
-                saveToShopifyCart(data);
-                location.reload(true);
+                saveToShopifyCart(data).then(() => {
+                  location.reload(true);
+                });
               } catch (e) {}
             });
           }

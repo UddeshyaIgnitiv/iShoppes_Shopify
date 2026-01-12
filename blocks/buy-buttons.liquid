@@ -38,14 +38,14 @@
 
   assign show_age_verification = false
   assign product_type_downcased = product.type | downcase
-  if product_type_downcased contains 'tobacco' or product_type_downcased contains 'liquor'
+  if product_type_downcased contains 'tobacco' or product_type_downcased contains 'liquor' or product_type_downcased contains 'cigarettes'
     assign show_age_verification = true
   endif
 
   unless show_age_verification
     for tag in product.tags
       assign tag_downcased = tag | downcase
-      if tag_downcased contains 'tobacco' or tag_downcased contains 'liquor'
+      if tag_downcased contains 'tobacco' or tag_downcased contains 'liquor' or tag_downcased contains 'cigarettes'
         assign show_age_verification = true
         break
       endif

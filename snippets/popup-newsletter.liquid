@@ -96,11 +96,11 @@
 
 <div id="newsletter-popup">
   <div id="popup-close">&times;</div>
-
-  <h2>FIRST TIME OFFER!</h2>
+  <div id="newsLetterForm">
+    <h2>FIRST TIME OFFER!</h2>
   <p>Get 10% off on your first order.</p>
 
-  <form method="post" action="/contact ">
+  <form method="post" action="/contact">
     <input type="hidden" name="form_type" value="customer">
     <input type="hidden" name="utf8" value="✓">
     <input type="hidden" name="contact[tags]" value="newsletter,popup">
@@ -110,7 +110,7 @@
 
     <button type="submit" id="popup-submit">GET MY 10% OFFER</button>
   </form>
-
+  </div>
   <div id="popup-message"></div>
   <div id="popup-no-thanks">NO THANKS</div>
 </div>
@@ -145,9 +145,16 @@
 
     if (posted === "true") {
       showPopup();
+      const newsLetterForm = document.getElementById('newsLetterForm');
+      document.getElementById("popup-no-thanks").style.display = "none";
+      newsLetterForm.remove();
       const msg = document.getElementById("popup-message");
-      msg.textContent = "Thank you! Your 10% offer is on the way";
-      msg.className = "success";
+        msg.innerHTML = `
+        <h4 style="margin-bottom:45px">Thanks for subscribing!</h4>
+        <p style="margin:0;font-size:16px;">Check your email for a confirmation message.</p>
+     `;
+      {% comment %} msg.textContent = "Thank you! Your 10% offer is on the way";
+      msg.className = "success"; {% endcomment %}
       msg.style.display = "block";
       setCookie("popup_closed", "yes", 1);
     } 

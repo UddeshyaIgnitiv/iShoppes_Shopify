@@ -404,155 +404,167 @@
             submitBtn.textContent = 'PLEASE WAIT...';
             form.submit();
           });
+/* ====================== FORGOT PASSWORD (NO REDIRECT + SAFE + AUTO RESET) ======================
+   - No redirect to /account/recover
+   - Shows success message in popup
+   - Hides email field after submit success
+   - Auto resets form after 4s (success)
+   - Handles 429 (Too many requests): shows error, then resets form + button after 4s
+   - Prevents double submit (inFlight)
+================================================================================================ */
+(function recoverNoRedirect() {
+  const recoverForm  = document.getElementById('RecoverPasswordForm');
+  const recoverEmail = document.getElementById('RecoverEmail');
+  const recoverBtn   = document.getElementById('RecoverSubmitBtn');
 
-          // ====================== FORGOT PASSWORD (NO REDIRECT + HIDE EMAIL FIELD) ======================
-        // ====================== FORGOT PASSWORD (NO REDIRECT + SAFE) ======================
-        (function recoverNoRedirect() {
-        const recoverForm  = document.getElementById('RecoverPasswordForm');
-        const recoverEmail = document.getElementById('RecoverEmail');
-        const recoverBtn   = document.getElementById('RecoverSubmitBtn');
+  const ajaxSuccess  = document.getElementById('RecoverAjaxSuccess');
+  const emailField   = document.getElementById('RecoverEmailField');
 
-        const ajaxSuccess  = document.getElementById('RecoverAjaxSuccess');
-        const emailField   = document.getElementById('RecoverEmailField');
+  if (!recoverForm || !recoverBtn) return;
 
-        // Optional error area (we'll create it if not present)
-        let ajaxError = document.getElementById('RecoverAjaxError');
+  // Create/locate error box
+  let ajaxError = document.getElementById('RecoverAjaxError');
+  if (!ajaxError) {
+    ajaxError = document.createElement('div');
+    ajaxError.id = 'RecoverAjaxError';
+    ajaxError.className = 'form-errors is-hidden';
+    ajaxError.setAttribute('role', 'alert');
+    ajaxError.setAttribute('aria-live', 'polite');
+    ajaxError.textContent = '';
+    // place error above success (or at top of form)
+    if (ajaxSuccess && ajaxSuccess.parentNode) {
+      ajaxSuccess.parentNode.insertBefore(ajaxError, ajaxSuccess);
+    } else {
+      recoverForm.insertBefore(ajaxError, recoverForm.firstChild);
+    }
+  }
 
-        if (!recoverForm || !recoverBtn) return;
+  let inFlight = false;
+  let resetTimer = null;
 
-        // Create error box if not exists
-        if (!ajaxError) {
-          ajaxError = document.createElement('div');
-          ajaxError.id = 'RecoverAjaxError';
-          ajaxError.className = 'form-errors is-hidden';
-          ajaxError.setAttribute('role', 'alert');
-          ajaxError.setAttribute('aria-live', 'polite');
-          ajaxError.textContent = '';
-          ajaxSuccess?.parentNode?.insertBefore(ajaxError, ajaxSuccess);
-        }
+  function showError(msg) {
+    ajaxError.textContent = msg;
+    ajaxError.classList.remove('is-hidden');
+  }
+  function hideError() {
+    ajaxError.classList.add('is-hidden');
+    ajaxError.textContent = '';
+  }
 
-        let inFlight = false;
-        let resetTimer = null;
+  function resetRecoverUI() {
+    clearTimeout(resetTimer);
+    recoverForm.reset();
+    hideError();
+    ajaxSuccess?.classList.add('is-hidden');
+    if (emailField) emailField.style.display = '';
+    recoverBtn.disabled = false;
+    recoverBtn.textContent = 'SEND RESET LINK';
+    inFlight = false;
+    recoverEmail?.focus();
+  }
 
-        function showError(msg) {
-          if (!ajaxError) return;
-          ajaxError.textContent = msg;
-          ajaxError.classList.remove('is-hidden');
-        }
-        function hideError() {
-          ajaxError?.classList.add('is-hidden');
-          ajaxError && (ajaxError.textContent = '');
-        }
+  function showSuccessThenReset() {
+    ajaxSuccess?.classList.remove('is-hidden');
+    if (emailField) emailField.style.display = 'none';
 
-        function showSuccessThenReset() {
-          ajaxSuccess?.classList.remove('is-hidden');
-          if (emailField) emailField.style.display = 'none';
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
+      resetRecoverUI();
+    }, 4000);
+  }
 
-          // Auto-reset after 4 seconds
-          clearTimeout(resetTimer);
-          resetTimer = setTimeout(() => {
-            recoverForm.reset();
-            ajaxSuccess?.classList.add('is-hidden');
-            if (emailField) emailField.style.display = '';
-            recoverBtn.disabled = false;
-            recoverBtn.textContent = 'SEND RESET LINK';
-            inFlight = false;
-            recoverEmail?.focus();
-          }, 4000);
-        }
+  // Block any native submit always
+  recoverForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation?.();
+    return false;
+  }, true);
 
-        function restoreButton(text = 'SEND RESET LINK') {
-          recoverBtn.disabled = false;
-          recoverBtn.textContent = text;
-        }
+  // Block Enter key
+  recoverForm.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation?.();
+      recoverBtn.click();
+    }
+  }, true);
 
-        // Prevent native submit always
-        recoverForm.addEventListener('submit', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation?.();
-          return false;
-        }, true);
+  // If user edits, clear messages/timers
+  recoverEmail?.addEventListener('input', function () {
+    clearTimeout(resetTimer);
+    hideError();
+    ajaxSuccess?.classList.add('is-hidden');
+    if (emailField) emailField.style.display = '';
+  });
 
-        // Prevent Enter key submit
-        recoverForm.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation?.();
-            recoverBtn.click();
-          }
-        }, true);
+  // Click handler (AJAX)
+  recoverBtn.addEventListener('click', async function () {
+    if (inFlight) return;
 
-        // Clear messages if user edits email
-        recoverEmail?.addEventListener('input', function () {
-          hideError();
-          ajaxSuccess?.classList.add('is-hidden');
-          if (emailField) emailField.style.display = '';
-          clearTimeout(resetTimer);
-          // do not flip inFlight here
-        });
+    clearTimeout(resetTimer);
+    hideError();
+    ajaxSuccess?.classList.add('is-hidden');
+    if (emailField) emailField.style.display = '';
 
-        recoverBtn.addEventListener('click', async function () {
-          if (inFlight) return; // ✅ blocks double-fire
+    if (!recoverForm.checkValidity()) {
+      recoverForm.reportValidity();
+      return;
+    }
 
-          hideError();
-          ajaxSuccess?.classList.add('is-hidden');
+    inFlight = true;
+    recoverBtn.disabled = true;
+    recoverBtn.textContent = 'PLEASE WAIT...';
 
-          if (!recoverForm.checkValidity()) {
-            recoverForm.reportValidity();
-            return;
-          }
+    try {
+      const res = await fetch('/account/recover', {
+        method: 'POST',
+        body: new FormData(recoverForm),
+        credentials: 'same-origin',
+      });
 
-          inFlight = true;
+      // 429 handling (rate limit)
+      if (res.status === 429) {
+        showError('Too many reset requests. Please wait a few minutes and try again.');
 
-          const oldText = recoverBtn.textContent || 'SEND RESET LINK';
-          recoverBtn.disabled = true;
-          recoverBtn.textContent = 'PLEASE WAIT...';
+        // restore button now
+        recoverBtn.disabled = false;
+        recoverBtn.textContent = 'SEND RESET LINK';
 
-          try {
-            const res = await fetch('/account/recover', {
-              method: 'POST',
-              body: new FormData(recoverForm),
-              credentials: 'same-origin',
-            });
+        // reset form after 4s
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+          resetRecoverUI();
+        }, 4000);
 
-            if (res.status === 429) {
-                // Shopify rate limit
-                showError('Too many reset requests. Please wait a few minutes and try again.');
-                restoreButton(oldText);
-                inFlight = false;
-                return;
-              }
+        return;
+      }
 
-              if (!res.ok) {
-                showError('Something went wrong. Please try again in a moment.');
-                restoreButton(oldText);
-                inFlight = false;
-                return;
-              }
+      if (!res.ok) {
+        showError('Something went wrong. Please try again in a moment.');
+        recoverBtn.disabled = false;
+        recoverBtn.textContent = 'SEND RESET LINK';
+        inFlight = false;
+        return;
+      }
 
-              // Success (Shopify still returns generic response)
-              showSuccessThenReset();
+      // Success (Shopify response is generic)
+      showSuccessThenReset();
 
-            } catch (err) {
-              showError('Network error. Please try again.');
-              restoreButton(oldText);
-              inFlight = false;
-            }
-          });
+    } catch (err) {
+      showError('Network error. Please try again.');
+      recoverBtn.disabled = false;
+      recoverBtn.textContent = 'SEND RESET LINK';
+      inFlight = false;
+    }
+  });
 
-          // If you have BackToLoginBtn, restore UI when leaving recover
-          document.getElementById('BackToLoginBtn')?.addEventListener('click', function () {
-            hideError();
-            ajaxSuccess?.classList.add('is-hidden');
-            if (emailField) emailField.style.display = '';
-            clearTimeout(resetTimer);
-            restoreButton('SEND RESET LINK');
-            inFlight = false;
-          });
-        })();
-
+  // If user leaves recover popup to login, reset everything
+  document.getElementById('BackToLoginBtn')?.addEventListener('click', function () {
+    resetRecoverUI();
+  });
+})();
 
           // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
   (function wishlistAuthGuard() {
@@ -651,7 +663,7 @@
 
 {% stylesheet %}
   .form-errors.is-hidden { display: none !important; }
-  
+
   /* Toast for wishlist auth */
   .wishlist-auth-toast{
     position: fixed;

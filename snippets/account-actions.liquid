@@ -130,12 +130,11 @@
             >
           </div>
 
-          <!-- ✅ Ajax success message (no redirect) -->
+          <!-- ✅ Ajax success message (shown without redirect) -->
           <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
             If an account exists for that email, you’ll receive a password reset email shortly.
           </div>
 
-          <!-- Shopify error output (still useful) -->
           {% if form.errors %}
             <div class="form-errors" role="alert" aria-live="polite">
               <ul class="errors">
@@ -147,7 +146,8 @@
           {% endif %}
 
           <div class="form-actions">
-            <button type="submit" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
+            <!-- ✅ IMPORTANT: button is NOT submit -->
+            <button type="button" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
             <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
         {% endform %}
@@ -386,10 +386,8 @@
             if (RegNote) RegNote.value = parts.filter(Boolean).join(' | ');
           }
 
-          // Prevent native submit (we submit only after validation)
           form?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
 
-          // Prevent Enter key submit without our checks
           form?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); submitBtn?.click(); }
           });
@@ -397,7 +395,6 @@
           submitBtn?.addEventListener('click', () => {
             const ok = validateRegisterForm();
             if (!ok) return;
-
             packNote();
             submitBtn.disabled = true;
             submitBtn.textContent = 'PLEASE WAIT...';
@@ -411,20 +408,37 @@
             const recoverBtn = document.getElementById('RecoverSubmitBtn');
             const ajaxSuccess = document.getElementById('RecoverAjaxSuccess');
 
-            if (!recoverForm) return;
+            if (!recoverForm || !recoverBtn) return;
 
             function showSuccess() {
-              if (ajaxSuccess) ajaxSuccess.classList.remove('is-hidden');
+              ajaxSuccess?.classList.remove('is-hidden');
             }
             function hideSuccess() {
-              if (ajaxSuccess) ajaxSuccess.classList.add('is-hidden');
+              ajaxSuccess?.classList.add('is-hidden');
             }
 
             recoverEmail?.addEventListener('input', hideSuccess);
 
+            // Block any native submit no matter what
             recoverForm.addEventListener('submit', function (e) {
-              e.preventDefault(); // ✅ stops Shopify redirect
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation?.();
+              return false;
+            }, true);
 
+            // Block Enter from submitting form
+            recoverForm.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                recoverBtn.click();
+              }
+            }, true);
+
+            // Ajax submit on button click
+            recoverBtn.addEventListener('click', function () {
               if (!recoverForm.checkValidity()) {
                 recoverForm.reportValidity();
                 return;
@@ -432,11 +446,9 @@
 
               hideSuccess();
 
-              const oldText = recoverBtn ? recoverBtn.textContent : '';
-              if (recoverBtn) {
-                recoverBtn.disabled = true;
-                recoverBtn.textContent = 'PLEASE WAIT...';
-              }
+              const oldText = recoverBtn.textContent;
+              recoverBtn.disabled = true;
+              recoverBtn.textContent = 'PLEASE WAIT...';
 
               const formData = new FormData(recoverForm);
 
@@ -446,17 +458,14 @@
                 credentials: 'same-origin',
               })
                 .then(() => {
-                  // Shopify doesn't return a clean JSON response; show generic message.
                   showSuccess();
                 })
                 .catch(() => {
                   showSuccess();
                 })
                 .finally(() => {
-                  if (recoverBtn) {
-                    recoverBtn.disabled = false;
-                    recoverBtn.textContent = oldText || 'SEND RESET LINK';
-                  }
+                  recoverBtn.disabled = false;
+                  recoverBtn.textContent = oldText || 'SEND RESET LINK';
                 });
             });
           })();
@@ -502,7 +511,6 @@
             document.addEventListener('click', function (e) {
               const t = e.target;
 
-              // A) Header wishlist link
               const a = t?.closest?.('a');
               if (a && isWishlistUrl(a.getAttribute('href') || '')) {
                 e.preventDefault();
@@ -512,7 +520,6 @@
                 return;
               }
 
-              // B) PLP wishlist icon button (div)
               const plpBtn = t?.closest?.(
                 '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
               );
@@ -524,7 +531,6 @@
                 return;
               }
 
-              // C) PDP wishlist add button (div)
               const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
               if (pdpBtn) {
                 e.preventDefault();
@@ -573,12 +579,11 @@
     transform: translateY(0);
   }
 
-  /* Hide utility */
+  /* Needed for recover success message */
   .form-success.is-hidden { display: none !important; }
 
-  #account-popover{
-    width: 25%;
-  }
+  #account-popover{ width: 25%; }
+
   .account-actions {
     background-color: var(--color-background);
     display: flex;
@@ -633,10 +638,7 @@
     pointer-events: none;
   }
 
-  .account-actions__nav {
-    padding: var(--padding-xl);
-    padding-block-start: 0;
-  }
+  .account-actions__nav { padding: var(--padding-xl); padding-block-start: 0; }
 
   .account-actions__list {
     display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm);
@@ -724,10 +726,7 @@
     line-height: 1.2;
     color: #d10000;
   }
-  .Vtl-WishlistProduct__AddToCart{ display: none; }
-  .Vtl-WishlistPage .Vtl-WishlistPage__Title{ font-size: 30px; }
   .field-error.is-hidden { display: none !important; }
-
   .input[aria-invalid="true"] { border-color: #d10000; }
 
 {% endstylesheet %}

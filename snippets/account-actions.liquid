@@ -431,20 +431,36 @@
 
             // Click interceptor (works even if element appears later)
             document.addEventListener('click', function (e) {
-              const a = e.target && e.target.closest ? e.target.closest('a') : null;
-              if (!a) return;
+              const target = e.target;
 
-              const href = a.getAttribute('href') || '';
-              if (!isWishlistUrl(href)) return;
+              // Case 1: Header wishlist link (<a href="/apps/page/wishlist">)
+              const a = target && target.closest ? target.closest('a') : null;
+              if (a) {
+                const href = a.getAttribute('href') || '';
+                if (isWishlistUrl(href)) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation?.();
+                  showToast('Please sign in to your account to see saved items.');
+                  return;
+                }
+              }
 
-              // Not logged in => block and show message
-              e.preventDefault();
-              e.stopPropagation();
-              e.stopImmediatePropagation?.();
+              // Case 2: PLP/PDP wishlist button (div based)
+              const wishlistBtn = target && target.closest
+                ? target.closest('.Vtl-WishlistButton__WishlistIconButton, .Vtl-WishlistIcon__Wrapper--Id')
+                : null;
 
-              showToast('Please sign in to your account to see saved items.');
+              if (wishlistBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                showToast('Please sign in to your account to see saved items.');
+                return;
+              }
+
             }, true);
-
+            
             // Also guard direct navigation (optional):
             // If someone lands on wishlist url while not logged-in, show toast and bounce to login section.
             if (window.location.pathname.replace(/\/+$/, '') === '/apps/page/wishlist') {

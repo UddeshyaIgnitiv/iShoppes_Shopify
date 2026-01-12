@@ -212,9 +212,9 @@
     <button type="submit">{{ section.settings.button_text }}</button>
     
     {% if form.posted_successfully? %}
-      <div class="newsletter-message newsletter-success">
+      {% comment %} <div class="newsletter-message newsletter-success">
         <p>Thanks for subscribing!</p>
-      </div>
+      </div> {% endcomment %}
     {% elsif form.errors %}
       <div class="newsletter-message newsletter-error">
         <p>{{ form.errors | default_errors }}</p>

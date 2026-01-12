@@ -117,7 +117,8 @@
       <!-- ================= RECOVER BLOCK (HIDDEN) ================= -->
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RecoverBlock">
         {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
-          <div class="form-field">
+
+          <div class="form-field" id="RecoverEmailField">
             <label for="RecoverEmail">Email*</label>
             <input
               id="RecoverEmail"
@@ -301,6 +302,9 @@
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
             showOnly(loginBlock);
+            // reset recover UI each time you go back
+            document.getElementById('RecoverAjaxSuccess')?.classList.add('is-hidden');
+            document.getElementById('RecoverEmailField')?.style && (document.getElementById('RecoverEmailField').style.display = '');
             document.getElementById('LoginEmail')?.focus();
           });
 
@@ -401,25 +405,29 @@
             form.submit();
           });
 
-          // ====================== FORGOT PASSWORD (NO REDIRECT) ======================
+          // ====================== FORGOT PASSWORD (NO REDIRECT + HIDE EMAIL FIELD) ======================
           (function recoverNoRedirect() {
             const recoverForm = document.getElementById('RecoverPasswordForm');
             const recoverEmail = document.getElementById('RecoverEmail');
             const recoverBtn = document.getElementById('RecoverSubmitBtn');
             const ajaxSuccess = document.getElementById('RecoverAjaxSuccess');
+            const emailField = document.getElementById('RecoverEmailField');
 
             if (!recoverForm || !recoverBtn) return;
 
             function showSuccess() {
               ajaxSuccess?.classList.remove('is-hidden');
+              if (emailField) emailField.style.display = 'none'; // ✅ hide email field
             }
-            function hideSuccess() {
+            function resetUI() {
               ajaxSuccess?.classList.add('is-hidden');
+              if (emailField) emailField.style.display = ''; // show again
             }
 
-            recoverEmail?.addEventListener('input', hideSuccess);
+            // If user types again, show field (in case you later show it)
+            recoverEmail?.addEventListener('input', resetUI);
 
-            // Block any native submit no matter what
+            // Block any native submit
             recoverForm.addEventListener('submit', function (e) {
               e.preventDefault();
               e.stopPropagation();
@@ -427,7 +435,7 @@
               return false;
             }, true);
 
-            // Block Enter from submitting form
+            // Block Enter key
             recoverForm.addEventListener('keydown', function (e) {
               if (e.key === 'Enter') {
                 e.preventDefault();
@@ -437,14 +445,14 @@
               }
             }, true);
 
-            // Ajax submit on button click
             recoverBtn.addEventListener('click', function () {
               if (!recoverForm.checkValidity()) {
                 recoverForm.reportValidity();
                 return;
               }
 
-              hideSuccess();
+              // keep field visible until request starts
+              resetUI();
 
               const oldText = recoverBtn.textContent;
               recoverBtn.disabled = true;
@@ -457,17 +465,16 @@
                 body: formData,
                 credentials: 'same-origin',
               })
-                .then(() => {
-                  showSuccess();
-                })
-                .catch(() => {
-                  showSuccess();
-                })
+                .then(() => showSuccess())
+                .catch(() => showSuccess())
                 .finally(() => {
                   recoverBtn.disabled = false;
                   recoverBtn.textContent = oldText || 'SEND RESET LINK';
                 });
             });
+
+            // When user clicks Back to Login, restore email field for next time
+            backToLoginBtn?.addEventListener('click', resetUI);
           })();
 
           // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
@@ -511,6 +518,7 @@
             document.addEventListener('click', function (e) {
               const t = e.target;
 
+              // header wishlist link
               const a = t?.closest?.('a');
               if (a && isWishlistUrl(a.getAttribute('href') || '')) {
                 e.preventDefault();
@@ -520,9 +528,8 @@
                 return;
               }
 
-              const plpBtn = t?.closest?.(
-                '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
-              );
+              // PLP wishlist
+              const plpBtn = t?.closest?.('.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]');
               if (plpBtn) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -531,6 +538,7 @@
                 return;
               }
 
+              // PDP wishlist
               const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
               if (pdpBtn) {
                 e.preventDefault();
@@ -549,7 +557,6 @@
 </div>
 
 {% stylesheet %}
-
   /* Toast for wishlist auth */
   .wishlist-auth-toast{
     position: fixed;
@@ -579,34 +586,13 @@
     transform: translateY(0);
   }
 
-  /* Needed for recover success message */
+  /* Needed for recover success message + hide helper */
   .form-success.is-hidden { display: none !important; }
 
   #account-popover{ width: 25%; }
-
-  .account-actions {
-    background-color: var(--color-background);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    transition: height var(--animation-values);
-    &:has([data-active]) .account-actions__main-menu { visibility: hidden; }
-  }
-
-  .account-actions__header {
-    padding: var(--padding-xl);
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-2xs);
-  }
-
-  .account-actions__title {
-    --font-h5--size: var(--font-size--lg);
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+  .account-actions { background-color: var(--color-background); display: flex; flex-direction: column; position: relative; transition: height var(--animation-values); &:has([data-active]) .account-actions__main-menu { visibility: hidden; } }
+  .account-actions__header { padding: var(--padding-xl); display: flex; flex-direction: column; gap: var(--gap-2xs); }
+  .account-actions__title { --font-h5--size: var(--font-size--lg); margin: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
   .account-actions__sign-ins {
     padding: var(--padding-xl);
@@ -615,118 +601,47 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-sm);
-
     max-width: min(640px, 100%);
     width: 100%;
     box-sizing: border-box;
     margin-inline: auto;
-
     max-height: 75vh;
     overflow-y: auto;
-
     transition: opacity .25s ease;
     scrollbar-gutter: stable;
   }
 
-  @supports not (scrollbar-gutter: stable) {
-    .account-actions__sign-ins { overflow-y: scroll; }
-  }
-
-  .account-actions__sign-ins.is-hidden {
-    display: none !important;
-    opacity: 0;
-    pointer-events: none;
-  }
-
+  .account-actions__sign-ins.is-hidden { display: none !important; opacity: 0; pointer-events: none; }
   .account-actions__nav { padding: var(--padding-xl); padding-block-start: 0; }
 
-  .account-actions__list {
-    display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm);
-    width: 100%; list-style: none; margin: 0; padding: 0;
-  }
-  @media (max-width: 300px) { .account-actions__list { grid-template-columns: 1fr; } }
-
-  .account-actions__link {
-    width: auto; display: flex; justify-content: center; align-items: center; gap: var(--gap-2xs);
-  }
+  .account-actions__list { display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); width: 100%; list-style: none; margin: 0; padding: 0; }
+  .account-actions__link { width: auto; display: flex; justify-content: center; align-items: center; gap: var(--gap-2xs); }
   .account-actions__icon { display: flex; width: var(--icon-size-sm); height: var(--icon-size-sm); margin-block: -4px; }
 
   .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
   .form-field label { font-weight: 600; font-size: 0.9rem; }
 
-  .form-field .input {
-    padding: 0.6rem 0.8rem;
-    border: 1px solid rgb(var(--color-foreground-rgb) / 0.3);
-    border-radius: var(--style-border-radius-buttons-secondary);
-    background: var(--color-background);
-    width: 100%;
-    box-sizing: border-box;
-  }
+  .form-field .input { padding: 0.6rem 0.8rem; border: 1px solid rgb(var(--color-foreground-rgb) / 0.3); border-radius: var(--style-border-radius-buttons-secondary); background: var(--color-background); width: 100%; box-sizing: border-box; }
 
-  .form-errors {
-    background: rgb(255 0 0 / 0.1);
-    border: 1px solid red;
-    color: red;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-  }
+  .form-errors { background: rgb(255 0 0 / 0.1); border: 1px solid red; color: red; padding: 0.5rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
 
-  .form-success {
-    background: rgb(0 128 0 / 0.10);
-    border: 1px solid rgb(0 128 0 / 0.35);
-    color: rgb(0 80 0);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-  }
+  .form-success { background: rgb(0 128 0 / 0.10); border: 1px solid rgb(0 128 0 / 0.35); color: rgb(0 80 0); padding: 0.5rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
 
-  .form-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 1rem;
-    align-items: stretch;
-  }
+  .form-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; align-items: stretch; }
 
   .form-actions .button,
-  .form-actions .button-secondary {
-    width: 100%;
-    text-align: center;
-    padding: 0.75rem 1rem;
-    font-weight: 600;
-    border-radius: var(--style-border-radius-buttons-primary);
-    transition: all 0.2s ease-in-out;
-  }
+  .form-actions .button-secondary { width: 100%; text-align: center; padding: 0.75rem 1rem; font-weight: 600; border-radius: var(--style-border-radius-buttons-primary); transition: all 0.2s ease-in-out; }
 
-  .form-actions .button {
-    background: #ffffff;
-    color: #000000;
-    border: 1px solid #000000;
-  }
+  .form-actions .button { background: #ffffff; color: #000000; border: 1px solid #000000; }
   .form-actions .button:hover { background: #f3f3f3; }
 
-  .form-actions .button-secondary {
-    background: #000000;
-    color: #ffffff;
-    border: 1px solid #000000;
-  }
+  .form-actions .button-secondary { background: #000000; color: #ffffff; border: 1px solid #000000; }
   .form-actions .button-secondary:hover { background: #222222; }
 
-  .link {
-    font-size: 0.9rem;
-    text-decoration: underline;
-    text-align: center;
-    margin-top: .25rem;
-  }
+  .link { font-size: 0.9rem; text-decoration: underline; text-align: center; margin-top: .25rem; }
 
-  .field-error {
-    margin: 6px 0 0;
-    font-size: 0.85rem;
-    line-height: 1.2;
-    color: #d10000;
-  }
+  .field-error { margin: 6px 0 0; font-size: 0.85rem; line-height: 1.2; color: #d10000; }
   .field-error.is-hidden { display: none !important; }
-  .input[aria-invalid="true"] { border-color: #d10000; }
 
+  .input[aria-invalid="true"] { border-color: #d10000; }
 {% endstylesheet %}

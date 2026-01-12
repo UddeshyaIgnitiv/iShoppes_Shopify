@@ -431,10 +431,15 @@
                 // Show email field again
                 if (emailField) emailField.style.display = '';
 
+                // Restore button state & text
+                recoverBtn.disabled = false;
+                recoverBtn.textContent = 'SEND RESET LINK';
+
                 // Optional: bring focus back
                 recoverEmail?.focus();
               }, 4000);
             }
+
             function resetUI() {
               ajaxSuccess?.classList.add('is-hidden');
               if (emailField) emailField.style.display = ''; // show again

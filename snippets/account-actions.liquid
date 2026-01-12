@@ -9,10 +9,6 @@
         {% endif %}
       </span>
     </header>
-    {%- assign is_logged_in = false -%}
-    {%- if customer and customer.email -%}
-      {%- assign is_logged_in = true -%}
-    {%- endif -%}
 
     {% if customer.email %}
       <nav class="account-actions__nav">
@@ -76,6 +72,9 @@
         </ul>
       </nav>
     {% endif %}
+    <script>
+      window.__CUSTOMER_LOGGED_IN__ = {{ customer.id | default: 0 | json }} != 0;
+    </script>
 
     {% unless customer %}
       <!-- ================= LOGIN BLOCK ================= -->
@@ -384,80 +383,111 @@
             submitBtn.textContent = 'PLEASE WAIT...';
             form.submit();
           });
+
+          // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
+          (function wishlistAuthGuard() {
+            // If logged in, do nothing
+            if (window.__CUSTOMER_LOGGED_IN__) return;
+
+            const WISHLIST_PATHS = [
+              '/apps/page/wishlist',
+              '{{ routes.root_url }}apps/page/wishlist'
+            ];
+
+            function isWishlistUrl(href) {
+              if (!href) return false;
+              try {
+                const url = new URL(href, window.location.origin);
+                const path = url.pathname.replace(/\/+$/, '');
+                return path === '/apps/page/wishlist';
+              } catch (e) {
+                // relative URL fallback
+                return href.indexOf('/apps/page/wishlist') !== -1;
+              }
+            }
+
+            // Create toast once
+            function getToast() {
+              let toast = document.getElementById('WishlistAuthToast');
+              if (toast) return toast;
+
+              toast = document.createElement('div');
+              toast.id = 'WishlistAuthToast';
+              toast.setAttribute('role', 'status');
+              toast.setAttribute('aria-live', 'polite');
+              toast.className = 'wishlist-auth-toast';
+              document.body.appendChild(toast);
+              return toast;
+            }
+
+            function showToast(msg) {
+              const toast = getToast();
+              toast.textContent = msg;
+              toast.classList.add('is-visible');
+
+              clearTimeout(toast._t);
+              toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
+            }
+
+            // Click interceptor (works even if element appears later)
+            document.addEventListener('click', function (e) {
+              const a = e.target && e.target.closest ? e.target.closest('a') : null;
+              if (!a) return;
+
+              const href = a.getAttribute('href') || '';
+              if (!isWishlistUrl(href)) return;
+
+              // Not logged in => block and show message
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation?.();
+
+              showToast('Please sign in to your account to see saved items.');
+            }, true);
+
+            // Also guard direct navigation (optional):
+            // If someone lands on wishlist url while not logged-in, show toast and bounce to login section.
+            if (window.location.pathname.replace(/\/+$/, '') === '/apps/page/wishlist') {
+              showToast('Please sign in to your account to see saved items.');
+            }
+          })();
+
         })();
       </script>
     {% endunless %}
   </div>
 </div>
-<!-- message placeholder -->
-<div class="wishlist-guard-msg" data-wishlist-msg aria-live="polite"></div>
-<script>
-(function () {
-  function initWishlistGuard(root) {
-    const link = root.querySelector('[data-wishlist-link]');
-    const msgEl = root.querySelector('[data-wishlist-msg]');
-    if (!link || !msgEl) return;
-
-    const isLoggedIn = (link.getAttribute('data-logged-in') === 'true');
-
-    function showMessage() {
-      msgEl.textContent = 'Please sign in to your account to see saved items.';
-      msgEl.classList.add('is-visible');
-
-      // auto-hide after 4s (optional)
-      window.clearTimeout(msgEl._t);
-      msgEl._t = window.setTimeout(() => {
-        msgEl.classList.remove('is-visible');
-        // keep text for screen readers? if you prefer remove:
-        // msgEl.textContent = '';
-      }, 4000);
-    }
-
-    link.addEventListener('click', function (e) {
-      if (isLoggedIn) return; // allow normal navigation
-      e.preventDefault();
-      e.stopPropagation();
-      showMessage();
-    });
-  }
-
-  // Support multiple wishlist icons if theme/app renders more than one
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.Vtl-WishlistHeaderWrapper').forEach(initWishlistGuard);
-  });
-})();
-</script>
-
 
 {% stylesheet %}
-.wishlist-guard-msg{
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 9999;
+.wishlist-auth-toast{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 999999;
 
-    max-width: 320px;
-    padding: 12px 16px;
-    border-radius: 6px;
+  max-width: 340px;
+  padding: 12px 14px;
+  border-radius: 8px;
 
-    background: #111;
-    color: #fff;
-    font-size: 13px;
-    line-height: 1.4;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.4;
 
-    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
 
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
 
-    transition: opacity .25s ease, transform .25s ease;
-  }
+  transition: opacity .25s ease, transform .25s ease;
+}
 
-  .wishlist-guard-msg.is-visible{
-    opacity: 1;
-    transform: translateY(0);
-  }
+.wishlist-auth-toast.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
   #account-popover{
     width: 25%;
   }
@@ -605,12 +635,8 @@
     line-height: 1.2;
     color: #d10000;
   }
-  .Vtl-WishlistPage .Vtl-WishlistPage__Products button.Vtl-WishlistProduct__AddToCart{
+  .Vtl-WishlistProduct__AddToCart{
     display: none;
-  }
-
-  .Vtl-WishlistPage .Vtl-WishlistPage__Title{
-    font-size: 30px
   }
   .field-error.is-hidden { display: none !important; }
 

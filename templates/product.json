@@ -287,13 +287,13 @@
             "ingredients_text": {
               "type": "text",
               "settings": {
-                // "text": "<p>Jameson Irish Whiskey</p>",
-                "text": "",
+                "text": "<p>{{ closest.product.metafields.custom.ingredients | metafield_tag }}</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
                 "type_preset": "rte",
                 "font": "var(--font-body--family)",
+                "weight": "",
                 "font_size": "1rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",

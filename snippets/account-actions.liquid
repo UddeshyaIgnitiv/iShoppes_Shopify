@@ -21,37 +21,27 @@
                 autofocus
               {% endif %}
             >
-              <span
-                class="account-actions__icons"
-                aria-hidden="true"
-              >
-              </span>
+              <span class="account-actions__icons" aria-hidden="true"></span>
               {{ 'content.account_orders' | t }}
             </a>
           </li>
+
           <li class="account-actions__list-item">
             <a
               href="{{ routes.root_url }}apps/page/wishlist"
               class="account-actions__links button-secondarys"
             >
-              <span
-                class="account-actions__icon"
-                aria-hidden="true"
-              >
-              </span>
+              <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_favorites' | t }}
             </a>
           </li>
+
           <li class="account-actions__list-item">
             <a
               href="{{ routes.account_addresses_url }}"
               class="account-actions__links button-secondarys"
             >
-              <span
-                class="account-actions__icon"
-                aria-hidden="true"
-              >
-              </span>
+              <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_profile' | t }}
             </a>
           </li>
@@ -61,17 +51,15 @@
               href="{{ routes.account_logout_url }}"
               class="account-actions__links button-secondarys"
             >
-              <span
-                class="account-actions__icon"
-                aria-hidden="true"
-              >
-              </span>
+              <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'actions.log_out' | t }}
             </a>
           </li>
         </ul>
       </nav>
     {% endif %}
+
+    <!-- Global login flag for JS (works everywhere) -->
     <script>
       window.__CUSTOMER_LOGGED_IN__ = {{ customer.id | default: 0 | json }} != 0;
     </script>
@@ -92,14 +80,29 @@
 
           <div class="form-field">
             <label for="LoginEmail">Email address*</label>
-            <input id="LoginEmail" class="input" type="email" name="customer[email]"
-              value="{{ form.email | escape }}" autocomplete="email" required aria-required="true">
+            <input
+              id="LoginEmail"
+              class="input"
+              type="email"
+              name="customer[email]"
+              value="{{ form.email | escape }}"
+              autocomplete="email"
+              required
+              aria-required="true"
+            >
           </div>
 
           <div class="form-field">
             <label for="LoginPassword">Password*</label>
-            <input id="LoginPassword" class="input" type="password" name="customer[password]"
-              autocomplete="current-password" required aria-required="true">
+            <input
+              id="LoginPassword"
+              class="input"
+              type="password"
+              name="customer[password]"
+              autocomplete="current-password"
+              required
+              aria-required="true"
+            >
           </div>
 
           <a href="#" id="ShowRecoverBtn" class="link" style="margin-inline-start:auto;">Forgot password?</a>
@@ -116,9 +119,23 @@
         {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
           <div class="form-field">
             <label for="RecoverEmail">Email*</label>
-            <input id="RecoverEmail" class="input" type="email" name="email" autocomplete="email" required aria-required="true">
+            <input
+              id="RecoverEmail"
+              class="input"
+              type="email"
+              name="email"
+              autocomplete="email"
+              required
+              aria-required="true"
+            >
           </div>
 
+          <!-- ✅ Ajax success message (no redirect) -->
+          <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
+            If an account exists for that email, you’ll receive a password reset email shortly.
+          </div>
+
+          <!-- Shopify error output (still useful) -->
           {% if form.errors %}
             <div class="form-errors" role="alert" aria-live="polite">
               <ul class="errors">
@@ -129,14 +146,8 @@
             </div>
           {% endif %}
 
-          {% if form.posted_successfully? %}
-            <div class="form-success" role="status" aria-live="polite">
-              If an account exists for that email, you’ll receive a password reset email shortly.
-            </div>
-          {% endif %}
-
           <div class="form-actions">
-            <button type="submit" class="button">SEND RESET LINK</button>
+            <button type="submit" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
             <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
         {% endform %}
@@ -180,8 +191,18 @@
 
           <div class="form-field">
             <label for="RegMobile">Mobile Number*</label>
-            <input id="RegMobile" class="input" type="text" name="reg_mobile" required aria-required="true"
-              inputmode="numeric" autocomplete="tel" minlength="7" maxlength="15">
+            <input
+              id="RegMobile"
+              class="input"
+              type="text"
+              name="reg_mobile"
+              required
+              aria-required="true"
+              inputmode="numeric"
+              autocomplete="tel"
+              minlength="7"
+              maxlength="15"
+            >
             <p id="RegMobileError" class="field-error is-hidden" role="alert" aria-live="polite">
               Mobile Number is not valid
             </p>
@@ -223,11 +244,8 @@
 
       <script>
         (function () {
-          // ===== Header title switching =====
+          // ================= HEADER =================
           const headerTitleEl = document.getElementById('AccountHeaderTitle');
-
-          // Put whatever your default heading should be:
-          // If your theme text is "Sign-in or Create an Account", set it here.
           const HEADER_DEFAULT = 'Sign-in or Create an Account';
           const HEADER_FORGOT  = 'Forgot password';
 
@@ -235,14 +253,13 @@
             if (headerTitleEl) headerTitleEl.textContent = text;
           }
 
-          // ===== Blocks =====
+          // ================= BLOCKS =================
           const loginBlock = document.getElementById('LoginBlock');
           const registerBlock = document.getElementById('RegisterBlock');
           const recoverBlock = document.getElementById('RecoverBlock');
 
           const showRegisterBtn = document.getElementById('ShowRegisterBtn');
           const cancelRegisterBtn = document.getElementById('CancelRegisterBtn');
-
           const showRecoverBtn = document.getElementById('ShowRecoverBtn');
           const backToLoginBtn = document.getElementById('BackToLoginBtn');
 
@@ -251,6 +268,9 @@
             block?.classList.remove('is-hidden');
             block?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
+
+          // Ensure initial header is default
+          setHeader(HEADER_DEFAULT);
 
           // LOGIN -> REGISTER
           showRegisterBtn?.addEventListener('click', (e) => {
@@ -268,7 +288,7 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // LOGIN -> RECOVER (change header)
+          // LOGIN -> RECOVER
           showRecoverBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_FORGOT);
@@ -276,7 +296,7 @@
             document.getElementById('RecoverEmail')?.focus();
           });
 
-          // RECOVER -> LOGIN (restore header)
+          // RECOVER -> LOGIN
           backToLoginBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -284,10 +304,7 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // Ensure initial header is default
-          setHeader(HEADER_DEFAULT);
-
-          // ===== Register validations + controlled submit =====
+          // ================= REGISTER VALIDATION + CONTROLLED SUBMIT =================
           const form = document.getElementById('ClassicRegisterForm');
           const submitBtn = document.getElementById('RegisterSubmitBtn');
 
@@ -369,8 +386,10 @@
             if (RegNote) RegNote.value = parts.filter(Boolean).join(' | ');
           }
 
+          // Prevent native submit (we submit only after validation)
           form?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
 
+          // Prevent Enter key submit without our checks
           form?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); submitBtn?.click(); }
           });
@@ -378,11 +397,69 @@
           submitBtn?.addEventListener('click', () => {
             const ok = validateRegisterForm();
             if (!ok) return;
+
             packNote();
             submitBtn.disabled = true;
             submitBtn.textContent = 'PLEASE WAIT...';
             form.submit();
           });
+
+          // ====================== FORGOT PASSWORD (NO REDIRECT) ======================
+          (function recoverNoRedirect() {
+            const recoverForm = document.getElementById('RecoverPasswordForm');
+            const recoverEmail = document.getElementById('RecoverEmail');
+            const recoverBtn = document.getElementById('RecoverSubmitBtn');
+            const ajaxSuccess = document.getElementById('RecoverAjaxSuccess');
+
+            if (!recoverForm) return;
+
+            function showSuccess() {
+              if (ajaxSuccess) ajaxSuccess.classList.remove('is-hidden');
+            }
+            function hideSuccess() {
+              if (ajaxSuccess) ajaxSuccess.classList.add('is-hidden');
+            }
+
+            recoverEmail?.addEventListener('input', hideSuccess);
+
+            recoverForm.addEventListener('submit', function (e) {
+              e.preventDefault(); // ✅ stops Shopify redirect
+
+              if (!recoverForm.checkValidity()) {
+                recoverForm.reportValidity();
+                return;
+              }
+
+              hideSuccess();
+
+              const oldText = recoverBtn ? recoverBtn.textContent : '';
+              if (recoverBtn) {
+                recoverBtn.disabled = true;
+                recoverBtn.textContent = 'PLEASE WAIT...';
+              }
+
+              const formData = new FormData(recoverForm);
+
+              fetch('/account/recover', {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+              })
+                .then(() => {
+                  // Shopify doesn't return a clean JSON response; show generic message.
+                  showSuccess();
+                })
+                .catch(() => {
+                  showSuccess();
+                })
+                .finally(() => {
+                  if (recoverBtn) {
+                    recoverBtn.disabled = false;
+                    recoverBtn.textContent = oldText || 'SEND RESET LINK';
+                  }
+                });
+            });
+          })();
 
           // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
           (function wishlistAuthGuard() {
@@ -467,6 +544,7 @@
 
 {% stylesheet %}
 
+  /* Toast for wishlist auth */
   .wishlist-auth-toast{
     position: fixed;
     right: 20px;
@@ -494,6 +572,9 @@
     opacity: 1;
     transform: translateY(0);
   }
+
+  /* Hide utility */
+  .form-success.is-hidden { display: none !important; }
 
   #account-popover{
     width: 25%;
@@ -551,6 +632,7 @@
     opacity: 0;
     pointer-events: none;
   }
+
   .account-actions__nav {
     padding: var(--padding-xl);
     padding-block-start: 0;
@@ -642,13 +724,10 @@
     line-height: 1.2;
     color: #d10000;
   }
-  .Vtl-WishlistProduct__AddToCart{
-    display: none;
-  }
-  .Vtl-WishlistPage .Vtl-WishlistPage__Title{
-    font-size: 30px;
-  }
+  .Vtl-WishlistProduct__AddToCart{ display: none; }
+  .Vtl-WishlistPage .Vtl-WishlistPage__Title{ font-size: 30px; }
   .field-error.is-hidden { display: none !important; }
 
   .input[aria-invalid="true"] { border-color: #d10000; }
+
 {% endstylesheet %}

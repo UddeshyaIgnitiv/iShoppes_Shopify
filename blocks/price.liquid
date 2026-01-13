@@ -81,13 +81,7 @@
   </div> {% endcomment %}
   
   <div class="terminal-select-wrapper" style="margin-top: 15px;">
-    <button class="terminal-select-btn">
-      {% if cart.attributes.Airport and cart.attributes.Airport != blank %}
-         In Stock
-        {% else %}
-          Select Terminal
-      {% endif %}
-    </button>
+    <button class="terminal-select-btn">Select Terminal</button>
   </div>
 
   {% if block_settings.show_tax_info %}

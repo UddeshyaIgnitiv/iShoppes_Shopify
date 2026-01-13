@@ -22,7 +22,6 @@
         {{ 'icon-search.svg' | inline_asset_content }}
       </span>
     </button>
-    {{ cart.attributes.Airport }}
     {% if cart.attributes.Airport and cart.attributes.Airport != blank %}
     <div class="header-terminalInfo text-white terminal-update-btn font-medium js-terminal-info-display">
       <span class="js-terminal-info-text">{{ cart.attributes.Airport }}</span>
@@ -86,16 +85,16 @@
 </div>
 {% stylesheet %}
   .header-terminalInfoDefault {
-    background: #005eb8;
-    color: #fff;
-    border-radius: 10px 0px 0px 10px;
+    background: #005eb8 !important;
+    color: #fff !important;
+    border-radius: 10px 0px 0px 10px !important;
     justify-self: end;
-    padding: 12px 10px;
+    padding: 12px 10px !important;
     text-transform: uppercase;
-    font-weight: 300;
-    letter-spacing: normal;
+    font-weight: 300 !important;
+    letter-spacing: normal !important;
     cursor: pointer;
-    grid-area: 2 / 8 / 2 / 8;
+    grid-area: 2 / 8 / 2 / 8 !important;
   }
   .search-wrapper > svg{
     width: 90% !important;

@@ -35,6 +35,48 @@
     class="collection-wrapper grid gap-style"
   >
     <h2 class="collection-title">{{ collection.title | capitalize }}</h2>
+    {% assign vendor_filter_value = '' %}
+    {% for filter in collection.filters %}
+      {% if filter.param_name == 'filter.p.vendor' and filter.active_values.size > 0 %}
+        {% assign vendor_filter_value = filter.active_values[0].value %}
+      {% endif %}
+    {% endfor %}
+    {% if vendor_filter_value == blank %}
+      {% assign vendor_filter_value = request.params['filter.p.vendor'] | default: '' %}
+    {% endif %}
+    {% if vendor_filter_value == blank and request.query_string contains 'filter.p.vendor=' %}
+      {% assign vendor_filter_value = request.query_string | split: 'filter.p.vendor=' | last | split: '&' | first | url_decode %}
+    {% endif %}
+    {% assign has_vendor_filter = false %}
+    {% if vendor_filter_value != blank %}
+      {% assign has_vendor_filter = true %}
+    {% endif %}
+    {% if has_vendor_filter %}
+      {% assign vendor_handle = vendor_filter_value | handleize %}
+      {% assign vendor_page = pages[vendor_handle] %}
+      {{ vendor_page.title }}
+      {% if vendor_page and vendor_page.image %}
+        <div class="collection-image">
+          <img
+            src="{{ vendor_page.image | image_url: width: 1600 }}"
+            alt="{{ vendor_page.image.alt | default: vendor_filter_value | escape }}"
+            width="{{ vendor_page.image.width }}"
+            height="{{ vendor_page.image.height }}"
+            loading="lazy"
+          >
+        </div>
+      {% endif %}
+    {% elsif collection.image %}
+      <div class="collection-image">
+        <img
+          src="{{ collection.image | image_url: width: 1600 }}"
+          alt="{{ collection.image.alt | default: collection.title | escape }}"
+          width="{{ collection.image.width }}"
+          height="{{ collection.image.height }}"
+          loading="lazy"
+        >
+      </div>
+    {% endif %}
     {% content_for 'block',
       type: 'filters',
       id: 'filters',

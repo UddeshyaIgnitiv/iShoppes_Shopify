@@ -58,7 +58,34 @@
               loading="lazy"
             >
           </div>
+          {% if vendor_handle == 'dior' %}
+            {%  if collection.image != blank %}
+            <div class="collection-banner">
+              <img
+                src="{{ collection.image | image_url }}"
+                alt="{{ collection.image.alt | default: collection.title | escape }}"
+                width="100%"
+                height="auto"
+                loading="lazy"
+              >
+            </div>
+            {% endif %}
+          {% endif %}
         {% endif %}
+      {% endif %}
+    {% endif %}
+    {% assign collection_title = collection.title | downcase %}
+    {% if collection_title == 'liquor and wine' and active_vendor_label == blank %}
+      {%  if collection.image != blank %}
+      <div class="collection-banner">
+        <img
+          src="{{ collection.image | image_url }}"
+          alt="{{ collection.image.alt | default: collection.title | escape }}"
+          width="100%"
+          height="auto"
+          loading="lazy"
+        >
+      </div>
       {% endif %}
     {% endif %}
     {% content_for 'block',
@@ -259,6 +286,13 @@
     background-color: #000;
     padding-block: 20px;
     active_vendor_label
+  }
+  .collection-banner {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-block: 1px;
   }
   .collection-filter-image img {
     display: block;

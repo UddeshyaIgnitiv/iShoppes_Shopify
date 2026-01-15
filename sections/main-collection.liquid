@@ -34,48 +34,32 @@
   <div
     class="collection-wrapper grid gap-style"
   >
+    {% assign vendor_filter = collection.filters | where: 'param_name', 'filter.p.vendor' | first %}
+    {% assign active_vendor_label = blank %}
+    {% if vendor_filter %}
+      {% for value in vendor_filter.active_values %}
+        {% assign active_vendor_label = value.label | default: value.value %}
+        {% break %}
+      {% endfor %}
+    {% endif %}
     <h2 class="collection-title">{{ collection.title | capitalize }}</h2>
-    {% assign vendor_filter_value = '' %}
-    {% for filter in collection.filters %}
-      {% if filter.param_name == 'filter.p.vendor' and filter.active_values.size > 0 %}
-        {% assign vendor_filter_value = filter.active_values[0].value %}
+    {% if active_vendor_label != blank %}
+      {% assign active_vendor_count = vendor_filter.active_values | size %}
+      {% if active_vendor_count == 1 %}
+        {% assign vendor_handle = active_vendor_label | handleize %}
+        {% assign vendor_collection = collections[vendor_handle] %}
+        {% if vendor_collection and vendor_collection.image %}
+          <div class="collection-filter-image">
+            <img
+              src="{{ vendor_collection.image | image_url }}"
+              alt="{{ vendor_collection.image.alt | default: active_vendor_label | escape }}"
+              width="145"
+              height="41"
+              loading="lazy"
+            >
+          </div>
+        {% endif %}
       {% endif %}
-    {% endfor %}
-    {% if vendor_filter_value == blank %}
-      {% assign vendor_filter_value = request.params['filter.p.vendor'] | default: '' %}
-    {% endif %}
-    {% if vendor_filter_value == blank and request.query_string contains 'filter.p.vendor=' %}
-      {% assign vendor_filter_value = request.query_string | split: 'filter.p.vendor=' | last | split: '&' | first | url_decode %}
-    {% endif %}
-    {% assign has_vendor_filter = false %}
-    {% if vendor_filter_value != blank %}
-      {% assign has_vendor_filter = true %}
-    {% endif %}
-    {% if has_vendor_filter %}
-      {% assign vendor_handle = vendor_filter_value | handleize %}
-      {% assign vendor_page = pages[vendor_handle] %}
-      {{ vendor_page.title }}
-      {% if vendor_page and vendor_page.image %}
-        <div class="collection-image">
-          <img
-            src="{{ vendor_page.image | image_url: width: 1600 }}"
-            alt="{{ vendor_page.image.alt | default: vendor_filter_value | escape }}"
-            width="{{ vendor_page.image.width }}"
-            height="{{ vendor_page.image.height }}"
-            loading="lazy"
-          >
-        </div>
-      {% endif %}
-    {% elsif collection.image %}
-      <div class="collection-image">
-        <img
-          src="{{ collection.image | image_url: width: 1600 }}"
-          alt="{{ collection.image.alt | default: collection.title | escape }}"
-          width="{{ collection.image.width }}"
-          height="{{ collection.image.height }}"
-          loading="lazy"
-        >
-      </div>
     {% endif %}
     {% content_for 'block',
       type: 'filters',
@@ -267,6 +251,65 @@
     text-transform: capitalize;
     grid-column: 1 / -1;
   }
+  .collection-filter-image {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    padding-block: 20px;
+    active_vendor_label
+  }
+  .collection-filter-image img {
+    display: block;
+    object-fit: contain;
+    
+  }
+  {% if vendor_handle == 'dior' %}
+    .collection-filter-image img {
+      width: 200px;
+      height: 60px;
+    }
+  {% elsif vendor_handle == 'glenfiddich' %}
+    .collection-filter-image img {
+      width: 445px;
+      height: 140px;
+    }
+  {% elsif vendor_handle == 'the-macallan' %}
+    .collection-filter-image {
+      background-color: #FFF;
+    }
+    .collection-filter-image img {
+      width: 445px;
+      height: 140px;
+    }
+  {% elsif vendor_handle == 'mac' %}
+    .collection-filter-image img {
+      width: 445px;
+      height: 140px;
+    }
+  {% elsif vendor_handle == 'clarins' %}
+    .collection-filter-image {
+      background-color: #FFF;
+    }
+    .collection-filter-image img {
+      width: 100%;
+      height: auto;
+    }
+  {% elsif vendor_handle == 'clinique' %}
+    .collection-filter-image {
+      background-color: #FFF;
+    }
+    .collection-filter-image img {
+      width: 445px;
+      height: 140px;
+    }
+  {% else %}
+    .collection-filter-image img {
+      width: 145px;
+      height: 41px;
+    }
+  {% endif %}
   .card {
     background: #fff;
     width: 250px;

@@ -347,5 +347,73 @@
         }
       })();
       </script>
+      <script>
+      (function () {
+        try {
+          const form = document.querySelector('#terminal-selection-div form');
+          if (!form) return;
+
+          function collectDepartureData_1() {
+            try {
+              return {
+                Airport: airportSelect?.options[airportSelect.selectedIndex]?.text || '',
+                Airline: airlineSelect?.options[airlineSelect.selectedIndex]?.text || '',
+                Flight: flightSelect?.options[flightSelect.selectedIndex]?.text || '',
+                Destination: destinationSelect?.options[destinationSelect.selectedIndex]?.text || '',
+                DepartureDate: document.getElementById('departuredate')?.value || '',
+                DepartureTime:
+                  `${document.getElementById('departurehours')?.value || ''}:` +
+                  `${document.getElementById('departureminutes')?.value || ''} ` +
+                  `${document.getElementById('departuremeridiem')?.value || ''}`,
+                Seat: document.getElementById('seatno')?.value || ''
+              };
+            } catch (e) {
+              return {};
+            }
+          }
+
+          form.addEventListener(
+            'submit',
+            async function (e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+
+              if (typeof validateDepartureTime === 'function') {
+                if (!validateDepartureTime()) return;
+              }
+
+              const data = collectDepartureData_1();
+              Object.keys(data).forEach(key => {
+                if (data[key]) {
+                  try {
+                    const d = new Date();
+                    d.setTime(d.getTime() + 48 * 60 * 60 * 1000);
+                    document.cookie =
+                      key +
+                      '=' +
+                      encodeURIComponent(data[key]) +
+                      ';expires=' +
+                      d.toUTCString() +
+                      ';path=/';
+                  } catch (e) {}
+                }
+              });
+
+              await fetch('/cart/update.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ attributes: data })
+              });
+
+              // Reload only AFTER Shopify confirms save
+              window.location.reload();
+            },
+            true
+          );
+        } catch (e) {
+          console.warn('Final cart override failed safely');
+        }
+      })();
+    </script>
   </body>
 </html>

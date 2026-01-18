@@ -497,7 +497,7 @@
                     class="fieldIcons-after-6am flex items-center justify-center mx-0.5 my-0 pointer-events-none w-[2.5rem] z-foreground"
                 ></span
             ></span>
-            <p class="message-root-6k6 font-normal leading-none pb-0.5 pt-2.5 px-0.5 text-colorDefault text-sm"></p>
+            <!--<p class="message-root-6k6 font-normal leading-none pb-0.5 pt-2.5 px-0.5 text-colorDefault text-sm"></p>-->
             <p id="departureDateError"
               class="message-root-6k6 font-normal leading-none pb-0.5 pt-2.5 px-0.5 text-sm"
               style="color:#ff4d4f; display:none;">
@@ -552,10 +552,7 @@
                                     class="icon-icon-P1l"
                                 >
                                     <polyline points="6 9 12 15 18 9"></polyline></svg></span></span
-                    ></span>
-                    <p
-                        class="message-root-6k6 font-normal leading-none pb-0.5 pt-2.5 px-0.5 text-colorDefault text-sm"
-                    ></p></span
+                    ></span></span
                 ><span class="header-departureTime-Mpg"
                     ><span
                         class="fieldIcons-root-4mU grid-flow-col inline-grid w-full"
@@ -599,10 +596,7 @@
                                     class="icon-icon-P1l"
                                 >
                                     <polyline points="6 9 12 15 18 9"></polyline></svg></span></span
-                    ></span>
-                    <p
-                        class="message-root-6k6 font-normal leading-none pb-0.5 pt-2.5 px-0.5 text-colorDefault text-sm"
-                    ></p></span
+                    ></span></span
                 ><span class="header-departureTime-Mpg"
                     ><span
                         class="fieldIcons-root-4mU grid-flow-col inline-grid w-full"
@@ -635,12 +629,11 @@
                                     class="icon-icon-P1l"
                                 >
                                     <polyline points="6 9 12 15 18 9"></polyline></svg></span></span
-                    ></span>
-                    <p
-                        class="message-root-6k6 font-normal leading-none pb-0.5 pt-2.5 px-0.5 text-colorDefault text-sm"
-                    ></p
-                ></span>
+                    ></span></span>
             </div>
+            <p
+                class="message-root-6k6 font-normal leading-none pb-0.5 pt-2.5 px-0.5 text-colorDefault text-sm w-full"
+            ></p>
         </div>
         <div>
             <label class="checkbox-root-loq" for="finalDestinationCheck"
@@ -675,7 +668,13 @@
             <button type="submit" class="ButtonPrimary ButtonPrimaryLight" priority="high">Submit</button>
         </div>
         <h6 class="text-center">
-            <button type="reset" class="text-uppercase text-center" style="text-decoration: underline">Reset</button>
+            <button
+                type="reset"
+                class="text-uppercase text-center departure-form-reset"
+                style="text-decoration: underline"
+            >
+                Reset
+            </button>
         </h6>
         <p class="text-center">
             Online ordering is currently available for select stores. We are continuously adding stores, so make sure to
@@ -700,6 +699,7 @@
     height: calc(100vh - 200px);
     overflow: hidden;
     overflow-y: auto;
+    right: 35px;
   }
   .header-closedepartureform-AsZ {
     display: flex;
@@ -734,6 +734,8 @@
     color: #333;
     min-height: 51px;
     display: inline;
+    padding-left: 10px;
+    font-size: 16px;
 }
 .bg-white {
     --tw-bg-opacity: 1;
@@ -742,6 +744,24 @@
 .header-departureform-1j0 form select {
     color: #333;
     min-height: 51px;
+    border-radius: 10px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 0px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 5px center;
+    background-size: 20px 20px;
+    padding-left: 10px;
+    font-size: 16px;
+}
+.header-departureform-1j0 form input[type="date"]::-webkit-calendar-picker-indicator {
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+    padding: 0 10px;
+
 }
 .header-departureFormSelect-oog {
     grid-area: auto;
@@ -858,10 +878,14 @@
     background: unset;
     border: unset;
     text-transform: uppercase;
+    cursor: pointer;
 }
 .header-departureform-1j0 form input:hover {
     background: #fff;
     color: #333;
+}
+.field-label-oLB span {
+  color: red;
 }
 {% comment %} .fieldIcons-root-4mU {
     grid-template-areas: 'before input after';
@@ -969,6 +993,173 @@ if (navOverlay) {
     }
   });
 }
+
+// Departure form validation for required fields
+const getFieldMessage = (fieldEl) => {
+  if (!fieldEl) return null;
+  const fieldRoot = fieldEl.closest('.field-root-b-C');
+  if (!fieldRoot) return null;
+  return fieldRoot.querySelector('.message-root-6k6');
+};
+
+const setError = (messageEl, message) => {
+  if (!messageEl) return;
+  messageEl.textContent = message || '';
+  messageEl.style.color = message ? '#ff4d4f' : '';
+  if (messageEl.id === 'departureDateError') {
+    messageEl.style.display = message ? 'block' : 'none';
+  }
+};
+
+const isSelectValueInvalid = (value) => {
+  if (!value) return true;
+  const normalized = value.trim().toLowerCase();
+  return normalized === '--' || normalized.startsWith('select');
+};
+
+const resetDepartureForm = (departureForm) => {
+  if (!departureForm) return;
+
+  const messages = departureForm.querySelectorAll('.message-root-6k6');
+  messages.forEach(messageEl => setError(messageEl, ''));
+
+  const departureDateError = departureForm.querySelector('#departureDateError');
+  if (departureDateError) {
+    setError(departureDateError, '');
+  }
+
+  const selectFields = departureForm.querySelectorAll('select');
+  selectFields.forEach(selectEl => {
+    if (selectEl.options.length > 0) {
+      selectEl.selectedIndex = 0;
+    }
+  });
+
+  const textInputs = departureForm.querySelectorAll('input[type="text"], input[type="date"]');
+  textInputs.forEach(inputEl => {
+    inputEl.value = '';
+  });
+
+  const toggleInputs = departureForm.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+  toggleInputs.forEach(inputEl => {
+    inputEl.checked = false;
+  });
+};
+
+const validateDepartureForm = (departureForm) => {
+  if (!departureForm) return true;
+
+  let hasErrors = false;
+  const airportSelect = departureForm.querySelector('#airportselect');
+  const airlineSelect = departureForm.querySelector('#airlineselect');
+  const flightSelect = departureForm.querySelector('#flightselect');
+  const destinationSelect = departureForm.querySelector('#destinationselect');
+  const departureDate = departureForm.querySelector('#departuredate');
+  const departureHours = departureForm.querySelector('#departurehours');
+  const departureMinutes = departureForm.querySelector('#departureminutes');
+  const departureMeridiem = departureForm.querySelector('#departuremeridiem');
+  const departureDateError = departureForm.querySelector('#departureDateError');
+
+  if (airportSelect) {
+    const messageEl = getFieldMessage(airportSelect);
+    if (isSelectValueInvalid(airportSelect.value)) {
+      setError(messageEl, 'Airport is required.');
+      hasErrors = true;
+    } else {
+      setError(messageEl, '');
+    }
+  }
+
+  if (airlineSelect) {
+    const messageEl = getFieldMessage(airlineSelect);
+    if (isSelectValueInvalid(airlineSelect.value)) {
+      setError(messageEl, 'Airline is required.');
+      hasErrors = true;
+    } else {
+      setError(messageEl, '');
+    }
+  }
+
+  if (flightSelect) {
+    const messageEl = getFieldMessage(flightSelect);
+    if (isSelectValueInvalid(flightSelect.value)) {
+      setError(messageEl, 'Flight is required.');
+      hasErrors = true;
+    } else {
+      setError(messageEl, '');
+    }
+  }
+
+  if (destinationSelect) {
+    const messageEl = getFieldMessage(destinationSelect);
+    if (isSelectValueInvalid(destinationSelect.value)) {
+      setError(messageEl, 'Destination is required.');
+      hasErrors = true;
+    } else {
+      setError(messageEl, '');
+    }
+  }
+
+  if (departureDate) {
+    const messageEl = departureDateError || getFieldMessage(departureDate);
+    if (!departureDate.value) {
+      setError(messageEl, 'Departure date is required.');
+      hasErrors = true;
+    } else {
+      setError(messageEl, '');
+    }
+  }
+
+  if (departureHours || departureMinutes || departureMeridiem) {
+    const timeMessageEl =
+      getFieldMessage(departureHours) ||
+      getFieldMessage(departureMinutes) ||
+      getFieldMessage(departureMeridiem);
+    const hoursInvalid = departureHours && !departureHours.value;
+    const minutesInvalid = departureMinutes && !departureMinutes.value;
+    if (hoursInvalid || minutesInvalid) {
+      setError(timeMessageEl, 'Departure time is required.');
+      hasErrors = true;
+    } else {
+      setError(timeMessageEl, '');
+    }
+  }
+
+  return !hasErrors;
+};
+
+document.addEventListener(
+  'submit',
+  function(event) {
+    const form = event.target && event.target.closest('.account-form');
+    if (!form) return;
+    if (!validateDepartureForm(form)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  },
+  true
+);
+
+document.addEventListener('change', function(event) {
+  const fieldEl = event.target;
+  if (!fieldEl || !fieldEl.closest('.account-form')) return;
+  const messageEl =
+    fieldEl.id === 'departuredate'
+      ? fieldEl.closest('.account-form').querySelector('#departureDateError') || getFieldMessage(fieldEl)
+      : getFieldMessage(fieldEl);
+  setError(messageEl, '');
+});
+
+document.addEventListener(
+  'reset',
+  function(event) {
+    const form = event.target && event.target.closest('.account-form');
+    if (!form) return;
+    window.setTimeout(() => resetDepartureForm(form), 0);
+  },
+  true
+);
 </script>
 
 <script

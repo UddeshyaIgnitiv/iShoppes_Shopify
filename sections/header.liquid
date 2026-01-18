@@ -668,7 +668,13 @@
             <button type="submit" class="ButtonPrimary ButtonPrimaryLight" priority="high">Submit</button>
         </div>
         <h6 class="text-center">
-            <button type="reset" class="text-uppercase text-center" style="text-decoration: underline">Reset</button>
+            <button
+                type="reset"
+                class="text-uppercase text-center departure-form-reset"
+                style="text-decoration: underline"
+            >
+                Reset
+            </button>
         </h6>
         <p class="text-center">
             Online ordering is currently available for select stores. We are continuously adding stores, so make sure to
@@ -693,6 +699,7 @@
     height: calc(100vh - 200px);
     overflow: hidden;
     overflow-y: auto;
+    right: 35px;
   }
   .header-closedepartureform-AsZ {
     display: flex;
@@ -871,6 +878,7 @@
     background: unset;
     border: unset;
     text-transform: uppercase;
+    cursor: pointer;
 }
 .header-departureform-1j0 form input:hover {
     background: #fff;
@@ -1009,6 +1017,35 @@ const isSelectValueInvalid = (value) => {
   return normalized === '--' || normalized.startsWith('select');
 };
 
+const resetDepartureForm = (departureForm) => {
+  if (!departureForm) return;
+
+  const messages = departureForm.querySelectorAll('.message-root-6k6');
+  messages.forEach(messageEl => setError(messageEl, ''));
+
+  const departureDateError = departureForm.querySelector('#departureDateError');
+  if (departureDateError) {
+    setError(departureDateError, '');
+  }
+
+  const selectFields = departureForm.querySelectorAll('select');
+  selectFields.forEach(selectEl => {
+    if (selectEl.options.length > 0) {
+      selectEl.selectedIndex = 0;
+    }
+  });
+
+  const textInputs = departureForm.querySelectorAll('input[type="text"], input[type="date"]');
+  textInputs.forEach(inputEl => {
+    inputEl.value = '';
+  });
+
+  const toggleInputs = departureForm.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+  toggleInputs.forEach(inputEl => {
+    inputEl.checked = false;
+  });
+};
+
 const validateDepartureForm = (departureForm) => {
   if (!departureForm) return true;
 
@@ -1113,6 +1150,16 @@ document.addEventListener('change', function(event) {
       : getFieldMessage(fieldEl);
   setError(messageEl, '');
 });
+
+document.addEventListener(
+  'reset',
+  function(event) {
+    const form = event.target && event.target.closest('.account-form');
+    if (!form) return;
+    window.setTimeout(() => resetDepartureForm(form), 0);
+  },
+  true
+);
 </script>
 
 <script

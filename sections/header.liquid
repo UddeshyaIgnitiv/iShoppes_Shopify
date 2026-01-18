@@ -831,8 +831,30 @@
     left: 0;
     height: 14px;
     width: 14px;
-    {% comment %} border: 1px solid #fff; {% endcomment %}
+    border: 1px solid #fff;
     border-radius: 2px;
+    background: transparent;
+}
+.checkbox-icon-Xb6 svg {
+    display: none;
+}
+.checkbox-icon-Xb6::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 4px;
+    top: 1px;
+    width: 4px;
+    height: 8px;
+    border: solid #000;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.checkbox-input-XgR:checked ~ .checkbox-icon-Xb6 {
+    background: #fff;
+}
+.checkbox-input-XgR:checked ~ .checkbox-icon-Xb6::after {
+    display: block;
 }
 .checkbox-label-2vd {
     grid-area: label;

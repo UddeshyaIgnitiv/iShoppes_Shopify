@@ -91,12 +91,12 @@
         </div>
         <div style="padding-top:30px">
           {%- if show_age_verification -%}
-            <style>
+            {% comment %} <style>
               #{{ product_form_id }} [name="add"],
               #{{ product_form_id }} .shopify-payment-button {
                 display: none;
               }
-            </style>
+            </style> {% endcomment %}
             <div class="age-verification-wrapper" style="width: 100%; margin-top: 15px; margin-bottom: 10px;">
               <div style="display: flex; align-items: flex-start; gap: 8px;">
                   <input type="checkbox" id="age-verification-{{ section.id }}" name="properties[Age Verification]" required form="{{ product_form_id }}" style="margin-top: 4px; width: 18px; height: 18px; accent-color: black;">
@@ -107,7 +107,7 @@
               </div>
             </div>
             <script>
-              (function() {
+              {% comment %} (function() {
                 var checkbox = document.getElementById('age-verification-{{ section.id }}');
                 var form = document.getElementById('{{ product_form_id }}');
                 if (!checkbox || !form) return;
@@ -126,7 +126,7 @@
                 
                 checkbox.addEventListener('change', toggleButtons);
                 if (checkbox.checked) toggleButtons();
-              })();
+              })(); {% endcomment %}
             </script>
           {%- endif -%}
 

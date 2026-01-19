@@ -99,7 +99,8 @@
             </style> {% endcomment %}
             <div class="age-verification-wrapper" style="width: 100%; margin-top: 15px; margin-bottom: 10px;">
               <div style="display: flex; align-items: flex-start; gap: 8px;">
-                  <input type="checkbox" id="age-verification-{{ section.id }}" name="properties[Age Verification]" required form="{{ product_form_id }}" style="margin-top: 4px; width: 18px; height: 18px; accent-color: black;">
+                  {% comment %} <input type="checkbox" id="age-verification-{{ section.id }}" name="properties[Age Verification]" required form="{{ product_form_id }}" style="margin-top: 4px; width: 18px; height: 18px; accent-color: black;"> {% endcomment %}
+                  <input type="checkbox" id="age-verification-{{ section.id }}" name="properties[Age Verification]" required form="{{ product_form_id }}" style="margin-top: 4px; width: 18px; height: 18px; accent-color: black;" oninvalid="this.setCustomValidity('Please confirm you are 21 years of age or older to continue.')" oninput="this.setCustomValidity('')">
                   <label for="age-verification-{{ section.id }}" style="font-size: 16px; line-height: 1.4; color: #000;">
                     <span style="font-weight: 500; display: block; margin-bottom: 4px;">Age Verification<span style="color: #e32c2b;">*</span></span>
                     <span style="font-weight: 400;">Yes, I confirm that I am 21 years of age or older.</span>

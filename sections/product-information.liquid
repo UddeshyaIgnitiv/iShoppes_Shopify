@@ -49,6 +49,78 @@
 >
   <script>
     window._klOnsite = window._klOnsite || []; window._klOnsite.push(['openForm', 'X3xycz']);
+
+    (function () {
+      var FORM_ID = 'X3xycz';
+
+      function safeJsonParse(str) {
+        try { return JSON.parse(str); } catch (e) { return null; }
+      }
+
+      function getKlaviyoOnsiteState() {
+        try {
+          var raw = localStorage.getItem('klaviyoOnsite');
+          return raw ? safeJsonParse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function wasFormDisabled(state, formId) {
+        return !!(state &&
+          state.viewedForms &&
+          state.viewedForms.modal &&
+          state.viewedForms.modal.disabledForms &&
+          state.viewedForms.modal.disabledForms[formId] &&
+          state.viewedForms.modal.disabledForms[formId].lastCloseTime
+        );
+      }
+
+      function wasFormViewed(state, formId) {
+        return !!(state &&
+          state.viewedForms &&
+          state.viewedForms.modal &&
+          state.viewedForms.modal.viewedForms &&
+          state.viewedForms.modal.viewedForms[formId]
+        );
+      }
+
+      // Optional extra: our own "opened once" flag (independent of Klaviyo)
+      function hasOurFlag() {
+        try { return localStorage.getItem('openedKlaviyoForm_' + FORM_ID) === '1'; } catch(e) { return false; }
+      }
+      function setOurFlag() {
+        try { localStorage.setItem('openedKlaviyoForm_' + FORM_ID, '1'); } catch(e) {}
+      }
+
+      function openFormOnce() {
+        // Ensure Klaviyo onsite is available
+        window._klOnsite = window._klOnsite || [];
+        window._klOnsite.push(['openForm', FORM_ID]);
+        setOurFlag();
+      }
+
+      // ---- Gating logic ----
+      var state = getKlaviyoOnsiteState();
+
+      // If user already closed/declined it -> never open again
+      if (wasFormDisabled(state, FORM_ID)) return;
+
+      // If already counted as viewed -> don't open again
+      if (wasFormViewed(state, FORM_ID)) return;
+
+      // If our own flag already set -> don't open again
+      if (hasOurFlag()) return;
+
+      // Trigger on page load highlighting: run after page is ready
+      if (document.readyState === 'complete') {
+        setTimeout(openFormOnce, 300);
+      } else {
+        window.addEventListener('load', function () {
+          setTimeout(openFormOnce, 300);
+        });
+      }
+    })();
   </script>
   {% if section.settings.desktop_media_position == 'left' and product_has_media %}
     {% assign product_href = '#ProductInformation-' | append: section.id %}

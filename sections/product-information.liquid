@@ -48,6 +48,86 @@
   style="{% render 'spacing-style', settings: section.settings %} --gap: {{ section.settings.gap }}px;"
 >
   <script>
+  (function () {
+    var FORM_ID = 'X3xycz';
+
+    // Our own flags (extra safety)
+    var SHOWN_KEY   = 'klaviyo_form_shown_' + FORM_ID;      // persistent
+    var SESSION_KEY = 'klaviyo_form_session_' + FORM_ID;    // per-tab
+
+    function safeJsonParse(str) {
+      try { return JSON.parse(str); } catch (e) { return null; }
+    }
+
+    function isFormDisabledInKlaviyoStorage(formId) {
+      try {
+        var raw = localStorage.getItem('klaviyoOnsite');
+        if (!raw) return false;
+
+        var data = safeJsonParse(raw);
+        if (!data) return false;
+
+        // Expected path from your example:
+        // data.viewedForms.modal.disabledForms[FORM_ID]
+        var disabledForms =
+          data &&
+          data.viewedForms &&
+          data.viewedForms.modal &&
+          data.viewedForms.modal.disabledForms;
+
+        return !!(disabledForms && disabledForms[formId]);
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function shouldOpen(formId) {
+      // already opened in this tab
+      try {
+        if (sessionStorage.getItem(SESSION_KEY) === '1') return false;
+      } catch (e) {}
+
+      // already opened in this browser (persistent)
+      try {
+        if (localStorage.getItem(SHOWN_KEY) === '1') return false;
+      } catch (e) {}
+
+      // user previously closed/rejected (Klaviyo marks it disabled)
+      if (isFormDisabledInKlaviyoStorage(formId)) return false;
+
+      return true;
+    }
+
+    function markShown() {
+      try { sessionStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
+      try { localStorage.setItem(SHOWN_KEY, '1'); } catch (e) {}
+    }
+
+    function openKlaviyoForm(formId) {
+      window._klOnsite = window._klOnsite || [];
+      window._klOnsite.push(['openForm', formId]);
+      markShown();
+    }
+
+    function init() {
+      if (!shouldOpen(FORM_ID)) return;
+
+      // Small delay so klaviyoOnsite has time to exist on first load in some themes
+      setTimeout(function () {
+        if (!shouldOpen(FORM_ID)) return; // re-check after delay
+        openKlaviyoForm(FORM_ID);
+      }, 800);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+
+  <script>
     window._klOnsite = window._klOnsite || []; window._klOnsite.push(['openForm', 'X3xycz']);
   </script>
   {% if section.settings.desktop_media_position == 'left' and product_has_media %}

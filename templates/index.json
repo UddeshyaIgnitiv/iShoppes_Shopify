@@ -14,6 +14,7 @@
       "blocks": {
         "slide_EVEiXg": {
           "type": "_slide",
+          "disabled": true,
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/251010_BDC2H25_LX-TR_INT.SHOPPES_Banner_Desktop_1440x495_758b7174-2a08-4255-884a-ee3244a670c6.jpg",
@@ -93,6 +94,7 @@
       "blocks": {
         "slide_CDdX4W": {
           "type": "_slide",
+          "disabled": true,
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/dior_home_banner_mob-632.jpg",

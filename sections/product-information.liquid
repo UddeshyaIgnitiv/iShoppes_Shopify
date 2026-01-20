@@ -50,77 +50,97 @@
   <script>
     window._klOnsite = window._klOnsite || []; window._klOnsite.push(['openForm', 'X3xycz']);
 
-    (function () {
-      var FORM_ID = 'X3xycz';
+(function () {
+  var FORM_ID = 'X3xycz';
 
-      function safeJsonParse(str) {
-        try { return JSON.parse(str); } catch (e) { return null; }
-      }
+  // Prevent double execution if Shopify re-renders the section
+  if (window.__kv_form_guard && window.__kv_form_guard[FORM_ID]) return;
+  window.__kv_form_guard = window.__kv_form_guard || {};
+  window.__kv_form_guard[FORM_ID] = true;
 
-      function getKlaviyoOnsiteState() {
-        try {
-          var raw = localStorage.getItem('klaviyoOnsite');
-          return raw ? safeJsonParse(raw) : null;
-        } catch (e) {
-          return null;
-        }
-      }
+  function safeParse(str) { try { return JSON.parse(str); } catch(e) { return null; } }
 
-      function wasFormDisabled(state, formId) {
-        return !!(state &&
-          state.viewedForms &&
-          state.viewedForms.modal &&
-          state.viewedForms.modal.disabledForms &&
-          state.viewedForms.modal.disabledForms[formId] &&
-          state.viewedForms.modal.disabledForms[formId].lastCloseTime
-        );
-      }
+  function getState() {
+    try {
+      var raw = localStorage.getItem('klaviyoOnsite');
+      return raw ? safeParse(raw) : null;
+    } catch(e) { return null; }
+  }
 
-      function wasFormViewed(state, formId) {
-        return !!(state &&
-          state.viewedForms &&
-          state.viewedForms.modal &&
-          state.viewedForms.modal.viewedForms &&
-          state.viewedForms.modal.viewedForms[formId]
-        );
-      }
+  function isDisabledInKlaviyoState(state, formId) {
+    var disabled =
+      state &&
+      state.viewedForms &&
+      state.viewedForms.modal &&
+      state.viewedForms.modal.disabledForms &&
+      state.viewedForms.modal.disabledForms[formId] &&
+      state.viewedForms.modal.disabledForms[formId].lastCloseTime;
 
-      // Optional extra: our own "opened once" flag (independent of Klaviyo)
-      function hasOurFlag() {
-        try { return localStorage.getItem('openedKlaviyoForm_' + FORM_ID) === '1'; } catch(e) { return false; }
-      }
-      function setOurFlag() {
-        try { localStorage.setItem('openedKlaviyoForm_' + FORM_ID, '1'); } catch(e) {}
-      }
+    return !!disabled;
+  }
 
-      function openFormOnce() {
-        // Ensure Klaviyo onsite is available
-        window._klOnsite = window._klOnsite || [];
-        window._klOnsite.push(['openForm', FORM_ID]);
-        setOurFlag();
-      }
+  // Our own "closed once" flag (extra safety)
+  function closedFlagKey() { return 'kv_form_closed_' + FORM_ID; }
+  function hasClosedFlag() {
+    try { return localStorage.getItem(closedFlagKey()) === '1'; } catch(e) { return false; }
+  }
+  function setClosedFlag() {
+    try { localStorage.setItem(closedFlagKey(), '1'); } catch(e) {}
+  }
 
-      // ---- Gating logic ----
-      var state = getKlaviyoOnsiteState();
+  // Listen for Klaviyo form events and mark as closed when user closes it
+  // Klaviyo dispatches "klaviyoForms" events like: open, close, submit, etc. :contentReference[oaicite:1]{index=1}
+  window.addEventListener('klaviyoForms', function (e) {
+    var d = e && e.detail ? e.detail : null;
+    if (!d) return;
 
-      // If user already closed/declined it -> never open again
-      if (wasFormDisabled(state, FORM_ID)) return;
+    // Some payloads use formId, others may use form_id; handle both
+    var fid = d.formId || d.form_id;
+    if (d.type === 'close' && String(fid) === String(FORM_ID)) {
+      setClosedFlag();
+    }
+  });
 
-      // If already counted as viewed -> don't open again
-      if (wasFormViewed(state, FORM_ID)) return;
+  function shouldOpenNow() {
+    // If user already declined/closed: do not open
+    if (hasClosedFlag()) return false;
 
-      // If our own flag already set -> don't open again
-      if (hasOurFlag()) return;
+    var state = getState();
+    if (isDisabledInKlaviyoState(state, FORM_ID)) return false;
 
-      // Trigger on page load highlighting: run after page is ready
-      if (document.readyState === 'complete') {
-        setTimeout(openFormOnce, 300);
-      } else {
-        window.addEventListener('load', function () {
-          setTimeout(openFormOnce, 300);
-        });
-      }
-    })();
+    return true;
+  }
+
+  function openForm() {
+    if (!shouldOpenNow()) return;
+
+    window._klOnsite = window._klOnsite || [];
+    window._klOnsite.push(['openForm', FORM_ID]);
+  }
+
+  // Wait a bit so Klaviyo + localStorage can be initialized
+  // Also handles cases where the klaviyo script loads slightly late.
+  function delayedAttempt(triesLeft) {
+    if (!shouldOpenNow()) return;
+
+    // If Klaviyo isn't ready yet, retry a few times
+    if (!window._klOnsite) {
+      if (triesLeft > 0) return setTimeout(function () { delayedAttempt(triesLeft - 1); }, 300);
+      return;
+    }
+
+    openForm();
+  }
+
+  // Run after load for best stability
+  if (document.readyState === 'complete') {
+    setTimeout(function () { delayedAttempt(6); }, 400);
+  } else {
+    window.addEventListener('load', function () {
+      setTimeout(function () { delayedAttempt(6); }, 400);
+    });
+  }
+})();
   </script>
   {% if section.settings.desktop_media_position == 'left' and product_has_media %}
     {% assign product_href = '#ProductInformation-' | append: section.id %}

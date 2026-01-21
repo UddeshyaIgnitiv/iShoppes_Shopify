@@ -45,7 +45,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/brugal_home_desktop_77929ced8d.jpg",
-            "link": "",
+            "link": "/collections/vendors?q=Brugal%201888",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",

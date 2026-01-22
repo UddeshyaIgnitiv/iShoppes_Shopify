@@ -219,12 +219,7 @@
 
           <div class="form-field">
             <label for="RegTerminal">Terminal Number*</label>
-            <select id="RegTerminal" class="input" required aria-required="true">
-              <option value="" selected disabled>Select terminal</option>
-              <option value="T1">T1</option>
-              <option value="T2">T2</option>
-              <option value="T3">T3</option>
-            </select>
+            <select id="RegTerminal" class="input" required aria-required="true"></select>
           </div>
 
           <div class="form-field" style="gap:10px;">
@@ -244,6 +239,25 @@
       </div>
 
       <script>
+      async function loadAirports() {
+      const res = await fetch('https://ignitiv.axiomconsulting.in/airports');
+      const airlines = await res.json();
+
+      const RegTerminal = document.getElementById('RegTerminal');
+      RegTerminal.innerHTML = ''; 
+
+      airlines.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.name;
+        option.textContent = item.name;
+        RegTerminal.appendChild(option);
+      });
+    }
+
+    loadAirports();
+
+      </script>
+    <script>
         (function () {
           // ================= HEADER =================
           const headerTitleEl = document.getElementById('AccountHeaderTitle');

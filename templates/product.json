@@ -315,6 +315,47 @@
             "ingredients_text"
           ]
         },
+        "accordion_row_Efma7Q": {
+          "type": "_accordion-row",
+          "name": "t:names.accordion_row",
+          "settings": {
+            "heading": "How to Use",
+            "open_by_default": false,
+            "icon": "none",
+            "width": 20
+          },
+          "blocks": {
+            "text_6QEWrL": {
+              "type": "text",
+              "settings": {
+                "text": "<p>{{ closest.product.metafields.custom.how_to_use | metafield_tag }}</p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "weight": "",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_6QEWrL"
+          ]
+        },
         "reviews_row": {
           "type": "_accordion-row",
           "settings": {
@@ -343,6 +384,7 @@
       "block_order": [
         "desc_row",
         "ingredients_row",
+        "accordion_row_Efma7Q",
         "reviews_row"
       ],
       "settings": {

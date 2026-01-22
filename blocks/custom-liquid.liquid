@@ -1,8 +1,12 @@
 
 
-<div>
-  {{ block.settings.custom_liquid }}
-</div>
+
+{% assign custom_liquid = block.settings.custom_liquid | strip %}
+{% if custom_liquid != blank %}
+  <div>
+    {{ block.settings.custom_liquid }}
+  </div>
+{% endif %}
 
 {% schema %}
 {

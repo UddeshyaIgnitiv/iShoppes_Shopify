@@ -365,6 +365,17 @@
         "padding-inline-end": 0
       }
     },
+    "vendor_description_section": {
+      "type": "custom-liquid",
+      "name": "Vendor Description",
+      "settings": {
+        "custom_liquid": "{% liquid\n  assign vendor_handle = product.vendor | handleize\n  assign vendor_collection = collections[vendor_handle]\n  assign vendor_description = product.metafields.custom.vendor_description | default: vendor_collection.description\n%}\n{% if vendor_description != blank %}\n  <div class=\"vendor-description\">\n    <h3 class=\"vendor-description__heading\">About This Brand</h3>\n    <div class=\"vendor-description__content rte\">\n      {{ vendor_description }}\n    </div>\n  </div>\n{% endif %}",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 10,
+        "padding-block-end": 10
+      }
+    },
     "custom_liquid_4rc4RD": {
       "type": "custom-liquid",
       "name": "t:names.custom_liquid",
@@ -380,6 +391,7 @@
   "order": [
     "main",
     "accordion_block",
+    "vendor_description_section",
     "custom_liquid_4rc4RD"
   ]
 }

@@ -397,6 +397,21 @@ p:empty {
   padding-left: 185px;
 }
 
+/* Vendor description spacing on PDP */
+.shopify-section:has(.vendor-description) .section {
+  padding-right: 15px !important;
+  padding-left: 15px !important;
+}
+.vendor-description {
+  padding-bottom: 20px;
+}
+.vendor-description__content {
+  font-size: 1rem;
+  font-family: var(--font-h3--family);
+  line-height: 130%;
+  letter-spacing: normal;
+}
+
 /* Remove padding on homepage */
 main[data-template="index"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
   padding-right: 0;

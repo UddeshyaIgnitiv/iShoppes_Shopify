@@ -200,8 +200,48 @@
     background-color: rgba(244, 67, 54, 0.2);
     color: #f44336;
   }
-{% endstyle %}
+  #newsletter-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    width: 90%;
+    max-width: 420px;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    z-index: 10000;
+    font-family: Arial, sans-serif;
+  }
+  #newsletter-popup p {
+    text-align: left;
+    font-size: 14px;
+    color: #000;
+    margin-bottom: 20px;
+  }
+  #newsletter-popup h2 {
+    text-align: center;
+    margin-bottom: 10px;
 
+    font-size: 22px;
+    font-weight: 700;
+  }
+  #popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 9999;
+  }
+   #popup-close {
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #555;
+  }
+{% endstyle %}
 <section class="newsletter-section">
   <h2>{{ section.settings.heading }}</h2>
   <p>{{ section.settings.subtext }}</p>
@@ -212,13 +252,29 @@
     <button type="submit">{{ section.settings.button_text }}</button>
     
     {% if form.posted_successfully? %}
-      {% comment %} <div class="newsletter-message newsletter-success">
-        <p>Thanks for subscribing!</p>
-      </div> {% endcomment %}
+      <div id="popup-overlay"></div>
+      <div id="newsletter-popup">
+      <div id="popup-close">&times;</div>
+      <div id="popup-message">
+        <h4 style="margin:25px 0 45px 0;color:#000000;">Thanks for subscribing!</h4>
+        <p style="margin:15px;font-size:16px;">Check your email for a confirmation message.</p>
+      </div>
+      </div>
     {% elsif form.errors %}
       <div class="newsletter-message newsletter-error">
         <p>{{ form.errors | default_errors }}</p>
       </div>
     {% endif %}
   {% endform %}
+  
+
+ <script>
+   function closePopup() {
+    document.getElementById("popup-overlay").style.display = "none";
+    document.getElementById("newsletter-popup").style.display = "none";
+  }
+  document.getElementById("popup-close").onclick = closePopup;
+  document.getElementById("popup-overlay").onclick = closePopup;
+ </script>
+
 </section>

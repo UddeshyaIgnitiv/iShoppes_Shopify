@@ -2620,6 +2620,9 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
 .button[id^='BuyButtons-ProductSubmitButton-'] {
   position: relative;
   overflow: hidden;
+  box-shadow: 0px 0px 0px 8px rgba(6, 0, 0, 0.1);
+  border-radius: 50px;
+  width: 100%;
 }
 
 /* Cart bubble */

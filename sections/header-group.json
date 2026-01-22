@@ -102,7 +102,7 @@
             "text_align": "left",
             "padding_block": 16,
             "padding_inline": 0,
-            "bold_current_item_on_breadcrumb": false,
+            "bold_current_item_on_breadcrumb": true,
             "hover_effect": "underline",
             "scroll_on_mobile": true,
             "hidden_product_name_on_breadcrumb": false,

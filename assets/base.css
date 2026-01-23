@@ -2605,7 +2605,7 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
   min-width: var(--minimum-touch-target);
 }
 .dior-auth-retailer-pdp {
-  margin-top: 50px;
+  /* margin-top: 50px; */
   display: flex;
   justify-content: center;
 }

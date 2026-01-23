@@ -323,6 +323,9 @@
           "shipping_method_title": "Pickup Information",
           "change_shipping_method_link_label": "Change Pickup Information"
         }
+      },
+      "customer_account": {
+        "sign_in_link_label": "‎ "
       }
     }
   },

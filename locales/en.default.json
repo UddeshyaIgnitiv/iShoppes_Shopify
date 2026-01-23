@@ -313,15 +313,15 @@
       },
       "shipping": {
         "free_rate_label": "‎ ",
-        "shipping_method_title": "Pickup Information"
+        "shipping_method_title": "Pickup Method"
       },
       "thank_you": {
-        "shipping_method_title": "Pickup Information"
+        "shipping_method_title": "Pickup Method"
       },
       "review": {
         "blocks": {
-          "shipping_method_title": "Pickup Information",
-          "change_shipping_method_link_label": "Change Pickup Information"
+          "shipping_method_title": "Pickup Method",
+          "change_shipping_method_link_label": "Change Pickup Method"
         }
       },
       "customer_account": {
@@ -332,7 +332,7 @@
   "customer_accounts": {
     "order_details": {
       "shipping": {
-        "method": "Pickup Information"
+        "method": "Pickup Method"
       }
     }
   }

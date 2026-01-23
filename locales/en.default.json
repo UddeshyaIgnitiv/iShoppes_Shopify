@@ -310,6 +310,9 @@
     "checkout": {
       "delivery_options": {
         "free_total_label": "Included"
+      },
+      "shipping": {
+        "free_rate_label": "Incl"
       }
     }
   }

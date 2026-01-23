@@ -69,22 +69,38 @@
       {% render 'quick-add-modal' %}
     {% endif %}
     <script>
-      document.querySelectorAll('.terminal-select-btn').forEach(el => {
-        el.addEventListener('click', function () {
-          document.getElementById('terminal-selection-div').style.display = 'block';
+      const terminalDiv = document.getElementById('terminal-selection-div');
+
+      function openTerminalModal() {
+        if (terminalDiv) {
+          terminalDiv.style.display = 'block';
+        }
+      }
+
+      function closeTerminalModal() {
+        if (terminalDiv) {
+          terminalDiv.style.display = 'none';
+        }
+      }
+
+      // Terminal button click
+      document.querySelectorAll('.terminal-select-btn, .terminal-update-btn')
+        .forEach(el => {
+          el.addEventListener('click', openTerminalModal);
         });
-    });
-    document.querySelectorAll('.terminal-update-btn').forEach(el => {
-      el.addEventListener('click', function () {
-        document.getElementById('terminal-selection-div').style.display = 'block';
+
+      document.querySelectorAll('.modal-close-dep')
+        .forEach(el => {
+          el.addEventListener('click', closeTerminalModal);
+        });
+
+      // Auto-open based if coming from checkout
+      document.addEventListener('DOMContentLoaded', function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('openterminal') === '1') {
+          openTerminalModal();
+        }
       });
-  });
-    document.querySelectorAll('.modal-close-dep').forEach(el => {
-      el.addEventListener('click', function () {
-        document.getElementById('terminal-selection-div').style.display = 'none';
-      });
-    });
-    
     </script>
     <script>
     const API_BASE = 'https://ignitiv.axiomconsulting.in';

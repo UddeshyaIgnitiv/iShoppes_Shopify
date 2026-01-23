@@ -1028,7 +1028,7 @@ const getFieldMessage = (fieldEl) => {
 const setError = (messageEl, message) => {
   if (!messageEl) return;
   messageEl.textContent = message || '';
-  {% comment %} messageEl.style.color = message ? 'rgb(255, 77, 79)' : ''; {% endcomment %}
+  messageEl.style.color = message ? 'rgb(255, 77, 79)' : 'rgb(255, 77, 79)';
   if (messageEl.id === 'departureDateError') {
     messageEl.style.display = message ? 'block' : 'none';
   }

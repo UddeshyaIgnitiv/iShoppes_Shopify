@@ -316,12 +316,12 @@
         "shipping_method_title": "Pickup Method"
       },
       "thank_you": {
-        "shipping_method_title": "Pickup Method"
+        "shipping_method_title": "Pickup Information"
       },
       "review": {
         "blocks": {
-          "shipping_method_title": "Pickup Method",
-          "change_shipping_method_link_label": "Change Pickup Method"
+          "shipping_method_title": "Pickup Information",
+          "change_shipping_method_link_label": "Change Pickup Information"
         }
       },
       "customer_account": {
@@ -332,7 +332,7 @@
   "customer_accounts": {
     "order_details": {
       "shipping": {
-        "method": "Pickup Method"
+        "method": "Pickup Information"
       }
     }
   }

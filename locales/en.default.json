@@ -312,7 +312,24 @@
         "free_total_label": "Included"
       },
       "shipping": {
-        "free_rate_label": "‎ "
+        "free_rate_label": "‎ ",
+        "shipping_method_title": "Pickup Information"
+      },
+      "thank_you": {
+        "shipping_method_title": "Pickup Information"
+      },
+      "review": {
+        "blocks": {
+          "shipping_method_title": "Pickup Information",
+          "change_shipping_method_link_label": "Change Pickup Information"
+        }
+      }
+    }
+  },
+  "customer_accounts": {
+    "order_details": {
+      "shipping": {
+        "method": "Pickup Information"
       }
     }
   }

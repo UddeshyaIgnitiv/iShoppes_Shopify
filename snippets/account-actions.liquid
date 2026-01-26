@@ -59,7 +59,7 @@
       </nav>
     {% endif %}
 
-    <!-- Global login flag for JS (works everywhere) -->
+    <!-- Global login flag for JS -->
     <script>
       window.__CUSTOMER_LOGGED_IN__ = {{ customer.id | default: 0 | json }} != 0;
     </script>
@@ -114,7 +114,7 @@
         {% endform %}
       </div>
 
-      <!-- ================= RECOVER BLOCK (HIDDEN) ================= -->
+      <!-- ================= RECOVER BLOCK ================= -->
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RecoverBlock">
         {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
 
@@ -131,7 +131,7 @@
             >
           </div>
 
-          <!-- ✅ Ajax success message (shown without redirect) -->
+          <!-- Ajax success message -->
           <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
             If an account exists for that email, you’ll receive a password reset email shortly.
           </div>
@@ -153,7 +153,7 @@
         {% endform %}
       </div>
 
-      <!-- ================= REGISTER BLOCK (HIDDEN) ================= -->
+      <!-- ================= REGISTER BLOCK (same as yours) ================= -->
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RegisterBlock">
         {% form 'create_customer', id: 'ClassicRegisterForm' %}
           {% if form.errors %}
@@ -241,10 +241,8 @@
         async function loadAirports() {
           const res = await fetch('https://ishoppes.axiomconsulting.in/airports');
           const airlines = await res.json();
-
           const RegTerminal = document.getElementById('RegTerminal');
           RegTerminal.innerHTML = '';
-
           airlines.forEach(item => {
             const option = document.createElement('option');
             option.value = item.name;
@@ -282,10 +280,8 @@
             block?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
 
-          // Ensure initial header is default
           setHeader(HEADER_DEFAULT);
 
-          // LOGIN -> REGISTER
           showRegisterBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -293,7 +289,6 @@
             document.getElementById('RegFirst')?.focus();
           });
 
-          // REGISTER -> LOGIN
           cancelRegisterBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -301,7 +296,6 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // LOGIN -> RECOVER
           showRecoverBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_FORGOT);
@@ -309,7 +303,6 @@
             document.getElementById('RecoverEmail')?.focus();
           });
 
-          // RECOVER -> LOGIN
           backToLoginBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -320,7 +313,7 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // ================= REGISTER VALIDATION + CONTROLLED SUBMIT =================
+          // ================= REGISTER VALIDATION (unchanged from your logic) =================
           const form = document.getElementById('ClassicRegisterForm');
           const submitBtn = document.getElementById('RegisterSubmitBtn');
 
@@ -353,9 +346,7 @@
             hideInlineError(RegMobile, RegMobileError);
           });
 
-          RegPassword?.addEventListener('input', () => {
-            hideInlineError(RegPassword, RegPasswordError);
-          });
+          RegPassword?.addEventListener('input', () => hideInlineError(RegPassword, RegPasswordError));
 
           function isValidMobile(v) { return /^[0-9]{7,15}$/.test(v); }
           function isValidPassword(v) {
@@ -364,7 +355,6 @@
 
           function validateRegisterForm() {
             let ok = true;
-
             hideInlineError(RegMobile, RegMobileError);
             hideInlineError(RegPassword, RegPasswordError);
 
@@ -403,7 +393,6 @@
           }
 
           form?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
-
           form?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); submitBtn?.click(); }
           });
@@ -417,17 +406,9 @@
             form.submit();
           });
 
-          /* ====================== FORGOT PASSWORD (NO REDIRECT + SAFE + 400/429 HANDLING) ======================
-            - POSTs to /account/recover via AJAX
-            - Forces FormData 'email' field (avoids 400)
-            - Prevents double binding + double submit
-            - Shows success message in popup
-            - Hides email field after success
-            - On 429: locks button with countdown, then re-enables
-            - On 400: shows message and re-enables
-          ================================================================================================ */
+          /* ====================== FORGOT PASSWORD (URLENCODED + DEBUG LOG) ====================== */
           (function recoverNoRedirect() {
-            // ✅ prevent multiple bindings (very important if snippet appears multiple times)
+            // Prevent multiple bindings
             if (window.__RECOVER_BIND_DONE__) return;
             window.__RECOVER_BIND_DONE__ = true;
 
@@ -440,7 +421,7 @@
 
             if (!recoverForm || !recoverBtn) return;
 
-            // Create/locate error box
+            // Error box
             let ajaxError = document.getElementById('RecoverAjaxError');
             if (!ajaxError) {
               ajaxError = document.createElement('div');
@@ -448,7 +429,6 @@
               ajaxError.className = 'form-errors is-hidden';
               ajaxError.setAttribute('role', 'alert');
               ajaxError.setAttribute('aria-live', 'polite');
-              ajaxError.textContent = '';
               if (ajaxSuccess && ajaxSuccess.parentNode) {
                 ajaxSuccess.parentNode.insertBefore(ajaxError, ajaxSuccess);
               } else {
@@ -488,37 +468,8 @@
               if (emailField) emailField.style.display = 'none';
 
               clearTimeout(resetTimer);
-              resetTimer = setTimeout(() => {
-                // after success, clear the email as well
-                resetRecoverUI({ keepEmail: false });
-              }, 4000);
+              resetTimer = setTimeout(() => resetRecoverUI({ keepEmail: false }), 4000);
             }
-
-            // Block any native submit always
-            recoverForm.addEventListener('submit', function (e) {
-              e.preventDefault();
-              e.stopPropagation();
-              e.stopImmediatePropagation?.();
-              return false;
-            }, true);
-
-            // Block Enter key
-            recoverForm.addEventListener('keydown', function (e) {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation?.();
-                recoverBtn.click();
-              }
-            }, true);
-
-            // If user edits, clear messages/timers
-            recoverEmail?.addEventListener('input', function () {
-              clearTimeout(resetTimer);
-              hideError();
-              ajaxSuccess?.classList.add('is-hidden');
-              if (emailField) emailField.style.display = '';
-            });
 
             async function lockButtonCountdown(seconds) {
               let remaining = seconds;
@@ -540,7 +491,31 @@
               });
             }
 
-            // Click handler (AJAX)
+            // Stop native submit
+            recoverForm.addEventListener('submit', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation?.();
+              return false;
+            }, true);
+
+            // Enter key
+            recoverForm.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                recoverBtn.click();
+              }
+            }, true);
+
+            recoverEmail?.addEventListener('input', function () {
+              clearTimeout(resetTimer);
+              hideError();
+              ajaxSuccess?.classList.add('is-hidden');
+              if (emailField) emailField.style.display = '';
+            });
+
             recoverBtn.addEventListener('click', async function () {
               if (inFlight) return;
 
@@ -566,18 +541,28 @@
               recoverBtn.textContent = 'PLEASE WAIT...';
 
               try {
-                const fd = new FormData(recoverForm);
-                // ✅ force Shopify expected param
-                fd.set('email', emailVal);
+                // ✅ Shopify expects urlencoded data
+                const body = new URLSearchParams();
+                body.set('form_type', 'recover_customer_password');
+                body.set('utf8', '✓');
+                body.set('email', emailVal);
+
+                console.log('Recover POST body:', body.toString());
 
                 const res = await fetch('/account/recover', {
                   method: 'POST',
-                  body: fd,
+                  headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'Accept': 'text/html',
+                  },
+                  body: body.toString(),
                   credentials: 'same-origin',
-                  headers: { 'Accept': 'text/html' },
                 });
 
-                // 429 handling (rate limit)
+                const html = await res.text();
+                console.log('Recover status:', res.status);
+                console.log('Recover HTML (first 300):', html.slice(0, 300));
+
                 if (res.status === 429) {
                   showError('Too many reset requests. Please wait a minute and try again.');
                   inFlight = false;
@@ -585,7 +570,6 @@
                   return;
                 }
 
-                // 400 handling (bad request)
                 if (res.status === 400) {
                   showError('Bad request. Please re-check the email and try again.');
                   recoverBtn.disabled = false;
@@ -602,7 +586,6 @@
                   return;
                 }
 
-                // Success (Shopify response is generic)
                 inFlight = false;
                 showSuccessThenReset();
 
@@ -614,13 +597,12 @@
               }
             });
 
-            // If user leaves recover popup to login, reset everything
             document.getElementById('BackToLoginBtn')?.addEventListener('click', function () {
               resetRecoverUI({ keepEmail: false });
             });
           })();
 
-          // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
+          // ====================== WISHLIST AUTH GUARD (same as your logic) ======================
           (function wishlistAuthGuard() {
             if (window.__CUSTOMER_LOGGED_IN__) return;
 
@@ -653,14 +635,12 @@
               const toast = getToast();
               toast.textContent = msg;
               toast.classList.add('is-visible');
-
               clearTimeout(toast._t);
               toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
             }
 
             function hideCounters() {
-              document
-                .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
+              document.querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
                 .forEach(el => el.style.display = 'none');
             }
 
@@ -711,28 +691,22 @@
 {% stylesheet %}
   .form-errors.is-hidden { display: none !important; }
 
-  /* Toast for wishlist auth */
   .wishlist-auth-toast{
     position: fixed;
     right: 20px;
     bottom: 20px;
     z-index: 999999;
-
     max-width: 340px;
     padding: 12px 14px;
     border-radius: 8px;
-
     background: #111;
     color: #fff;
     font-size: 13px;
     line-height: 1.4;
-
     box-shadow: 0 10px 30px rgba(0,0,0,.35);
-
     opacity: 0;
     transform: translateY(8px);
     pointer-events: none;
-
     transition: opacity .25s ease, transform .25s ease;
   }
   .wishlist-auth-toast.is-visible{

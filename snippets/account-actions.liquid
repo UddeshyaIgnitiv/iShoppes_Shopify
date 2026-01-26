@@ -147,7 +147,6 @@
           {% endif %}
 
           <div class="form-actions">
-            <!-- ✅ IMPORTANT: button is NOT submit -->
             <button type="button" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
             <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
@@ -239,25 +238,24 @@
       </div>
 
       <script>
-      async function loadAirports() {
-      const res = await fetch('https://ishoppes.axiomconsulting.in/airports');
-      const airlines = await res.json();
+        async function loadAirports() {
+          const res = await fetch('https://ishoppes.axiomconsulting.in/airports');
+          const airlines = await res.json();
 
-      const RegTerminal = document.getElementById('RegTerminal');
-      RegTerminal.innerHTML = ''; 
+          const RegTerminal = document.getElementById('RegTerminal');
+          RegTerminal.innerHTML = '';
 
-      airlines.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.name;
-        option.textContent = item.name;
-        RegTerminal.appendChild(option);
-      });
-    }
-
-    loadAirports();
-
+          airlines.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.name;
+            option.textContent = item.name;
+            RegTerminal.appendChild(option);
+          });
+        }
+        loadAirports();
       </script>
-    <script>
+
+      <script>
         (function () {
           // ================= HEADER =================
           const headerTitleEl = document.getElementById('AccountHeaderTitle');
@@ -316,9 +314,9 @@
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
             showOnly(loginBlock);
-            // reset recover UI each time you go back
             document.getElementById('RecoverAjaxSuccess')?.classList.add('is-hidden');
-            document.getElementById('RecoverEmailField')?.style && (document.getElementById('RecoverEmailField').style.display = '');
+            const f = document.getElementById('RecoverEmailField');
+            if (f) f.style.display = '';
             document.getElementById('LoginEmail')?.focus();
           });
 
@@ -418,15 +416,21 @@
             submitBtn.textContent = 'PLEASE WAIT...';
             form.submit();
           });
-          /* ====================== FORGOT PASSWORD (NO REDIRECT + SAFE + AUTO RESET) ======================
-            - No redirect to /account/recover
+
+          /* ====================== FORGOT PASSWORD (NO REDIRECT + SAFE + 400/429 HANDLING) ======================
+            - POSTs to /account/recover via AJAX
+            - Forces FormData 'email' field (avoids 400)
+            - Prevents double binding + double submit
             - Shows success message in popup
-            - Hides email field after submit success
-            - Auto resets form after 4s (success)
-            - Handles 429 (Too many requests): shows error, then resets form + button after 4s
-            - Prevents double submit (inFlight)
+            - Hides email field after success
+            - On 429: locks button with countdown, then re-enables
+            - On 400: shows message and re-enables
           ================================================================================================ */
           (function recoverNoRedirect() {
+            // ✅ prevent multiple bindings (very important if snippet appears multiple times)
+            if (window.__RECOVER_BIND_DONE__) return;
+            window.__RECOVER_BIND_DONE__ = true;
+
             const recoverForm  = document.getElementById('RecoverPasswordForm');
             const recoverEmail = document.getElementById('RecoverEmail');
             const recoverBtn   = document.getElementById('RecoverSubmitBtn');
@@ -445,7 +449,6 @@
               ajaxError.setAttribute('role', 'alert');
               ajaxError.setAttribute('aria-live', 'polite');
               ajaxError.textContent = '';
-              // place error above success (or at top of form)
               if (ajaxSuccess && ajaxSuccess.parentNode) {
                 ajaxSuccess.parentNode.insertBefore(ajaxError, ajaxSuccess);
               } else {
@@ -465,9 +468,12 @@
               ajaxError.textContent = '';
             }
 
-            function resetRecoverUI() {
+            function resetRecoverUI({ keepEmail = true } = {}) {
               clearTimeout(resetTimer);
+              const currentEmail = (recoverEmail?.value || '');
               recoverForm.reset();
+              if (keepEmail && recoverEmail) recoverEmail.value = currentEmail;
+
               hideError();
               ajaxSuccess?.classList.add('is-hidden');
               if (emailField) emailField.style.display = '';
@@ -483,7 +489,8 @@
 
               clearTimeout(resetTimer);
               resetTimer = setTimeout(() => {
-                resetRecoverUI();
+                // after success, clear the email as well
+                resetRecoverUI({ keepEmail: false });
               }, 4000);
             }
 
@@ -513,6 +520,26 @@
               if (emailField) emailField.style.display = '';
             });
 
+            async function lockButtonCountdown(seconds) {
+              let remaining = seconds;
+              recoverBtn.disabled = true;
+              recoverBtn.textContent = `PLEASE WAIT... (${remaining}s)`;
+
+              return new Promise(resolve => {
+                const iv = setInterval(() => {
+                  remaining -= 1;
+                  if (remaining <= 0) {
+                    clearInterval(iv);
+                    recoverBtn.disabled = false;
+                    recoverBtn.textContent = 'SEND RESET LINK';
+                    resolve();
+                    return;
+                  }
+                  recoverBtn.textContent = `PLEASE WAIT... (${remaining}s)`;
+                }, 1000);
+              });
+            }
+
             // Click handler (AJAX)
             recoverBtn.addEventListener('click', async function () {
               if (inFlight) return;
@@ -521,6 +548,13 @@
               hideError();
               ajaxSuccess?.classList.add('is-hidden');
               if (emailField) emailField.style.display = '';
+
+              const emailVal = (recoverEmail?.value || '').trim();
+              if (!emailVal) {
+                showError('Please enter your email.');
+                recoverEmail?.focus();
+                return;
+              }
 
               if (!recoverForm.checkValidity()) {
                 recoverForm.reportValidity();
@@ -532,26 +566,31 @@
               recoverBtn.textContent = 'PLEASE WAIT...';
 
               try {
+                const fd = new FormData(recoverForm);
+                // ✅ force Shopify expected param
+                fd.set('email', emailVal);
+
                 const res = await fetch('/account/recover', {
                   method: 'POST',
-                  body: new FormData(recoverForm),
+                  body: fd,
                   credentials: 'same-origin',
+                  headers: { 'Accept': 'text/html' },
                 });
 
                 // 429 handling (rate limit)
                 if (res.status === 429) {
-                  showError('Too many reset requests. Please wait a few minutes and try again.');
+                  showError('Too many reset requests. Please wait a minute and try again.');
+                  inFlight = false;
+                  await lockButtonCountdown(60);
+                  return;
+                }
 
-                  // restore button now
+                // 400 handling (bad request)
+                if (res.status === 400) {
+                  showError('Bad request. Please re-check the email and try again.');
                   recoverBtn.disabled = false;
                   recoverBtn.textContent = 'SEND RESET LINK';
-
-                  // reset form after 4s
-                  clearTimeout(resetTimer);
-                  resetTimer = setTimeout(() => {
-                    resetRecoverUI();
-                  }, 4000);
-
+                  inFlight = false;
                   return;
                 }
 
@@ -564,6 +603,7 @@
                 }
 
                 // Success (Shopify response is generic)
+                inFlight = false;
                 showSuccessThenReset();
 
               } catch (err) {
@@ -576,98 +616,91 @@
 
             // If user leaves recover popup to login, reset everything
             document.getElementById('BackToLoginBtn')?.addEventListener('click', function () {
-              resetRecoverUI();
+              resetRecoverUI({ keepEmail: false });
             });
           })();
 
-  // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
-  (function wishlistAuthGuard() {
-    if (window.__CUSTOMER_LOGGED_IN__) return;
+          // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
+          (function wishlistAuthGuard() {
+            if (window.__CUSTOMER_LOGGED_IN__) return;
 
-    const MSG = 'Please sign in to your account to see saved items.';
+            const MSG = 'Please sign in to your account to see saved items.';
 
-    function isWishlistUrl(href) {
-      if (!href) return false;
-      try {
-        const url = new URL(href, window.location.origin);
-        return url.pathname.replace(/\/+$/, '') === '/apps/page/wishlist';
-      } catch (e) {
-        return href.indexOf('/apps/page/wishlist') !== -1;
-      }
-    }
+            function isWishlistUrl(href) {
+              if (!href) return false;
+              try {
+                const url = new URL(href, window.location.origin);
+                return url.pathname.replace(/\/+$/, '') === '/apps/page/wishlist';
+              } catch (e) {
+                return href.indexOf('/apps/page/wishlist') !== -1;
+              }
+            }
 
-    function getToast() {
-      let toast = document.getElementById('WishlistAuthToast');
-      if (toast) return toast;
+            function getToast() {
+              let toast = document.getElementById('WishlistAuthToast');
+              if (toast) return toast;
 
-      toast = document.createElement('div');
-      toast.id = 'WishlistAuthToast';
-      toast.setAttribute('role', 'status');
-      toast.setAttribute('aria-live', 'polite');
-      toast.className = 'wishlist-auth-toast';
-      document.body.appendChild(toast);
-      return toast;
-    }
+              toast = document.createElement('div');
+              toast.id = 'WishlistAuthToast';
+              toast.setAttribute('role', 'status');
+              toast.setAttribute('aria-live', 'polite');
+              toast.className = 'wishlist-auth-toast';
+              document.body.appendChild(toast);
+              return toast;
+            }
 
-    function showToast(msg) {
-      const toast = getToast();
-      toast.textContent = msg;
-      toast.classList.add('is-visible');
+            function showToast(msg) {
+              const toast = getToast();
+              toast.textContent = msg;
+              toast.classList.add('is-visible');
 
-      clearTimeout(toast._t);
-      toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
-    }
+              clearTimeout(toast._t);
+              toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
+            }
 
-    // ---- Hide header wishlist counter for guests ----
-    function hideCounters() {
-      document
-        .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
-        .forEach(el => el.style.display = 'none');
-    }
+            function hideCounters() {
+              document
+                .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
+                .forEach(el => el.style.display = 'none');
+            }
 
-    hideCounters();
+            hideCounters();
+            const mo = new MutationObserver(hideCounters);
+            mo.observe(document.documentElement, { childList: true, subtree: true });
 
-    // App injects later – keep watching
-    const mo = new MutationObserver(hideCounters);
-    mo.observe(document.documentElement, { childList: true, subtree: true });
+            document.addEventListener('click', function (e) {
+              const t = e.target;
 
-    // ---- Intercept clicks everywhere ----
-    document.addEventListener('click', function (e) {
-      const t = e.target;
+              const a = t?.closest?.('a');
+              if (a && isWishlistUrl(a.getAttribute('href') || '')) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                showToast(MSG);
+                return;
+              }
 
-      // A) Header wishlist link
-      const a = t?.closest?.('a');
-      if (a && isWishlistUrl(a.getAttribute('href') || '')) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation?.();
-        showToast(MSG);
-        return;
-      }
+              const plpBtn = t?.closest?.(
+                '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
+              );
+              if (plpBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                showToast(MSG);
+                return;
+              }
 
-      // B) PLP wishlist icon
-      const plpBtn = t?.closest?.(
-        '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
-      );
-      if (plpBtn) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation?.();
-        showToast(MSG);
-        return;
-      }
-
-      // C) PDP wishlist button
-      const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
-      if (pdpBtn) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation?.();
-        showToast(MSG);
-        return;
-      }
-    }, true);
-  })();
+              const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
+              if (pdpBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation?.();
+                showToast(MSG);
+                return;
+              }
+            }, true);
+          })();
 
         })();
       </script>
@@ -707,7 +740,6 @@
     transform: translateY(0);
   }
 
-  /* Needed for recover success message + hide helper */
   .form-success.is-hidden { display: none !important; }
 
   #account-popover{ width: 25%; }
@@ -763,8 +795,9 @@
 
   .field-error { margin: 6px 0 0; font-size: 0.85rem; line-height: 1.2; color: #d10000; }
   .field-error.is-hidden { display: none !important; }
-  .Vtl-WishlistProduct__AddToCart{ display: none; }
-  .Vtl-WishlistPage .Vtl-WishlistPage__Title{ font-size: 30px; }
 
   .input[aria-invalid="true"] { border-color: #d10000; }
+
+  .Vtl-WishlistProduct__AddToCart{ display: none; }
+  .Vtl-WishlistPage .Vtl-WishlistPage__Title{ font-size: 30px; }
 {% endstylesheet %}

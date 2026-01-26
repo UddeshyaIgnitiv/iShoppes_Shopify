@@ -114,7 +114,7 @@
         {% endform %}
       </div>
 
-      <!-- ================= RECOVER BLOCK (CAPTCHA SAFE) ================= -->
+      <!-- ================= RECOVER BLOCK (CAPTCHA SAFE: REAL SUBMIT) ================= -->
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RecoverBlock">
         {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
 
@@ -131,16 +131,10 @@
             >
           </div>
 
-          <!-- ✅ Shopify success (works with CAPTCHA because this is a real submit) -->
-          {% if form.posted_successfully? %}
-            <div id="RecoverAjaxSuccess" class="form-success" role="status" aria-live="polite">
-              If an account exists for that email, you’ll receive a password reset email shortly.
-            </div>
-          {% else %}
-            <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
-              If an account exists for that email, you’ll receive a password reset email shortly.
-            </div>
-          {% endif %}
+          <!-- Success message (we will show this via JS after redirect) -->
+          <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
+            If an account exists for that email, you’ll receive a password reset email shortly.
+          </div>
 
           {% if form.errors %}
             <div class="form-errors" role="alert" aria-live="polite">
@@ -153,7 +147,7 @@
           {% endif %}
 
           <div class="form-actions">
-            <!-- ✅ MUST be submit so Shopify can attach CAPTCHA token -->
+            <!-- MUST be submit so Shopify CAPTCHA token is included -->
             <button type="submit" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
             <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
@@ -289,7 +283,27 @@
             block?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
 
-          // Initial header
+          // ================= OPEN ACCOUNT POPOVER (best-effort) =================
+          function openAccountPopoverBestEffort() {
+            // Try common triggers (theme-dependent)
+            const candidates = [
+              '[aria-controls="account-popover"]',
+              '[data-popover-open="account-popover"]',
+              'a[href="#account-popover"]',
+              'button[aria-controls="account-popover"]',
+              '#account-popover-toggle',
+              '.header__icon--account',
+              '.header__account'
+            ];
+
+            for (const sel of candidates) {
+              const el = document.querySelector(sel);
+              if (el) { el.click(); return true; }
+            }
+            return false;
+          }
+
+          // Ensure initial header is default
           setHeader(HEADER_DEFAULT);
 
           // LOGIN -> REGISTER
@@ -323,16 +337,13 @@
             showOnly(loginBlock);
 
             // reset recover UI
-            const success = document.getElementById('RecoverAjaxSuccess');
-            success?.classList.add('is-hidden');
-
+            document.getElementById('RecoverPasswordForm')?.reset();
+            document.getElementById('RecoverAjaxSuccess')?.classList.add('is-hidden');
             const f = document.getElementById('RecoverEmailField');
             if (f) f.style.display = '';
-
             const btn = document.getElementById('RecoverSubmitBtn');
             if (btn) { btn.disabled = false; btn.textContent = 'SEND RESET LINK'; }
 
-            document.getElementById('RecoverPasswordForm')?.reset();
             document.getElementById('LoginEmail')?.focus();
           });
 
@@ -431,14 +442,18 @@
             form.submit();
           });
 
-          /* ====================== RECOVER UX (CAPTCHA SAFE) ======================
-             - MUST use real form submit (Shopify CAPTCHA requires token)
-             - We only improve UX: disable button / show wait
-             - If posted_successfully? message is present, we auto-reset after 4s
-          ======================================================================= */
+          /* ====================== FORGOT PASSWORD (CAPTCHA SAFE + AUTO REOPEN POPUP AFTER REDIRECT) ======================
+             Shopify requires CAPTCHA token, so we MUST submit the form normally.
+             But Shopify redirects to login page, so we:
+             1) store a flag in sessionStorage before submit
+             2) on next page load, auto-open the account popover + show Recover block + success message
+             3) auto-reset after 4s (like your earlier UX)
+          =============================================================================================================== */
           (function recoverCaptchaSafe() {
             if (window.__RECOVER_CAPTCHA_SAFE_BIND__) return;
             window.__RECOVER_CAPTCHA_SAFE_BIND__ = true;
+
+            const KEY = '__RECOVER_SUCCESS_FLAG__';
 
             const recoverForm  = document.getElementById('RecoverPasswordForm');
             const recoverBtn   = document.getElementById('RecoverSubmitBtn');
@@ -448,30 +463,66 @@
 
             if (!recoverForm || !recoverBtn) return;
 
-            // If Shopify already shows success (posted_successfully?), hide email and auto reset
-            const successVisible = ajaxSuccess && !ajaxSuccess.classList.contains('is-hidden');
-            if (successVisible) {
+            function showRecoverSuccessUI() {
+              setHeader(HEADER_FORGOT);
+              showOnly(recoverBlock);
+
+              ajaxSuccess?.classList.remove('is-hidden');
               if (emailField) emailField.style.display = 'none';
+
+              // reset after 4s (like you wanted)
               setTimeout(() => {
                 recoverForm.reset();
-                if (emailField) emailField.style.display = '';
                 ajaxSuccess?.classList.add('is-hidden');
+                if (emailField) emailField.style.display = '';
                 recoverBtn.disabled = false;
                 recoverBtn.textContent = 'SEND RESET LINK';
+
+                // optionally bring back login view after reset (still inside popup)
+                setHeader(HEADER_DEFAULT);
+                showOnly(loginBlock);
               }, 4000);
             }
 
-            // Allow CAPTCHA submit: DO NOT preventDefault
+            // Before submit, store a flag so we can show message after Shopify redirect
             recoverForm.addEventListener('submit', function () {
+              const emailVal = (recoverEmail?.value || '').trim();
+              sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), email: emailVal }));
+
               recoverBtn.disabled = true;
               recoverBtn.textContent = 'PLEASE WAIT...';
+              // DO NOT preventDefault - CAPTCHA needs normal submit
             });
 
-            // On typing, restore button
+            // After redirect/page load: if flag exists, reopen popup + show success message
+            try {
+              const raw = sessionStorage.getItem(KEY);
+              if (raw) {
+                const data = JSON.parse(raw || '{}');
+                const isFresh = data && data.t && (Date.now() - data.t) < (5 * 60 * 1000); // 5 min window
+
+                // Clear immediately to avoid repeat
+                sessionStorage.removeItem(KEY);
+
+                if (isFresh) {
+                  // Best effort to reopen popover (theme dependent)
+                  openAccountPopoverBestEffort();
+
+                  // If our popover content is already in DOM, show it
+                  // Restore email into field (optional)
+                  if (recoverEmail && data.email) recoverEmail.value = data.email;
+
+                  // Show success UI inside popup
+                  showRecoverSuccessUI();
+                }
+              }
+            } catch (e) { /* ignore */ }
+
+            // If user edits, restore UI
             recoverEmail?.addEventListener('input', function () {
               recoverBtn.disabled = false;
               recoverBtn.textContent = 'SEND RESET LINK';
-              if (ajaxSuccess) ajaxSuccess.classList.add('is-hidden');
+              ajaxSuccess?.classList.add('is-hidden');
               if (emailField) emailField.style.display = '';
             });
           })();
@@ -509,10 +560,12 @@
               const toast = getToast();
               toast.textContent = msg;
               toast.classList.add('is-visible');
+
               clearTimeout(toast._t);
               toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
             }
 
+            // ---- Hide header wishlist counter for guests ----
             function hideCounters() {
               document
                 .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
@@ -520,12 +573,16 @@
             }
 
             hideCounters();
+
+            // App injects later – keep watching
             const mo = new MutationObserver(hideCounters);
             mo.observe(document.documentElement, { childList: true, subtree: true });
 
+            // ---- Intercept clicks everywhere ----
             document.addEventListener('click', function (e) {
               const t = e.target;
 
+              // A) Header wishlist link
               const a = t?.closest?.('a');
               if (a && isWishlistUrl(a.getAttribute('href') || '')) {
                 e.preventDefault();
@@ -535,6 +592,7 @@
                 return;
               }
 
+              // B) PLP wishlist icon
               const plpBtn = t?.closest?.(
                 '.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]'
               );
@@ -546,6 +604,7 @@
                 return;
               }
 
+              // C) PDP wishlist button
               const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
               if (pdpBtn) {
                 e.preventDefault();
@@ -595,6 +654,7 @@
     transform: translateY(0);
   }
 
+  /* Needed for success message */
   .form-success.is-hidden { display: none !important; }
 
   #account-popover{ width: 25%; }

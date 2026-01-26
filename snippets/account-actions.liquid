@@ -59,7 +59,7 @@
       </nav>
     {% endif %}
 
-    <!-- Global login flag for JS -->
+    <!-- Global login flag for JS (works everywhere) -->
     <script>
       window.__CUSTOMER_LOGGED_IN__ = {{ customer.id | default: 0 | json }} != 0;
     </script>
@@ -114,7 +114,7 @@
         {% endform %}
       </div>
 
-      <!-- ================= RECOVER BLOCK ================= -->
+      <!-- ================= RECOVER BLOCK (CAPTCHA SAFE) ================= -->
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RecoverBlock">
         {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
 
@@ -131,10 +131,16 @@
             >
           </div>
 
-          <!-- Ajax success message -->
-          <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
-            If an account exists for that email, you’ll receive a password reset email shortly.
-          </div>
+          <!-- ✅ Shopify success (works with CAPTCHA because this is a real submit) -->
+          {% if form.posted_successfully? %}
+            <div id="RecoverAjaxSuccess" class="form-success" role="status" aria-live="polite">
+              If an account exists for that email, you’ll receive a password reset email shortly.
+            </div>
+          {% else %}
+            <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
+              If an account exists for that email, you’ll receive a password reset email shortly.
+            </div>
+          {% endif %}
 
           {% if form.errors %}
             <div class="form-errors" role="alert" aria-live="polite">
@@ -147,13 +153,14 @@
           {% endif %}
 
           <div class="form-actions">
-            <button type="button" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
+            <!-- ✅ MUST be submit so Shopify can attach CAPTCHA token -->
+            <button type="submit" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
             <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
         {% endform %}
       </div>
 
-      <!-- ================= REGISTER BLOCK (same as yours) ================= -->
+      <!-- ================= REGISTER BLOCK (HIDDEN) ================= -->
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RegisterBlock">
         {% form 'create_customer', id: 'ClassicRegisterForm' %}
           {% if form.errors %}
@@ -241,8 +248,10 @@
         async function loadAirports() {
           const res = await fetch('https://ishoppes.axiomconsulting.in/airports');
           const airlines = await res.json();
+
           const RegTerminal = document.getElementById('RegTerminal');
           RegTerminal.innerHTML = '';
+
           airlines.forEach(item => {
             const option = document.createElement('option');
             option.value = item.name;
@@ -280,8 +289,10 @@
             block?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
 
+          // Initial header
           setHeader(HEADER_DEFAULT);
 
+          // LOGIN -> REGISTER
           showRegisterBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -289,6 +300,7 @@
             document.getElementById('RegFirst')?.focus();
           });
 
+          // REGISTER -> LOGIN
           cancelRegisterBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -296,6 +308,7 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
+          // LOGIN -> RECOVER
           showRecoverBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_FORGOT);
@@ -303,17 +316,27 @@
             document.getElementById('RecoverEmail')?.focus();
           });
 
+          // RECOVER -> LOGIN
           backToLoginBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
             showOnly(loginBlock);
-            document.getElementById('RecoverAjaxSuccess')?.classList.add('is-hidden');
+
+            // reset recover UI
+            const success = document.getElementById('RecoverAjaxSuccess');
+            success?.classList.add('is-hidden');
+
             const f = document.getElementById('RecoverEmailField');
             if (f) f.style.display = '';
+
+            const btn = document.getElementById('RecoverSubmitBtn');
+            if (btn) { btn.disabled = false; btn.textContent = 'SEND RESET LINK'; }
+
+            document.getElementById('RecoverPasswordForm')?.reset();
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // ================= REGISTER VALIDATION (unchanged from your logic) =================
+          // ================= REGISTER VALIDATION + CONTROLLED SUBMIT =================
           const form = document.getElementById('ClassicRegisterForm');
           const submitBtn = document.getElementById('RegisterSubmitBtn');
 
@@ -355,6 +378,7 @@
 
           function validateRegisterForm() {
             let ok = true;
+
             hideInlineError(RegMobile, RegMobileError);
             hideInlineError(RegPassword, RegPasswordError);
 
@@ -393,6 +417,7 @@
           }
 
           form?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
+
           form?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); submitBtn?.click(); }
           });
@@ -406,203 +431,52 @@
             form.submit();
           });
 
-          /* ====================== FORGOT PASSWORD (URLENCODED + DEBUG LOG) ====================== */
-          (function recoverNoRedirect() {
-            // Prevent multiple bindings
-            if (window.__RECOVER_BIND_DONE__) return;
-            window.__RECOVER_BIND_DONE__ = true;
+          /* ====================== RECOVER UX (CAPTCHA SAFE) ======================
+             - MUST use real form submit (Shopify CAPTCHA requires token)
+             - We only improve UX: disable button / show wait
+             - If posted_successfully? message is present, we auto-reset after 4s
+          ======================================================================= */
+          (function recoverCaptchaSafe() {
+            if (window.__RECOVER_CAPTCHA_SAFE_BIND__) return;
+            window.__RECOVER_CAPTCHA_SAFE_BIND__ = true;
 
             const recoverForm  = document.getElementById('RecoverPasswordForm');
-            const recoverEmail = document.getElementById('RecoverEmail');
             const recoverBtn   = document.getElementById('RecoverSubmitBtn');
-
+            const recoverEmail = document.getElementById('RecoverEmail');
             const ajaxSuccess  = document.getElementById('RecoverAjaxSuccess');
             const emailField   = document.getElementById('RecoverEmailField');
 
             if (!recoverForm || !recoverBtn) return;
 
-            // Error box
-            let ajaxError = document.getElementById('RecoverAjaxError');
-            if (!ajaxError) {
-              ajaxError = document.createElement('div');
-              ajaxError.id = 'RecoverAjaxError';
-              ajaxError.className = 'form-errors is-hidden';
-              ajaxError.setAttribute('role', 'alert');
-              ajaxError.setAttribute('aria-live', 'polite');
-              if (ajaxSuccess && ajaxSuccess.parentNode) {
-                ajaxSuccess.parentNode.insertBefore(ajaxError, ajaxSuccess);
-              } else {
-                recoverForm.insertBefore(ajaxError, recoverForm.firstChild);
-              }
-            }
-
-            let inFlight = false;
-            let resetTimer = null;
-
-            function showError(msg) {
-              ajaxError.textContent = msg;
-              ajaxError.classList.remove('is-hidden');
-            }
-            function hideError() {
-              ajaxError.classList.add('is-hidden');
-              ajaxError.textContent = '';
-            }
-
-            function resetRecoverUI({ keepEmail = true } = {}) {
-              clearTimeout(resetTimer);
-              const currentEmail = (recoverEmail?.value || '');
-              recoverForm.reset();
-              if (keepEmail && recoverEmail) recoverEmail.value = currentEmail;
-
-              hideError();
-              ajaxSuccess?.classList.add('is-hidden');
-              if (emailField) emailField.style.display = '';
-              recoverBtn.disabled = false;
-              recoverBtn.textContent = 'SEND RESET LINK';
-              inFlight = false;
-              recoverEmail?.focus();
-            }
-
-            function showSuccessThenReset() {
-              ajaxSuccess?.classList.remove('is-hidden');
+            // If Shopify already shows success (posted_successfully?), hide email and auto reset
+            const successVisible = ajaxSuccess && !ajaxSuccess.classList.contains('is-hidden');
+            if (successVisible) {
               if (emailField) emailField.style.display = 'none';
-
-              clearTimeout(resetTimer);
-              resetTimer = setTimeout(() => resetRecoverUI({ keepEmail: false }), 4000);
-            }
-
-            async function lockButtonCountdown(seconds) {
-              let remaining = seconds;
-              recoverBtn.disabled = true;
-              recoverBtn.textContent = `PLEASE WAIT... (${remaining}s)`;
-
-              return new Promise(resolve => {
-                const iv = setInterval(() => {
-                  remaining -= 1;
-                  if (remaining <= 0) {
-                    clearInterval(iv);
-                    recoverBtn.disabled = false;
-                    recoverBtn.textContent = 'SEND RESET LINK';
-                    resolve();
-                    return;
-                  }
-                  recoverBtn.textContent = `PLEASE WAIT... (${remaining}s)`;
-                }, 1000);
-              });
-            }
-
-            // Stop native submit
-            recoverForm.addEventListener('submit', function (e) {
-              e.preventDefault();
-              e.stopPropagation();
-              e.stopImmediatePropagation?.();
-              return false;
-            }, true);
-
-            // Enter key
-            recoverForm.addEventListener('keydown', function (e) {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation?.();
-                recoverBtn.click();
-              }
-            }, true);
-
-            recoverEmail?.addEventListener('input', function () {
-              clearTimeout(resetTimer);
-              hideError();
-              ajaxSuccess?.classList.add('is-hidden');
-              if (emailField) emailField.style.display = '';
-            });
-
-            recoverBtn.addEventListener('click', async function () {
-              if (inFlight) return;
-
-              clearTimeout(resetTimer);
-              hideError();
-              ajaxSuccess?.classList.add('is-hidden');
-              if (emailField) emailField.style.display = '';
-
-              const emailVal = (recoverEmail?.value || '').trim();
-              if (!emailVal) {
-                showError('Please enter your email.');
-                recoverEmail?.focus();
-                return;
-              }
-
-              if (!recoverForm.checkValidity()) {
-                recoverForm.reportValidity();
-                return;
-              }
-
-              inFlight = true;
-              recoverBtn.disabled = true;
-              recoverBtn.textContent = 'PLEASE WAIT...';
-
-              try {
-                // ✅ Shopify expects urlencoded data
-                const body = new URLSearchParams();
-                body.set('form_type', 'recover_customer_password');
-                body.set('utf8', '✓');
-                body.set('email', emailVal);
-
-                console.log('Recover POST body:', body.toString());
-
-                const res = await fetch('/account/recover', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                    'Accept': 'text/html',
-                  },
-                  body: body.toString(),
-                  credentials: 'same-origin',
-                });
-
-                const html = await res.text();
-                console.log('Recover status:', res.status);
-                console.log('Recover HTML (first 300):', html.slice(0, 300));
-
-                if (res.status === 429) {
-                  showError('Too many reset requests. Please wait a minute and try again.');
-                  inFlight = false;
-                  await lockButtonCountdown(60);
-                  return;
-                }
-
-                if (res.status === 400) {
-                  showError('Bad request. Please re-check the email and try again.');
-                  recoverBtn.disabled = false;
-                  recoverBtn.textContent = 'SEND RESET LINK';
-                  inFlight = false;
-                  return;
-                }
-
-                if (!res.ok) {
-                  showError('Something went wrong. Please try again in a moment.');
-                  recoverBtn.disabled = false;
-                  recoverBtn.textContent = 'SEND RESET LINK';
-                  inFlight = false;
-                  return;
-                }
-
-                inFlight = false;
-                showSuccessThenReset();
-
-              } catch (err) {
-                showError('Network error. Please try again.');
+              setTimeout(() => {
+                recoverForm.reset();
+                if (emailField) emailField.style.display = '';
+                ajaxSuccess?.classList.add('is-hidden');
                 recoverBtn.disabled = false;
                 recoverBtn.textContent = 'SEND RESET LINK';
-                inFlight = false;
-              }
+              }, 4000);
+            }
+
+            // Allow CAPTCHA submit: DO NOT preventDefault
+            recoverForm.addEventListener('submit', function () {
+              recoverBtn.disabled = true;
+              recoverBtn.textContent = 'PLEASE WAIT...';
             });
 
-            document.getElementById('BackToLoginBtn')?.addEventListener('click', function () {
-              resetRecoverUI({ keepEmail: false });
+            // On typing, restore button
+            recoverEmail?.addEventListener('input', function () {
+              recoverBtn.disabled = false;
+              recoverBtn.textContent = 'SEND RESET LINK';
+              if (ajaxSuccess) ajaxSuccess.classList.add('is-hidden');
+              if (emailField) emailField.style.display = '';
             });
           })();
 
-          // ====================== WISHLIST AUTH GUARD (same as your logic) ======================
+          // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
           (function wishlistAuthGuard() {
             if (window.__CUSTOMER_LOGGED_IN__) return;
 
@@ -640,7 +514,8 @@
             }
 
             function hideCounters() {
-              document.querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
+              document
+                .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
                 .forEach(el => el.style.display = 'none');
             }
 
@@ -691,22 +566,28 @@
 {% stylesheet %}
   .form-errors.is-hidden { display: none !important; }
 
+  /* Toast for wishlist auth */
   .wishlist-auth-toast{
     position: fixed;
     right: 20px;
     bottom: 20px;
     z-index: 999999;
+
     max-width: 340px;
     padding: 12px 14px;
     border-radius: 8px;
+
     background: #111;
     color: #fff;
     font-size: 13px;
     line-height: 1.4;
+
     box-shadow: 0 10px 30px rgba(0,0,0,.35);
+
     opacity: 0;
     transform: translateY(8px);
     pointer-events: none;
+
     transition: opacity .25s ease, transform .25s ease;
   }
   .wishlist-auth-toast.is-visible{

@@ -59,7 +59,7 @@
       </nav>
     {% endif %}
 
-    <!-- Global login flag for JS (works everywhere) -->
+    <!-- Global login flag -->
     <script>
       window.__CUSTOMER_LOGGED_IN__ = {{ customer.id | default: 0 | json }} != 0;
     </script>
@@ -118,6 +118,12 @@
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RecoverBlock">
         {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
 
+          {%- comment -%}
+            ✅ Force Shopify to return back to current page after recover.
+            We append ?recover_sent=1 so we can detect and show popup success.
+          {%- endcomment -%}
+          <input type="hidden" name="return_to" value="{{ request.path }}?recover_sent=1">
+
           <div class="form-field" id="RecoverEmailField">
             <label for="RecoverEmail">Email*</label>
             <input
@@ -131,16 +137,10 @@
             >
           </div>
 
-          <!-- ✅ Shopify success (works with CAPTCHA because this is a real submit) -->
-          {% if form.posted_successfully? %}
-            <div id="RecoverAjaxSuccess" class="form-success" role="status" aria-live="polite">
-              If an account exists for that email, you’ll receive a password reset email shortly.
-            </div>
-          {% else %}
-            <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
-              If an account exists for that email, you’ll receive a password reset email shortly.
-            </div>
-          {% endif %}
+          <!-- ✅ Success message shown by JS after redirect -->
+          <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
+            If an account exists for that email, you’ll receive a password reset email shortly.
+          </div>
 
           {% if form.errors %}
             <div class="form-errors" role="alert" aria-live="polite">
@@ -153,7 +153,6 @@
           {% endif %}
 
           <div class="form-actions">
-            <!-- ✅ MUST be submit so Shopify can attach CAPTCHA token -->
             <button type="submit" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
             <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
           </div>
@@ -248,10 +247,8 @@
         async function loadAirports() {
           const res = await fetch('https://ishoppes.axiomconsulting.in/airports');
           const airlines = await res.json();
-
           const RegTerminal = document.getElementById('RegTerminal');
           RegTerminal.innerHTML = '';
-
           airlines.forEach(item => {
             const option = document.createElement('option');
             option.value = item.name;
@@ -286,13 +283,68 @@
           function showOnly(block) {
             [loginBlock, registerBlock, recoverBlock].forEach(el => el?.classList.add('is-hidden'));
             block?.classList.remove('is-hidden');
-            block?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
 
-          // Initial header
+          // ========= popover opener (works even after redirect) =========
+          function openAccountPopoverForce() {
+            // 1) If account-popover is <details>, open it directly (best)
+            const pop = document.getElementById('account-popover');
+            if (pop && pop.tagName && pop.tagName.toLowerCase() === 'details') {
+              pop.open = true;
+              pop.setAttribute('open', '');
+              pop.dispatchEvent(new Event('toggle', { bubbles: true }));
+              return true;
+            }
+
+            // 2) Click common account triggers
+            const selectors = [
+              '[aria-controls="account-popover"]',
+              '[data-popover-open="account-popover"]',
+              'a[href="#account-popover"]',
+              'button[aria-controls="account-popover"]',
+              '.header__icon--account',
+              '.header__account',
+              'a[href*="/account/login"]',
+              'a[href*="/account"]',
+              'button[aria-label*="Account"]',
+              'a[aria-label*="Account"]'
+            ];
+
+            for (const sel of selectors) {
+              const el = document.querySelector(sel);
+              if (el) { el.click(); return true; }
+            }
+            return false;
+          }
+
+          // ========= recover success UI =========
+          function showRecoverSuccessUI() {
+            setHeader(HEADER_FORGOT);
+            showOnly(recoverBlock);
+
+            const ajaxSuccess = document.getElementById('RecoverAjaxSuccess');
+            const emailField  = document.getElementById('RecoverEmailField');
+            const recoverBtn  = document.getElementById('RecoverSubmitBtn');
+            const recoverForm = document.getElementById('RecoverPasswordForm');
+
+            ajaxSuccess?.classList.remove('is-hidden');
+            if (emailField) emailField.style.display = 'none';
+            if (recoverBtn) { recoverBtn.disabled = false; recoverBtn.textContent = 'SEND RESET LINK'; }
+
+            // auto reset after 4 seconds (your earlier behavior)
+            setTimeout(() => {
+              recoverForm?.reset();
+              ajaxSuccess?.classList.add('is-hidden');
+              if (emailField) emailField.style.display = '';
+              setHeader(HEADER_DEFAULT);
+              showOnly(loginBlock);
+            }, 4000);
+          }
+
+          // ================= initial header =================
           setHeader(HEADER_DEFAULT);
 
-          // LOGIN -> REGISTER
+          // ================= toggle handlers =================
           showRegisterBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -300,7 +352,6 @@
             document.getElementById('RegFirst')?.focus();
           });
 
-          // REGISTER -> LOGIN
           cancelRegisterBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -308,7 +359,6 @@
             document.getElementById('LoginEmail')?.focus();
           });
 
-          // LOGIN -> RECOVER
           showRecoverBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_FORGOT);
@@ -316,22 +366,16 @@
             document.getElementById('RecoverEmail')?.focus();
           });
 
-          // RECOVER -> LOGIN
           backToLoginBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
             showOnly(loginBlock);
 
-            // reset recover UI
-            const success = document.getElementById('RecoverAjaxSuccess');
-            success?.classList.add('is-hidden');
-
+            document.getElementById('RecoverAjaxSuccess')?.classList.add('is-hidden');
             const f = document.getElementById('RecoverEmailField');
             if (f) f.style.display = '';
-
             const btn = document.getElementById('RecoverSubmitBtn');
             if (btn) { btn.disabled = false; btn.textContent = 'SEND RESET LINK'; }
-
             document.getElementById('RecoverPasswordForm')?.reset();
             document.getElementById('LoginEmail')?.focus();
           });
@@ -417,7 +461,6 @@
           }
 
           form?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
-
           form?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); submitBtn?.click(); }
           });
@@ -431,52 +474,59 @@
             form.submit();
           });
 
-          /* ====================== RECOVER UX (CAPTCHA SAFE) ======================
-             - MUST use real form submit (Shopify CAPTCHA requires token)
-             - We only improve UX: disable button / show wait
-             - If posted_successfully? message is present, we auto-reset after 4s
-          ======================================================================= */
-          (function recoverCaptchaSafe() {
-            if (window.__RECOVER_CAPTCHA_SAFE_BIND__) return;
-            window.__RECOVER_CAPTCHA_SAFE_BIND__ = true;
+          // ====================== RECOVER: keep popup open + show success after redirect ======================
+          (function recoverRedirectUX() {
+            const KEY = '__RECOVER_SENT__';
 
             const recoverForm  = document.getElementById('RecoverPasswordForm');
             const recoverBtn   = document.getElementById('RecoverSubmitBtn');
             const recoverEmail = document.getElementById('RecoverEmail');
-            const ajaxSuccess  = document.getElementById('RecoverAjaxSuccess');
-            const emailField   = document.getElementById('RecoverEmailField');
 
-            if (!recoverForm || !recoverBtn) return;
+            if (recoverForm && recoverBtn) {
+              recoverForm.addEventListener('submit', function () {
+                // store flag before submit so after redirect we can show success in popup
+                try {
+                  sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), email: (recoverEmail?.value || '').trim() }));
+                } catch(e) {}
 
-            // If Shopify already shows success (posted_successfully?), hide email and auto reset
-            const successVisible = ajaxSuccess && !ajaxSuccess.classList.contains('is-hidden');
-            if (successVisible) {
-              if (emailField) emailField.style.display = 'none';
-              setTimeout(() => {
-                recoverForm.reset();
-                if (emailField) emailField.style.display = '';
-                ajaxSuccess?.classList.add('is-hidden');
-                recoverBtn.disabled = false;
-                recoverBtn.textContent = 'SEND RESET LINK';
-              }, 4000);
+                recoverBtn.disabled = true;
+                recoverBtn.textContent = 'PLEASE WAIT...';
+                // IMPORTANT: do NOT preventDefault (CAPTCHA needs real submit)
+              });
             }
 
-            // Allow CAPTCHA submit: DO NOT preventDefault
-            recoverForm.addEventListener('submit', function () {
-              recoverBtn.disabled = true;
-              recoverBtn.textContent = 'PLEASE WAIT...';
-            });
+            // Detect after redirect (either sessionStorage OR ?recover_sent=1)
+            const params = new URLSearchParams(window.location.search || '');
+            const urlFlag = params.get('recover_sent') === '1';
 
-            // On typing, restore button
-            recoverEmail?.addEventListener('input', function () {
-              recoverBtn.disabled = false;
-              recoverBtn.textContent = 'SEND RESET LINK';
-              if (ajaxSuccess) ajaxSuccess.classList.add('is-hidden');
-              if (emailField) emailField.style.display = '';
-            });
+            let ssFlag = null;
+            try { ssFlag = sessionStorage.getItem(KEY); } catch(e) {}
+
+            if (urlFlag || ssFlag) {
+              // clean URL (remove recover_sent=1)
+              if (urlFlag) {
+                params.delete('recover_sent');
+                const newQs = params.toString();
+                const newUrl = window.location.pathname + (newQs ? '?' + newQs : '') + window.location.hash;
+                window.history.replaceState({}, '', newUrl);
+              }
+              try { sessionStorage.removeItem(KEY); } catch(e) {}
+
+              // open popover + show success
+              // sometimes DOM not ready yet, so do it in a short retry loop
+              let tries = 0;
+              const iv = setInterval(() => {
+                tries += 1;
+
+                openAccountPopoverForce();   // open the popup (theme dependent)
+                showRecoverSuccessUI();      // show success and auto-reset
+
+                if (tries >= 6) clearInterval(iv);
+              }, 250);
+            }
           })();
 
-          // ====================== WISHLIST AUTH GUARD (APP INJECTED) ======================
+          // ====================== WISHLIST AUTH GUARD ======================
           (function wishlistAuthGuard() {
             if (window.__CUSTOMER_LOGGED_IN__) return;
 
@@ -514,8 +564,7 @@
             }
 
             function hideCounters() {
-              document
-                .querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
+              document.querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
                 .forEach(el => el.style.display = 'none');
             }
 
@@ -598,6 +647,7 @@
   .form-success.is-hidden { display: none !important; }
 
   #account-popover{ width: 25%; }
+
   .account-actions { background-color: var(--color-background); display: flex; flex-direction: column; position: relative; transition: height var(--animation-values); &:has([data-active]) .account-actions__main-menu { visibility: hidden; } }
   .account-actions__header { padding: var(--padding-xl); display: flex; flex-direction: column; gap: var(--gap-2xs); }
   .account-actions__title { --font-h5--size: var(--font-size--lg); margin: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }

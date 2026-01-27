@@ -329,7 +329,8 @@
         "sign_in_link_label": "‎ "
       },
       "order_summary": {
-        "enter_shipping_address": "‎ "
+        "enter_shipping_address": "‎ ",
+        "shipping_label": "‎ "
       }
     }
   },

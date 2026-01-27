@@ -330,7 +330,8 @@
       },
       "order_summary": {
         "enter_shipping_address": "‎ ",
-        "shipping_label": "‎ "
+        "shipping_label": "‎ ",
+        "free_shipping_total_label": "‎ "
       }
     }
   },

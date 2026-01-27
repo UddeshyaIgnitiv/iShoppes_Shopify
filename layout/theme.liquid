@@ -70,6 +70,8 @@
     {% endif %}
     <script>
       const terminalDiv = document.getElementById('terminal-selection-div');
+      const terminalParams = new URLSearchParams(window.location.search);
+      const keepTerminalOpen = terminalParams.get('openterminal') === '1';
 
       function openTerminalModal() {
         if (terminalDiv) {
@@ -78,6 +80,9 @@
       }
 
       function closeTerminalModal() {
+        if (keepTerminalOpen) {
+          document.body.classList.remove('terminal-force-open');
+        }
         if (terminalDiv) {
           terminalDiv.style.display = 'none';
         }
@@ -96,8 +101,8 @@
 
       // Auto-open based if coming from checkout
       document.addEventListener('DOMContentLoaded', function () {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('openterminal') === '1') {
+        if (keepTerminalOpen) {
+          document.body.classList.add('terminal-force-open');
           openTerminalModal();
         }
       });

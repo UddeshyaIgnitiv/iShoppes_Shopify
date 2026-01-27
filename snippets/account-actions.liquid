@@ -562,66 +562,89 @@
         })();
 
         /* ====================== LOGIN FAILED -> REOPEN POPUP ====================== */
-(function loginFailedHandler() {
-  const params = new URLSearchParams(window.location.search || '');
-  const failed = params.get('login_failed') === '1';
+        (function () {
+  /* ====================== LOGIN FAILED -> FORCE OPEN ACCOUNT POPOVER ====================== */
+  (function loginFailedForcePopup() {
+    const params = new URLSearchParams(window.location.search || '');
+    const failed = params.get('login_failed') === '1';
+    if (!failed) return;
 
-  if (!failed) return;
+    // Clean URL (remove login_failed=1)
+    params.delete('login_failed');
+    const cleanUrl =
+      window.location.pathname +
+      (params.toString() ? '?' + params.toString() : '') +
+      window.location.hash;
+    try { history.replaceState({}, '', cleanUrl); } catch (e) {}
 
-  // Remove flag from URL (clean)
-  params.delete('login_failed');
-  const newUrl = window.location.pathname +
-    (params.toString() ? '?' + params.toString() : '') +
-    window.location.hash;
-  history.replaceState({}, '', newUrl);
+    const headerTitleEl = document.getElementById('AccountHeaderTitle');
+    const loginBlock = document.getElementById('LoginBlock');
+    const recoverBlock = document.getElementById('RecoverBlock');
+    const registerBlock = document.getElementById('RegisterBlock');
 
-  const loginBlock   = document.getElementById('LoginBlock');
-  const recoverBlock = document.getElementById('RecoverBlock');
-  const registerBlock = document.getElementById('RegisterBlock');
-  const headerTitleEl = document.getElementById('AccountHeaderTitle');
-
-  function showOnly(block) {
-    [loginBlock, recoverBlock, registerBlock].forEach(el => el?.classList.add('is-hidden'));
-    block?.classList.remove('is-hidden');
-  }
-
-  function openAccountPopoverForce() {
-    const pop = document.getElementById('account-popover');
-
-    // If it's <details>
-    if (pop && pop.tagName && pop.tagName.toLowerCase() === 'details') {
-      pop.open = true;
-      pop.setAttribute('open', '');
-      return true;
+    function showOnly(block) {
+      [loginBlock, recoverBlock, registerBlock].forEach(el => el?.classList.add('is-hidden'));
+      block?.classList.remove('is-hidden');
     }
 
-    const selectors = [
-      '[aria-controls="account-popover"]',
-      'a[href="#account-popover"]',
-      '.header__icon--account',
-      '.header__account',
-      'button[aria-label*="Account"]',
-      'a[aria-label*="Account"]'
-    ];
+    function forceOpenPopover() {
+      const pop = document.getElementById('account-popover');
 
-    for (const sel of selectors) {
-      const el = document.querySelector(sel);
-      if (el) { el.click(); return true; }
+      // 1) details pattern
+      if (pop && pop.tagName && pop.tagName.toLowerCase() === 'details') {
+        pop.open = true;
+        pop.setAttribute('open', '');
+        pop.dispatchEvent(new Event('toggle', { bubbles: true }));
+        return true;
+      }
+
+      // 2) If it has aria-hidden or hidden attribute, remove it
+      if (pop) {
+        pop.removeAttribute('hidden');
+        pop.setAttribute('aria-hidden', 'false');
+        pop.style.display = '';
+        pop.style.visibility = '';
+        // some themes use "is-active/open" classes
+        pop.classList.add('is-active', 'is-open', 'active', 'open');
+      }
+
+      // 3) Click likely account trigger buttons/links
+      const selectors = [
+        '[aria-controls="account-popover"]',
+        '[data-popover-open="account-popover"]',
+        'button[aria-controls="account-popover"]',
+        'a[href="#account-popover"]',
+        '.header__icon--account',
+        '.header__account',
+        '[data-action="open-account"]',
+        '[data-account-toggle]',
+        'button[aria-label*="Account"]',
+        'a[aria-label*="Account"]'
+      ];
+
+      for (const sel of selectors) {
+        const el = document.querySelector(sel);
+        if (el) { el.click(); return true; }
+      }
+
+      return !!pop; // if pop exists but no known opener, we still tried class/attrs
     }
-    return false;
-  }
 
-  let tries = 0;
-  const iv = setInterval(() => {
-    tries++;
+    // Retry because some themes mount popover after JS
+    let tries = 0;
+    const iv = setInterval(() => {
+      tries++;
 
-    openAccountPopoverForce();
-    headerTitleEl && (headerTitleEl.textContent = 'Sign-in or Create an Account');
-    showOnly(loginBlock);
-    document.getElementById('LoginEmail')?.focus();
+      const opened = forceOpenPopover();
 
-    if (tries >= 8) clearInterval(iv);
-  }, 250);
+      if (headerTitleEl) headerTitleEl.textContent = 'Sign-in or Create an Account';
+      showOnly(loginBlock);
+      document.getElementById('LoginEmail')?.focus();
+
+      // Stop once popover exists and we attempted open a few times
+      if (opened || tries >= 12) clearInterval(iv);
+    }, 250);
+  })();
 })();
 
       </script>

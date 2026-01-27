@@ -68,6 +68,8 @@
       <!-- ================= LOGIN BLOCK ================= -->
       <div class="account-actions__sign-ins" data-skip-subtree-update="true" id="LoginBlock">
         {% form 'customer_login', id: 'ClassicLoginForm' %}
+          <input type="hidden" name="return_to" value="{{ request.path }}?login_failed=1">
+
           {% if form.errors %}
             <div class="form-errors" role="alert" aria-live="polite">
               <ul class="errors">
@@ -558,6 +560,70 @@
           })();
 
         })();
+
+        /* ====================== LOGIN FAILED -> REOPEN POPUP ====================== */
+(function loginFailedHandler() {
+  const params = new URLSearchParams(window.location.search || '');
+  const failed = params.get('login_failed') === '1';
+
+  if (!failed) return;
+
+  // Remove flag from URL (clean)
+  params.delete('login_failed');
+  const newUrl = window.location.pathname +
+    (params.toString() ? '?' + params.toString() : '') +
+    window.location.hash;
+  history.replaceState({}, '', newUrl);
+
+  const loginBlock   = document.getElementById('LoginBlock');
+  const recoverBlock = document.getElementById('RecoverBlock');
+  const registerBlock = document.getElementById('RegisterBlock');
+  const headerTitleEl = document.getElementById('AccountHeaderTitle');
+
+  function showOnly(block) {
+    [loginBlock, recoverBlock, registerBlock].forEach(el => el?.classList.add('is-hidden'));
+    block?.classList.remove('is-hidden');
+  }
+
+  function openAccountPopoverForce() {
+    const pop = document.getElementById('account-popover');
+
+    // If it's <details>
+    if (pop && pop.tagName && pop.tagName.toLowerCase() === 'details') {
+      pop.open = true;
+      pop.setAttribute('open', '');
+      return true;
+    }
+
+    const selectors = [
+      '[aria-controls="account-popover"]',
+      'a[href="#account-popover"]',
+      '.header__icon--account',
+      '.header__account',
+      'button[aria-label*="Account"]',
+      'a[aria-label*="Account"]'
+    ];
+
+    for (const sel of selectors) {
+      const el = document.querySelector(sel);
+      if (el) { el.click(); return true; }
+    }
+    return false;
+  }
+
+  let tries = 0;
+  const iv = setInterval(() => {
+    tries++;
+
+    openAccountPopoverForce();
+    headerTitleEl && (headerTitleEl.textContent = 'Sign-in or Create an Account');
+    showOnly(loginBlock);
+    document.getElementById('LoginEmail')?.focus();
+
+    if (tries >= 8) clearInterval(iv);
+  }, 250);
+})();
+
       </script>
     {% endunless %}
   </div>

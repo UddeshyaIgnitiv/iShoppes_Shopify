@@ -173,6 +173,8 @@
     const meridiemSelect = document.getElementById('departuremeridiem');
     const errorBox = document.getElementById('departureDateError');
     const form = document.querySelector('#terminal-selection-div form');
+    const finalDestinationCheck = document.getElementById('finalDestinationCheck');
+    const hasFinalConnection = finalDestinationCheck?.checked ? 'yes' : 'no';
 
     function parseMinutes(val) {
         if (!val) return 0;
@@ -289,7 +291,8 @@
                 Destination: destinationselect?.options[destinationselect.selectedIndex]?.text || '',
                 DepartureDate: departuredate?.value || '',
                 DepartureTime: `${departurehours?.value || ''}:${departureminutes?.value || ''} ${departuremeridiem?.value || ''}`,
-                Seat: seatno?.value || ''
+                Seat: seatno?.value || '',
+                Connecting Flight: finalDestinationCheck?.checked ? 'Yes' : 'No'
               };
             } catch (e) {
               return {};

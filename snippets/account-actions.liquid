@@ -72,7 +72,7 @@
             ✅ If login fails, Shopify will go to /account/login.
             We add a query flag so JS can open the popover and show login.
           {%- endcomment -%}
-          <input type="hidden" name="return_to" value="/account/login">
+          <input type="hidden" name="return_to" value="{{ routes.account_url }}">
 
           {% if form.errors %}
             <div class="form-errors" id="LoginFormErrors" role="alert" aria-live="polite">
@@ -313,6 +313,25 @@
             pop.classList.add('open', 'active', 'is-open');
             return true;
           }
+          (function setLoginReturnTo() {
+  const form = document.getElementById('ClassicLoginForm');
+  if (!form) return;
+
+  const input = form.querySelector('input[name="return_to"]');
+  if (!input) return;
+
+  // if they are already on /account/login, go to /account on success
+  const isAccountLogin = (window.location.pathname || '').replace(/\/+$/, '') === '/account/login';
+
+  if (isAccountLogin) {
+    input.value = '/account';
+    return;
+  }
+
+  // otherwise return to current page after login
+  input.value = window.location.pathname + window.location.search + window.location.hash;
+})();
+
 
           /* ====================== LOGIN WRONG PASSWORD -> OPEN POPOVER (SESSION FLAG) ====================== */
 (function loginWrongPasswordPopup() {

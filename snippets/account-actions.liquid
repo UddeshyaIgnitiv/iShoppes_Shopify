@@ -78,11 +78,18 @@
             <div class="form-errors" id="LoginFormErrors" role="alert" aria-live="polite">
               <ul class="errors">
                 {% for field in form.errors %}
-                  <li>{{ form.errors.messages[field] }}</li>
+                  {% assign msg = form.errors.messages[field] | downcase %}
+
+                  {% if msg contains 'incorrect' or msg contains 'password' %}
+                    <li>Email id or password is not valid.</li>
+                  {% else %}
+                    <li>{{ form.errors.messages[field] }}</li>
+                  {% endif %}
                 {% endfor %}
               </ul>
             </div>
           {% endif %}
+
 
           <div class="form-field">
             <label for="LoginEmail">Email address*</label>

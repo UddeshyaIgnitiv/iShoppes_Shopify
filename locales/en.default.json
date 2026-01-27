@@ -313,7 +313,8 @@
       },
       "shipping": {
         "free_rate_label": "‎ ",
-        "shipping_method_title": "Pickup Method"
+        "shipping_method_title": "Pickup Method",
+        "shipping_address_title": "Billing Address"
       },
       "thank_you": {
         "shipping_method_title": "Pickup Information"

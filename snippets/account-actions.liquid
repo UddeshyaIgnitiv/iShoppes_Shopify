@@ -72,10 +72,10 @@
             ✅ If login fails, Shopify will go to /account/login.
             We add a query flag so JS can open the popover and show login.
           {%- endcomment -%}
-          <input type="hidden" name="return_to" value="/account/login?login_failed=1">
+          <input type="hidden" name="return_to" value="/account/login">
 
           {% if form.errors %}
-            <div class="form-errors" role="alert" aria-live="polite">
+            <div class="form-errors" id="LoginFormErrors" role="alert" aria-live="polite">
               <ul class="errors">
                 {% for field in form.errors %}
                   <li>{{ form.errors.messages[field] }}</li>
@@ -306,6 +306,84 @@
             pop.classList.add('open', 'active', 'is-open');
             return true;
           }
+
+          /* ====================== LOGIN WRONG PASSWORD -> OPEN POPOVER (SESSION FLAG) ====================== */
+(function loginWrongPasswordPopup() {
+  // Uses native Popover API: <div id="account-popover" popover="auto">
+  function openAccountPopover() {
+    const pop = document.getElementById('account-popover');
+    if (!pop) return false;
+
+    if (typeof pop.showPopover === 'function') {
+      try { pop.showPopover(); return true; } catch (e) {}
+    }
+    // fallback
+    pop.style.display = '';
+    pop.style.visibility = '';
+    pop.classList.add('open', 'active', 'is-open');
+    return true;
+  }
+
+  function showLoginBlock() {
+    const loginBlock = document.getElementById('LoginBlock');
+    const recoverBlock = document.getElementById('RecoverBlock');
+    const registerBlock = document.getElementById('RegisterBlock');
+
+    [loginBlock, recoverBlock, registerBlock].forEach(el => el?.classList.add('is-hidden'));
+    loginBlock?.classList.remove('is-hidden');
+
+    const headerTitleEl = document.getElementById('AccountHeaderTitle');
+    if (headerTitleEl) headerTitleEl.textContent = 'Sign-in or Create an Account';
+
+    document.getElementById('LoginEmail')?.focus();
+  }
+
+  // 1) Before Shopify redirects: set a flag so we can open popup on /account/login
+  const loginForm = document.getElementById('ClassicLoginForm');
+  if (loginForm && !loginForm.__openFlagBound) {
+    loginForm.__openFlagBound = true;
+
+    loginForm.addEventListener('submit', function () {
+      try {
+        sessionStorage.setItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__', '1');
+      } catch (e) {}
+      const btn = document.getElementById('LoginSubmitBtn');
+      if (btn) { btn.disabled = true; btn.textContent = 'PLEASE WAIT...'; }
+    });
+  }
+
+  // 2) On load: if we are on /account/login and either
+  //    A) session flag exists (meaning user tried login)
+  //    B) login errors exist in markup (wrong password)
+  // then open popover and show login
+  const path = window.location.pathname || '';
+  const isAccountLoginPage = path.replace(/\/+$/, '') === '/account/login';
+
+  let flag = false;
+  try { flag = sessionStorage.getItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__') === '1'; } catch (e) {}
+
+  const hasLoginErrors =
+    !!document.getElementById('LoginFormErrors') ||
+    !!document.querySelector('#ClassicLoginForm .form-errors');
+
+  if (!isAccountLoginPage) return;
+  if (!flag && !hasLoginErrors) return;
+
+  // clear flag so it doesn't open every time
+  try { sessionStorage.removeItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__'); } catch (e) {}
+
+  // popover may mount a bit late → retry
+  let tries = 0;
+  const iv = setInterval(() => {
+    tries++;
+    openAccountPopover();
+    showLoginBlock();
+
+    // stop after some tries
+    if (tries >= 15) clearInterval(iv);
+  }, 200);
+})();
+
 
           // Initial header
           setHeader(HEADER_DEFAULT);

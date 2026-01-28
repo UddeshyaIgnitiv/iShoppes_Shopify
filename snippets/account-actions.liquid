@@ -260,39 +260,49 @@
       </div>
 
       <script>
-        async function loadAirports() {
-          const res = await fetch('https://ishoppes.axiomconsulting.in/airports');
-          const airlines = await res.json();
-          const RegTerminal = document.getElementById('RegTerminal');
-          RegTerminal.innerHTML = '';
-          airlines.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.name;
-            option.textContent = item.name;
-            RegTerminal.appendChild(option);
-          });
-        }
-        loadAirports();
+        (function () {
+          const root = document.currentScript?.closest('.account-actions');
+          const RegTerminal = root?.querySelector('#RegTerminal');
+          if (!RegTerminal) return;
+
+          async function loadAirports() {
+            const res = await fetch('https://ishoppes.axiomconsulting.in/airports');
+            const airlines = await res.json();
+            RegTerminal.innerHTML = '';
+            airlines.forEach(item => {
+              const option = document.createElement('option');
+              option.value = item.name;
+              option.textContent = item.name;
+              RegTerminal.appendChild(option);
+            });
+          }
+
+          loadAirports();
+        })();
       </script>
 
       <script>
         (function () {
+          const root = document.currentScript?.closest('.account-actions');
+          if (!root) return;
+          const $ = (sel) => root.querySelector(sel);
+
           // ================= HEADER =================
-          const headerTitleEl = document.getElementById('AccountHeaderTitle');
+          const headerTitleEl = $('#AccountHeaderTitle');
           const HEADER_DEFAULT = 'Sign-in or Create an Account';
           const HEADER_FORGOT  = 'Forgot password';
 
           function setHeader(text) { if (headerTitleEl) headerTitleEl.textContent = text; }
 
           // ================= BLOCKS =================
-          const loginBlock = document.getElementById('LoginBlock');
-          const registerBlock = document.getElementById('RegisterBlock');
-          const recoverBlock = document.getElementById('RecoverBlock');
+          const loginBlock = $('#LoginBlock');
+          const registerBlock = $('#RegisterBlock');
+          const recoverBlock = $('#RecoverBlock');
 
-          const showRegisterBtn = document.getElementById('ShowRegisterBtn');
-          const cancelRegisterBtn = document.getElementById('CancelRegisterBtn');
-          const showRecoverBtn = document.getElementById('ShowRecoverBtn');
-          const backToLoginBtn = document.getElementById('BackToLoginBtn');
+          const showRegisterBtn = $('#ShowRegisterBtn');
+          const cancelRegisterBtn = $('#CancelRegisterBtn');
+          const showRecoverBtn = $('#ShowRecoverBtn');
+          const backToLoginBtn = $('#BackToLoginBtn');
 
           function showOnly(block) {
             [loginBlock, registerBlock, recoverBlock].forEach(el => el?.classList.add('is-hidden'));
@@ -314,7 +324,7 @@
             return true;
           }
           (function setLoginReturnTo() {
-  const form = document.getElementById('ClassicLoginForm');
+  const form = $('#ClassicLoginForm');
   if (!form) return;
 
   const input = form.querySelector('input[name="return_to"]');
@@ -334,6 +344,8 @@
 
 
           /* ====================== LOGIN WRONG PASSWORD -> OPEN POPOVER (SESSION FLAG) ====================== */
+if (!window.__ACCOUNT_POPOVER_LOGIN_INIT__) {
+window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 (function loginWrongPasswordPopup() {
   // Uses native Popover API: <div id="account-popover" popover="auto">
   function openAccountPopover() {
@@ -409,6 +421,7 @@
     if (tries >= 15) clearInterval(iv);
   }, 200);
 })();
+}
 
 
           // Initial header
@@ -419,7 +432,7 @@
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
             showOnly(registerBlock);
-            document.getElementById('RegFirst')?.focus();
+            $('#RegFirst')?.focus();
           });
 
           // REGISTER -> LOGIN
@@ -427,7 +440,7 @@
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
             showOnly(loginBlock);
-            document.getElementById('LoginEmail')?.focus();
+            $('#LoginEmail')?.focus();
           });
 
           // LOGIN -> RECOVER
@@ -435,7 +448,7 @@
             e.preventDefault();
             setHeader(HEADER_FORGOT);
             showOnly(recoverBlock);
-            document.getElementById('RecoverEmail')?.focus();
+            $('#RecoverEmail')?.focus();
           });
 
           // RECOVER -> LOGIN
@@ -444,28 +457,28 @@
             setHeader(HEADER_DEFAULT);
             showOnly(loginBlock);
 
-            const success = document.getElementById('RecoverAjaxSuccess');
+            const success = $('#RecoverAjaxSuccess');
             success?.classList.add('is-hidden');
-            const field = document.getElementById('RecoverEmailField');
+            const field = $('#RecoverEmailField');
             if (field) field.style.display = '';
-            const btn = document.getElementById('RecoverSubmitBtn');
+            const btn = $('#RecoverSubmitBtn');
             if (btn) { btn.disabled = false; btn.textContent = 'SEND RESET LINK'; }
-            document.getElementById('RecoverPasswordForm')?.reset();
-            document.getElementById('LoginEmail')?.focus();
+            $('#RecoverPasswordForm')?.reset();
+            $('#LoginEmail')?.focus();
           });
 
           // ================= REGISTER VALIDATION + CONTROLLED SUBMIT =================
-          const regForm = document.getElementById('ClassicRegisterForm');
-          const regSubmitBtn = document.getElementById('RegisterSubmitBtn');
+          const regForm = $('#ClassicRegisterForm');
+          const regSubmitBtn = $('#RegisterSubmitBtn');
 
-          const RegCountry = document.getElementById('RegCountry');
-          const RegTerminal = document.getElementById('RegTerminal');
-          const RegMobile = document.getElementById('RegMobile');
-          const RegPassword = document.getElementById('RegPassword');
-          const RegNote = document.getElementById('RegNote');
+          const RegCountry = $('#RegCountry');
+          const RegTerminal = $('#RegTerminal');
+          const RegMobile = $('#RegMobile');
+          const RegPassword = $('#RegPassword');
+          const RegNote = $('#RegNote');
 
-          const RegMobileError = document.getElementById('RegMobileError');
-          const RegPasswordError = document.getElementById('RegPasswordError');
+          const RegMobileError = $('#RegMobileError');
+          const RegPasswordError = $('#RegPasswordError');
 
           function showInlineError(input, errorEl) {
             if (errorEl) errorEl.classList.remove('is-hidden');
@@ -518,8 +531,8 @@
           }
 
           function packNote() {
-            const first = (document.getElementById('RegFirst')?.value || '').trim();
-            const last  = (document.getElementById('RegLast')?.value || '').trim();
+            const first = ($('#RegFirst')?.value || '').trim();
+            const last  = ($('#RegLast')?.value || '').trim();
             const country = RegCountry?.value || '';
             const terminal = RegTerminal?.value || '';
             const mobile = (RegMobile?.value || '').trim();
@@ -565,14 +578,14 @@
               openAccountPopover();
               setHeader(HEADER_DEFAULT);
               showOnly(loginBlock);
-              document.getElementById('LoginEmail')?.focus();
+              $('#LoginEmail')?.focus();
               if (tries >= 12) clearInterval(iv);
             }, 200);
           })();
 
           /* ====================== RECOVER SUCCESS HANDLER (posted_successfully?) ====================== */
           (function handleRecoverSuccess() {
-            const successEl = document.getElementById('RecoverAjaxSuccess');
+            const successEl = $('#RecoverAjaxSuccess');
             if (!successEl) return;
 
             const visible = !successEl.classList.contains('is-hidden');
@@ -585,20 +598,20 @@
               setHeader(HEADER_FORGOT);
               showOnly(recoverBlock);
 
-              const emailField = document.getElementById('RecoverEmailField');
+              const emailField = $('#RecoverEmailField');
               if (emailField) emailField.style.display = 'none';
 
               if (tries >= 8) clearInterval(iv);
             }, 200);
 
             setTimeout(() => {
-              document.getElementById('RecoverPasswordForm')?.reset();
+              $('#RecoverPasswordForm')?.reset();
               successEl.classList.add('is-hidden');
 
-              const emailField = document.getElementById('RecoverEmailField');
+              const emailField = $('#RecoverEmailField');
               if (emailField) emailField.style.display = '';
 
-              const btn = document.getElementById('RecoverSubmitBtn');
+              const btn = $('#RecoverSubmitBtn');
               if (btn) { btn.disabled = false; btn.textContent = 'SEND RESET LINK'; }
 
               setHeader(HEADER_DEFAULT);

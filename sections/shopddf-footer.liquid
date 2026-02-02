@@ -1,38 +1,31 @@
 <footer class="shopddf-footer">
   <div class="shopddf-footer__social">
-    {% if section.settings.instagram_url != blank %}
-      <a href="{{ section.settings.instagram_url }}" aria-label="Instagram">
-        {% render 'icon', icon: 'instagram' %}
+      <a target="_blank" href="https://www.instagram.com/shopddf" aria-label="Instagram">
+          <img src="{{ 'insta-icon.png' | asset_url }}" alt="Instagram" class="insta-icon" width="25px" height="25px">
       </a>
-    {% endif %}
-    {% if section.settings.facebook_url != blank %}
-      <a href="{{ section.settings.facebook_url }}" aria-label="Facebook">
-        {% render 'icon', icon: 'facebook' %}
+      <a target="_blank" href="https://www.facebook.com/DDFSNY" aria-label="Facebook">
+        <img src="{{ 'fb-icon.png' | asset_url }}" alt="Instagram" class="insta-icon" width="25px" height="25px">
       </a>
-    {% endif %}
   </div>
 
   <div class="shopddf-footer__main">
     <div class="shopddf-footer__column">
-      <h4>{{ section.settings.company_heading }}</h4>
-      {% if section.settings.company_menu != blank %}
-        <ul>
-          {% for link in section.settings.company_menu.links %}
-            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">Retail Store</a></li>
+        <li><a href="#">Store Events</a></li>
+        <li><a href="#">Diplomatic Catalogue</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
     </div>
 
     <div class="shopddf-footer__column">
-      <h4>{{ section.settings.follow_heading }}</h4>
-      {% if section.settings.follow_menu != blank %}
+      <h4>Follow Us</h4>
         <ul>
-          {% for link in section.settings.follow_menu.links %}
-            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-          {% endfor %}
+            <li><a target="_blank" href="https://www.instagram.com/shopddf">Instagram</a></li>
+            <li><a target="_blank" href="https://www.facebook.com/DDFSNY">Facebook</a></li>
+            <li><a target="_blank" href="https://web.wechat.com/ddfnyc">WeChat</a></li>
         </ul>
-      {% endif %}
     </div>
 
     <div class="shopddf-footer__column shopddf-footer__column--newsletter">
@@ -44,13 +37,13 @@
           <div class="shopddf-footer__options">
             {% if section.settings.checkbox_one_label != blank %}
               <label>
-                <input type="checkbox" name="contact[tags]" value="{{ section.settings.checkbox_one_label | escape }}">
+                <input type="radio" name="contact[tags]" value="{{ section.settings.checkbox_one_label | escape }}">
                 {{ section.settings.checkbox_one_label }}
               </label>
             {% endif %}
             {% if section.settings.checkbox_two_label != blank %}
               <label>
-                <input type="checkbox" name="contact[tags]" value="{{ section.settings.checkbox_two_label | escape }}">
+                <input type="radio" name="contact[tags]" value="{{ section.settings.checkbox_two_label | escape }}">
                 {{ section.settings.checkbox_two_label }}
               </label>
             {% endif %}
@@ -112,10 +105,11 @@
   }
 
   .shopddf-footer__column h4 {
-    font-size: 13px;
+    font-size: 22px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 12px;
+    font-weight: 500;
   }
 
   .shopddf-footer__column ul {
@@ -131,7 +125,10 @@
   .shopddf-footer__column a {
     text-decoration: none;
     color: inherit;
-    font-size: 13px;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
   .shopddf-footer__column--newsletter form {
@@ -144,12 +141,15 @@
     gap: 16px;
     flex-wrap: wrap;
     font-size: 12px;
+    cursor: pointer;
   }
 
   .shopddf-footer__options label {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    font-size: 16px;
+    cursor: pointer;
   }
 
   .shopddf-footer__column--newsletter input[type='email'],
@@ -161,15 +161,24 @@
   }
 
   .shopddf-footer__column--newsletter button {
-    border: none;
-    padding: 10px 18px;
-    border-radius: 20px;
-    background: #0b0b0b;
-    color: #ffffff;
+    outline: none;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: normal;
     text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    cursor: pointer;
+    width: 50%;
+    justify-self: end;
+    margin-left: auto;
+    color: #ffffff;
+    padding: 15px 50px;
+    background-color: #0b0b0b;
+    border-radius: 50px;
+    cursor: pointer; 
+    margin-top: 8px;
+    margin-right: 8px;
+    text-decoration: none;
+    box-shadow: 0px 0px 0px 8px rgba(6, 0, 0, 0.1);
   }
 
   .shopddf-footer__success {
@@ -178,9 +187,9 @@
   }
 
   .shopddf-footer__bottom {
-    text-align: center;
-    font-size: 12px;
-    padding: 10px 12px 24px;
+    text-align: left;
+    font-size: 14px;
+    padding: 10px 115px 24px;
     color: #6b6b6b;
   }
 

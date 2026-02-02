@@ -1,0 +1,281 @@
+<footer class="shopddf-footer">
+  <div class="shopddf-footer__social">
+    {% if section.settings.instagram_url != blank %}
+      <a href="{{ section.settings.instagram_url }}" aria-label="Instagram">
+        {% render 'icon', icon: 'instagram' %}
+      </a>
+    {% endif %}
+    {% if section.settings.facebook_url != blank %}
+      <a href="{{ section.settings.facebook_url }}" aria-label="Facebook">
+        {% render 'icon', icon: 'facebook' %}
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="shopddf-footer__main">
+    <div class="shopddf-footer__column">
+      <h4>{{ section.settings.company_heading }}</h4>
+      {% if section.settings.company_menu != blank %}
+        <ul>
+          {% for link in section.settings.company_menu.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="shopddf-footer__column">
+      <h4>{{ section.settings.follow_heading }}</h4>
+      {% if section.settings.follow_menu != blank %}
+        <ul>
+          {% for link in section.settings.follow_menu.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="shopddf-footer__column shopddf-footer__column--newsletter">
+      <h4>{{ section.settings.newsletter_heading }}</h4>
+      {% form 'customer', id: 'shopddf-footer-newsletter' %}
+        {% if form.posted_successfully? %}
+          <p class="shopddf-footer__success">{{ section.settings.success_message }}</p>
+        {% else %}
+          <div class="shopddf-footer__options">
+            {% if section.settings.checkbox_one_label != blank %}
+              <label>
+                <input type="checkbox" name="contact[tags]" value="{{ section.settings.checkbox_one_label | escape }}">
+                {{ section.settings.checkbox_one_label }}
+              </label>
+            {% endif %}
+            {% if section.settings.checkbox_two_label != blank %}
+              <label>
+                <input type="checkbox" name="contact[tags]" value="{{ section.settings.checkbox_two_label | escape }}">
+                {{ section.settings.checkbox_two_label }}
+              </label>
+            {% endif %}
+          </div>
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input
+            type="email"
+            name="contact[email]"
+            placeholder="Email Address"
+            required
+          >
+          <input
+            type="text"
+            name="contact[first_name]"
+            placeholder="First Name"
+          >
+          <button type="submit">{{ section.settings.button_label }}</button>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+
+  <div class="shopddf-footer__bottom">
+    <p>{{ section.settings.copyright }}</p>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .shopddf-footer {
+    background: #e9e9e9;
+    color: #1f1f1f;
+  }
+
+  .shopddf-footer__social {
+    background: #0b0b0b;
+    padding: 18px 0;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+  }
+
+  .shopddf-footer__social a {
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shopddf-footer__social svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .shopddf-footer__main {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    padding: 32px 48px 20px;
+  }
+
+  .shopddf-footer__column h4 {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .shopddf-footer__column ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .shopddf-footer__column li {
+    margin-bottom: 8px;
+  }
+
+  .shopddf-footer__column a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 13px;
+  }
+
+  .shopddf-footer__column--newsletter form {
+    display: grid;
+    gap: 10px;
+  }
+
+  .shopddf-footer__options {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+
+  .shopddf-footer__options label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .shopddf-footer__column--newsletter input[type='email'],
+  .shopddf-footer__column--newsletter input[type='text'] {
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #cfcfcf;
+    background: transparent;
+  }
+
+  .shopddf-footer__column--newsletter button {
+    border: none;
+    padding: 10px 18px;
+    border-radius: 20px;
+    background: #0b0b0b;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+  }
+
+  .shopddf-footer__success {
+    font-size: 13px;
+    color: #0b0b0b;
+  }
+
+  .shopddf-footer__bottom {
+    text-align: center;
+    font-size: 12px;
+    padding: 10px 12px 24px;
+    color: #6b6b6b;
+  }
+
+  @media (max-width: 768px) {
+    .shopddf-footer__main {
+      grid-template-columns: 1fr;
+      padding: 24px 20px;
+    }
+
+    .shopddf-footer__options {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ShopDDF Footer",
+  "tag": "section",
+  "class": "shopddf-footer-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "company_heading",
+      "label": "Company heading",
+      "default": "Company"
+    },
+    {
+      "type": "link_list",
+      "id": "company_menu",
+      "label": "Company menu"
+    },
+    {
+      "type": "text",
+      "id": "follow_heading",
+      "label": "Follow heading",
+      "default": "Follow Us"
+    },
+    {
+      "type": "link_list",
+      "id": "follow_menu",
+      "label": "Follow menu"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Newsletter Sign Up"
+    },
+    {
+      "type": "text",
+      "id": "checkbox_one_label",
+      "label": "Checkbox one label",
+      "default": "DDF Store"
+    },
+    {
+      "type": "text",
+      "id": "checkbox_two_label",
+      "label": "Checkbox two label",
+      "default": "DDF Catalog"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks for signing up."
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright text",
+      "default": "Copyright © Diplomatic Duty Free Shops of New York. All rights reserved."
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ShopDDF Footer"
+    }
+  ]
+}
+{% endschema %}

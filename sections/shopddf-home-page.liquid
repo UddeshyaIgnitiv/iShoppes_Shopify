@@ -32,26 +32,23 @@
   <div class="shopddf-home__cards">
     {% for block in section.blocks %}
       <article class="shopddf-home__card" {{ block.shopify_attributes }}>
-        {% if block.settings.image != blank %}
-          <img
-            src="{{ block.settings.image | image_url: width: 900 }}"
-            alt="{{ block.settings.image.alt | default: block.settings.title }}"
-            loading="lazy"
-            width="{{ block.settings.image.width }}"
-            height="{{ block.settings.image.height }}"
-          >
-        {% else %}
-          {{ 'image' | placeholder_svg_tag: 'shopddf-home__card-placeholder' }}
-        {% endif %}
-        <h3>{{ block.settings.title }}</h3>
-        {% if block.settings.subtext != blank %}
-          <p>{{ block.settings.subtext }}</p>
-        {% endif %}
-        {% if block.settings.link != blank %}
-          <a class="shopddf-home__card-link" href="{{ block.settings.link }}">
-            {{ block.settings.link_label }}
-          </a>
-        {% endif %}
+        <a class="shopddf-home__card-link" href="{{ block.settings.link }}">
+          {% if block.settings.image != blank %}
+            <img
+              src="{{ block.settings.image | image_url: width: 900 }}"
+              alt="{{ block.settings.image.alt | default: block.settings.title }}"
+              loading="lazy"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+            >
+          {% else %}
+            {{ 'image' | placeholder_svg_tag: 'shopddf-home__card-placeholder' }}
+          {% endif %}
+          {% comment %} <h3>{{ block.settings.title }}</h3> {% endcomment %}
+          {% if block.settings.subtext != blank %}
+            <h1 class="shopddf-home__card-subtext">{{ block.settings.subtext }}</h1>
+          {% endif %}
+        </a>
       </article>
     {% endfor %}
   </div>
@@ -107,21 +104,34 @@
   }
 
   .shopddf-home__card {
-    background: #ffffff;
+    background: #f1f1f1;
     border: 1px solid #efefef;
     text-align: center;
+    text-decoration: none;
   }
-
+  .shopddf-home__card-subtext {
+    color: #000;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    height: 70px;
+    vertical-align: middle;
+    padding: 17px;
+    line-height: 20px;
+  }
   .shopddf-home__card img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 600px;
+    object-fit: cover;
   }
 
   .shopddf-home__card-placeholder {
     display: block;
     width: 100%;
-    height: auto;
+    height: 600px;
     background: #f2f2f2;
   }
 
@@ -146,6 +156,7 @@
     letter-spacing: 0.08em;
     text-decoration: underline;
     color: #0b0b0b;
+    text-decoration: none;
   }
 
   @media (max-width: 768px) {

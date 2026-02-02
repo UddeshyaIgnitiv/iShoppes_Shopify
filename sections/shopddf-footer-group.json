@@ -13,7 +13,20 @@
   "sections": {
     "shopddf_footer": {
       "type": "shopddf-footer",
-      "settings": {}
+      "settings": {
+        "company_heading": "Company",
+        "company_menu": "",
+        "follow_heading": "Follow Us",
+        "follow_menu": "",
+        "newsletter_heading": "Newsletter Sign Up",
+        "checkbox_one_label": "DDF Store",
+        "checkbox_two_label": "DDF Catalog",
+        "button_label": "Subscribe",
+        "success_message": "Thanks for signing up.",
+        "copyright": "Copyright © Diplomatic Duty Free Shops of New York. All rights reserved.",
+        "instagram_url": "https://www.instagram.com/shopddf",
+        "facebook_url": "https://www.facebook.com/DDFSNY"
+      }
     }
   },
   "order": [

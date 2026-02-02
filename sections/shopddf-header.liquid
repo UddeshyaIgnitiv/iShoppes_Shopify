@@ -1,5 +1,5 @@
 {% liquid
-  assign menu_links = section.settings.menu.links
+  assign menu_links = linklists['shopddf-main-menu'].links
 %}
 
 <header class="shopddf-header">
@@ -19,57 +19,60 @@
         <span class="shopddf-header__logo-text">{{ shop.name }}</span>
       {% endif %}
     </a>
-
-    
   </div>
 
-  {% if menu_links != blank %}
+  
     <nav class="shopddf-header__nav" aria-label="Main menu">
-      <ul class="shopddf-header__menu">
-        {% for link in menu_links %}
-          <li class="shopddf-header__menu-item{% if link.links != blank %} has-children{% endif %}">
-            <a class="shopddf-header__menu-link" href="{{ link.url }}">
-              {{ link.title }}
+      <div class="shopddf-header__nav-inner">
+        {% if menu_links != blank %}
+        <ul class="shopddf-header__menu">
+          {% for link in menu_links %}
+            <li class="shopddf-header__menu-item{% if link.links != blank %} has-children{% endif %}">
+              <a class="shopddf-header__menu-link" href="{{ link.url }}">
+                {{ link.title }}
+                {% if link.links != blank %}
+                  <span class="shopddf-header__caret" aria-hidden="true">
+                    {{ 'icon-caret.svg' | inline_asset_content }}
+                  </span>
+                {% endif %}
+              </a>
               {% if link.links != blank %}
-                <span class="shopddf-header__caret" aria-hidden="true">
-                  {{ 'icon-caret.svg' | inline_asset_content }}
-                </span>
+                <ul class="shopddf-header__submenu">
+                  {% for child in link.links %}
+                    <li>
+                      <a href="{{ child.url }}">{{ child.title }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="shopddf-header__icons shopddf-header__icons--nav">
+          {% if section.settings.show_search %}
+            <a class="shopddf-header__icon" href="{{ routes.search_url }}" aria-label="Search">
+              {% comment %} {{ 'icon-search.svg' | inline_asset_content }} {% endcomment %}
+              <svg width="34" height="34" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M62.1,57L44.6,42.8c3.2-4.2,5-9.3,5-14.7c0-6.5-2.5-12.5-7.1-17.1v0c-9.4-9.4-24.7-9.4-34.2,0C3.8,15.5,1.3,21.6,1.3,28 c0,6.5,2.5,12.5,7.1,17.1c4.7,4.7,10.9,7.1,17.1,7.1c6.1,0,12.1-2.3,16.8-6.8l17.7,14.3c0.3,0.3,0.7,0.4,1.1,0.4 c0.5,0,1-0.2,1.4-0.6C63,58.7,62.9,57.6,62.1,57z M10.8,42.7C6.9,38.8,4.8,33.6,4.8,28s2.1-10.7,6.1-14.6c4-4,9.3-6,14.6-6 c5.3,0,10.6,2,14.6,6c3.9,3.9,6.1,9.1,6.1,14.6S43.9,38.8,40,42.7C32,50.7,18.9,50.7,10.8,42.7z" transform="translate(20	 20)" fill="#fff"></path></svg>
+            </a>
+          {% endif %}
+          {% if section.settings.show_account and shop.customer_accounts_enabled %}
+            <a class="shopddf-header__icon" href="{{ routes.account_url }}" aria-label="Account">
+              {{ 'icon-account.svg' | inline_asset_content }}
+            </a>
+          {% endif %}
+          {% if section.settings.show_cart %}
+            <a class="shopddf-header__icon shopddf-header__icon--cart" href="{{ routes.cart_url }}" aria-label="Cart">
+              {% comment %} {% render 'cart-icon-component' %} {% endcomment %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="Now 21.218" height="26.376" viewBox="0 0 21.218 26.376"><path id="Path_26" data-name="Path 26" d="M300.126,6341.15h-2.57v-.21a4.946,4.946,0,0,0-9.893,0v.21h-2.571a3.1,3.1,0,0,0-3.092,3.095v13.042a5.09,5.09,0,0,0,5.082,5.085l11.054-.005a5.086,5.086,0,0,0,5.081-5.08v-13.042A3.1,3.1,0,0,0,300.126,6341.15Zm-1.989,19.866-11.054,0a3.732,3.732,0,0,1-3.663-3.054H301.8A3.732,3.732,0,0,1,298.138,6361.016Zm-5.528-23.668a3.6,3.6,0,0,1,3.6,3.592v.21h-7.19v-.21A3.6,3.6,0,0,1,292.609,6337.348Zm-3.594,7.452V6342.5h7.19v2.295h1.351V6342.5h2.57a1.742,1.742,0,0,1,1.741,1.74v12.367H283.351v-12.367a1.744,1.744,0,0,1,1.742-1.74h2.571v2.295Z" transform="translate(-282.001 -6335.996)" fill="#fff"></path></svg>
+              {% if cart.item_count > 0 %}
+                <span class="shopddf-header__cart-count">{{ cart.item_count }}</span>
               {% endif %}
             </a>
-            {% if link.links != blank %}
-              <ul class="shopddf-header__submenu">
-                {% for child in link.links %}
-                  <li>
-                    <a href="{{ child.url }}">{{ child.title }}</a>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-  <div class="shopddf-header__icons">
-      {% if section.settings.show_search %}
-        <a class="shopddf-header__icon" href="{{ routes.search_url }}" aria-label="Search">
-          {{ 'icon-search.svg' | inline_asset_content }}
-        </a>
-      {% endif %}
-      {% if section.settings.show_account and shop.customer_accounts_enabled %}
-        <a class="shopddf-header__icon" href="{{ routes.account_url }}" aria-label="Account">
-          {{ 'icon-account.svg' | inline_asset_content }}
-        </a>
-      {% endif %}
-      {% if section.settings.show_cart %}
-        <a class="shopddf-header__icon shopddf-header__icon--cart" href="{{ routes.cart_url }}" aria-label="Cart">
-          {% render 'cart-icon-component' %}
-          {% if cart.item_count > 0 %}
-            <span class="shopddf-header__cart-count">{{ cart.item_count }}</span>
           {% endif %}
-        </a>
-      {% endif %}
-    </div>
+        </div>
+      </div>
     </nav>
-  {% endif %}
 </header>
 
 {% stylesheet %}
@@ -109,15 +112,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
     color: #0b0b0b;
     position: relative;
   }
 
   .shopddf-header__icon svg {
-    width: 22px;
-    height: 22px;
+    width: 36px;
+    height: 36px;
   }
 
   .shopddf-header__cart-count {
@@ -137,16 +140,32 @@
 
   .shopddf-header__nav {
     background: #0b0b0b;
+    padding: 0 20px;
+  }
+
+  .shopddf-header__nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background: #0b0b0b;
   }
 
   .shopddf-header__menu {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 22px;
     list-style: none;
     margin: 0;
-    padding: 10px 20px;
+    padding: 0;
+  }
+
+  .shopddf-header__icons--nav {
+    margin-left: auto;
   }
 
   .shopddf-header__menu-link {
@@ -155,7 +174,7 @@
     gap: 6px;
     color: #ffffff;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-weight: 500;
@@ -235,8 +254,7 @@
     {
       "type": "link_list",
       "id": "menu",
-      "label": "Menu",
-      "default": "main-menu"
+      "label": "Menu"
     },
     {
       "type": "checkbox",

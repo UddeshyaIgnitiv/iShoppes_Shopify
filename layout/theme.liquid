@@ -40,7 +40,11 @@
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
     <div id="header-group">
-      {% sections 'header-group' %}
+      {% if template.suffix == 'shopddf-home-page' %}
+        {% sections 'shopddf-header-group' %}
+      {% else %}
+        {% sections 'header-group' %}
+      {% endif %}
     </div>
 
     <script
@@ -61,7 +65,11 @@
       {{ content_for_layout }}
     </main>
 
-    {% sections 'footer-group' %}
+    {% if template.suffix == 'shopddf-home-page' %}
+      {% sections 'shopddf-footer-group' %}
+    {% else %}
+      {% sections 'footer-group' %}
+    {% endif %}
 
     {% render 'search-modal' %}
 

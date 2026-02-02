@@ -1,0 +1,217 @@
+<section class="shopddf-home">
+  <div class="shopddf-home__hero">
+    {% if section.settings.hero_image != blank %}
+      <picture>
+        {% if section.settings.hero_image_mobile != blank %}
+          <source media="(max-width: 768px)" srcset="{{ section.settings.hero_image_mobile | image_url: width: 900 }}">
+        {% endif %}
+        <img
+          src="{{ section.settings.hero_image | image_url: width: 1600 }}"
+          alt="{{ section.settings.hero_image.alt | default: section.settings.hero_heading }}"
+          loading="lazy"
+          width="{{ section.settings.hero_image.width }}"
+          height="{{ section.settings.hero_image.height }}"
+        >
+      </picture>
+    {% else %}
+      <div class="shopddf-home__hero-placeholder"></div>
+    {% endif %}
+  </div>
+
+  <div class="shopddf-home__welcome">
+    <h2>{{ section.settings.hero_heading }}</h2>
+    <div class="shopddf-home__welcome-text">{{ section.settings.hero_text }}</div>
+  </div>
+
+  <div class="shopddf-home__cards">
+    {% for block in section.blocks %}
+      <article class="shopddf-home__card" {{ block.shopify_attributes }}>
+        {% if block.settings.image != blank %}
+          <img
+            src="{{ block.settings.image | image_url: width: 900 }}"
+            alt="{{ block.settings.image.alt | default: block.settings.title }}"
+            loading="lazy"
+            width="{{ block.settings.image.width }}"
+            height="{{ block.settings.image.height }}"
+          >
+        {% endif %}
+        <h3>{{ block.settings.title }}</h3>
+        {% if block.settings.subtext != blank %}
+          <p>{{ block.settings.subtext }}</p>
+        {% endif %}
+        {% if block.settings.link != blank %}
+          <a class="shopddf-home__card-link" href="{{ block.settings.link }}">
+            {{ block.settings.link_label }}
+          </a>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .shopddf-home__hero img,
+  .shopddf-home__hero-placeholder {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .shopddf-home__hero-placeholder {
+    background: #f0f0f0;
+    min-height: 280px;
+  }
+
+  .shopddf-home__welcome {
+    background: #d6d6d6;
+    text-align: center;
+    padding: 24px 16px;
+  }
+
+  .shopddf-home__welcome h2 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .shopddf-home__welcome-text {
+    max-width: 860px;
+    margin: 0 auto;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .shopddf-home__cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .shopddf-home__card {
+    background: #ffffff;
+    border: 1px solid #efefef;
+    text-align: center;
+  }
+
+  .shopddf-home__card img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .shopddf-home__card h3 {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 10px 8px 4px;
+  }
+
+  .shopddf-home__card p {
+    font-size: 11px;
+    color: #4a4a4a;
+    margin: 0 8px 10px;
+  }
+
+  .shopddf-home__card-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: underline;
+    color: #0b0b0b;
+  }
+
+  @media (max-width: 768px) {
+    .shopddf-home__cards {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ShopDDF Home Page",
+  "tag": "section",
+  "class": "shopddf-home-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_mobile",
+      "label": "Hero image (mobile)"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Welcome heading",
+      "default": "Welcome"
+    },
+    {
+      "type": "richtext",
+      "id": "hero_text",
+      "label": "Welcome text",
+      "default": "<p>We offer a diverse selection of iconic beauty products, carefully curated by our seasoned buyers to bring you the epitome of luxury from across the globe.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Winter Specials"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext",
+          "default": "Only for duty free liquor and tobacco tax exempt diplomats"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "View details"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ShopDDF Home Page",
+      "blocks": [
+        {
+          "type": "card"
+        },
+        {
+          "type": "card"
+        },
+        {
+          "type": "card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

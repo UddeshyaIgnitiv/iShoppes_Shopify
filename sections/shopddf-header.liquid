@@ -12,7 +12,8 @@
           loading="lazy"
           width="{{ section.settings.logo.width }}"
           height="{{ section.settings.logo.height }}"
-          style="width: {{ section.settings.logo_width }}px;"
+          {% comment %} style="width: {{ section.settings.logo_width }}px;" {% endcomment %}
+          style="width:320px"
         >
       {% else %}
         <span class="shopddf-header__logo-text">{{ shop.name }}</span>

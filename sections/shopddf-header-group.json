@@ -17,9 +17,9 @@
         "logo": "shopify://shop_images/shopddfLogo.png",
         "logo_width": 240,
         "menu": "main-menu",
-        "show_search": false,
+        "show_search": true,
         "show_account": false,
-        "show_cart": false
+        "show_cart": true
       }
     }
   },

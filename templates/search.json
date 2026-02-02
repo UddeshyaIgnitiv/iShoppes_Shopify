@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "search": {
       "type": "search-header",
@@ -140,6 +141,7 @@
             "price_fYkUgG": {
               "type": "price",
               "name": "t:names.product_price",
+              "disabled": true,
               "settings": {
                 "show_sale_price_first": true,
                 "show_installments": false,

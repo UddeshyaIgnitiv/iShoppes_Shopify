@@ -11,7 +11,10 @@
   "sections": {
     "main": {
       "type": "shopddf-home-page",
-      "settings": {}
+      "settings": {
+        "hero_heading": "",
+        "hero_text": ""
+      }
     }
   },
   "order": [

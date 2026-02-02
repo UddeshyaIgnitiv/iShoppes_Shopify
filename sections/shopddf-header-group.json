@@ -13,7 +13,14 @@
   "sections": {
     "shopddf_header": {
       "type": "shopddf-header",
-      "settings": {}
+      "settings": {
+        "logo": "shopify://shop_images/shopddfLogo.png",
+        "logo_width": 160,
+        "menu": "main-menu",
+        "show_search": false,
+        "show_account": false,
+        "show_cart": false
+      }
     }
   },
   "order": [

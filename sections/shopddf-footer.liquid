@@ -1,15 +1,11 @@
 <footer class="shopddf-footer">
   <div class="shopddf-footer__social">
-    {% if section.settings.instagram_url != blank %}
-      <a href="{{ section.settings.instagram_url }}" aria-label="Instagram">
-        {% render 'icon', icon: 'instagram' %}
+      <a target="_blank" href="https://www.instagram.com/shopddf" aria-label="Instagram">
+          <img src="{{ 'insta-icon.png' | asset_url }}" alt="Instagram" class="insta-icon" width="25px" height="25px">
       </a>
-    {% endif %}
-    {% if section.settings.facebook_url != blank %}
-      <a href="{{ section.settings.facebook_url }}" aria-label="Facebook">
-        {% render 'icon', icon: 'facebook' %}
+      <a target="_blank" href="https://www.facebook.com/DDFSNY" aria-label="Facebook">
+        <img src="{{ 'fb-icon.png' | asset_url }}" alt="Instagram" class="insta-icon" width="25px" height="25px">
       </a>
-    {% endif %}
   </div>
 
   <div class="shopddf-footer__main">
@@ -191,9 +187,9 @@
   }
 
   .shopddf-footer__bottom {
-    text-align: center;
-    font-size: 12px;
-    padding: 10px 12px 24px;
+    text-align: left;
+    font-size: 14px;
+    padding: 10px 115px 24px;
     color: #6b6b6b;
   }
 

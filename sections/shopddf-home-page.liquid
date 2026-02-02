@@ -1,4 +1,4 @@
-<section class="shopddf-home">
+<section class="shopddf-home shopddf-page-section">
   <div class="shopddf-home__hero">
     {% if section.settings.hero_image != blank %}
       <picture>
@@ -40,6 +40,8 @@
             width="{{ block.settings.image.width }}"
             height="{{ block.settings.image.height }}"
           >
+        {% else %}
+          {{ 'image' | placeholder_svg_tag: 'shopddf-home__card-placeholder' }}
         {% endif %}
         <h3>{{ block.settings.title }}</h3>
         {% if block.settings.subtext != blank %}
@@ -56,36 +58,45 @@
 </section>
 
 {% stylesheet %}
-  .shopddf-home__hero img,
-  .shopddf-home__hero-placeholder {
-    display: block;
-    width: 100%;
-    height: auto;
+  .shopddf-page-section {
+    padding-left: 45px !important;
+    padding-right: 45px !important;
   }
-
-  .shopddf-home__hero-placeholder {
-    background: #f0f0f0;
-    min-height: 280px;
-  }
-
+  
   .shopddf-home__welcome {
     background: #d6d6d6;
     text-align: center;
     padding: 24px 16px;
   }
-
+  .shopddf-home__welcome h2:after, .shopddf-home__welcome h2:before {
+    content: " ";
+    display: block;
+    border-bottom: 1px solid #217CFE;
+    border-top: 1px solid #217CFE;
+    height: 5px;
+  }
   .shopddf-home__welcome h2 {
-    margin: 0 0 10px;
-    font-size: 18px;
-    letter-spacing: 0.08em;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 300;
+    color: #222;
+    letter-spacing: 1px;
     text-transform: uppercase;
+    display: grid;
+    grid-template-columns: 1fr max-content 1fr;
+    grid-gap: 20px;
+    align-items: center;
+    padding: 30px 24px 0px 24px;
   }
 
   .shopddf-home__welcome-text {
-    max-width: 860px;
+    /* max-width: 860px; */
     margin: 0 auto;
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 130%;
+    text-align: justify;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   .shopddf-home__cards {
@@ -105,6 +116,13 @@
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  .shopddf-home__card-placeholder {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #f2f2f2;
   }
 
   .shopddf-home__card h3 {

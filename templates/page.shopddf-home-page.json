@@ -12,9 +12,42 @@
     "main": {
       "type": "shopddf-home-page",
       "settings": {
-        "hero_heading": "",
-        "hero_text": ""
-      }
+        "hero_image": "shopify://shop_images/shopddf-homepage-banner.jpg",
+        "hero_image_mobile": "shopify://shop_images/shopddf-homepage-banner-mobile.jpg",
+        "hero_heading": "Welcome",
+        "hero_text": "<p>We offer a diverse selection of iconic beauty products, carefully curated by our seasoned buyers to bring you the epitome of luxury from across the globe. Our premium collections boast unbeatable prices, ensuring that you'll find remarkable deals tailored to both your style and budget.<br/><br/>When you walk into ShopDDF, we want you to feel transported, even if it’s just for a moment. We’re more than just a retail store. Our knowledgeable and professional staff, with their friendly smiles and helpful tips, ensures every shopping journey is both seamless and memorable. <br/><br/>For international travelers seeking a taste of global elegance, or for New Yorkers longing to carry a piece of the world wherever they go, we provide an unparalleled retail experience in a chic, comfortable and upscale atmosphere. Whether you are a returning customer or first-time visitor, we warmly invite you to immerse yourself in the unique charm and sophistication of ShopDDF. <br/><br/>With pride in our unwavering commitment to customer satisfaction, and immense pleasure in serving discerning shoppers for years, ShopDDF has become an intrinsic part of Manhattan’s rich cultural fabric. We encourage you to take a part of this luxurious journey with us. Join us today to experience Manhattan’s only Diplomatic Duty Free retail boutique - the true reflection of world class luxury in the heart of the city.</p>"
+      },
+      "blocks": {
+        "card-1": {
+          "type": "card",
+          "settings": {
+            "title": "Winter Specials",
+            "subtext": "Only for duty free liquor and tobacco tax exempt diplomats",
+            "link_label": "View details"
+          }
+        },
+        "card-2": {
+          "type": "card",
+          "settings": {
+            "title": "Diplomatic Duty Free Store",
+            "subtext": "Only for duty free liquor and tobacco tax exempt diplomats",
+            "link_label": "View details"
+          }
+        },
+        "card-3": {
+          "type": "card",
+          "settings": {
+            "title": "Shops of New York",
+            "subtext": "Only for duty free liquor and tobacco tax exempt diplomats",
+            "link_label": "View details"
+          }
+        }
+      },
+      "block_order": [
+        "card-1",
+        "card-2",
+        "card-3"
+      ]
     }
   },
   "order": [

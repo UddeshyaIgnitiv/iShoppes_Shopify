@@ -14,7 +14,6 @@
     "shopddf_header": {
       "type": "shopddf-header",
       "settings": {
-        "logo": "shopify://shop_images/shopddfLogo.png",
         "logo_width": 160,
         "menu": "main-menu",
         "show_search": false,

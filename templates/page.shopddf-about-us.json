@@ -15,25 +15,24 @@
         "gallery-1": {
           "type": "gallery_image",
           "settings": {
-            "image": ""
+            "image": "shopify://shop_images/aboutus-1.jpg"
           }
         },
         "gallery-2": {
           "type": "gallery_image",
           "settings": {
-            "image": ""
+            "image": "shopify://shop_images/aboutus2.jpg"
           }
         },
         "gallery-3": {
           "type": "gallery_image",
           "settings": {
-            "image": ""
+            "image": "shopify://shop_images/aboutus3.jpg"
           }
         },
         "feature-1": {
           "type": "feature",
           "settings": {
-            "icon": "",
             "title": "Expert Team",
             "text": "Our multilingual sales staff is there to provide excellent customer service in any language you feel comfortable speaking."
           }
@@ -41,7 +40,6 @@
         "feature-2": {
           "type": "feature",
           "settings": {
-            "icon": "",
             "title": "Premium Brands",
             "text": "The store is a merchandising paradise with an extensive array of fragrances, cosmetics, skincare products, and more."
           }
@@ -49,7 +47,6 @@
         "feature-3": {
           "type": "feature",
           "settings": {
-            "icon": "",
             "title": "Quality Standards",
             "text": "With an enduring international reputation for quality, creativity, and uniqueness, we stand apart in Midtown Manhattan."
           }
@@ -57,7 +54,6 @@
         "feature-4": {
           "type": "feature",
           "settings": {
-            "icon": "",
             "title": "First Class Experience",
             "text": "Our focus on distinctive products and competitive pricing delivers a first-class experience for every client."
           }

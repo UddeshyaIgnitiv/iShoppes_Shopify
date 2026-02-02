@@ -1,10 +1,10 @@
 <footer class="shopddf-footer">
   <div class="shopddf-footer__social">
       <a target="_blank" href="https://www.instagram.com/shopddf" aria-label="Instagram">
-          <img src="{{ 'insta-icon.png' | asset_url }}" alt="Instagram" class="insta-icon" width="25px" height="25px">
+          <img src="{{ 'insta-icon.png' | asset_url }}" alt="Instagram" class="social-icon" width="25px" height="25px">
       </a>
       <a target="_blank" href="https://www.facebook.com/DDFSNY" aria-label="Facebook">
-        <img src="{{ 'fb-icon.png' | asset_url }}" alt="Instagram" class="insta-icon" width="25px" height="25px">
+        <img src="{{ 'fb-icon.png' | asset_url }}" alt="Facebook" class="social-icon" width="25px" height="25px">
       </a>
   </div>
 
@@ -90,6 +90,16 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+  }
+
+  .shopddf-footer__social img {
+    display: block;
+    width: 22px;
+    height: 22px;
   }
 
   .shopddf-footer__social svg {

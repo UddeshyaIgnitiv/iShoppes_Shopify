@@ -48,8 +48,6 @@
           </li>
         {% endfor %}
       </ul>
-    </nav>
-  {% endif %}
   <div class="shopddf-header__icons">
       {% if section.settings.show_search %}
         <a class="shopddf-header__icon" href="{{ routes.search_url }}" aria-label="Search">
@@ -70,6 +68,8 @@
         </a>
       {% endif %}
     </div>
+    </nav>
+  {% endif %}
 </header>
 
 {% stylesheet %}

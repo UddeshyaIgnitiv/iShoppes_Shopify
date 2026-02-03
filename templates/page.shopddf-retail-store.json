@@ -9,6 +9,9 @@
  */
 {
   "sections": {
+    "store_info": {
+      "type": "shopddf-retail-store-info"
+    },
     "main": {
       "type": "shopddf-retail-store",
       "blocks": {
@@ -47,6 +50,7 @@
     }
   },
   "order": [
+    "store_info",
     "main"
   ]
 }

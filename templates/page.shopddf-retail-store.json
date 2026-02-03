@@ -38,7 +38,11 @@
       ],
       "settings": {
         "heading": "Retail Store",
-        "body_text": "<p>Nestled mere steps from the United Nations, our retail store extends a warm invitation to all members of the diplomatic and United Nations communities. With an extensive selection of beauty products, we are proud to showcase the most prestigious and coveted brands available. To make your shopping experience effortless, our friendly and well-informed sales team is fluent in multiple languages and ready to assist you. Diplomats can further benefit from additional savings by presenting their tax exemption card, allowing them to shop tax-free on New York City sales tax. Come and explore the exceptional offerings we have in store for you.</p><p> </p>"
+        "body_text": "<p>Nestled mere steps from the United Nations, our retail store extends a warm invitation to all members of the diplomatic and United Nations communities. With an extensive selection of beauty products, we are proud to showcase the most prestigious and coveted brands available. To make your shopping experience effortless, our friendly and well-informed sales team is fluent in multiple languages and ready to assist you. Diplomats can further benefit from additional savings by presenting their tax exemption card, allowing them to shop tax-free on New York City sales tax. Come and explore the exceptional offerings we have in store for you.</p><p> </p>",
+        "hours_image": "shopify://shop_images/dutyfreeNY.jpg",
+        "hours_heading": "Hours of Operation",
+        "hours_rows": "Monday|10:00AM - 5:00PM",
+        "hours_text": "<p><strong>Monday</strong> 10:00AM - 5:00PM</p><p><strong>Tuesday</strong> 10:00AM - 5:00PM</p><p><strong>Wednesday</strong> 10:00AM - 5:00PM</p><p><strong>Thursday</strong> 10:00AM - 5:00PM</p><p><strong>Friday</strong> 10:00AM - 5:00PM</p><p><strong>Saturday & Sunday</strong> CLOSED</p>"
       }
     }
   },

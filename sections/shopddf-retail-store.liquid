@@ -115,6 +115,101 @@
       {% endfor %}
     </div>
   {% endif %}
+
+  {% assign store_meta = shop.metafields.custom.shopddf_retails_stores.value %}
+  {% if store_meta == blank %}
+    {% assign store_meta = shop.metafields.shopddf_retails_stores.value %}
+  {% endif %}
+  {% assign store_item = store_meta %}
+  {% if store_meta != blank and store_meta.first != blank %}
+    {% assign store_item = store_meta.first %}
+  {% endif %}
+  {% assign store_title = store_item.store_title | default: store_item.storeTitle %}
+  {% assign store_address = store_item.address %}
+  {% assign store_phone = store_item.phone %}
+  {% assign store_email = store_item.email %}
+  {% assign store_hours = store_item.storeHours | default: store_item.store_hours %}
+  {% assign store_map_url = store_item.map | default: store_item.map_url %}
+  {% assign has_store_meta = false %}
+  {% if store_title != blank or store_address != blank or store_phone != blank or store_email != blank or store_hours != blank or store_map_url != blank %}
+    {% assign has_store_meta = true %}
+  {% endif %}
+
+  {% assign contact_blocks = section.blocks | where: "type", "contact_card" %}
+  {% if has_store_meta or contact_blocks.size > 0 or section.settings.contact_heading != blank or section.settings.map_url != blank %}
+    <div class="shopddf-retailstore__contact">
+      {% if store_title != blank or section.settings.contact_heading != blank %}
+        <div class="shopddf-retailstore__contact-bar">
+          <h3>{{ store_title | default: section.settings.contact_heading }}</h3>
+        </div>
+      {% endif %}
+      {% if has_store_meta %}
+        <div class="shopddf-retailstore__contact-grid">
+          {% if store_address != blank %}
+            <article class="shopddf-retailstore__contact-card">
+              <h4 class="shopddf-retailstore__contact-title">Address</h4>
+              <p class="shopddf-retailstore__contact-text">{{ store_address | newline_to_br }}</p>
+            </article>
+          {% endif %}
+          {% if store_phone != blank %}
+            <article class="shopddf-retailstore__contact-card">
+              <h4 class="shopddf-retailstore__contact-title">Phone</h4>
+              <p class="shopddf-retailstore__contact-text">{{ store_phone }}</p>
+            </article>
+          {% endif %}
+          {% if store_email != blank %}
+            <article class="shopddf-retailstore__contact-card">
+              <h4 class="shopddf-retailstore__contact-title">Email</h4>
+              <p class="shopddf-retailstore__contact-text">{{ store_email }}</p>
+            </article>
+          {% endif %}
+          {% if store_hours != blank %}
+            <article class="shopddf-retailstore__contact-card">
+              <h4 class="shopddf-retailstore__contact-title">Store Hours</h4>
+              <p class="shopddf-retailstore__contact-text">{{ store_hours | newline_to_br }}</p>
+            </article>
+          {% endif %}
+        </div>
+      {% elsif contact_blocks.size > 0 %}
+        <div class="shopddf-retailstore__contact-grid">
+          {% for block in contact_blocks %}
+            <article class="shopddf-retailstore__contact-card" {{ block.shopify_attributes }}>
+              {% if block.settings.icon != blank %}
+                <div class="shopddf-retailstore__contact-icon">
+                  <img
+                    src="{{ block.settings.icon | image_url: width: 120 }}"
+                    alt="{{ block.settings.icon.alt | default: block.settings.title }}"
+                    loading="lazy"
+                    width="{{ block.settings.icon.width }}"
+                    height="{{ block.settings.icon.height }}"
+                  >
+                </div>
+              {% endif %}
+              {% if block.settings.title != blank %}
+                <h4 class="shopddf-retailstore__contact-title">{{ block.settings.title }}</h4>
+              {% endif %}
+              {% if block.settings.text != blank %}
+                <p class="shopddf-retailstore__contact-text">{{ block.settings.text }}</p>
+              {% endif %}
+            </article>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% assign map_url_value = store_map_url | default: section.settings.map_url %}
+      {% if map_url_value != blank %}
+        <div class="shopddf-retailstore__map">
+          <iframe
+            src="{{ map_url_value }}"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+            title="{{ store_title | default: section.settings.contact_heading | default: section.settings.heading }}"
+            style="height: {{ section.settings.map_height | default: 320 }}px;"
+          ></iframe>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
 </section>
 
 {% stylesheet %}
@@ -328,6 +423,77 @@
     filter: brightness(0) invert(1);
   }
 
+  .shopddf-retailstore__contact {
+    margin: 26px 0 0;
+  }
+
+  .shopddf-retailstore__contact-bar {
+    background: #1f2b33;
+    color: #fff;
+    padding: 10px 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 14px;
+  }
+
+  .shopddf-retailstore__contact-bar h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .shopddf-retailstore__contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    background: #fff;
+    padding: 14px;
+  }
+
+  .shopddf-retailstore__contact-card {
+    background: #203038;
+    color: #fff;
+    text-align: center;
+    padding: 26px 18px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shopddf-retailstore__contact-icon img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    filter: brightness(0) invert(1);
+  }
+
+  .shopddf-retailstore__contact-title {
+    margin: 4px 0 6px;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .shopddf-retailstore__contact-text {
+    margin: 0;
+    font-size: 14px;
+    color: #e6eef2;
+  }
+
+  .shopddf-retailstore__map {
+    border: 1px solid #e0e0e0;
+    border-top: 0;
+  }
+
+  .shopddf-retailstore__map iframe {
+    width: 100%;
+    border: 0;
+    display: block;
+  }
+
   @media (max-width: 990px) {
     .shopddf-retailstore__gallery {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -361,6 +527,10 @@
 
   @media (max-width: 600px) {
     .shopddf-retailstore__features {
+      grid-template-columns: 1fr;
+    }
+
+    .shopddf-retailstore__contact-grid {
       grid-template-columns: 1fr;
     }
   }
@@ -406,6 +576,27 @@
       "id": "hours_text",
       "label": "Hours text",
       "default": "<p><strong>Monday</strong> 10:00AM - 5:00PM</p><p><strong>Tuesday</strong> 10:00AM - 5:00PM</p><p><strong>Wednesday</strong> 10:00AM - 5:00PM</p><p><strong>Thursday</strong> 10:00AM - 5:00PM</p><p><strong>Friday</strong> 10:00AM - 5:00PM</p><p><strong>Saturday &amp; Sunday</strong> CLOSED</p>"
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Contact heading",
+      "default": "DDF New York City"
+    },
+    {
+      "type": "url",
+      "id": "map_url",
+      "label": "Map URL"
+    },
+    {
+      "type": "range",
+      "id": "map_height",
+      "label": "Map height",
+      "min": 200,
+      "max": 640,
+      "step": 10,
+      "unit": "px",
+      "default": 320
     }
   ],
   "blocks": [
@@ -440,6 +631,29 @@
           "id": "text",
           "label": "Text",
           "default": "Our multilingual sales staff is there to provide excellent customer service in any language you feel comfortable speaking."
+        }
+      ]
+    },
+    {
+      "type": "contact_card",
+      "name": "Contact card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Address"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "801 2nd Avenue, 4th floor, New York"
         }
       ]
     }
@@ -483,6 +697,34 @@
           "settings": {
             "title": "First Class Experience",
             "text": "Our focus on distinctive products and competitive pricing delivers a first-class experience for every client."
+          }
+        },
+        {
+          "type": "contact_card",
+          "settings": {
+            "title": "Address",
+            "text": "801 2nd Avenue, 4th floor, New York"
+          }
+        },
+        {
+          "type": "contact_card",
+          "settings": {
+            "title": "Phone",
+            "text": "212-838-9151"
+          }
+        },
+        {
+          "type": "contact_card",
+          "settings": {
+            "title": "Email",
+            "text": "info@shopddf.com"
+          }
+        },
+        {
+          "type": "contact_card",
+          "settings": {
+            "title": "Store Hours",
+            "text": "Monday - Friday 10:00AM - 5:00PM"
           }
         }
       ]

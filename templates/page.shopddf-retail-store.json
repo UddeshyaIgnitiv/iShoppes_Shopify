@@ -14,15 +14,21 @@
       "blocks": {
         "gallery-1": {
           "type": "gallery_image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/retailstore1.webp"
+          }
         },
         "gallery-2": {
           "type": "gallery_image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/retailstore2.webp"
+          }
         },
         "gallery-3": {
           "type": "gallery_image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/retailstore3.webp"
+          }
         },
         "feature-1": {
           "type": "feature",

@@ -7,7 +7,6 @@
       <div class="shopddf-retailstore__text">{{ section.settings.body_text }}</div>
     {% endif %}
   </div>
-
   {% assign gallery_blocks = section.blocks | where: "type", "gallery_image" %}
   {% if gallery_blocks.size > 0 %}
     <div class="shopddf-retailstore__gallery">

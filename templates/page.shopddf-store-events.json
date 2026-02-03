@@ -1,0 +1,52 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "store-events",
+      "blocks": {
+        "event-1": {
+          "type": "event",
+          "settings": {
+            "title": "Clinique Raffle",
+            "time": "12:00 AM",
+            "start_day": "7",
+            "end_day": "28",
+            "start_month": "Feb",
+            "end_month": "Feb",
+            "link_label": "Learn More"
+          }
+        },
+        "event-2": {
+          "type": "event",
+          "settings": {
+            "title": "Mario Badescu Raffle",
+            "time": "12:00 AM",
+            "start_day": "7",
+            "end_day": "28",
+            "start_month": "Feb",
+            "end_month": "Feb",
+            "link_label": "Learn More"
+          }
+        }
+      },
+      "block_order": [
+        "event-1",
+        "event-2"
+      ],
+      "settings": {
+        "heading": "Store Events"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -108,7 +108,7 @@
             {% if store_meta.phone != blank %}
               {% assign phone_value = store_meta.phone | strip %}
               <div class="shopddf-retailstore__feature retailstore-phone shopddf-retailstore-meta__feature">
-                <img src="{{ 'phone-img.png' | asset_url }}" alt="Address" width="25px" height="25px" loading="lazy" />
+                <img src="{{ 'phone-img.png' | asset_url }}" alt="Phone" width="25px" height="25px" loading="lazy" />
                 <h3 class="shopddf-retailstore-meta__feature-label">Phone</h3>
                 <p class="shopddf-retailstore-meta__feature-value">
                   <a href="tel:{{ phone_value | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}">{{ phone_value }}</a>
@@ -119,7 +119,7 @@
             {% if store_meta.email != blank %}
               {% assign email_value = store_meta.email | strip %}
               <div class="shopddf-retailstore__feature retailstore-email shopddf-retailstore-meta__feature">
-                <img src="{{ 'email-img.png' | asset_url }}" alt="Address" width="25px" height="25px" loading="lazy" />
+                <img src="{{ 'email-img.png' | asset_url }}" alt="Email" width="25px" height="25px" loading="lazy" />
                 <h3 class="shopddf-retailstore-meta__feature-label">Email</h3>
                 <p class="shopddf-retailstore-meta__feature-value">
                   <a href="mailto:{{ email_value }}">{{ email_value }}</a>
@@ -128,7 +128,7 @@
             {% endif %}
             {% if store_meta.storehours != blank %}
               <div class="shopddf-retailstore__feature retailstore-hours shopddf-retailstore-meta__feature">
-                <img src="{{ 'clock-img.png' | asset_url }}" alt="Address" width="25px" height="25px" loading="lazy" />
+                <img src="{{ 'clock-img.png' | asset_url }}" alt="Working Hours" width="25px" height="25px" loading="lazy" />
                 <h3 class="shopddf-retailstore-meta__feature-label">Store Hours</h3>
                 <div class="shopddf-retailstore-meta__feature-value">
                   {% assign hours_field = store_meta.storehours %}

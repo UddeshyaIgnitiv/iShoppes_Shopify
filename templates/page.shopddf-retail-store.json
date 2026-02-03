@@ -14,21 +14,15 @@
       "blocks": {
         "gallery-1": {
           "type": "gallery_image",
-          "settings": {
-            "image": "shopify://shop_images/retailstore-1.jpg"
-          }
+          "settings": {}
         },
         "gallery-2": {
           "type": "gallery_image",
-          "settings": {
-            "image": "shopify://shop_images/retailstore2.jpg"
-          }
+          "settings": {}
         },
         "gallery-3": {
           "type": "gallery_image",
-          "settings": {
-            "image": "shopify://shop_images/retailstore3.jpg"
-          }
+          "settings": {}
         },
         "feature-1": {
           "type": "feature",
@@ -74,7 +68,7 @@
       ],
       "settings": {
         "heading": "Retail Store",
-        "body_text": "<p>As Manhattan's sole travel retail boutique, ShopDDF has garnered an international reputation for excellence in quality, creativity, and uniqueness. Situated in the heart of Midtown Manhattan, our emphasis on exclusive products, extensive range of goods, competitive pricing, and dedicated focus have allowed us to build strong relationships with our clientele.</p><p>Whether you are traveling to or from New York City, a visit to our Diplomatic Duty Free Shops is sure to leave a lasting impression as a reflection of Manhattan's incomparable spirit as the world's greatest city. Our shop offers a wide selection of the most sought-after and esteemed brands, including designer skincare, cosmetics, fragrances, and food and gifts.</p><p>Our team of multilingual sales staff is always on hand to provide excellent customer service in any language that you feel most comfortable speaking. Additionally, our shop is conveniently located mere steps from the United Nations, making it a popular destination for members of the diplomatic and UN communities.</p>"
+        "body_text": "<p>Nestled mere steps from the United Nations, our retail store extends a warm invitation to all members of the diplomatic and United Nations communities. With an extensive selection of beauty products, we are proud to showcase the most prestigious and coveted brands available. To make your shopping experience effortless, our friendly and well-informed sales team is fluent in multiple languages and ready to assist you. Diplomats can further benefit from additional savings by presenting their tax exemption card, allowing them to shop tax-free on New York City sales tax. Come and explore the exceptional offerings we have in store for you.</p><p> </p>"
       }
     }
   },

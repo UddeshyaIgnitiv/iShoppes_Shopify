@@ -29,48 +29,12 @@
           "settings": {
             "image": "shopify://shop_images/retailstore3.webp"
           }
-        },
-        "feature-1": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/team.png",
-            "title": "Expert Team",
-            "text": "Our multilingual sales staff is there to provide excellent customer service in any language you feel comfortable speaking."
-          }
-        },
-        "feature-2": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/brand.png",
-            "title": "Premium Brands",
-            "text": "The store is a merchandising paradise with an extensive array of fragrances, cosmetics, skincare products, and more."
-          }
-        },
-        "feature-3": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/quality.png",
-            "title": "Quality Standards",
-            "text": "With an enduring international reputation for quality, creativity, and uniqueness, we stand apart in Midtown Manhattan."
-          }
-        },
-        "feature-4": {
-          "type": "feature",
-          "settings": {
-            "icon": "shopify://shop_images/service.png",
-            "title": "First Class Experience",
-            "text": "Our focus on distinctive products and competitive pricing delivers a first-class experience for every client."
-          }
         }
       },
       "block_order": [
         "gallery-1",
         "gallery-2",
-        "gallery-3",
-        "feature-1",
-        "feature-2",
-        "feature-3",
-        "feature-4"
+        "gallery-3"
       ],
       "settings": {
         "heading": "Retail Store",

@@ -51,19 +51,30 @@
         {% endif %}
         {% if hours_rows_value != blank %}
           <ul class="shopddf-retailstore__hours-list">
-            {% assign hours_lines = hours_rows_value | split: '\n' %}
-            {% for line in hours_lines %}
-              {% assign trimmed_line = line | strip %}
-              {% if trimmed_line != blank %}
-                {% assign parts = trimmed_line | split: '|' %}
-                {% assign day_value = parts[0] | strip %}
-                {% assign time_value = parts[1] | strip %}
-                <li class="shopddf-retailstore__hours-row">
-                  <span class="shopddf-retailstore__hours-day">{{ day_value }}</span>
-                  <span class="shopddf-retailstore__hours-time">{{ time_value }}</span>
-                </li>
-              {% endif %}
-            {% endfor %}
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Monday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Tuesday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Wednesday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Thursday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Friday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Saturday & Sunday</span>
+              <span class="shopddf-retailstore__hours-time">Closed</span>
+            </li>
           </ul>
         {% elsif section.settings.hours_text != blank %}
           <div class="shopddf-retailstore__hours-text">{{ section.settings.hours_text }}</div>
@@ -185,11 +196,11 @@
 
   .shopddf-retailstore__hours {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 1px;
     align-items: stretch;
     margin: 10px 0 26px;
-    border: 1px solid #e0e0e0;
+    /* border: 1px solid #e0e0e0; */
   }
 
   .shopddf-retailstore__hours-media img,
@@ -210,25 +221,29 @@
   }
 
   .shopddf-retailstore__hours-heading {
-    font-size: 16px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin: 0 0 10px;
     color: #222;
+    font-size: 30px;
+    line-height: 32px;
+    margin: 20px 0 8px;
+    font-weight: 500;
   }
 
   .shopddf-retailstore__hours-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    border: 1px solid #e1e1e1;
+    /* border: 1px solid #e1e1e1; */
     background: #fff;
+    text-transform: uppercase;
   }
 
   .shopddf-retailstore__hours-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     padding: 8px 12px;
     font-size: 14px;
     color: #222;
@@ -244,10 +259,13 @@
 
   .shopddf-retailstore__hours-day {
     font-weight: 700;
+    font-size: 1.3rem;
+    width: 280px;
   }
 
   .shopddf-retailstore__hours-time {
     font-weight: 500;
+    font-size: 16px;
     color: #333;
   }
 
@@ -332,6 +350,12 @@
 
     .shopddf-retailstore__gallery {
       grid-template-columns: 1fr;
+    }
+    .shopddf-retailstore__hours-day {
+      width: 170px;
+    }
+    .shopddf-retailstore__hours-heading {
+      font-size: 26px;
     }
   }
 

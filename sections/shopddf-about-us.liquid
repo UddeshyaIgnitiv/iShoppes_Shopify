@@ -34,25 +34,29 @@
     <div class="shopddf-about__features">
       {% for block in feature_blocks %}
         <article class="shopddf-about__feature" {{ block.shopify_attributes }}>
-          <div class="shopddf-about__feature-icon">
-            {% if block.settings.icon != blank %}
-              <img
-                src="{{ block.settings.icon | image_url: width: 180 }}"
-                alt="{{ block.settings.icon.alt | default: block.settings.title }}"
-                loading="lazy"
-                width="{{ block.settings.icon.width }}"
-                height="{{ block.settings.icon.height }}"
-              >
-            {% else %}
-              {{ 'image' | placeholder_svg_tag: 'shopddf-about__feature-placeholder' }}
+          {% if block.settings.title != blank %}
+            <div>
+              <h3>{{ block.settings.title }}</h3>
+            </div>
+          {% endif %}
+          <div class="shopddf-about_feature_body">
+            <div class="shopddf-about__feature-icon">
+              {% if block.settings.icon != blank %}
+                <img
+                  src="{{ block.settings.icon | image_url: width: 180 }}"
+                  alt="{{ block.settings.icon.alt | default: block.settings.title }}"
+                  loading="lazy"
+                  width="{{ block.settings.icon.width }}"
+                  height="{{ block.settings.icon.height }}"
+                >
+              {% else %}
+                {{ 'image' | placeholder_svg_tag: 'shopddf-about__feature-placeholder' }}
+              {% endif %}
+            </div>
+            {% if block.settings.text != blank %}
+              <p>{{ block.settings.text }}</p>
             {% endif %}
           </div>
-          {% if block.settings.title != blank %}
-            <h3>{{ block.settings.title }}</h3>
-          {% endif %}
-          {% if block.settings.text != blank %}
-            <p>{{ block.settings.text }}</p>
-          {% endif %}
         </article>
       {% endfor %}
     </div>
@@ -60,6 +64,15 @@
 </section>
 
 {% stylesheet %}
+  .shopddf-about_feature_body {
+    float: left;
+    width: 100%;
+    text-align: center;
+    background-image: url('{{ "dd-aboutus-bb.png" | asset_url }}');
+    background-position: top center;
+    min-height: 305px;
+    padding-top: 30px;
+  }
   .shopddf-page-section {
     padding-left: 45px !important;
     padding-right: 45px !important;
@@ -71,7 +84,7 @@
   }
 
   .shopddf-about__intro {
-    max-width: 980px;
+    /* max-width: 980px; */
     margin: 0 auto 24px;
   }
 
@@ -126,10 +139,11 @@
   }
 
   .shopddf-about__feature {
-    background: #f1f1f1;
     border: 1px solid #e6e6e6;
     padding: 18px 14px 20px;
     text-align: center;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    background-color: #f9f9f9;
   }
 
   .shopddf-about__feature-icon {
@@ -147,18 +161,34 @@
   }
 
   .shopddf-about__feature h3 {
-    font-size: 13px;
+    font-size: 17px;
+    text-align: center;
+    font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin: 0 0 10px;
-    color: #222;
+    margin-top: 20px;
+    margin-bottom: 30px;
   }
 
   .shopddf-about__feature p {
-    font-size: 12px;
-    line-height: 1.5;
-    color: #555;
-    margin: 0;
+    font-size: 14px;
+    line-height: 25px;
+    text-align: justify;
+    padding: 0;
+  }
+
+  .shopddf-about__feature:hover {
+    background: #123b6c;
+    border-color: #0f2f56;
+    color: #fff;
+  }
+
+  .shopddf-about__feature:hover h3,
+  .shopddf-about__feature:hover p {
+    color: #fff;
+  }
+
+  .shopddf-about__feature:hover img {
+    filter: brightness(0) invert(1);
   }
 
   @media (max-width: 990px) {

@@ -1,0 +1,150 @@
+{% assign store_meta = page.metafields.custom.shopddf_retails_stores.value | default: page.metafields.shopddf_retails_stores.value %}
+{% if store_meta != blank %}
+  <section class="shopddf-retailstore-meta shopddf-page-section">
+    {% if store_meta.store_title != blank %}
+      <h2 class="shopddf-retailstore-meta__heading">{{ store_meta.store_title }}</h2>
+    {% endif %}
+
+    <div class="shopddf-retailstore__features shopddf-retailstore-meta__features">
+      {% if store_meta.address != blank %}
+        <div class="shopddf-retailstore__feature shopddf-retailstore-meta__feature">
+          <h3 class="shopddf-retailstore-meta__feature-label">Address</h3>
+          <p class="shopddf-retailstore-meta__feature-value">{{ store_meta.address }}</p>
+        </div>
+      {% endif %}
+
+      {% if store_meta.phone != blank %}
+        {% assign phone_value = store_meta.phone | strip %}
+        <div class="shopddf-retailstore__feature shopddf-retailstore-meta__feature">
+          <h3 class="shopddf-retailstore-meta__feature-label">Phone</h3>
+          <p class="shopddf-retailstore-meta__feature-value">
+            <a href="tel:{{ phone_value | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}">{{ phone_value }}</a>
+          </p>
+        </div>
+      {% endif %}
+
+      {% if store_meta.email != blank %}
+        {% assign email_value = store_meta.email | strip %}
+        <div class="shopddf-retailstore__feature shopddf-retailstore-meta__feature">
+          <h3 class="shopddf-retailstore-meta__feature-label">Email</h3>
+          <p class="shopddf-retailstore-meta__feature-value">
+            <a href="mailto:{{ email_value }}">{{ email_value }}</a>
+          </p>
+        </div>
+      {% endif %}
+
+      {% if store_meta.storeworkinghours != blank %}
+        <div class="shopddf-retailstore__feature shopddf-retailstore-meta__feature">
+          <h3 class="shopddf-retailstore-meta__feature-label">Store Hours</h3>
+          <div class="shopddf-retailstore-meta__feature-value">
+            {% assign hours_field = store_meta.storeworkinghours %}
+            {% if hours_field.value != blank %}
+              {{ hours_field | metafield_tag }}
+            {% else %}
+              {{ hours_field | newline_to_br }}
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if store_meta.map != blank %}
+      <div class="shopddf-retailstore-meta__map">
+        {% assign map_field = store_meta.map %}
+        {% if map_field.value != blank %}
+          {{ map_field | metafield_tag }}
+        {% else %}
+          {{ map_field }}
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .shopddf-retailstore-meta {
+    padding-top: 10px;
+    padding-bottom: 28px;
+  }
+
+  .shopddf-retailstore-meta__heading {
+    font-size: 26px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #222;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #d6d6d6;
+    padding-bottom: 10px;
+    margin: 0 0 16px;
+  }
+
+  .shopddf-retailstore-meta__features {
+    margin: 0 0 18px;
+  }
+
+  .shopddf-retailstore-meta__feature {
+    text-align: center;
+  }
+
+  .shopddf-retailstore-meta__feature-label {
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    margin: 10px 0 12px;
+    text-transform: uppercase;
+  }
+
+  .shopddf-retailstore-meta__feature-value {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  .shopddf-retailstore-meta__feature-value a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .shopddf-retailstore-meta__feature-value a:hover {
+    text-decoration: underline;
+  }
+
+  .shopddf-retailstore-meta__map {
+    border: 1px solid #e1e1e1;
+    background: #fff;
+  }
+
+  .shopddf-retailstore-meta__map iframe,
+  .shopddf-retailstore-meta__map img {
+    display: block;
+    width: 100%;
+    min-height: 320px;
+    border: 0;
+  }
+
+  @media (max-width: 990px) {
+    .shopddf-retailstore-meta__features {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .shopddf-retailstore-meta__features {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ShopDDF Retail Store Info",
+  "tag": "section",
+  "class": "shopddf-retailstore-meta-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "ShopDDF Retail Store Info"
+    }
+  ]
+}
+{% endschema %}

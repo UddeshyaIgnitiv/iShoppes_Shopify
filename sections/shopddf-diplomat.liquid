@@ -1,205 +1,421 @@
-<section class="shopddf-diplomat page-width-normal">
-  <div class="shopddf-diplomat__header">
+<section class="shopddf-retailstore shopddf-page-section">
+  <div class="shopddf-retailstore__intro">
     {% if section.settings.heading != blank %}
-      <h2 class="shopddf-diplomat__heading">{{ section.settings.heading }}</h2>
+      <h2 class="shopddf-retailstore__heading">{{ section.settings.heading }}</h2>
     {% endif %}
-    <div class="shopddf-diplomat__divider"></div>
-    {% if section.settings.intro != blank %}
-      <div class="shopddf-diplomat__intro">{{ section.settings.intro }}</div>
+    {% if section.settings.body_text != blank %}
+      <div class="shopddf-retailstore__text">{{ section.settings.body_text }}</div>
     {% endif %}
   </div>
+  {% assign gallery_blocks = section.blocks | where: "type", "gallery_image" %}
+  {% if gallery_blocks.size > 0 %}
+    <div class="shopddf-retailstore__gallery">
+      {% for block in gallery_blocks %}
+        <figure class="shopddf-retailstore__gallery-item" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            <img
+              src="{{ block.settings.image | image_url: width: 900 }}"
+              alt="{{ block.settings.image.alt | default: section.settings.heading }}"
+              loading="lazy"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+            >
+          {% else %}
+            {{ 'image' | placeholder_svg_tag: 'shopddf-retailstore__gallery-placeholder' }}
+          {% endif %}
+        </figure>
+      {% endfor %}
+    </div>
+  {% endif %}
 
-  <div class="shopddf-diplomat__hours">
-    <div class="shopddf-diplomat__hours-left">
-      <div class="shopddf-diplomat__logo-card">
-        {% if section.settings.logo_image != blank %}
+  {% assign hours_rows_value = section.settings.hours_rows | strip %}
+  {% if section.settings.hours_image != blank or section.settings.hours_heading != blank or hours_rows_value != blank or section.settings.hours_text != blank %}
+    <div class="shopddf-retailstore__hours">
+      <div class="shopddf-retailstore__hours-media">
+        {% if section.settings.hours_image != blank %}
           <img
-            src="{{ section.settings.logo_image | image_url: width: 500 }}"
-            alt="{{ section.settings.logo_image.alt | default: section.settings.logo_caption }}"
+            src="{{ section.settings.hours_image | image_url: width: 800 }}"
+            alt="{{ section.settings.hours_image.alt | default: section.settings.hours_heading }}"
             loading="lazy"
-            width="{{ section.settings.logo_image.width }}"
-            height="{{ section.settings.logo_image.height }}"
+            width="{{ section.settings.hours_image.width }}"
+            height="{{ section.settings.hours_image.height }}"
           >
+          
         {% else %}
-          {{ 'image' | placeholder_svg_tag: 'shopddf-diplomat__logo-placeholder' }}
+          {{ 'image' | placeholder_svg_tag: 'shopddf-retailstore__hours-placeholder' }}
         {% endif %}
-        {% if section.settings.logo_caption != blank %}
-          <div class="shopddf-diplomat__logo-text">{{ section.settings.logo_caption }}</div>
-        {% endif %}
-        <div class="shopddf-diplomat__phone">
-          {% if section.settings.phone_label != blank %}
-            <span class="shopddf-diplomat__phone-label">{{ section.settings.phone_label }}</span>
-          {% endif %}
-          {% if section.settings.phone_number != blank %}
-            <span class="shopddf-diplomat__phone-number">{{ section.settings.phone_number }}</span>
-          {% endif %}
+        <div class="whPhone">
+          <div class="raw-html-embed">
+            <p>New York Store Phone #:</p>
+            <h3>212.838.9151 Ext 307</h3>
+          </div>
         </div>
       </div>
+      <div class="shopddf-retailstore__hours-content">
+        {% if section.settings.hours_heading != blank %}
+          <h3 class="shopddf-retailstore__hours-heading">{{ section.settings.hours_heading }}</h3>
+        {% endif %}
+        {% if hours_rows_value != blank %}
+          <ul class="shopddf-retailstore__hours-list">
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Monday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Tuesday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Wednesday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Thursday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Friday</span>
+              <span class="shopddf-retailstore__hours-time">10:00AM - 5:00PM</span>
+            </li>
+            <li class="shopddf-retailstore__hours-row">
+              <span class="shopddf-retailstore__hours-day">Saturday & Sunday</span>
+              <span class="shopddf-retailstore__hours-time">Closed</span>
+            </li>
+          </ul>
+        {% elsif section.settings.hours_text != blank %}
+          <div class="shopddf-retailstore__hours-text">{{ section.settings.hours_text }}</div>
+        {% endif %}
+      </div>
     </div>
+  {% endif %}
 
-    <div class="shopddf-diplomat__hours-right">
-      {% if section.settings.hours_heading != blank %}
-        <h3 class="shopddf-diplomat__hours-heading">{{ section.settings.hours_heading }}</h3>
-      {% endif %}
-      {% assign hours_rows_value = section.settings.hours_rows | strip %}
-      {% if hours_rows_value != blank %}
-        {% assign hours_rows = hours_rows_value | split: '\n' %}
-        <ul class="shopddf-diplomat__hours-list">
-          {% for row in hours_rows %}
-            {% assign clean_row = row | strip %}
-            {% if clean_row != blank %}
-              {% assign parts = clean_row | split: '|' %}
-              {% assign day_value = parts[0] | strip %}
-              {% assign time_value = '' %}
-              {% if parts.size > 1 %}
-                {% assign time_value = parts[1] | strip %}
-              {% endif %}
-              <li class="shopddf-diplomat__hours-row">
-                <span class="shopddf-diplomat__hours-day">{{ day_value }}</span>
-                {% if time_value != blank %}
-                  <span class="shopddf-diplomat__hours-time">{{ time_value }}</span>
-                {% endif %}
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </div>
-  </div>
+  
 </section>
 
 {% stylesheet %}
-  .shopddf-diplomat {
-    padding: 28px 0 60px;
+  .shopddf-retailstore_feature_body {
+    float: left;
+    width: 100%;
+    text-align: center;
+    background-image: url('{{ "dd-aboutus-bb.png" | asset_url }}');
+    background-position: top center;
+    min-height: 305px;
+    padding-top: 30px;
+  }
+  .shopddf-page-section {
+    padding-left: 45px !important;
+    padding-right: 45px !important;
   }
 
-  .shopddf-diplomat__header {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  .shopddf-retailstore {
+    padding-top: 10px;
+    padding-bottom: 28px;
   }
 
-  .shopddf-diplomat__heading {
-    margin: 0;
-    font-size: 30px;
+  .shopddf-retailstore-meta {
+    padding-bottom: 28px;
+  }
+
+  .shopddf-retailstore-meta__heading {
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    background-color: rgb(32, 39, 45);
+    color: rgb(255, 255, 255);
+    font-size: 1.5rem;
+    padding-top: 15px;
+    padding-left: 30px;
+    height: 50px;
   }
 
-  .shopddf-diplomat__divider {
-    height: 1px;
-    width: 100%;
-    background: #d9d9d9;
-  }
-
-  .shopddf-diplomat__intro {
-    max-width: 1100px;
-    color: #444;
-    font-size: 0.98rem;
-    line-height: 1.6;
-  }
-
-  .shopddf-diplomat__intro p {
-    margin: 0 0 12px;
-    line-height: 1.7;
-    text-align: justify;
-    font-size: 14px;
-  }
-
-  .shopddf-diplomat__hours {
-    margin-top: 28px;
+  .shopddf-retailstore-meta__features {
     display: grid;
-    grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
-    gap: 28px;
-    align-items: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0 0 18px;
   }
 
-  .shopddf-diplomat__logo-card {
-    background: #0f4d9b;
-    color: #ffffff;
-    padding: 20px 18px;
+  .shopddf-retailstore-meta__feature {
     text-align: center;
   }
 
-  .shopddf-diplomat__logo-card img,
-  .shopddf-diplomat__logo-placeholder {
-    display: block;
-    margin: 0 auto 16px;
-    max-width: 220px;
-    width: 100%;
-    height: auto;
-  }
-
-  .shopddf-diplomat__logo-text {
-    font-size: 14px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-
-  .shopddf-diplomat__phone {
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .shopddf-diplomat__phone-number {
-    display: block;
+  .shopddf-retailstore-meta__feature-label {
     font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    margin-top: 6px;
-  }
-
-  .shopddf-diplomat__hours-right {
-    background: #f3f3f3;
-    padding: 20px 22px;
-    border: 1px solid #e3e3e3;
-  }
-
-  .shopddf-diplomat__hours-heading {
-    margin: 0 0 12px;
-    font-size: 22px;
-    text-transform: uppercase;
     letter-spacing: 0.06em;
-    font-weight: 600;
-  }
-
-  .shopddf-diplomat__hours-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .shopddf-diplomat__hours-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 12px 14px;
-    font-size: 14px;
+    margin: 10px 0 12px;
     text-transform: uppercase;
   }
 
-  .shopddf-diplomat__hours-row:nth-child(odd) {
-    background: #f8f8f8;
+  .shopddf-retailstore-meta__feature-value {
+    margin: 20px;;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
   }
 
-  .shopddf-diplomat__hours-row:nth-child(even) {
-    background: #ededed;
+  .shopddf-retailstore-meta__feature-value a {
+    color: inherit;
+    text-decoration: none;
   }
 
-  .shopddf-diplomat__hours-day {
-    font-weight: 600;
+  .shopddf-retailstore-meta__feature-value a:hover {
+    text-decoration: underline;
   }
 
-  .shopddf-diplomat__hours-time {
+  .shopddf-retailstore-meta__map {
+    border: 1px solid #e1e1e1;
+    background: #fff;
+    height: 400px;
+  }
+
+  .shopddf-retailstore-meta__map iframe,
+  .shopddf-retailstore-meta__map img {
+    display: block;
+    width: 100%;
+    min-height: 400px;
+    border: 0;
+  }
+  .whPhone {
+    background-color: #0156B1;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+  }
+  .whPhone p {
+    text-align: center;
+  }
+  .whPhone h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    padding-bottom: 10px;
+  }
+  .shopddf-retailstore__intro {
+    /* max-width: 980px; */
+    margin: 0 auto 24px;
+  }
+  .shopddf-retailstore-meta__feature img {
+    display: block;
+    max-width: 15%;
+    height: auto;
+    object-fit: contain;
+    margin: 30px auto;
+  }
+  .shopddf-retailstore__heading {
+    font-size: 28px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #222;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #d6d6d6;
+    padding-bottom: 10px;
+    margin: 0 0 16px;
+  }
+
+  .shopddf-retailstore__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4a4a4a;
+  }
+
+  .shopddf-retailstore__text p {
+    margin: 0 0 12px;
+  }
+
+  .shopddf-retailstore__gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 16px 0 26px;
+  }
+
+  .shopddf-retailstore__gallery-item {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .shopddf-retailstore__gallery-item img,
+  .shopddf-retailstore__gallery-placeholder {
+    display: block;
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    transition: transform 0.35s ease, filter 0.35s ease;
+  }
+
+  .shopddf-retailstore__gallery-placeholder {
+    background: #f2f2f2;
+  }
+
+  .shopddf-retailstore__gallery-item:hover img,
+  .shopddf-retailstore__gallery-item:focus-within img {
+    transform: scale(1.05);
+    filter: saturate(1.05);
+  }
+
+  .shopddf-retailstore__hours {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 1px;
+    align-items: stretch;
+    margin: 10px 0 26px;
+    /* border: 1px solid #e0e0e0; */
+  }
+
+  .shopddf-retailstore__hours-media img,
+  .shopddf-retailstore__hours-placeholder {
+    display: block;
+    width: 100%;
+    height: 85%;
+    min-height: 240px;
+    object-fit: cover;
+  }
+
+  .shopddf-retailstore__hours-content {
+    padding: 18px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #f7f7f7;
+  }
+
+  .shopddf-retailstore__hours-heading {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+    color: #222;
+    font-size: 30px;
+    line-height: 32px;
+    margin: 20px 0 8px;
     font-weight: 500;
   }
 
-  @media (max-width: 900px) {
-    .shopddf-diplomat__hours {
+  .shopddf-retailstore__hours-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* border: 1px solid #e1e1e1; */
+    background: #fff;
+    text-transform: uppercase;
+  }
+
+  .shopddf-retailstore__hours-row {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #222;
+  }
+
+  .shopddf-retailstore__hours-row:nth-child(odd) {
+    background: #ededed;
+  }
+
+  .shopddf-retailstore__hours-row:nth-child(even) {
+    background: #f7f7f7;
+  }
+
+  .shopddf-retailstore__hours-day {
+    font-weight: 700;
+    font-size: 1.3rem;
+    width: 280px;
+  }
+
+  .shopddf-retailstore__hours-time {
+    font-weight: 500;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .shopddf-retailstore__features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .shopddf-retailstore__feature {
+    border: 1px solid #e6e6e6;
+    padding: 18px 14px 20px;
+    text-align: center;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    text-align: center;
+    background: #1E2E33;
+    color: white;
+  }
+
+  .shopddf-retailstore__feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .shopddf-retailstore__feature-icon img,
+  .shopddf-retailstore__feature-placeholder {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+  }
+
+  .shopddf-retailstore__feature h3 {
+    font-size: 17px;
+    text-align: center;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-top: 20px;
+    /* margin-bottom: 30px; */
+    font-size: 1.125rem;
+  }
+
+  .shopddf-retailstore__feature p {
+    font-size: 14px;
+    line-height: 25px;
+    text-align: center;
+    padding: 0;
+  }
+
+
+
+  .shopddf-retailstore__feature:hover img {
+    /* filter: brightness(0) invert(1); */
+  }
+
+  @media (max-width: 990px) {
+    .shopddf-retailstore__gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .shopddf-retailstore__features {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .shopddf-retailstore__hours {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .shopddf-page-section {
+      padding-left: 24px !important;
+      padding-right: 24px !important;
+    }
+
+    .shopddf-retailstore__gallery {
+      grid-template-columns: 1fr;
+    }
+    .shopddf-retailstore__hours-day {
+      width: 170px;
+    }
+    .shopddf-retailstore__hours-heading {
+      font-size: 26px;
+    }
+    .shopddf-retailstore__hours-media img {
+      height: 80%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .shopddf-retailstore__features {
       grid-template-columns: 1fr;
     }
   }
@@ -207,44 +423,26 @@
 
 {% schema %}
 {
-  "name": "ShopDDF Diplomat",
+  "name": "ShopDDF Retails Store",
   "tag": "section",
-  "class": "shopddf-diplomat-section",
+  "class": "shopddf-retailstore-section",
   "settings": [
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "WELCOME DIPLOMATS FROM AROUND THE WORLD"
+      "default": "Retail Store"
     },
     {
       "type": "richtext",
-      "id": "intro",
-      "label": "Intro text",
-      "default": "<p>Diplomatic Duty Free Shops of New York (ShopDDF) is the preferred source for Duty Free shopping in New York City, Washington, DC, and other affiliated cities. ShopDDF takes pride in providing the Diplomatic Community with competitive pricing, the most comprehensive selection of merchandise, and superior service. It is this commitment to service that has earned the trust and devotion of our very special clientele.</p><p>Our 2024 Catalogue includes an expanded selection of the most requested Duty Free products. However, if there is something you are looking for that is not listed, you should contact your sales representative and they will do everything possible to accommodate your request. The catalogue is also available online at www.shopddf.com. You can now browse our catalogue, view our seasonal \"Special\" price lists, sign up for our newsletter. Our sales representatives will do everything possible to ensure an easy, convenient, and consistent Duty Free shopping experience. Please contact them for any questions you may have about shopping with us.</p>"
+      "id": "body_text",
+      "label": "Body text",
+      "default": "<p>As Manhattan's sole travel retail boutique, ShopDDF has garnered an international reputation for excellence in quality, creativity, and uniqueness. Situated in the heart of Midtown Manhattan, our emphasis on exclusive products, extensive range of goods, competitive pricing, and dedicated focus have allowed us to build strong relationships with our clientele.</p><p>Whether you are traveling to or from New York City, a visit to our Diplomatic Duty Free Shops is sure to leave a lasting impression as a reflection of Manhattan's incomparable spirit as the world's greatest city. Our shop offers a wide selection of the most sought-after and esteemed brands, including designer skincare, cosmetics, fragrances, and food and gifts.</p><p>Our team of multilingual sales staff is always on hand to provide excellent customer service in any language that you feel most comfortable speaking. Additionally, our shop is conveniently located mere steps from the United Nations, making it a popular destination for members of the diplomatic and UN communities.</p>"
     },
     {
       "type": "image_picker",
-      "id": "logo_image",
-      "label": "Logo image"
-    },
-    {
-      "type": "text",
-      "id": "logo_caption",
-      "label": "Logo caption",
-      "default": "Diplomatic Duty Free Shops of New York"
-    },
-    {
-      "type": "text",
-      "id": "phone_label",
-      "label": "Phone label",
-      "default": "New York Store Phone #"
-    },
-    {
-      "type": "text",
-      "id": "phone_number",
-      "label": "Phone number",
-      "default": "212.838.9151 Ext 305"
+      "id": "hours_image",
+      "label": "Hours image"
     },
     {
       "type": "text",
@@ -255,13 +453,94 @@
     {
       "type": "textarea",
       "id": "hours_rows",
-      "label": "Hours rows (Day|Time per line)",
-      "default": "Monday|09:30AM - 5:45PM\nTuesday|09:30AM - 5:45PM\nWednesday|09:30AM - 5:45PM\nThursday|09:30AM - 5:45PM\nFriday|09:30AM - 5:45PM\nSaturday & Sunday|Closed"
+      "label": "Hours rows (one per line: Day|Time)",
+      "default": "Monday|10:00AM - 5:00PM\nTuesday|10:00AM - 5:00PM\nWednesday|10:00AM - 5:00PM\nThursday|10:00AM - 5:00PM\nFriday|10:00AM - 5:00PM\nSaturday & Sunday|Closed"
+    },
+    {
+      "type": "richtext",
+      "id": "hours_text",
+      "label": "Hours text",
+      "default": "<p><strong>Monday</strong> 10:00AM - 5:00PM</p><p><strong>Tuesday</strong> 10:00AM - 5:00PM</p><p><strong>Wednesday</strong> 10:00AM - 5:00PM</p><p><strong>Thursday</strong> 10:00AM - 5:00PM</p><p><strong>Friday</strong> 10:00AM - 5:00PM</p><p><strong>Saturday &amp; Sunday</strong> CLOSED</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gallery_image",
+      "name": "Gallery image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Expert Team"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Our multilingual sales staff is there to provide excellent customer service in any language you feel comfortable speaking."
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "ShopDDF Diplomat"
+      "name": "ShopDDF Retails Store",
+      "blocks": [
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Expert Team",
+            "text": "Our multilingual sales staff is there to provide excellent customer service in any language you feel comfortable speaking."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Premium Brands",
+            "text": "The store is a merchandising paradise with an extensive array of fragrances, cosmetics, skincare products, and more."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Quality Standards",
+            "text": "With an enduring international reputation for quality, creativity, and uniqueness, we stand apart in Midtown Manhattan."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "First Class Experience",
+            "text": "Our focus on distinctive products and competitive pricing delivers a first-class experience for every client."
+          }
+        }
+      ]
     }
   ]
 }

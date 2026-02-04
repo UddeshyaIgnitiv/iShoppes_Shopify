@@ -4,51 +4,59 @@
       <h2 class="store-events__heading">{{ section.settings.heading }}</h2>
     {% endif %}
     <div class="store-events__divider"></div>
-
-    {% if section.blocks.size > 0 %}
+    {% assign events = shop.metaobjects.events.values %}
+    {% if events != blank and events.size > 0 %}
       <div class="store-events__grid">
-        {% for block in section.blocks %}
-          <article class="store-event-card" {{ block.shopify_attributes }}>
+        {% for event in events %} 
+          {% assign event_image = event.banner.value %}
+          {% assign event_title = event.title.value %}
+          {% assign event_location = event.location.value %}
+          {% assign event_start_date = event.startdate.value %}
+          {% assign event_end_date = event.enddate.value %}
+          {% assign event_description = event.description.value %}
+          {% assign event_start_month_label = event_start_date | date: "%b" %}
+          {% assign event_start_day_label = event_start_date | date: "%-d" %}
+          {% assign event_start_time_label = event_start_date | date: "%-I:%M %p %Z" %}
+          {% assign event_end_month_label = event_end_date | date: "%b" %}
+          {% assign event_end_day_label = event_end_date | date: "%-d" %}
+          {% assign event_link_label = event.link_label.value %}
+          <article class="store-event-card">
             <div class="store-event-card__media">
-              {% if block.settings.image != blank %}
+              {% if event_image != blank %}
                 <img
-                  src="{{ block.settings.image | image_url: width: 900 }}"
-                  alt="{{ block.settings.image.alt | default: block.settings.title }}"
+                  src="{{ event_image | image_url: width: 900 }}"
+                  alt="{{ event_image.alt | default: event_title }}"
                   loading="lazy"
-                  width="{{ block.settings.image.width }}"
-                  height="{{ block.settings.image.height }}"
+                  width="{{ event_image.width }}"
+                  height="{{ event_image.height }}"
                 >
               {% else %}
                 {{ 'image' | placeholder_svg_tag: 'store-event-card__placeholder' }}
               {% endif %}
 
-              {% assign has_date = false %}
-              {% if block.settings.start_day != blank or block.settings.start_month != blank %}
-                {% assign has_date = true %}
-              {% endif %}
-              {% if has_date %}
+              {% if event_start_day_label != blank or event_start_month_label != blank %}
                 <div class="store-event-card__date">
                   {% assign day_line = '' %}
-                  {% if block.settings.start_day != blank %}
-                    {% assign day_line = block.settings.start_day %}
+                  {% if event_start_day_label != blank %}
+                    {% assign day_line = event_start_day_label %}
                   {% endif %}
-                  {% if block.settings.end_day != blank %}
+                  {% if event_end_day_label != blank %}
                     {% if day_line != blank %}
-                      {% assign day_line = day_line | append: ' - ' | append: block.settings.end_day %}
+                      {% assign day_line = day_line | append: ' - ' | append: event_end_day_label %}
                     {% else %}
-                      {% assign day_line = block.settings.end_day %}
+                      {% assign day_line = event_end_day_label %}
                     {% endif %}
                   {% endif %}
 
                   {% assign month_line = '' %}
-                  {% if block.settings.start_month != blank %}
-                    {% assign month_line = block.settings.start_month %}
+                  {% if event_start_month_label != blank %}
+                    {% assign month_line = event_start_month_label %}
                   {% endif %}
-                  {% if block.settings.end_month != blank %}
+                  {% if event_end_month_label != blank %}
                     {% if month_line != blank %}
-                      {% assign month_line = month_line | append: ' - ' | append: block.settings.end_month %}
+                      {% assign month_line = month_line | append: ' - ' | append: event_end_month_label %}
                     {% else %}
-                      {% assign month_line = block.settings.end_month %}
+                      {% assign month_line = event_end_month_label %}
                     {% endif %}
                   {% endif %}
 
@@ -63,21 +71,17 @@
             </div>
 
             <div class="store-event-card__body">
-              {% if block.settings.title != blank %}
-                <h3 class="store-event-card__title">{{ block.settings.title }}</h3>
+              {% if event_title != blank %}
+                <h3 class="store-event-card__title">{{ event_title }}</h3>
               {% endif %}
-              {% if block.settings.time != blank %}
-                <p class="store-event-card__meta"><strong>Event Time:</strong> {{ block.settings.time }}</p>
+              {% if event_start_time_label != blank %}
+                <p class="store-event-card__meta"><strong>Event Time:</strong> {{ event_start_time_label }}</p>
               {% endif %}
-              {% if block.settings.location != blank %}
-                <p class="store-event-card__meta"><strong>Location:</strong> {{ block.settings.location }}</p>
-              {% endif %}
-
-              {% if block.settings.link != blank %}
-                <a class="store-event-card__link" href="{{ block.settings.link }}">
-                  {{ block.settings.link_label | default: 'Learn More' }}
-                </a>
-              {% endif %}
+              <p class="store-event-card__meta"><strong>Location:</strong> {{ event_location }}</p>
+              <p class="store-event-card__meta">{{ event_description }}</p>
+              <a class="store-event-card__link" href="/pages/shopddf-event/{{ event.system.handle }}">
+                {{ event_link_label | default: 'Learn More' }}
+              </a>
             </div>
           </article>
         {% endfor %}
@@ -128,13 +132,16 @@
   .store-event-card__media {
     position: relative;
     background: #f2f2f2;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
   }
 
   .store-event-card__media img,
   .store-event-card__placeholder {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
   }
 
   .store-event-card__date {

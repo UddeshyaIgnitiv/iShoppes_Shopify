@@ -1,0 +1,268 @@
+<section class="shopddf-diplomat page-width-normal">
+  <div class="shopddf-diplomat__header">
+    {% if section.settings.heading != blank %}
+      <h2 class="shopddf-diplomat__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+    <div class="shopddf-diplomat__divider"></div>
+    {% if section.settings.intro != blank %}
+      <div class="shopddf-diplomat__intro">{{ section.settings.intro }}</div>
+    {% endif %}
+  </div>
+
+  <div class="shopddf-diplomat__hours">
+    <div class="shopddf-diplomat__hours-left">
+      <div class="shopddf-diplomat__logo-card">
+        {% if section.settings.logo_image != blank %}
+          <img
+            src="{{ section.settings.logo_image | image_url: width: 500 }}"
+            alt="{{ section.settings.logo_image.alt | default: section.settings.logo_caption }}"
+            loading="lazy"
+            width="{{ section.settings.logo_image.width }}"
+            height="{{ section.settings.logo_image.height }}"
+          >
+        {% else %}
+          {{ 'image' | placeholder_svg_tag: 'shopddf-diplomat__logo-placeholder' }}
+        {% endif %}
+        {% if section.settings.logo_caption != blank %}
+          <div class="shopddf-diplomat__logo-text">{{ section.settings.logo_caption }}</div>
+        {% endif %}
+        <div class="shopddf-diplomat__phone">
+          {% if section.settings.phone_label != blank %}
+            <span class="shopddf-diplomat__phone-label">{{ section.settings.phone_label }}</span>
+          {% endif %}
+          {% if section.settings.phone_number != blank %}
+            <span class="shopddf-diplomat__phone-number">{{ section.settings.phone_number }}</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="shopddf-diplomat__hours-right">
+      {% if section.settings.hours_heading != blank %}
+        <h3 class="shopddf-diplomat__hours-heading">{{ section.settings.hours_heading }}</h3>
+      {% endif %}
+      {% assign hours_rows_value = section.settings.hours_rows | strip %}
+      {% if hours_rows_value != blank %}
+        {% assign hours_rows = hours_rows_value | split: '\n' %}
+        <ul class="shopddf-diplomat__hours-list">
+          {% for row in hours_rows %}
+            {% assign clean_row = row | strip %}
+            {% if clean_row != blank %}
+              {% assign parts = clean_row | split: '|' %}
+              {% assign day_value = parts[0] | strip %}
+              {% assign time_value = '' %}
+              {% if parts.size > 1 %}
+                {% assign time_value = parts[1] | strip %}
+              {% endif %}
+              <li class="shopddf-diplomat__hours-row">
+                <span class="shopddf-diplomat__hours-day">{{ day_value }}</span>
+                {% if time_value != blank %}
+                  <span class="shopddf-diplomat__hours-time">{{ time_value }}</span>
+                {% endif %}
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .shopddf-diplomat {
+    padding: 28px 0 60px;
+  }
+
+  .shopddf-diplomat__header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .shopddf-diplomat__heading {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .shopddf-diplomat__divider {
+    height: 1px;
+    width: 100%;
+    background: #d9d9d9;
+  }
+
+  .shopddf-diplomat__intro {
+    max-width: 1100px;
+    color: #444;
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+
+  .shopddf-diplomat__intro p {
+    margin: 0 0 12px;
+    line-height: 1.7;
+    text-align: justify;
+    font-size: 14px;
+  }
+
+  .shopddf-diplomat__hours {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .shopddf-diplomat__logo-card {
+    background: #0f4d9b;
+    color: #ffffff;
+    padding: 20px 18px;
+    text-align: center;
+  }
+
+  .shopddf-diplomat__logo-card img,
+  .shopddf-diplomat__logo-placeholder {
+    display: block;
+    margin: 0 auto 16px;
+    max-width: 220px;
+    width: 100%;
+    height: auto;
+  }
+
+  .shopddf-diplomat__logo-text {
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .shopddf-diplomat__phone {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .shopddf-diplomat__phone-number {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-top: 6px;
+  }
+
+  .shopddf-diplomat__hours-right {
+    background: #f3f3f3;
+    padding: 20px 22px;
+    border: 1px solid #e3e3e3;
+  }
+
+  .shopddf-diplomat__hours-heading {
+    margin: 0 0 12px;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+
+  .shopddf-diplomat__hours-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .shopddf-diplomat__hours-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  .shopddf-diplomat__hours-row:nth-child(odd) {
+    background: #f8f8f8;
+  }
+
+  .shopddf-diplomat__hours-row:nth-child(even) {
+    background: #ededed;
+  }
+
+  .shopddf-diplomat__hours-day {
+    font-weight: 600;
+  }
+
+  .shopddf-diplomat__hours-time {
+    font-weight: 500;
+  }
+
+  @media (max-width: 900px) {
+    .shopddf-diplomat__hours {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ShopDDF Diplomat",
+  "tag": "section",
+  "class": "shopddf-diplomat-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "WELCOME DIPLOMATS FROM AROUND THE WORLD"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro text",
+      "default": "<p>Diplomatic Duty Free Shops of New York (ShopDDF) is the preferred source for Duty Free shopping in New York City, Washington, DC, and other affiliated cities. ShopDDF takes pride in providing the Diplomatic Community with competitive pricing, the most comprehensive selection of merchandise, and superior service. It is this commitment to service that has earned the trust and devotion of our very special clientele.</p><p>Our 2024 Catalogue includes an expanded selection of the most requested Duty Free products. However, if there is something you are looking for that is not listed, you should contact your sales representative and they will do everything possible to accommodate your request. The catalogue is also available online at www.shopddf.com. You can now browse our catalogue, view our seasonal \"Special\" price lists, sign up for our newsletter. Our sales representatives will do everything possible to ensure an easy, convenient, and consistent Duty Free shopping experience. Please contact them for any questions you may have about shopping with us.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image"
+    },
+    {
+      "type": "text",
+      "id": "logo_caption",
+      "label": "Logo caption",
+      "default": "Diplomatic Duty Free Shops of New York"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Phone label",
+      "default": "New York Store Phone #"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Phone number",
+      "default": "212.838.9151 Ext 305"
+    },
+    {
+      "type": "text",
+      "id": "hours_heading",
+      "label": "Hours heading",
+      "default": "Hours of Operation"
+    },
+    {
+      "type": "textarea",
+      "id": "hours_rows",
+      "label": "Hours rows (Day|Time per line)",
+      "default": "Monday|09:30AM - 5:45PM\nTuesday|09:30AM - 5:45PM\nWednesday|09:30AM - 5:45PM\nThursday|09:30AM - 5:45PM\nFriday|09:30AM - 5:45PM\nSaturday & Sunday|Closed"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ShopDDF Diplomat"
+    }
+  ]
+}
+{% endschema %}

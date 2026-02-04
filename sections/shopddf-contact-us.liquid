@@ -1,0 +1,395 @@
+<section class="shopddf-contact-us">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="shopddf-contact-us__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+    {% if section.settings.note_text != blank %}
+      <p class="shopddf-contact-us__note">{{ section.settings.note_text }}</p>
+    {% endif %}
+    {% if section.settings.intro_text != blank %}
+      <div class="shopddf-contact-us__intro">{{ section.settings.intro_text }}</div>
+    {% endif %}
+
+    {% assign location_rows = section.settings.locations | strip | split: '\n' %}
+    {% capture locations_data %}
+      [
+        {% for row in location_rows %}
+          {% assign parts = row | split: '|' %}
+          {% assign location = parts[0] | strip %}
+          {% assign consulates = parts[1] | default: '' | split: ',' %}
+          {
+            "location": {{ location | json }},
+            "consulates": [
+              {% for consulate in consulates %}
+                {{ consulate | strip | json }}{% unless forloop.last %},{% endunless %}
+              {% endfor %}
+            ]
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    {% endcapture %}
+
+    {%- form 'contact', id: 'ContactForm', class: 'shopddf-contact-us__form' -%}
+      {% if form.errors %}
+        <div class="shopddf-contact-us__message shopddf-contact-us__message--error">
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+      {% if form.posted_successfully? %}
+        <div class="shopddf-contact-us__message shopddf-contact-us__message--success">
+          Thanks for contacting us. We'll get back to you as soon as possible.
+        </div>
+      {% endif %}
+
+      {% if section.settings.directory_heading != blank %}
+        <h3 class="shopddf-contact-us__subheading">{{ section.settings.directory_heading }}</h3>
+      {% endif %}
+      <div
+        class="shopddf-contact-us__directory"
+        data-locations="{{ locations_data | strip | escape }}"
+      >
+        <div class="shopddf-contact-us__field">
+          <label class="shopddf-contact-us__label" for="ContactLocation">Location</label>
+          <select
+            id="ContactLocation"
+            name="contact[location]"
+            class="shopddf-contact-us__input"
+            data-contact-location
+          >
+            <option value="">Select Location</option>
+            {% for row in location_rows %}
+              {% assign location = row | split: '|' | first | strip %}
+              {% if location != blank %}
+                <option value="{{ location | escape }}">{{ location }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+        <div class="shopddf-contact-us__field">
+          <label class="shopddf-contact-us__label" for="ContactConsulate">Consulate / Mission</label>
+          <select
+            id="ContactConsulate"
+            name="contact[consulate]"
+            class="shopddf-contact-us__input"
+            data-contact-consulate
+            disabled
+          >
+            <option value="">Select Consulate / Mission</option>
+          </select>
+        </div>
+      </div>
+
+      {% if section.settings.contact_heading != blank %}
+        <h3 class="shopddf-contact-us__subheading">{{ section.settings.contact_heading }}</h3>
+      {% endif %}
+      <div class="shopddf-contact-us__contact-grid">
+        <div class="shopddf-contact-us__column">
+          <div class="shopddf-contact-us__field">
+            <label class="shopddf-contact-us__label" for="ContactName">Name</label>
+            <input
+              id="ContactName"
+              type="text"
+              name="contact[name]"
+              class="shopddf-contact-us__input"
+              placeholder="Name..."
+              required
+            >
+          </div>
+          <div class="shopddf-contact-us__field">
+            <label class="shopddf-contact-us__label" for="ContactEmail">Email</label>
+            <input
+              id="ContactEmail"
+              type="email"
+              name="contact[email]"
+              class="shopddf-contact-us__input"
+              placeholder="Email..."
+              required
+            >
+          </div>
+          <div class="shopddf-contact-us__field">
+            <label class="shopddf-contact-us__label" for="ContactPhone">Phone</label>
+            <input
+              id="ContactPhone"
+              type="tel"
+              name="contact[phone]"
+              class="shopddf-contact-us__input"
+              placeholder="Phone..."
+            >
+          </div>
+        </div>
+        <div class="shopddf-contact-us__column">
+          <div class="shopddf-contact-us__field shopddf-contact-us__field--textarea">
+            <label class="shopddf-contact-us__label" for="ContactMessage">Message</label>
+            <textarea
+              id="ContactMessage"
+              name="contact[body]"
+              class="shopddf-contact-us__input shopddf-contact-us__input--textarea"
+              placeholder="Message"
+              required
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="shopddf-contact-us__actions">
+        <button type="submit" class="shopddf-contact-us__submit">
+          {{ section.settings.submit_label }}
+        </button>
+      </div>
+    {%- endform -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .shopddf-contact-us {
+    padding: 24px 45px 60px;
+  }
+
+  .shopddf-contact-us * {
+    box-sizing: border-box;
+  }
+
+  .shopddf-contact-us__heading {
+    font-size: 30px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #222;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #d6d6d6;
+    padding-bottom: 10px;
+    margin: 0 0 8px;
+  }
+
+  .shopddf-contact-us__note {
+    color: #6b8fc8;
+    font-size: 15px;
+    margin: 0 0 18px;
+  }
+
+  .shopddf-contact-us__intro {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4a4a4a;
+    margin-bottom: 26px;
+  }
+
+  .shopddf-contact-us__intro p {
+    margin: 0 0 12px;
+  }
+
+  .shopddf-contact-us__subheading {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 12px;
+    color: #1f3552;
+  }
+
+  .shopddf-contact-us__directory {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 26px;
+  }
+
+  .shopddf-contact-us__contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    align-items: start;
+  }
+
+  .shopddf-contact-us__column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .shopddf-contact-us__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .shopddf-contact-us__label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f3552;
+  }
+
+  .shopddf-contact-us__input {
+    border: 1px solid #cfcfcf;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #222;
+    background: #fff;
+    min-height: 46px;
+  }
+
+  .shopddf-contact-us__input--textarea {
+    min-height: 180px;
+    resize: vertical;
+  }
+
+  .shopddf-contact-us__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  .shopddf-contact-us__submit {
+    border: 0;
+    padding: 12px 40px;
+    border-radius: 999px;
+    background: #111;
+    color: #fff;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+
+  .shopddf-contact-us__submit:hover {
+    background: #000;
+  }
+
+  .shopddf-contact-us__message {
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .shopddf-contact-us__message--error {
+    background: #fbeaea;
+    color: #9b1c1c;
+    border: 1px solid #f1c2c2;
+  }
+
+  .shopddf-contact-us__message--success {
+    background: #eaf6ea;
+    color: #1c7b2c;
+    border: 1px solid #c7e3c7;
+  }
+
+  @media (max-width: 990px) {
+    .shopddf-contact-us__directory,
+    .shopddf-contact-us__contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .shopddf-contact-us {
+      padding: 24px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    const directory = document.querySelector('.shopddf-contact-us__directory');
+    if (!directory) return;
+
+    const locationSelect = directory.querySelector('[data-contact-location]');
+    const consulateSelect = directory.querySelector('[data-contact-consulate]');
+    if (!locationSelect || !consulateSelect) return;
+
+    let data = [];
+    try {
+      data = JSON.parse(directory.dataset.locations || '[]');
+    } catch (error) {
+      data = [];
+    }
+
+    const resetConsulate = () => {
+      consulateSelect.innerHTML = '<option value="">Select Consulate / Mission</option>';
+      consulateSelect.disabled = true;
+    };
+
+    const updateConsulates = (location) => {
+      resetConsulate();
+      if (!location) return;
+      const match = data.find((entry) => entry.location === location);
+      if (!match || !Array.isArray(match.consulates)) return;
+
+      const options = match.consulates.filter(Boolean);
+      if (!options.length) return;
+
+      options.forEach((consulate) => {
+        const option = document.createElement('option');
+        option.value = consulate;
+        option.textContent = consulate;
+        consulateSelect.appendChild(option);
+      });
+      consulateSelect.disabled = false;
+    };
+
+    locationSelect.addEventListener('change', (event) => {
+      updateConsulates(event.target.value);
+    });
+
+    if (locationSelect.value) {
+      updateConsulates(locationSelect.value);
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "ShopDDF Contact Us",
+  "tag": "section",
+  "class": "shopddf-contact-us-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Contact Us"
+    },
+    {
+      "type": "text",
+      "id": "note_text",
+      "label": "Note text",
+      "default": "*Only for duty free liquor and tobacco tax exempt diplomats"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text",
+      "label": "Intro text",
+      "default": "<p>Our dedicated staff will be happy to assist you. If you need to contact us, please use the form provided below and we will respond promptly to your needs. Thank you.</p>"
+    },
+    {
+      "type": "text",
+      "id": "directory_heading",
+      "label": "Directory heading",
+      "default": "DIPLOMATIC CATALOG DIRECTORY:"
+    },
+    {
+      "type": "textarea",
+      "id": "locations",
+      "label": "Locations (one per line: Location|Consulate 1, Consulate 2)",
+      "default": "New York|Permanent Mission of Brazil, Permanent Mission of Canada, Permanent Mission of Japan\nWashington, DC|Embassy of Australia, Embassy of France, Embassy of Germany"
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Contact heading",
+      "default": "CONTACT INFORMATION:"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit button label",
+      "default": "Submit"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ShopDDF Contact Us"
+    }
+  ]
+}
+{% endschema %}

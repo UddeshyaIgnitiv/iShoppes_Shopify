@@ -1,0 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "shopddf-contact-us",
+      "settings": {
+        "heading": "Contact Us",
+        "note_text": "*Only for duty free liquor and tobacco tax exempt diplomats",
+        "intro_text": "<p>Our dedicated staff will be happy to assist you. If you need to contact us, please use the form provided below and we will respond promptly to your needs. Thank you.</p>",
+        "directory_heading": "DIPLOMATIC CATALOG DIRECTORY:",
+        "locations": "New York|Permanent Mission of Brazil, Permanent Mission of Canada, Permanent Mission of Japan\nWashington, DC|Embassy of Australia, Embassy of France, Embassy of Germany",
+        "contact_heading": "CONTACT INFORMATION:",
+        "submit_label": "Submit"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

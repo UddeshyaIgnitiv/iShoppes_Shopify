@@ -95,8 +95,7 @@
 
   .shopddf-newsletter__heading {
     margin: 0;
-    font-size: clamp(1.7rem, 2.6vw, 2.4rem);
-    letter-spacing: 0.08em;
+    font-size: 32px;
     text-transform: uppercase;
     font-weight: 500;
   }
@@ -113,9 +112,15 @@
     font-size: 0.98rem;
     line-height: 1.6;
   }
+  .shopddf-newsletter__intro p {
+    line-height: 25px;
+    text-align: justify;
+    padding: 0;
+    font-size: 14px;
+  }
 
   .shopddf-newsletter__intro a {
-    color: inherit;
+    color: #0000FF;
   }
 
   .shopddf-newsletter__columns {
@@ -133,20 +138,23 @@
 
   .shopddf-newsletter__title {
     color: #fff;
+    display: block;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 17px;
     text-align: center;
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    padding: 14px 18px;
+    font-weight: bold;
+    padding: 15px 0;
+    margin-bottom: 30px;
     text-transform: uppercase;
   }
 
   .shopddf-newsletter__title--left {
-    background: {{ section.settings.left_title_color }};
+    background: #14457f;
   }
 
   .shopddf-newsletter__title--right {
-    background: {{ section.settings.right_title_color }};
+    background: #20272d;
   }
 
   .shopddf-newsletter__text {
@@ -154,6 +162,7 @@
     color: #444;
     line-height: 1.6;
     font-size: 0.98rem;
+    min-height: 100px;
   }
 
   .shopddf-newsletter__form {

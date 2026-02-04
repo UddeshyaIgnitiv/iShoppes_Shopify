@@ -10,53 +10,39 @@
 {
   "sections": {
     "main": {
-      "type": "main-page",
+      "type": "shopddf-store-events",
       "blocks": {
-        "heading": {
-          "type": "text",
-          "name": "Title",
+        "event-1": {
+          "type": "event",
           "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "custom",
-            "font": "var(--font-primary--family)",
-            "font_size": "2.2rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "title": "Clinique Raffle",
+            "time": "12:00 AM",
+            "start_day": "7",
+            "end_day": "28",
+            "start_month": "Feb",
+            "end_month": "Feb",
+            "link_label": "Learn More"
+          }
         },
-        "page-content": {
-          "type": "page-content",
+        "event-2": {
+          "type": "event",
           "settings": {
-            "alignment": "justify"
-          },
-          "blocks": {}
+            "title": "Mario Badescu Raffle",
+            "time": "12:00 AM",
+            "start_day": "7",
+            "end_day": "28",
+            "start_month": "Feb",
+            "end_month": "Feb",
+            "link_label": "Learn More"
+          }
         }
       },
       "block_order": [
-        "heading",
-        "page-content"
+        "event-1",
+        "event-2"
       ],
       "settings": {
-        "content_direction": "column",
-        "page_width": "section--full-width",
-        "gap": 32,
-        "color_scheme": "",
-        "padding-block-start": 40,
-        "padding-block-end": 80
+        "heading": "Store Events"
       }
     }
   },

@@ -1,0 +1,301 @@
+<div class="section page-width-normal shopddf-newsletter">
+  <div class="shopddf-newsletter__header">
+    {% if section.settings.heading != blank %}
+      <h2 class="shopddf-newsletter__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+    <div class="shopddf-newsletter__divider"></div>
+    {% if section.settings.intro != blank %}
+      <div class="shopddf-newsletter__intro">{{ section.settings.intro }}</div>
+    {% endif %}
+  </div>
+
+  <div class="shopddf-newsletter__columns">
+    <div class="shopddf-newsletter__column">
+      <div class="shopddf-newsletter__title shopddf-newsletter__title--left">
+        {{ section.settings.left_title }}
+      </div>
+      {% if section.settings.left_text != blank %}
+        <p class="shopddf-newsletter__text">{{ section.settings.left_text }}</p>
+      {% endif %}
+
+      {% form 'customer', class: 'shopddf-newsletter__form' %}
+        <input type="hidden" name="contact[tags]" value="{{ section.settings.left_tag }}">
+        <input
+          class="shopddf-newsletter__input"
+          type="email"
+          name="contact[email]"
+          placeholder="{{ section.settings.email_placeholder }}"
+          required
+        >
+        <input
+          class="shopddf-newsletter__input"
+          type="text"
+          name="contact[first_name]"
+          placeholder="{{ section.settings.first_name_placeholder }}"
+        >
+        <input
+          class="shopddf-newsletter__input"
+          type="text"
+          name="contact[last_name]"
+          placeholder="{{ section.settings.last_name_placeholder }}"
+        >
+        <button class="shopddf-newsletter__button" type="submit">
+          {{ section.settings.button_text }}
+        </button>
+      {% endform %}
+    </div>
+
+    <div class="shopddf-newsletter__column">
+      <div class="shopddf-newsletter__title shopddf-newsletter__title--right">
+        {{ section.settings.right_title }}
+      </div>
+      {% if section.settings.right_text != blank %}
+        <p class="shopddf-newsletter__text">{{ section.settings.right_text }}</p>
+      {% endif %}
+
+      {% form 'customer', class: 'shopddf-newsletter__form' %}
+        <input type="hidden" name="contact[tags]" value="{{ section.settings.right_tag }}">
+        <input
+          class="shopddf-newsletter__input"
+          type="email"
+          name="contact[email]"
+          placeholder="{{ section.settings.email_placeholder }}"
+          required
+        >
+        <input
+          class="shopddf-newsletter__input"
+          type="text"
+          name="contact[first_name]"
+          placeholder="{{ section.settings.first_name_placeholder }}"
+        >
+        <input
+          class="shopddf-newsletter__input"
+          type="text"
+          name="contact[last_name]"
+          placeholder="{{ section.settings.last_name_placeholder }}"
+        >
+        <button class="shopddf-newsletter__button" type="submit">
+          {{ section.settings.button_text }}
+        </button>
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .shopddf-newsletter {
+    padding: 36px 0 60px;
+  }
+
+  .shopddf-newsletter__header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .shopddf-newsletter__heading {
+    margin: 0;
+    font-size: clamp(1.7rem, 2.6vw, 2.4rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .shopddf-newsletter__divider {
+    height: 1px;
+    background: #d9d9d9;
+    width: 100%;
+  }
+
+  .shopddf-newsletter__intro {
+    max-width: 1100px;
+    color: #444;
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+
+  .shopddf-newsletter__intro a {
+    color: inherit;
+  }
+
+  .shopddf-newsletter__columns {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px;
+  }
+
+  .shopddf-newsletter__column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .shopddf-newsletter__title {
+    color: #fff;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 14px 18px;
+    text-transform: uppercase;
+  }
+
+  .shopddf-newsletter__title--left {
+    background: {{ section.settings.left_title_color }};
+  }
+
+  .shopddf-newsletter__title--right {
+    background: {{ section.settings.right_title_color }};
+  }
+
+  .shopddf-newsletter__text {
+    margin: 0;
+    color: #444;
+    line-height: 1.6;
+    font-size: 0.98rem;
+  }
+
+  .shopddf-newsletter__form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 4px;
+  }
+
+  .shopddf-newsletter__input {
+    border: none;
+    border-bottom: 1px solid #b6b6b6;
+    padding: 10px 0;
+    font-size: 0.98rem;
+    color: #444;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .shopddf-newsletter__input::placeholder {
+    color: #9a9a9a;
+  }
+
+  .shopddf-newsletter__button {
+    margin-top: 8px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    border: 1px solid #111;
+    background: #0c0c0c;
+    color: #fff;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    box-shadow: 0 0 0 6px #e7e7e7;
+  }
+
+  .shopddf-newsletter__button:hover {
+    background: #1a1a1a;
+  }
+
+  @media (max-width: 900px) {
+    .shopddf-newsletter__columns {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ShopDDF Newsletter",
+  "tag": "section",
+  "class": "shopddf-newsletter-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "NEWSLETTER"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro text",
+      "default": "<p>We offer newsletters for our Diplomatic Store and Catalog division. Please read below to see which newsletter best fits your needs. Please check your security and SPAM settings to allow emails from <a href=\"mailto:support@shopddf.com\">support@shopddf.com</a>, <a href=\"mailto:is@shopddf.com\">is@shopddf.com</a>, <a href=\"mailto:ch@shopddf.com\">ch@shopddf.com</a></p>"
+    },
+    {
+      "type": "text",
+      "id": "left_title",
+      "label": "Left column title",
+      "default": "DIPLOMATIC DUTY FREE SHOPS OF NY STORE ALERTS"
+    },
+    {
+      "type": "text",
+      "id": "left_text",
+      "label": "Left column text",
+      "default": "Take a moment to sign-up for our email list and be the first to know about new products, store parties, sales and more."
+    },
+    {
+      "type": "color",
+      "id": "left_title_color",
+      "label": "Left title background",
+      "default": "#124a88"
+    },
+    {
+      "type": "text",
+      "id": "left_tag",
+      "label": "Left form tag",
+      "default": "shopddf-store-alerts"
+    },
+    {
+      "type": "text",
+      "id": "right_title",
+      "label": "Right column title",
+      "default": "DIPLOMATIC DUTY FREE SHOPS OF NY CATALOG"
+    },
+    {
+      "type": "text",
+      "id": "right_text",
+      "label": "Right column text",
+      "default": "*Must have Diplomatic Status for liquor & tobacco eligibility. Take a moment to sign-up for our email list today for current sales and offers from our Diplomatic Catalog Division. You will also receive store alerts."
+    },
+    {
+      "type": "color",
+      "id": "right_title_color",
+      "label": "Right title background",
+      "default": "#1f2730"
+    },
+    {
+      "type": "text",
+      "id": "right_tag",
+      "label": "Right form tag",
+      "default": "shopddf-catalog"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Email Address"
+    },
+    {
+      "type": "text",
+      "id": "first_name_placeholder",
+      "label": "First name placeholder",
+      "default": "First Name"
+    },
+    {
+      "type": "text",
+      "id": "last_name_placeholder",
+      "label": "Last name placeholder",
+      "default": "Last Name"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "SUBSCRIBE"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ShopDDF Newsletter"
+    }
+  ]
+}
+{% endschema %}

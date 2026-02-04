@@ -11,7 +11,16 @@
   "sections": {
     "main": {
       "type": "shopddf-diplomat",
-      "settings": {}
+      "settings": {
+        "heading": "WELCOME DIPLOMATS FROM AROUND THE WORLD",
+        "intro": "<p>Diplomatic Duty Free Shops of New York (ShopDDF) is the preferred source for Duty Free shopping in New York City, Washington, DC, and other affiliated cities. ShopDDF takes pride in providing the Diplomatic Community with competitive pricing, the most comprehensive selection of merchandise, and superior service. It is this commitment to service that has earned the trust and devotion of our very special clientele.</p><p>Our 2024 Catalogue includes an expanded selection of the most requested Duty Free products. However, if there is something you are looking for that is not listed, you should contact your sales representative and they will do everything possible to accommodate your request. The catalogue is also available online at www.shopddf.com. You can now browse our catalogue, view our seasonal \"Special\" price lists, sign up for our newsletter. Our sales representatives will do everything possible to ensure an easy, convenient, and consistent Duty Free shopping experience. Please contact them for any questions you may have about shopping with us.</p>",
+        "logo_image": "shopify://shop_images/dutyfreeNY.jpg",
+        "logo_caption": "Diplomatic Duty Free Shops of New York",
+        "phone_label": "New York Store Phone #",
+        "phone_number": "212.838.9151 Ext 305",
+        "hours_heading": "Hours of Operation",
+        "hours_rows": "Monday|09:30AM - 5:45PM\nTuesday|09:30AM - 5:45PM\nWednesday|09:30AM - 5:45PM\nThursday|09:30AM - 5:45PM\nFriday|09:30AM - 5:45PM\nSaturday & Sunday|Closed"
+      }
     }
   },
   "order": [

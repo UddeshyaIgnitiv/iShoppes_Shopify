@@ -39,7 +39,7 @@
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
-    {{ template }}
+    {{ settings | json }}
     <div id="header-group">
       {% if template.suffix == 'shopddf-home-page' or template.suffix == 'shopddf-about-us' or template.suffix == 'shopddf-retail-store' or template.suffix == 'shopddf-store-events' or template.suffix == 'shopddf-newsletter' or template.suffix == 'shopddf-diplomat' or template.suffix == 'shopddf-ordering' %}
         {% sections 'shopddf-header-group' %}

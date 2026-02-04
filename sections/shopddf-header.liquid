@@ -4,7 +4,8 @@
 
 <header class="shopddf-header">
   <div class="shopddf-header__top">
-    <a class="shopddf-header__logo" href="{{ routes.root_url }}">
+    {% comment %} <a class="shopddf-header__logo" href="{{ routes.root_url }}"> {% endcomment %}
+    <a class="shopddf-header__logo" href="/pages/shopddf-home-page">
       {% if section.settings.logo != blank %}
         <img
           src="{{ section.settings.logo | image_url: width: 400 }}"

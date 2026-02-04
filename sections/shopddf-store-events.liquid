@@ -1,12 +1,12 @@
 <div class="section page-width-normal store-events-section">
-  <div class="store-events">
+  <div class="store-events" data-section-id="{{ section.id }}">
     {% if section.settings.heading != blank %}
       <h2 class="store-events__heading">{{ section.settings.heading }}</h2>
     {% endif %}
     <div class="store-events__divider"></div>
     {% assign events = shop.metaobjects.events.values %}
     {% if events != blank and events.size > 0 %}
-      <div class="store-events__grid">
+      <div class="store-events__grid" data-event-list>
         {% for event in events %} 
           {% assign event_image = event.banner.value %}
           {% assign event_title = event.title.value %}
@@ -34,40 +34,40 @@
                 {{ 'image' | placeholder_svg_tag: 'store-event-card__placeholder' }}
               {% endif %}
 
-              {% if event_start_day_label != blank or event_start_month_label != blank %}
-                <div class="store-event-card__date">
-                  {% assign day_line = '' %}
-                  {% if event_start_day_label != blank %}
-                    {% assign day_line = event_start_day_label %}
-                  {% endif %}
-                  {% if event_end_day_label != blank %}
-                    {% if day_line != blank %}
-                      {% assign day_line = day_line | append: ' - ' | append: event_end_day_label %}
-                    {% else %}
-                      {% assign day_line = event_end_day_label %}
-                    {% endif %}
-                  {% endif %}
+          {% assign day_line = '' %}
+          {% if event_start_day_label != blank %}
+            {% assign day_line = event_start_day_label %}
+          {% endif %}
+          {% if event_end_day_label != blank %}
+            {% if day_line != blank %}
+              {% assign day_line = day_line | append: ' - ' | append: event_end_day_label %}
+            {% else %}
+              {% assign day_line = event_end_day_label %}
+            {% endif %}
+          {% endif %}
 
-                  {% assign month_line = '' %}
-                  {% if event_start_month_label != blank %}
-                    {% assign month_line = event_start_month_label %}
-                  {% endif %}
-                  {% if event_end_month_label != blank %}
-                    {% if month_line != blank %}
-                      {% assign month_line = month_line | append: ' - ' | append: event_end_month_label %}
-                    {% else %}
-                      {% assign month_line = event_end_month_label %}
-                    {% endif %}
-                  {% endif %}
+          {% assign month_line = '' %}
+          {% if event_start_month_label != blank %}
+            {% assign month_line = event_start_month_label %}
+          {% endif %}
+          {% if event_end_month_label != blank %}
+            {% if month_line != blank %}
+              {% assign month_line = month_line | append: ' - ' | append: event_end_month_label %}
+            {% else %}
+              {% assign month_line = event_end_month_label %}
+            {% endif %}
+          {% endif %}
 
-                  {% if day_line != blank %}
-                    <span class="store-event-card__date-line store-event-card__date-line--day">{{ day_line }}</span>
-                  {% endif %}
-                  {% if month_line != blank %}
-                    <span class="store-event-card__date-line store-event-card__date-line--month">{{ month_line }}</span>
-                  {% endif %}
-                </div>
+          {% if event_start_day_label != blank or event_start_month_label != blank %}
+            <div class="store-event-card__date">
+              {% if day_line != blank %}
+                <span class="store-event-card__date-line store-event-card__date-line--day">{{ day_line }}</span>
               {% endif %}
+              {% if month_line != blank %}
+                <span class="store-event-card__date-line store-event-card__date-line--month">{{ month_line }}</span>
+              {% endif %}
+            </div>
+          {% endif %}
             </div>
 
             <div class="store-event-card__body">
@@ -79,12 +79,40 @@
               {% endif %}
               <p class="store-event-card__meta"><strong>Location:</strong> {{ event_location }}</p>
               <p class="store-event-card__meta">{{ event_description }}</p>
-              <a class="store-event-card__link" href="/pages/shopddf-event/{{ event.system.handle }}">
+              <button
+                class="store-event-card__link"
+                type="button"
+                data-event-title="{{ event_title | escape }}"
+                data-event-location="{{ event_location | escape }}"
+                data-event-time="{{ event_start_time_label | escape }}"
+                data-event-day="{{ day_line | escape }}"
+                data-event-month="{{ month_line | escape }}"
+                data-event-description="{{ event_description | strip_html | escape }}"
+                {% if event_image != blank %}
+                  data-event-image="{{ event_image | image_url: width: 1400 }}"
+                  data-event-image-alt="{{ event_image.alt | default: event_title | escape }}"
+                {% endif %}
+              >
                 {{ event_link_label | default: 'Learn More' }}
-              </a>
+              </button>
             </div>
           </article>
         {% endfor %}
+      </div>
+      <div class="store-events__detail" aria-hidden="true">
+        <div class="store-events__detail-inner">
+          <button class="store-events__detail-close" type="button">Close</button>
+          <div class="store-events__detail-media" data-event-detail="media">
+            <img data-event-detail="image" alt="" loading="lazy" width="1400" height="1050">
+          </div>
+          <div class="store-events__detail-content">
+            <h3 class="store-events__detail-title" data-event-detail="title"></h3>
+            <p class="store-events__detail-meta" data-event-detail="time"></p>
+            <p class="store-events__detail-meta" data-event-detail="location"></p>
+            <p class="store-events__detail-meta" data-event-detail="date"></p>
+            <p class="store-events__detail-description" data-event-detail="description"></p>
+          </div>
+        </div>
       </div>
     {% endif %}
   </div>
@@ -198,18 +226,186 @@
     color: #1976c5;
     font-weight: 600;
     text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
   }
 
   .store-event-card__link:hover {
     text-decoration: underline;
   }
 
+  .store-events__grid {
+    transition: opacity 220ms ease, max-height 260ms ease;
+    max-height: 5000px;
+    overflow: hidden;
+  }
+
+  .store-events__grid.is-hidden {
+    opacity: 0;
+    max-height: 0;
+    pointer-events: none;
+  }
+
+  .store-events__detail {
+    margin-top: 32px;
+    padding: 28px;
+    border-radius: 14px;
+    background: #f8f8f8;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 220ms ease, max-height 260ms ease;
+  }
+
+  .store-events__detail.is-visible {
+    opacity: 1;
+    max-height: 5000px;
+    pointer-events: auto;
+  }
+
+  .store-events__detail-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    position: relative;
+  }
+
+  .store-events__detail-media {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .store-events__detail-media img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .store-events__detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .store-events__detail-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .store-events__detail-meta,
+  .store-events__detail-description {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .store-events__detail-close {
+    position: absolute;
+    right: 0;
+    top: -6px;
+    background: #0b5aa4;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
   @media screen and (max-width: 749px) {
     .store-events-section {
       padding: 24px 0 36px;
     }
+
+    .store-events__detail-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .store-events__detail-close {
+      position: static;
+      align-self: flex-start;
+      margin-bottom: 8px;
+    }
   }
 {% endstylesheet %}
+
+<script>
+  (() => {
+    const section = document.querySelector('.store-events-section [data-section-id="{{ section.id }}"]');
+    if (!section) return;
+
+    const detail = section.querySelector('.store-events__detail');
+    const list = section.querySelector('[data-event-list]');
+    if (!detail) return;
+
+    const detailTitle = detail.querySelector('[data-event-detail="title"]');
+    const detailTime = detail.querySelector('[data-event-detail="time"]');
+    const detailLocation = detail.querySelector('[data-event-detail="location"]');
+    const detailDate = detail.querySelector('[data-event-detail="date"]');
+    const detailDescription = detail.querySelector('[data-event-detail="description"]');
+    const detailMedia = detail.querySelector('[data-event-detail="media"]');
+    const detailImage = detail.querySelector('[data-event-detail="image"]');
+    const closeButton = detail.querySelector('.store-events__detail-close');
+
+    const formatLabel = (label, value) => {
+      if (!value) return '';
+      return `${label} ${value}`;
+    };
+
+    section.addEventListener('click', (event) => {
+      const trigger = event.target.closest('.store-event-card__link');
+      if (!trigger) return;
+
+      const title = trigger.dataset.eventTitle || '';
+      const time = trigger.dataset.eventTime || '';
+      const location = trigger.dataset.eventLocation || '';
+      const day = trigger.dataset.eventDay || '';
+      const month = trigger.dataset.eventMonth || '';
+      const description = trigger.dataset.eventDescription || '';
+      const image = trigger.dataset.eventImage || '';
+      const imageAlt = trigger.dataset.eventImageAlt || title || '';
+
+      if (detailTitle) detailTitle.textContent = title;
+      if (detailTime) detailTime.textContent = formatLabel('Event Time:', time);
+      if (detailLocation) detailLocation.textContent = formatLabel('Location:', location);
+      if (detailDate) {
+        const dateLine = [day, month].filter(Boolean).join(' · ');
+        detailDate.textContent = formatLabel('Date:', dateLine);
+      }
+      if (detailDescription) detailDescription.textContent = description;
+
+      if (image && detailImage && detailMedia) {
+        detailImage.src = image;
+        detailImage.alt = imageAlt;
+        detailMedia.hidden = false;
+      } else if (detailMedia) {
+        detailMedia.hidden = true;
+      }
+
+      if (list) list.classList.add('is-hidden');
+      detail.classList.add('is-visible');
+      detail.setAttribute('aria-hidden', 'false');
+      detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        detail.classList.remove('is-visible');
+        detail.setAttribute('aria-hidden', 'true');
+        if (list) list.classList.remove('is-hidden');
+      });
+    }
+  })();
+</script>
 
 {% schema %}
 {

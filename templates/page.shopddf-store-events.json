@@ -11,42 +11,6 @@
   "sections": {
     "main": {
       "type": "shopddf-store-events",
-      "blocks": {
-        "event-1": {
-          "type": "event",
-          "settings": {
-            "image": "shopify://shop_images/clinique-event.jpg",
-            "title": "Clinique Raffle",
-            "time": "12:00 AM",
-            "location": "",
-            "start_day": "7",
-            "end_day": "28",
-            "start_month": "Feb",
-            "end_month": "Feb",
-            "link": "",
-            "link_label": "Learn More"
-          }
-        },
-        "event-2": {
-          "type": "event",
-          "settings": {
-            "image": "shopify://shop_images/Mario-event.jpg",
-            "title": "Mario Badescu Raffle",
-            "time": "12:00 AM",
-            "location": "",
-            "start_day": "7",
-            "end_day": "28",
-            "start_month": "Feb",
-            "end_month": "Feb",
-            "link": "",
-            "link_label": "Learn More"
-          }
-        }
-      },
-      "block_order": [
-        "event-1",
-        "event-2"
-      ],
       "settings": {
         "heading": "Store Events"
       }

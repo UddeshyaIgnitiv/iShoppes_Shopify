@@ -221,6 +221,7 @@
         const now = new Date();
         const diff = departureDT - now;
         const hoursUntilDeparture = diff / (1000 * 60 * 60);
+        alert(hoursUntilDeparture);
 
         // Must be between 2-72 hours from now
         if (hoursUntilDeparture < 2 || hoursUntilDeparture > 72) {

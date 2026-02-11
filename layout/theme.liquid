@@ -194,6 +194,31 @@
         return parseInt(val.replace('min_', ''), 10);
     }
 
+    // Return Eastern (America/New_York) offset for a given date as ISO string: '-05:00' (EST) or '-04:00' (EDT)
+    function getEasternOffsetISO(dateStr) {
+        const [y, m, d] = dateStr.split('-').map(Number);
+        const month = m - 1;
+        const getSecondSunday = (yr, mo) => {
+            let day = 1;
+            let count = 0;
+            while (count < 2) {
+                const d = new Date(yr, mo, day);
+                if (d.getDay() === 0) count++;
+                day++;
+            }
+            return day - 1;
+        };
+        const getFirstSunday = (yr, mo) => {
+            let day = 1;
+            while (new Date(yr, mo, day).getDay() !== 0) day++;
+            return day;
+        };
+        const marchSecondSun = getSecondSunday(y, 2);
+        const novFirstSun = getFirstSunday(y, 10);
+        const inDST = (month > 2 && month < 10) || (month === 2 && d >= marchSecondSun) || (month === 10 && d < novFirstSun);
+        return inDST ? '-04:00' : '-05:00';
+    }
+
     function getDepartureDateTime() {
         if (!dateInput.value || !hoursSelect.value || !meridiemSelect.value) {
             return null;
@@ -206,10 +231,11 @@
         if (meridiemSelect.value === 'PM' && hrs !== 12) hrs += 12;
         if (meridiemSelect.value === 'AM' && hrs === 12) hrs = 0;
 
-        const dt = new Date(dateInput.value);
-        dt.setHours(hrs, mins, 0, 0);
-
-        return dt;
+        const pad = n => String(n).padStart(2, '0');
+        const dateStr = dateInput.value;
+        const offset = getEasternOffsetISO(dateStr);
+        const isoStr = `${dateStr}T${pad(hrs)}:${pad(mins)}:00${offset}`;
+        return new Date(isoStr);
     }
 
     function validateDepartureTime() {

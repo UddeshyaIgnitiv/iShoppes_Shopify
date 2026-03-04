@@ -390,9 +390,9 @@
                                       >
                                         <a href="{{ childlink.url }}" class="menu-drawer__menu-item-text" style="color: inherit; text-decoration: none;">{{ childlink.title | escape }}</a>
                                         {% if childlink.links != blank %}
-                                          {% comment %} <span class="svg-wrapper icon-caret">
+                                          <span class="svg-wrapper icon-caret">
                                           {{- 'icon-caret.svg' | inline_asset_content -}}
-                                        </span> {% endcomment %}
+                                        </span>
                                         {% endif %}
                                       </summary>
                                       {% liquid

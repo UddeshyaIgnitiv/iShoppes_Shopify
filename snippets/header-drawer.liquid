@@ -389,9 +389,11 @@
                                         class="menu-drawer__menu-item menu-drawer__menu-item--parent focus-inset"
                                       >
                                         <a href="{{ childlink.url }}" class="menu-drawer__menu-item-text" style="color: inherit; text-decoration: none;">{{ childlink.title | escape }}</a>
-                                        <span class="svg-wrapper icon-caret">
+                                        {% if childlink.links != blank %}
+                                          <span class="svg-wrapper icon-caret">
                                           {{- 'icon-caret.svg' | inline_asset_content -}}
                                         </span>
+                                        {% endif %}
                                       </summary>
                                       {% liquid
                                         assign render_link_image = false

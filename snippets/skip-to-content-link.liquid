@@ -8,9 +8,9 @@
   @example
   {% render 'skip-to-content-link', href: '#MainContent', text: 'Skip to main content' %}
 {%- enddoc -%}
-<a
+{% comment %} <a
   class="skip-to-content-link button-secondary"
   href="{{ href }}"
 >
   {{ text | t }}
-</a>
+</a> {% endcomment %}

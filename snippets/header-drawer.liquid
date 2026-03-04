@@ -410,6 +410,7 @@
                                         tabindex="-1"
                                       >
                                         {%- for grandchildlink in childlink.links -%}
+                                          {% if grandchildlink.title != 'untitled' %} 
                                           <li
                                             class="menu-drawer__list-item"
                                             style="--menu-drawer-animation-index: {{ forloop.index }};"
@@ -434,6 +435,7 @@
                                               </span>
                                             </a>
                                           </li>
+                                          {% endif %}
                                         {%- endfor -%}
                                       </ul>
                                     </details>

@@ -404,6 +404,7 @@
                                           endif
                                         endif
                                       %}
+                                      {% if childlink.links != blank %}
                                       <ul
                                         class="menu-drawer__menu menu-drawer__menu--grandchildlist details-content{% if render_link_image %} menu-drawer__menu--grid{% endif %}"
                                         role="list"
@@ -438,6 +439,7 @@
                                           {% endif %}
                                         {%- endfor -%}
                                       </ul>
+                                      {% endif %}
                                     </details>
                                   </accordion-custom>
                                 {% else %}

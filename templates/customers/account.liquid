@@ -6,9 +6,14 @@
   </div>
 
   {% if customer.orders_count > 0 %}
-    <div class="account-orders__list">
+    <div class="account-orders__search">
+      <label for="order-search" class="account-orders__search-label">Search by order Number</label>
+      <input type="text" id="order-search" class="account-orders__search-input" placeholder="e.g. 1001 or #1001" autocomplete="off" aria-label="Search orders by order ID">
+    </div>
+    <p id="order-search-no-results" class="account-orders__search-no-results" hidden>No orders match your search.</p>
+    <div class="account-orders__list" id="account-orders-list">
       {% for order in customer.orders %}
-        <div class="order-card">
+        <div class="order-card" data-order-id="{{ order.name | downcase }}">
           <div class="order-card__header">
             <h3>
               <a href="{{ order.order_status_url }}" target="_blank">
@@ -73,6 +78,38 @@
 .account-orders__header h2 {
   font-size: 1.8rem;
   font-weight: 700;
+}
+
+.account-orders__search {
+  margin-bottom: 1.5rem;
+  max-width: 320px;
+}
+
+.account-orders__search-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.account-orders__search-input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.account-orders__search-input:focus {
+  outline: none;
+  border-color: #000;
+}
+
+.account-orders__search-no-results {
+  margin: 1rem 0;
+  color: #666;
+  font-size: 0.95rem;
 }
 
 .account-orders__list {
@@ -192,3 +229,26 @@
 }
 
 </style>
+<script>
+(function() {
+  var searchInput = document.getElementById('order-search');
+  var list = document.getElementById('account-orders-list');
+  var noResults = document.getElementById('order-search-no-results');
+  if (!searchInput || !list) return;
+
+  searchInput.addEventListener('input', function() {
+    var query = (this.value || '').trim().toLowerCase().replace(/^#/, '');
+    var cards = list.querySelectorAll('.order-card');
+    var visibleCount = 0;
+
+    cards.forEach(function(card) {
+      var orderId = (card.getAttribute('data-order-id') || '').toLowerCase();
+      var show = !query || orderId.indexOf(query) !== -1;
+      card.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
+    });
+
+    noResults.hidden = visibleCount > 0 || !query;
+  });
+})();
+</script>

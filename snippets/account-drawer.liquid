@@ -1,803 +1,94 @@
-<div class="account-actions">
-  <div class="account-actions__main-menu">
-    <header class="account-actions__header">
-      <span class="account-actions__title h5" id="AccountHeaderTitle">
-        {% if customer and customer.first_name != blank %}
-          {% assign first_name = customer.first_name %}
-          {% if customer.last_name != blank %}
-            {% assign first_name = customer.first_name | append: ' ' | append: customer.last_name %}
-          {% endif %}
-          {{ 'content.account_title_personalized' | t: first_name: first_name }}
-        {% else %}
-          {{ 'content.account_title' | t }}
-        {% endif %}
-        !
+{%- doc -%}
+  Renders the account drawer, which is used for mobile users.
+{%- enddoc -%}
+
+<script
+  src="{{ 'dialog.js' | asset_url }}"
+  type="module"
+></script>
+
+<dialog-component
+  class="account-drawer"
+  {{ block.shopify_attributes }}
+>
+  {% render 'account-button', attributes: 'on:click="/showDialog"' %}
+  <dialog
+    ref="dialog"
+    class="color-{{ settings.popover_color_scheme }} dialog-modal dialog-drawer dialog-bottom-sheet account-drawer__dialog"
+    scroll-lock
+  >
+    <button
+      ref="closeButton"
+      on:click="/closeDialog"
+      class="button button-unstyled close-button account-drawer__close-button"
+      aria-label="{{ 'actions.close_dialog' | t }}"
+    >
+      <span
+        class="svg-wrapper"
+        aria-hidden="true"
+      >
+        {{- 'icon-close.svg' | inline_asset_content -}}
       </span>
-    </header>
-
-    {% if customer.email %}
-      <nav class="account-actions__nav">
-        <ul class="account-actions__list">
-          <li class="account-actions__list-item">
-            <a
-              href="{{ routes.account_url }}"
-              class="account-actions__links button-secondarys"
-              {% if autofocus_enabled and customer %}
-                autofocus
-              {% endif %}
-            >
-              <span class="account-actions__icons" aria-hidden="true"></span>
-              {{ 'content.account_orders' | t }}
-            </a>
-          </li>
-
-          <li class="account-actions__list-item">
-            <a
-              href="{{ routes.root_url }}apps/page/wishlist"
-              class="account-actions__links button-secondarys"
-            >
-              <span class="account-actions__icon" aria-hidden="true"></span>
-              {{ 'content.account_favorites' | t }}
-            </a>
-          </li>
-
-          <li class="account-actions__list-item">
-            <a
-              href="{{ routes.account_addresses_url }}"
-              class="account-actions__links button-secondarys"
-            >
-              <span class="account-actions__icon" aria-hidden="true"></span>
-              {{ 'content.account_profile' | t }}
-            </a>
-          </li>
-          <hr class="account-actions__divider">
-          <li class="account-actions__list-item">
-            <a
-              href="{{ routes.account_logout_url }}"
-              class="account-actions__links button-secondarys"
-            >
-              <span class="account-actions__icon" aria-hidden="true"></span>
-              {{ 'actions.log_out' | t }}
-            </a>
-          </li>
-        </ul>
-      </nav>
-    {% endif %}
-
-    <!-- Global login flag for JS -->
-    <script>
-      window.__CUSTOMER_LOGGED_IN__ = {{ customer.id | default: 0 | json }} != 0;
-    </script>
-
-    {% unless customer %}
-      <!-- ================= LOGIN BLOCK ================= -->
-      <div class="account-actions__sign-ins" data-skip-subtree-update="true" id="LoginBlock">
-        {% form 'customer_login', id: 'ClassicLoginForm' %}
-          {%- comment -%}
-            ✅ If login fails, Shopify will go to /account/login.
-            We add a query flag so JS can open the popover and show login.
-          {%- endcomment -%}
-          <input type="hidden" name="return_to" value="{{ routes.account_url }}">
-
-          {% if form.errors %}
-            <div class="form-errors" id="LoginFormErrors" role="alert" aria-live="polite">
-              <ul class="errors">
-                {% for field in form.errors %}
-                  {% assign msg = form.errors.messages[field] | downcase %}
-
-                  {% if msg contains 'incorrect' or msg contains 'password' %}
-                    <li>Email id or password is not valid.</li>
-                  {% else %}
-                    <li>{{ form.errors.messages[field] }}</li>
-                  {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-          {% endif %}
-
-
-          <div class="form-field">
-            <label for="LoginEmail">Email address*</label>
-            <input
-              id="LoginEmail"
-              class="input"
-              type="email"
-              name="customer[email]"
-              value="{{ form.email | escape }}"
-              autocomplete="email"
-              required
-              aria-required="true"
-            >
-          </div>
-
-          <div class="form-field">
-            <label for="LoginPassword">Password*</label>
-            <input
-              id="LoginPassword"
-              class="input"
-              type="password"
-              name="customer[password]"
-              autocomplete="current-password"
-              required
-              aria-required="true"
-            >
-          </div>
-
-          <a href="#" id="ShowRecoverBtn" class="link" style="margin-inline-start:auto;">Forgot password?</a>
-
-          <div class="form-actions">
-            <button type="submit" class="account-actions__link button" id="LoginSubmitBtn">SIGN IN</button>
-            <button type="button" id="ShowRegisterBtn" class="account-actions__link button-secondary">CREATE AN ACCOUNT</button>
-          </div>
-        {% endform %}
-      </div>
-
-      <!-- ================= RECOVER BLOCK (CAPTCHA SAFE) ================= -->
-      <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RecoverBlock">
-        {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
-
-          <div class="form-field" id="RecoverEmailField">
-            <label for="RecoverEmail">Email*</label>
-            <input
-              id="RecoverEmail"
-              class="input"
-              type="email"
-              name="email"
-              autocomplete="email"
-              required
-              aria-required="true"
-            >
-          </div>
-
-          {%- comment -%}
-            ✅ On success Shopify sets posted_successfully?
-            We show success message and JS will keep popover open + auto reset.
-          {%- endcomment -%}
-          {% if form.posted_successfully? %}
-            <div id="RecoverAjaxSuccess" class="form-success" role="status" aria-live="polite">
-              If an account exists for that email, you’ll receive a password reset email shortly.
-            </div>
-          {% else %}
-            <div id="RecoverAjaxSuccess" class="form-success is-hidden" role="status" aria-live="polite">
-              If an account exists for that email, you’ll receive a password reset email shortly.
-            </div>
-          {% endif %}
-
-          {% if form.errors %}
-            <div class="form-errors" role="alert" aria-live="polite">
-              <ul class="errors">
-                {% for field in form.errors %}
-                  <li>{{ form.errors.messages[field] }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-          {% endif %}
-
-          <div class="form-actions">
-            <button type="submit" class="button" id="RecoverSubmitBtn">SEND RESET LINK</button>
-            <button type="button" id="BackToLoginBtn" class="button-secondary">BACK TO LOGIN</button>
-          </div>
-        {% endform %}
-      </div>
-
-      <!-- ================= REGISTER BLOCK (HIDDEN) ================= -->
-      <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RegisterBlock">
-        {% form 'create_customer', id: 'ClassicRegisterForm' %}
-          {% if form.errors %}
-            <div class="form-errors" role="alert" aria-live="polite">
-              <ul class="errors">
-                {% for field in form.errors %}
-                  <li>{{ form.errors.messages[field] }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-          {% endif %}
-
-          <div class="form-field">
-            <label for="RegFirst">First Name*</label>
-            <input id="RegFirst" class="input" type="text" name="customer[first_name]" required aria-required="true">
-          </div>
-
-          <div class="form-field">
-            <label for="RegLast">Last Name*</label>
-            <input id="RegLast" class="input" type="text" name="customer[last_name]" required aria-required="true">
-          </div>
-
-          <div class="form-field">
-            <label for="RegEmail">Email*</label>
-            <input id="RegEmail" class="input" type="email" name="customer[email]" required aria-required="true" autocomplete="email">
-          </div>
-
-          <div class="form-field">
-            <label for="RegCountry">Country of Origin or Residence*</label>
-            <select id="RegCountry" class="input" required aria-required="true">
-              <option value="" selected disabled>Select country</option>
-              {{ all_country_option_tags }}
-            </select>
-          </div>
-
-          <div class="form-field">
-            <label for="RegMobile">Mobile Number*</label>
-            <input
-              id="RegMobile"
-              class="input"
-              type="text"
-              name="reg_mobile"
-              required
-              aria-required="true"
-              inputmode="numeric"
-              autocomplete="tel"
-              minlength="7"
-              maxlength="15"
-            >
-            <p id="RegMobileError" class="field-error is-hidden" role="alert" aria-live="polite">
-              Mobile Number is not valid
-            </p>
-          </div>
-
-          <div class="form-field">
-            <label for="RegPassword">Password*</label>
-            <input id="RegPassword" class="input" type="password" name="customer[password]" required aria-required="true" autocomplete="new-password">
-            <p id="RegPasswordError" class="field-error is-hidden" role="alert" aria-live="polite">
-              Password must contain atleast 1 lowercase and 1 uppercase letter, 1 digit and a special character.
-            </p>
-          </div>
-
-          <div class="form-field">
-            <label for="RegTerminal">Terminal Number*</label>
-            <select id="RegTerminal" class="input" required aria-required="true"></select>
-          </div>
-
-          <div class="form-field" style="gap:10px;">
-            <label style="display:flex;align-items:center;gap:10px;">
-              <input type="checkbox" id="RegMarketing" name="customer[accepts_marketing]" value="true">
-              <span>Subscribe to news and updates</span>
-            </label>
-          </div>
-
-          <input type="hidden" id="RegNote" name="customer[note]" value="">
-
-          <div class="form-actions">
-            <button type="button" id="RegisterSubmitBtn" class="button">CREATE AN ACCOUNT</button>
-            <button type="button" id="CancelRegisterBtn" class="button-secondary">CANCEL</button>
-          </div>
-        {% endform %}
-      </div>
-
-      <script>
-        (function () {
-          const root = document.currentScript?.closest('.account-actions');
-          const RegTerminal = root?.querySelector('#RegTerminal');
-          if (!RegTerminal) return;
-
-          async function loadAirports() {
-            const res = await fetch('https://ishoppes.axiomconsulting.in/airports');
-            const airlines = await res.json();
-            RegTerminal.innerHTML = '';
-            airlines.forEach(item => {
-              const option = document.createElement('option');
-              option.value = item.name;
-              option.textContent = item.name;
-              RegTerminal.appendChild(option);
-            });
-          }
-
-          loadAirports();
-        })();
-      </script>
-
-      <script>
-        (function () {
-          const root = document.currentScript?.closest('.account-actions');
-          if (!root) return;
-          const $ = (sel) => root.querySelector(sel);
-
-          // ================= HEADER =================
-          const headerTitleEl = $('#AccountHeaderTitle');
-          const HEADER_DEFAULT = 'Sign-in or Create an Account';
-          const HEADER_FORGOT  = 'Forgot password';
-
-          function setHeader(text) { if (headerTitleEl) headerTitleEl.textContent = text; }
-
-          // ================= BLOCKS =================
-          const loginBlock = $('#LoginBlock');
-          const registerBlock = $('#RegisterBlock');
-          const recoverBlock = $('#RecoverBlock');
-
-          const showRegisterBtn = $('#ShowRegisterBtn');
-          const cancelRegisterBtn = $('#CancelRegisterBtn');
-          const showRecoverBtn = $('#ShowRecoverBtn');
-          const backToLoginBtn = $('#BackToLoginBtn');
-
-          function showOnly(block) {
-            [loginBlock, registerBlock, recoverBlock].forEach(el => el?.classList.add('is-hidden'));
-            block?.classList.remove('is-hidden');
-            block?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
-          }
-
-          // ✅ Your theme uses native Popover API (popover="auto")
-          function openAccountPopover() {
-            const pop = document.getElementById('account-popover');
-            if (!pop) return false;
-            if (typeof pop.showPopover === 'function') {
-              try { pop.showPopover(); return true; } catch(e) {}
-            }
-            // fallback
-            pop.style.display = '';
-            pop.style.visibility = '';
-            pop.classList.add('open', 'active', 'is-open');
-            return true;
-          }
-          (function setLoginReturnTo() {
-  const form = $('#ClassicLoginForm');
-  if (!form) return;
-
-  const input = form.querySelector('input[name="return_to"]');
-  if (!input) return;
-
-  // if they are already on /account/login, go to /account on success
-  const isAccountLogin = (window.location.pathname || '').replace(/\/+$/, '') === '/account/login';
-
-  if (isAccountLogin) {
-    input.value = '/account';
-    return;
-  }
-
-  // otherwise return to current page after login
-  input.value = window.location.pathname + window.location.search + window.location.hash;
-})();
-
-
-          /* ====================== LOGIN WRONG PASSWORD -> OPEN POPOVER (SESSION FLAG) ====================== */
-if (!window.__ACCOUNT_POPOVER_LOGIN_INIT__) {
-window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
-(function loginWrongPasswordPopup() {
-  // Uses native Popover API: <div id="account-popover" popover="auto">
-  function openAccountPopover() {
-    const pop = document.getElementById('account-popover');
-    if (!pop) return false;
-
-    if (typeof pop.showPopover === 'function') {
-      try { pop.showPopover(); return true; } catch (e) {}
-    }
-    // fallback
-    pop.style.display = '';
-    pop.style.visibility = '';
-    pop.classList.add('open', 'active', 'is-open');
-    return true;
-  }
-
-  function showLoginBlock() {
-    const loginBlock = document.getElementById('LoginBlock');
-    const recoverBlock = document.getElementById('RecoverBlock');
-    const registerBlock = document.getElementById('RegisterBlock');
-
-    [loginBlock, recoverBlock, registerBlock].forEach(el => el?.classList.add('is-hidden'));
-    loginBlock?.classList.remove('is-hidden');
-
-    const headerTitleEl = document.getElementById('AccountHeaderTitle');
-    if (headerTitleEl) headerTitleEl.textContent = 'Sign-in or Create an Account';
-
-    document.getElementById('LoginEmail')?.focus();
-  }
-
-  // 1) Before Shopify redirects: set a flag so we can open popup on /account/login
-  const loginForm = document.getElementById('ClassicLoginForm');
-  if (loginForm && !loginForm.__openFlagBound) {
-    loginForm.__openFlagBound = true;
-
-    loginForm.addEventListener('submit', function () {
-      try {
-        sessionStorage.setItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__', '1');
-      } catch (e) {}
-      const btn = document.getElementById('LoginSubmitBtn');
-      if (btn) { btn.disabled = true; btn.textContent = 'PLEASE WAIT...'; }
-    });
-  }
-
-  // 2) On load: if we are on /account/login and either
-  //    A) session flag exists (meaning user tried login)
-  //    B) login errors exist in markup (wrong password)
-  // then open popover and show login
-  const path = window.location.pathname || '';
-  const isAccountLoginPage = path.replace(/\/+$/, '') === '/account/login';
-
-  let flag = false;
-  try { flag = sessionStorage.getItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__') === '1'; } catch (e) {}
-
-  const hasLoginErrors =
-    !!document.getElementById('LoginFormErrors') ||
-    !!document.querySelector('#ClassicLoginForm .form-errors');
-
-  if (!isAccountLoginPage) return;
-  if (!flag && !hasLoginErrors) return;
-
-  // clear flag so it doesn't open every time
-  try { sessionStorage.removeItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__'); } catch (e) {}
-
-  // popover may mount a bit late → retry
-  let tries = 0;
-  const iv = setInterval(() => {
-    tries++;
-    openAccountPopover();
-    showLoginBlock();
-
-    // stop after some tries
-    if (tries >= 15) clearInterval(iv);
-  }, 200);
-})();
-}
-
-
-          // Initial header
-          setHeader(HEADER_DEFAULT);
-
-          // LOGIN -> REGISTER
-          showRegisterBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            setHeader(HEADER_DEFAULT);
-            showOnly(registerBlock);
-            $('#RegFirst')?.focus();
-          });
-
-          // REGISTER -> LOGIN
-          cancelRegisterBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            setHeader(HEADER_DEFAULT);
-            showOnly(loginBlock);
-            $('#LoginEmail')?.focus();
-          });
-
-          // LOGIN -> RECOVER
-          showRecoverBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            setHeader(HEADER_FORGOT);
-            showOnly(recoverBlock);
-            $('#RecoverEmail')?.focus();
-          });
-
-          // RECOVER -> LOGIN
-          backToLoginBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            setHeader(HEADER_DEFAULT);
-            showOnly(loginBlock);
-
-            const success = $('#RecoverAjaxSuccess');
-            success?.classList.add('is-hidden');
-            const field = $('#RecoverEmailField');
-            if (field) field.style.display = '';
-            const btn = $('#RecoverSubmitBtn');
-            if (btn) { btn.disabled = false; btn.textContent = 'SEND RESET LINK'; }
-            $('#RecoverPasswordForm')?.reset();
-            $('#LoginEmail')?.focus();
-          });
-
-          // ================= REGISTER VALIDATION + CONTROLLED SUBMIT =================
-          const regForm = $('#ClassicRegisterForm');
-          const regSubmitBtn = $('#RegisterSubmitBtn');
-
-          const RegCountry = $('#RegCountry');
-          const RegTerminal = $('#RegTerminal');
-          const RegMobile = $('#RegMobile');
-          const RegPassword = $('#RegPassword');
-          const RegNote = $('#RegNote');
-
-          const RegMobileError = $('#RegMobileError');
-          const RegPasswordError = $('#RegPasswordError');
-
-          function showInlineError(input, errorEl) {
-            if (errorEl) errorEl.classList.remove('is-hidden');
-            input?.setAttribute('aria-invalid', 'true');
-          }
-          function hideInlineError(input, errorEl) {
-            if (errorEl) errorEl.classList.add('is-hidden');
-            input?.removeAttribute('aria-invalid');
-          }
-
-          RegCountry?.addEventListener('invalid', () => RegCountry.setCustomValidity('Please select a country.'));
-          RegCountry?.addEventListener('change', () => RegCountry.setCustomValidity(''));
-
-          RegTerminal?.addEventListener('invalid', () => RegTerminal.setCustomValidity('Please select a terminal.'));
-          RegTerminal?.addEventListener('change', () => RegTerminal.setCustomValidity(''));
-
-          RegMobile?.addEventListener('input', () => {
-            RegMobile.value = RegMobile.value.replace(/[^0-9]/g, '');
-            hideInlineError(RegMobile, RegMobileError);
-          });
-
-          RegPassword?.addEventListener('input', () => hideInlineError(RegPassword, RegPasswordError));
-
-          function isValidMobile(v) { return /^[0-9]{7,15}$/.test(v); }
-          function isValidPassword(v) {
-            return /[a-z]/.test(v) && /[A-Z]/.test(v) && /[0-9]/.test(v) && /[^A-Za-z0-9]/.test(v);
-          }
-
-          function validateRegisterForm() {
-            let ok = true;
-            hideInlineError(RegMobile, RegMobileError);
-            hideInlineError(RegPassword, RegPasswordError);
-
-            if (regForm && !regForm.checkValidity()) {
-              regForm.reportValidity();
-              ok = false;
-            }
-
-            const mobile = (RegMobile?.value || '').trim();
-            if (!isValidMobile(mobile)) { showInlineError(RegMobile, RegMobileError); ok = false; }
-
-            const pw = (RegPassword?.value || '');
-            if (!isValidPassword(pw)) { showInlineError(RegPassword, RegPasswordError); ok = false; }
-
-            if (!ok) {
-              if (RegMobile && !isValidMobile(mobile)) RegMobile.focus();
-              else if (RegPassword && !isValidPassword(pw)) RegPassword.focus();
-            }
-            return ok;
-          }
-
-          function packNote() {
-            const first = ($('#RegFirst')?.value || '').trim();
-            const last  = ($('#RegLast')?.value || '').trim();
-            const country = RegCountry?.value || '';
-            const terminal = RegTerminal?.value || '';
-            const mobile = (RegMobile?.value || '').trim();
-
-            const parts = [
-              `Country: ${country}`,
-              `Mobile: ${mobile}`,
-              `Terminal: ${terminal}`,
-              `Name: ${first} ${last}`.trim()
-            ];
-            if (RegNote) RegNote.value = parts.filter(Boolean).join(' | ');
-          }
-
-          regForm?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
-          regForm?.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') { e.preventDefault(); regSubmitBtn?.click(); }
-          });
-
-          regSubmitBtn?.addEventListener('click', () => {
-            const ok = validateRegisterForm();
-            if (!ok) return;
-            packNote();
-            regSubmitBtn.disabled = true;
-            regSubmitBtn.textContent = 'PLEASE WAIT...';
-            regForm.submit();
-          });
-
-          /* ====================== LOGIN FAILED HANDLER ====================== */
-          (function handleLoginFailed() {
-            const params = new URLSearchParams(window.location.search || '');
-            if (params.get('login_failed') !== '1') return;
-
-            // clean URL
-            params.delete('login_failed');
-            const cleanUrl = window.location.pathname +
-              (params.toString() ? '?' + params.toString() : '') +
-              window.location.hash;
-            try { history.replaceState({}, '', cleanUrl); } catch(e) {}
-
-            let tries = 0;
-            const iv = setInterval(() => {
-              tries++;
-              openAccountPopover();
-              setHeader(HEADER_DEFAULT);
-              showOnly(loginBlock);
-              $('#LoginEmail')?.focus();
-              if (tries >= 12) clearInterval(iv);
-            }, 200);
-          })();
-
-          /* ====================== RECOVER SUCCESS HANDLER (posted_successfully?) ====================== */
-          (function handleRecoverSuccess() {
-            const successEl = $('#RecoverAjaxSuccess');
-            if (!successEl) return;
-
-            const visible = !successEl.classList.contains('is-hidden');
-            if (!visible) return;
-
-            let tries = 0;
-            const iv = setInterval(() => {
-              tries++;
-              openAccountPopover();
-              setHeader(HEADER_FORGOT);
-              showOnly(recoverBlock);
-
-              const emailField = $('#RecoverEmailField');
-              if (emailField) emailField.style.display = 'none';
-
-              if (tries >= 8) clearInterval(iv);
-            }, 200);
-
-            setTimeout(() => {
-              $('#RecoverPasswordForm')?.reset();
-              successEl.classList.add('is-hidden');
-
-              const emailField = $('#RecoverEmailField');
-              if (emailField) emailField.style.display = '';
-
-              const btn = $('#RecoverSubmitBtn');
-              if (btn) { btn.disabled = false; btn.textContent = 'SEND RESET LINK'; }
-
-              setHeader(HEADER_DEFAULT);
-              showOnly(loginBlock);
-            }, 4000);
-          })();
-
-          /* ====================== WISHLIST AUTH GUARD (APP INJECTED) ====================== */
-          (function wishlistAuthGuard() {
-            if (window.__CUSTOMER_LOGGED_IN__) return;
-
-            const MSG = 'Please sign in to your account to see saved items.';
-
-            function isWishlistUrl(href) {
-              if (!href) return false;
-              try {
-                const url = new URL(href, window.location.origin);
-                return url.pathname.replace(/\/+$/, '') === '/apps/page/wishlist';
-              } catch (e) {
-                return href.indexOf('/apps/page/wishlist') !== -1;
-              }
-            }
-
-            function getToast() {
-              let toast = document.getElementById('WishlistAuthToast');
-              if (toast) return toast;
-
-              toast = document.createElement('div');
-              toast.id = 'WishlistAuthToast';
-              toast.setAttribute('role', 'status');
-              toast.setAttribute('aria-live', 'polite');
-              toast.className = 'wishlist-auth-toast';
-              document.body.appendChild(toast);
-              return toast;
-            }
-
-            function showToast(msg) {
-              const toast = getToast();
-              toast.textContent = msg;
-              toast.classList.add('is-visible');
-              clearTimeout(toast._t);
-              toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
-            }
-
-            function hideCounters() {
-              document.querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
-                .forEach(el => el.style.display = 'none');
-            }
-
-            hideCounters();
-            const mo = new MutationObserver(hideCounters);
-            mo.observe(document.documentElement, { childList: true, subtree: true });
-
-            document.addEventListener('click', function (e) {
-              const t = e.target;
-
-              const a = t?.closest?.('a');
-              if (a && isWishlistUrl(a.getAttribute('href') || '')) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation?.();
-                showToast(MSG);
-                return;
-              }
-
-              const plpBtn = t?.closest?.('.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]');
-              if (plpBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation?.();
-                showToast(MSG);
-                return;
-              }
-
-              const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
-              if (pdpBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation?.();
-                showToast(MSG);
-                return;
-              }
-            }, true);
-          })();
-
-        })();
-      </script>
-    {% endunless %}
-  </div>
-</div>
+    </button>
+    {% render 'account-actions', autofocus_enabled: true %}
+  </dialog>
+</dialog-component>
 
 {% stylesheet %}
-  .form-errors.is-hidden { display: none !important; }
+  .account-drawer {
+    display: contents;
 
-  /* Toast for wishlist auth */
-  .wishlist-auth-toast{
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 999999;
-    max-width: 340px;
-    padding: 12px 14px;
-    border-radius: 8px;
-    background: #111;
-    color: #fff;
-    font-size: 13px;
-    line-height: 1.4;
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-    transition: opacity .25s ease, transform .25s ease;
-  }
-  .wishlist-auth-toast.is-visible{
-    opacity: 1;
-    transform: translateY(0);
+    @media screen and (min-width: 750px) {
+      display: none;
+    }
   }
 
-  .form-success.is-hidden { display: none !important; }
+  .account-drawer__dialog {
+    --animation-speed: 0.24s;
+    --dialog-drawer-opening-animation: account-drawer-slide-in;
+    --dialog-drawer-closing-animation: account-drawer-slide-out;
 
-  #account-popover{ width: 25%; }
+    height: fit-content;
+    margin: 0;
+    inset-block-end: 0;
+    inset-block-start: auto;
+    border-radius: 0;
+    padding: 0;
+  }
 
-  .account-actions { background-color: var(--color-background); display: flex; flex-direction: column; position: relative; transition: height var(--animation-values); &:has([data-active]) .account-actions__main-menu { visibility: hidden; } }
-  .account-actions__header { padding: var(--padding-xl); display: flex; flex-direction: column; gap: var(--gap-2xs); }
-  .account-actions__title { --font-h5--size: var(--font-size--lg); margin: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .account-drawer__close-button {
+    z-index: 1;
+    inset-block-start: var(--padding-xs);
+    inset-inline-end: var(--padding-xs);
+    color: var(--color-foreground);
+    background-color: transparent;
+  }
 
-  .account-actions__sign-ins {
-    padding: var(--padding-xl);
-    padding-block-start: 0;
-    padding-block-end: var(--padding-md);
+  .account-drawer__close-button .svg-wrapper {
     display: flex;
-    flex-direction: column;
-    gap: var(--gap-sm);
-    max-width: min(640px, 100%);
-    width: 100%;
-    box-sizing: border-box;
-    margin-inline: auto;
-    max-height: 75vh;
-    overflow-y: auto;
-    transition: opacity .25s ease;
-    scrollbar-gutter: stable;
+    width: var(--button-size);
+    height: var(--button-size);
+    align-items: center;
+    justify-content: center;
   }
 
-  .account-actions__sign-ins.is-hidden { display: none !important; opacity: 0; pointer-events: none; }
-  .account-actions__nav { padding: var(--padding-xl); padding-block-start: 0; }
+  @keyframes account-drawer-slide-in {
+    from {
+      transform: translateY(100%);
+    }
 
-  .account-actions__list { display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); width: 100%; list-style: none; margin: 0; padding: 0; }
-
-  .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
-  .form-field label { font-weight: 600; font-size: 0.9rem; }
-
-  .form-field .input { padding: 0.6rem 0.8rem; border: 1px solid rgb(var(--color-foreground-rgb) / 0.3); border-radius: var(--style-border-radius-buttons-secondary); background: var(--color-background); width: 100%; box-sizing: border-box; }
-
-  .form-errors { background: rgb(255 0 0 / 0.1); border: 1px solid red; color: red; padding: 0.5rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
-
-  .form-success { background: rgb(0 128 0 / 0.10); border: 1px solid rgb(0 128 0 / 0.35); color: rgb(0 80 0); padding: 0.5rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
-
-  .form-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; align-items: stretch; }
-
-  .form-actions .button,
-  .form-actions .button-secondary { width: 100%; text-align: center; padding: 0.75rem 1rem; font-weight: 600; border-radius: var(--style-border-radius-buttons-primary); transition: all 0.2s ease-in-out; }
-
-  .form-actions .button { background: #ffffff; color: #000000; border: 1px solid #000000; }
-  .form-actions .button:hover { background: #f3f3f3; }
-
-  .form-actions .button-secondary { background: #000000; color: #ffffff; border: 1px solid #000000; }
-  .form-actions .button-secondary:hover { background: #222222; }
-
-  .link { font-size: 0.9rem; text-decoration: underline; text-align: center; margin-top: .25rem; }
-
-  .field-error { margin: 6px 0 0; font-size: 0.85rem; line-height: 1.2; color: #d10000; }
-  .field-error.is-hidden { display: none !important; }
-
-  .input[aria-invalid="true"] { border-color: #d10000; }
-
-  .Vtl-WishlistProduct__AddToCart{ display: none; }
-  .Vtl-WishlistPage .Vtl-WishlistPage__Title{ font-size: 30px; }
-  .account-actions__links {
-    font-weight: 600;
+    to {
+      transform: translateY(0);
+    }
   }
-  .account-actions__list-item {
-    padding-top: 10px;
+
+  @keyframes account-drawer-slide-out {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(100%);
+    }
   }
 {% endstylesheet %}

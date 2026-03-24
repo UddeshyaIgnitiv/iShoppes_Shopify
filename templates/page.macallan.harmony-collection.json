@@ -269,6 +269,7 @@
         },
         "product_c8edBd": {
           "type": "product",
+          "disabled": true,
           "settings": {
             "product": "the-macallan-m-257437"
           }

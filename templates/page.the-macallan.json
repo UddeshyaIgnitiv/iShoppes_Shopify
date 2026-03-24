@@ -173,7 +173,7 @@
           "type": "_slide",
           "settings": {
             "media_type_1": "image",
-            "image_1": "shopify://shop_images/macallan_banner_m1.webp",
+            "image_1": "shopify://shop_images/coloer-collection-slider-mobile.jpg",
             "link": "shopify://pages/colour-collection",
             "content_direction": "column",
             "vertical_on_mobile": true,

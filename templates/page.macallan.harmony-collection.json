@@ -43,6 +43,7 @@
       "custom_css": [],
       "settings": {
         "content_direction": "column",
+        "page_width": "page-width-content",
         "gap": 0,
         "color_scheme": "",
         "padding-block-start": 0,
@@ -67,7 +68,7 @@
           "name": "t:names.slide",
           "settings": {
             "media_type_1": "image",
-            "image_1": "shopify://shop_images/mds_banner_macallan_d.webp",
+            "image_1": "shopify://shop_images/slider.jpg",
             "link": "",
             "content_direction": "column",
             "vertical_on_mobile": true,
@@ -102,7 +103,7 @@
         "color_scheme": "scheme-1",
         "autoplay": false,
         "autoplay_speed": 4,
-        "section_width": "full-width",
+        "section_width": "page-width",
         "slide_height": "medium",
         "padding-block-start": 0,
         "padding-block-end": 0
@@ -169,6 +170,7 @@
             "alignment": "center",
             "type_preset": "rte",
             "font": "var(--font-body--family)",
+            "weight": "",
             "font_size": "1rem",
             "line_height": "normal",
             "letter_spacing": "normal",
@@ -195,6 +197,7 @@
             "alignment": "center",
             "type_preset": "rte",
             "font": "var(--font-body--family)",
+            "weight": "",
             "font_size": "1rem",
             "line_height": "normal",
             "letter_spacing": "normal",

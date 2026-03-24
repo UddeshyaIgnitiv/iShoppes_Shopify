@@ -445,6 +445,10 @@ main[data-template="page.macallan.masters-decanter-series"] .shopify-section:not
   padding-right: 0;
   padding-left: 0;
 }
+main[data-template="page.macallan.harmony-collection"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+  padding-right: 0;
+  padding-left: 0;
+}
 main[data-template="page.macallan.about.us"] .shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
   padding-right: 0;
   padding-left: 0;

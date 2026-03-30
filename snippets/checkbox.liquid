@@ -13,7 +13,21 @@
   @param {string} [inputRef] - input ref attribute for use with component framework
   @param {string} [labelRef] - label ref attribute for use with component framework
   @param {boolean} [autofocus] - whether the input should be autofocused
+
+  Leading c- / C- is stripped from value and label for display (data-label, label text). The submitted `value` attribute stays unchanged for facet URLs.
 {%- enddoc -%}
+{%- liquid
+  assign display_value = value
+  assign value_prefix = value | slice: 0, 2 | downcase
+  if value_prefix == 'c-'
+    assign display_value = value | slice: 2, value.size
+  endif
+  assign display_label = label
+  assign label_prefix = label | slice: 0, 2 | downcase
+  if label_prefix == 'c-'
+    assign display_label = label | slice: 2, label.size
+  endif
+-%}
 <div
   class="checkbox"
   {{ events }}
@@ -24,7 +38,8 @@
     value="{{ value }}"
     id="{{ id }}"
     class="checkbox__input"
-    data-label="{{ label }}"
+    data-label="{{ display_label }}"
+    data-display-value="{{ display_value }}"
     {% if checked %}
       checked
     {% endif %}
@@ -53,15 +68,6 @@
     role="checkbox"
   >
     {{ 'icon-checkmark.svg' | inline_asset_content }}
-    <span class="checkbox__label-text">
-      {%- liquid
-        assign prefix = label | slice: 0, 2
-        if prefix == 'c-'
-          echo label | slice: 2, label.size
-        else
-          echo label
-        endif
-      -%}
-    </span>
+    <span class="checkbox__label-text">{{ display_label }}</span>
   </label>
 </div>

@@ -9,6 +9,8 @@
   @param {boolean} [should_render_clear] - Whether to render the clear button
   @param {boolean} [show_swatch_label] - Whether to show the swatch label
   @param {boolean} [in_drawer] - Whether the filter is in a drawer
+
+  For filter.p.tag, options that match a shop vendor (after stripping leading c- / C- from value, label, and vendor) are not rendered so vendor names stay in the vendor filter only.
 {%- enddoc -%}
 
 {% liquid
@@ -189,15 +191,51 @@
             {% endif %}
             name="{{ filter.label }}"
           >
+            {% assign visible_index = 0 %}
             {%- for value in filter.values -%}
               {% liquid
+                assign skip_tag_value = false
+                if filter.param_name == 'filter.p.tag' and shop.vendors != blank and shop.vendors.size > 0
+                  assign tag_display_value = value.value
+                  assign tag_value_prefix = value.value | slice: 0, 2 | downcase
+                  if tag_value_prefix == 'c-'
+                    assign tag_display_value = value.value | slice: 2, value.value.size
+                  endif
+                  assign tag_display_label = value.label
+                  assign tag_label_prefix = value.label | slice: 0, 2 | downcase
+                  if tag_label_prefix == 'c-'
+                    assign tag_display_label = value.label | slice: 2, value.label.size
+                  endif
+                  assign tag_value_handle = tag_display_value | handleize
+                  assign tag_label_handle = tag_display_label | handleize
+                  assign tag_is_vendor = false
+                  for vendor in shop.vendors
+                    assign vendor_prefix = vendor | slice: 0, 2 | downcase
+                    assign vendor_without_c = vendor
+                    if vendor_prefix == 'c-'
+                      assign vendor_without_c = vendor | slice: 2, vendor.size
+                    endif
+                    assign vendor_handle = vendor_without_c | handleize
+                    if vendor == value.value or vendor == value.label or vendor_without_c == tag_display_value or vendor_without_c == tag_display_label or vendor_handle == tag_value_handle or vendor_handle == tag_label_handle
+                      assign tag_is_vendor = true
+                      break
+                    endif
+                  endfor
+                  if tag_is_vendor
+                    assign skip_tag_value = true
+                  endif
+                endif
+              %}
+              {% unless skip_tag_value %}
+              {% liquid
+                assign visible_index = visible_index | plus: 1
                 assign input_id = 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index | replace: '.', '-' | append: '-' | append: filter_style | append: '-' | append: in_drawer
                 assign is_disabled = false
                 if value.count == 0 and value.active == false
                   assign is_disabled = true
                 endif
                 assign hidden_class = null
-                if forloop.index > inital_visible_values and render_show_more
+                if visible_index > inital_visible_values and render_show_more
                   assign hidden_class = 'hidden'
                   if filter_style == 'horizontal'
                     assign hidden_class = 'mobile:hidden'
@@ -375,6 +413,7 @@
                   {% endif %}
                 {% endif %}
               </li>
+              {% endunless %}
             {%- endfor -%}
           </ul>
         </div>

@@ -124,7 +124,43 @@
           if is_swatch and show_swatch_label
             assign should_render_for_swatch = false
           endif
-          if filter.values.size > max_visible_values and should_render_for_swatch == false
+
+          assign filter_visible_count = filter.values.size
+          if filter.param_name == 'filter.p.tag' and shop.vendors != blank and shop.vendors.size > 0
+            assign filter_visible_count = 0
+            for value in filter.values
+              assign tag_display_value = value.value
+              assign tag_value_prefix = value.value | slice: 0, 2 | downcase
+              if tag_value_prefix == 'c-'
+                assign tag_display_value = value.value | slice: 2, value.value.size
+              endif
+              assign tag_display_label = value.label
+              assign tag_label_prefix = value.label | slice: 0, 2 | downcase
+              if tag_label_prefix == 'c-'
+                assign tag_display_label = value.label | slice: 2, value.label.size
+              endif
+              assign tag_value_handle = tag_display_value | handleize
+              assign tag_label_handle = tag_display_label | handleize
+              assign tag_is_vendor = false
+              for vendor in shop.vendors
+                assign vendor_prefix = vendor | slice: 0, 2 | downcase
+                assign vendor_without_c = vendor
+                if vendor_prefix == 'c-'
+                  assign vendor_without_c = vendor | slice: 2, vendor.size
+                endif
+                assign vendor_handle = vendor_without_c | handleize
+                if vendor == value.value or vendor == value.label or vendor_without_c == tag_display_value or vendor_without_c == tag_display_label or vendor_handle == tag_value_handle or vendor_handle == tag_label_handle
+                  assign tag_is_vendor = true
+                  break
+                endif
+              endfor
+              unless tag_is_vendor
+                assign filter_visible_count = filter_visible_count | plus: 1
+              endunless
+            endfor
+          endif
+
+          if filter_visible_count > max_visible_values and should_render_for_swatch == false
             assign render_show_more = true
           endif
         %}

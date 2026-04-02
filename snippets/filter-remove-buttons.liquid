@@ -73,11 +73,18 @@
           {% if value.swatch %}
             {% render 'swatch', swatch: value.swatch, mode: 'pill' %}
           {% endif %}
-
-          {% if filter.type == 'boolean' or show_filter_label %}
-            {{ filter.label | escape }}: {{ value.label | escape }}
-          {% else %}
-            {{ value.label | escape }}
+          {% if filter.param_name != 'filter.p.vendor' %}
+            {% if filter.type == 'boolean' or show_filter_label %}
+              {{ filter.label | escape }}: {{ value.label | slice: 2, value.label.size | escape }}
+            {% else %}
+              {{ value.label | slice: 2, value.label.size | escape }}
+            {% endif %}
+          {%  else %}
+            {% if filter.type == 'boolean' or show_filter_label %}
+              {{ filter.label | escape }}: {{ value.label | escape }}
+            {% else %}
+              {{ value.label | escape }}
+            {% endif %}
           {% endif %}
 
           <span class="svg-wrapper svg-wrapper--smaller">

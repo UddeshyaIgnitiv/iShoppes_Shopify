@@ -136,17 +136,46 @@
            assign max_price_val = filter.range_max | money_without_currency | replace: ',', ''
            assign current_min_val = filter.min_value.value | money_without_currency | replace: ',', '' | default: 0
            assign current_max_val = filter.max_value.value | money_without_currency | replace: ',', '' | default: max_price_val
+           assign max_price_num = max_price_val | times: 1
+           assign cur_min_num = current_min_val | times: 1
+           assign cur_max_num = current_max_val | times: 1
+           if max_price_num > 0
+             assign hl_left_pct = cur_min_num | times: 100.0 | divided_by: max_price_num
+             assign hl_width_pct = cur_max_num | minus: cur_min_num | times: 100.0 | divided_by: max_price_num
+             assign hl_max_pct = cur_max_num | times: 100.0 | divided_by: max_price_num
+           else
+             assign hl_left_pct = 0
+             assign hl_width_pct = 0
+             assign hl_max_pct = 0
+           endif
         -%}
 
         <div class="price-facet__slider-wrapper">
            <div class="price-facet__slider">
               <div class="price-facet__slider-track-bg"></div>
-              <div class="price-facet__slider-track-highlight" id="slider-highlight-{{ filter.label | escape }}" ref="sliderHighlight"></div>
+              <div
+                class="price-facet__slider-track-highlight"
+                id="slider-highlight-{{ filter.label | escape }}"
+                ref="sliderHighlight"
+                style="left: {{ hl_left_pct }}%; width: {{ hl_width_pct }}%;"
+              ></div>
+              <span
+                class="price-facet__slider-marker price-facet__slider-marker--min"
+                ref="minMarker"
+                aria-hidden="true"
+                style="left: {{ hl_left_pct }}%;"
+              ></span>
+              <span
+                class="price-facet__slider-marker price-facet__slider-marker--max"
+                ref="maxMarker"
+                aria-hidden="true"
+                style="left: {{ hl_max_pct }}%;"
+              ></span>
               <input 
                 type="range" 
                 min="0" 
                 max="{{ max_price_val }}" 
-                value="{{ current_min_val }}" 
+                value="{{ cur_min_num | round }}"
                 step="1"
                 class="price-facet__range-input price-facet__range-input--min"
                 id="slider-min-{{ filter.label | escape }}"
@@ -157,7 +186,7 @@
                 type="range" 
                 min="0" 
                 max="{{ max_price_val }}" 
-                value="{{ current_max_val }}" 
+                value="{{ cur_max_num | round }}"
                 step="1"
                 class="price-facet__range-input price-facet__range-input--max"
                 id="slider-max-{{ filter.label | escape }}"
@@ -217,19 +246,24 @@
   .price-facet__slider-wrapper {
     width: 100%;
     padding: 10px 0;
+    overflow: visible;
   }
 
   .price-facet__slider {
     position: relative;
-    height: 4px;
+    height: 28px;
     width: 100%;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
+    overflow: visible;
   }
 
   .price-facet__slider-track-bg {
     position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
     width: 100%;
     height: 4px;
     background-color: #e0e0e0;
@@ -239,22 +273,60 @@
 
   .price-facet__slider-track-highlight {
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     height: 4px;
     background-color: #3b82f6; /* Blue color */
     border-radius: 2px;
     z-index: 2;
   }
 
+  .price-facet__slider-marker {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: 3;
+    width: 20px;
+    height: 20px;
+    margin-left: 0;
+    border-radius: 50%;
+    background-color: #3b82f6;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
   .price-facet__range-input {
     position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
     pointer-events: none;
     -webkit-appearance: none;
     appearance: none;
-    z-index: 3;
     height: 4px;
     width: 100%;
     opacity: 0;
     margin: 0;
+  }
+
+  /* Min must stack above max so the min thumb receives drags; the min track passes
+     pointer events through to the max slider below (see runnable-track / moz-range-track). */
+  .price-facet__range-input--min {
+    z-index: 5;
+  }
+
+  .price-facet__range-input--max {
+    z-index: 4;
+  }
+
+  .price-facet__range-input::-webkit-slider-runnable-track {
+    pointer-events: none;
+  }
+
+  .price-facet__range-input::-moz-range-track {
+    pointer-events: none;
   }
 
   /* Webkit Thumb */

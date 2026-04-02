@@ -214,6 +214,8 @@ if (!customElements.get('facet-inputs-component')) {
  * @property {HTMLElement | undefined} minDisplay - The minimum display element
  * @property {HTMLElement | undefined} maxDisplay - The maximum display element
  * @property {HTMLElement | undefined} sliderHighlight - The slider highlight element
+ * @property {HTMLElement | undefined} minMarker - Visual handle at the min end of the slider
+ * @property {HTMLElement | undefined} maxMarker - Visual handle at the max end of the slider
  */
 
 /**
@@ -221,6 +223,9 @@ if (!customElements.get('facet-inputs-component')) {
  * @extends {Component<PriceFacetRefs>}
  */
 class PriceFacetComponent extends Component {
+  /** @type {boolean} */
+  #sliderDelegationBound = false;
+
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('keydown', this.#onKeyDown);
@@ -230,6 +235,14 @@ class PriceFacetComponent extends Component {
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('keydown', this.#onKeyDown);
+  }
+
+  /**
+   * Section morphing replaces inner nodes but keeps this element; re-bind refs and refresh the bar.
+   */
+  updatedCallback() {
+    super.updatedCallback();
+    this.#initSlider();
   }
 
   /**
@@ -261,17 +274,54 @@ class PriceFacetComponent extends Component {
   }
 
   /**
+   * Delegated listeners survive section morphing (replaced range inputs would otherwise drop handlers).
+   */
+  #delegatedSliderInput = (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement) || target.type !== 'range') return;
+    if (!target.classList.contains('price-facet__range-input')) return;
+    this.#onSliderInput(event);
+  };
+
+  #delegatedSliderChange = (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement) || target.type !== 'range') return;
+    if (!target.classList.contains('price-facet__range-input')) return;
+    this.#onSliderChange();
+  };
+
+  /**
    * Initializes the slider if range inputs exist
    */
   #initSlider() {
     const { minRange, maxRange } = this.refs;
-    if (minRange && maxRange) {
-      minRange.addEventListener('input', this.#onSliderInput.bind(this));
-      maxRange.addEventListener('input', this.#onSliderInput.bind(this));
-      minRange.addEventListener('change', this.#onSliderChange.bind(this));
-      maxRange.addEventListener('change', this.#onSliderChange.bind(this));
-      this.#updateSliderUI();
+    if (!minRange || !maxRange) return;
+
+    if (!this.#sliderDelegationBound) {
+      this.#sliderDelegationBound = true;
+      this.addEventListener('input', this.#delegatedSliderInput);
+      this.addEventListener('change', this.#delegatedSliderChange);
     }
+    this.#updateSliderUI();
+  }
+
+  /**
+   * @param {HTMLInputElement} input
+   * @returns {number}
+   */
+  #parseRangeMax(input) {
+    const raw = input.getAttribute('max') ?? input.max ?? '';
+    const m = parseFloat(String(raw).replace(/,/g, ''));
+    return Number.isFinite(m) && m > 0 ? m : 1;
+  }
+
+  /**
+   * @param {HTMLInputElement} input
+   * @returns {number}
+   */
+  #parseRangeCurrentValue(input) {
+    const v = parseFloat(String(input.value ?? '').replace(/,/g, ''));
+    return Number.isFinite(v) ? Math.round(v) : 0;
   }
 
   /**
@@ -280,19 +330,21 @@ class PriceFacetComponent extends Component {
    */
   #onSliderInput(event) {
     const { minRange, maxRange } = this.refs;
-    
+
     if (!minRange || !maxRange) return;
 
-    const minVal = parseInt(minRange.value);
-    const maxVal = parseInt(maxRange.value);
+    let minVal = this.#parseRangeCurrentValue(minRange);
+    let maxVal = this.#parseRangeCurrentValue(maxRange);
 
     // Prevent crossing
     if (minVal > maxVal - 1) {
       const target = event.target;
       if (target === minRange) {
-        minRange.value = (maxVal - 1).toString();
+        minVal = maxVal - 1;
+        minRange.value = String(minVal);
       } else {
-        maxRange.value = (minVal + 1).toString();
+        maxVal = minVal + 1;
+        maxRange.value = String(maxVal);
       }
     }
 
@@ -317,24 +369,28 @@ class PriceFacetComponent extends Component {
    * Updates the visual slider UI (highlight bar and text)
    */
   #updateSliderUI() {
-    const { minRange, maxRange, minDisplay, maxDisplay, sliderHighlight } = this.refs;
+    const { minRange, maxRange, minDisplay, maxDisplay, sliderHighlight, minMarker, maxMarker } =
+      this.refs;
 
     if (!minRange || !maxRange) return;
 
-    const minVal = parseInt(minRange.value);
-    const maxVal = parseInt(maxRange.value);
-    const maxRangeVal = parseInt(maxRange.max);
+    const minVal = this.#parseRangeCurrentValue(minRange);
+    const maxVal = this.#parseRangeCurrentValue(maxRange);
+    const denom = this.#parseRangeMax(maxRange);
 
     if (minDisplay) minDisplay.textContent = minVal.toString();
     if (maxDisplay) maxDisplay.textContent = maxVal.toString();
 
     if (sliderHighlight) {
-      const leftPercent = (minVal / maxRangeVal) * 100;
-      const widthPercent = ((maxVal - minVal) / maxRangeVal) * 100;
+      const leftPercent = (minVal / denom) * 100;
+      const widthPercent = ((maxVal - minVal) / denom) * 100;
 
       sliderHighlight.style.left = `${leftPercent}%`;
-      sliderHighlight.style.width = `${widthPercent}%`;
+      sliderHighlight.style.width = `${Math.max(0, widthPercent)}%`;
     }
+
+    if (minMarker) minMarker.style.left = `${(minVal / denom) * 100}%`;
+    if (maxMarker) maxMarker.style.left = `${(maxVal / denom) * 100}%`;
   }
 
   /**

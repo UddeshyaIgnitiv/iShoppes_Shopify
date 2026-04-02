@@ -10,7 +10,7 @@
   @param {boolean} [show_swatch_label] - Whether to show the swatch label
   @param {boolean} [in_drawer] - Whether the filter is in a drawer
 
-  For filter.p.tag, options that match a shop vendor (after stripping leading c- / C- from value, label, and vendor) are not rendered so vendor names stay in the vendor filter only.
+  For filter.p.tag, options are hidden when they match a shop vendor (after stripping leading c- / C-), or when value is c-Brands.
 {%- enddoc -%}
 
 {% liquid
@@ -25,8 +25,13 @@
   if filter.presentation == 'image'
     assign is_image = true
   endif
+  assign path_parts = request.path | strip | split: '/'
+  assign last_url_segment = path_parts | last
+  if last_url_segment == blank and collection.handle != blank
+    assign last_url_segment = collection.handle
+  endif
+  assign last_url_segment_handle = last_url_segment | handleize
 %}
-
 <accordion-custom
   class="facets__item"
   {% if filter_style == 'horizontal' %}
@@ -126,7 +131,7 @@
           endif
 
           assign filter_visible_count = filter.values.size
-          if filter.param_name == 'filter.p.tag' and shop.vendors != blank and shop.vendors.size > 0
+          if filter.param_name == 'filter.p.tag'
             assign filter_visible_count = 0
             for value in filter.values
               assign tag_display_value = value.value
@@ -142,19 +147,25 @@
               assign tag_value_handle = tag_display_value | handleize
               assign tag_label_handle = tag_display_label | handleize
               assign tag_is_vendor = false
-              for vendor in shop.vendors
-                assign vendor_prefix = vendor | slice: 0, 2 | downcase
-                assign vendor_without_c = vendor
-                if vendor_prefix == 'c-'
-                  assign vendor_without_c = vendor | slice: 2, vendor.size
-                endif
-                assign vendor_handle = vendor_without_c | handleize
-                if vendor == value.value or vendor == value.label or vendor_without_c == tag_display_value or vendor_without_c == tag_display_label or vendor_handle == tag_value_handle or vendor_handle == tag_label_handle
-                  assign tag_is_vendor = true
-                  break
-                endif
-              endfor
-              unless tag_is_vendor
+              if shop.vendors != blank and shop.vendors.size > 0
+                for vendor in shop.vendors
+                  assign vendor_prefix = vendor | slice: 0, 2 | downcase
+                  assign vendor_without_c = vendor
+                  if vendor_prefix == 'c-'
+                    assign vendor_without_c = vendor | slice: 2, vendor.size
+                  endif
+                  assign vendor_handle = vendor_without_c | handleize
+                  if vendor == value.value or vendor == value.label or vendor_without_c == tag_display_value or vendor_without_c == tag_display_label or vendor_handle == tag_value_handle or vendor_handle == tag_label_handle
+                    assign tag_is_vendor = true
+                    break
+                  endif
+                endfor
+              endif
+              assign skip_tag_for_count = tag_is_vendor
+              if value.value == "c-Brands" or value.value == "c-Special Offers" or value.value == 'c-Food' or value.value == 'c-Travel Exclusives' or value.value == 'c-Liquor & Wine' or value.value == 'c-Shopddf Category' or value.value == 'c-BEAUTY BRANDS' or value.value == 'c-Default Category' or value.value == 'c-Liquor Wine' or value.value == 'c-LIQUOR WINE BRANDS' or value.value == 'c-Liquor\' or value.value == 'c-Lancme' or value.value == 'c-Este Lauder' or value.value == 'c-haribo' or value.value == 'c-haribo(mix&match)' or value.value == 'c-Mens Skincare' or value.value == 'c-Womens Fragrance' or value.value == 'c-Womens Skincare' or value.value == 'c-Mens Fragrance' or value.value == 'c-LB' or value.value == 'c-haribbomixmatch' or value.label == last_url_segment
+                assign skip_tag_for_count = true
+              endif
+              unless skip_tag_for_count
                 assign filter_visible_count = filter_visible_count | plus: 1
               endunless
             endfor
@@ -231,7 +242,7 @@
             {%- for value in filter.values -%}
               {% liquid
                 assign skip_tag_value = false
-                if filter.param_name == 'filter.p.tag' and shop.vendors != blank and shop.vendors.size > 0
+                if filter.param_name == 'filter.p.tag'
                   assign tag_display_value = value.value
                   assign tag_value_prefix = value.value | slice: 0, 2 | downcase
                   if tag_value_prefix == 'c-'
@@ -245,23 +256,29 @@
                   assign tag_value_handle = tag_display_value | handleize
                   assign tag_label_handle = tag_display_label | handleize
                   assign tag_is_vendor = false
-                  for vendor in shop.vendors
-                    assign vendor_prefix = vendor | slice: 0, 2 | downcase
-                    assign vendor_without_c = vendor
-                    if vendor_prefix == 'c-'
-                      assign vendor_without_c = vendor | slice: 2, vendor.size
-                    endif
-                    assign vendor_handle = vendor_without_c | handleize
-                    if vendor == value.value or vendor == value.label or vendor_without_c == tag_display_value or vendor_without_c == tag_display_label or vendor_handle == tag_value_handle or vendor_handle == tag_label_handle
-                      assign tag_is_vendor = true
-                      break
-                    endif
-                  endfor
+                  if shop.vendors != blank and shop.vendors.size > 0
+                    for vendor in shop.vendors
+                      assign vendor_prefix = vendor | slice: 0, 2 | downcase
+                      assign vendor_without_c = vendor
+                      if vendor_prefix == 'c-'
+                        assign vendor_without_c = vendor | slice: 2, vendor.size
+                      endif
+                      assign vendor_handle = vendor_without_c | handleize
+                      if vendor == value.value or vendor == value.label or vendor_without_c == tag_display_value or vendor_without_c == tag_display_label or vendor_handle == tag_value_handle or vendor_handle == tag_label_handle
+                        assign tag_is_vendor = true
+                        break
+                      endif
+                    endfor
+                  endif
                   if tag_is_vendor
+                    assign skip_tag_value = true
+                  endif
+                  if value.value == "c-Brands" or value.value == "c-Special Offers" or value.value == 'c-Food' or value.value == 'c-Travel Exclusives' or value.value == 'c-Liquor & Wine' or value.value == 'c-Shopddf Category' or value.value == 'c-BEAUTY BRANDS' or value.value == 'c-Default Category' or value.value == 'c-Liquor Wine' or value.value == 'c-LIQUOR WINE BRANDS' or value.value == 'c-Liquor\' or value.value == 'c-Lancme' or value.value == 'c-Este Lauder' or value.value == 'c-haribo' or value.value == 'c-haribo(mix&match)' or value.value == 'c-Mens Skincare' or value.value == 'c-Womens Fragrance' or value.value == 'c-Womens Skincare' or value.value == 'c-Mens Fragrance' or value.value == 'c-LB' or value.value == 'c-haribbomixmatch' or tag_label_handle == last_url_segment_handle
                     assign skip_tag_value = true
                   endif
                 endif
               %}
+              {% comment %} {{ value.label }} {% endcomment %}
               {% unless skip_tag_value %}
               {% liquid
                 assign visible_index = visible_index | plus: 1

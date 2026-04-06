@@ -84,8 +84,12 @@
   {% unless block_settings.show_discount_promotion == false %}
     {% render 'product-discount-promotion',
       product_for_promo: product_resource,
-      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: '
+      variant_for_promo: selected_variant,
+      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: ',
+      probe_quantity: block_settings.discount_probe_quantity | default: 1,
+      probe_enabled: block_settings.discount_probe_enabled
     %}
+    <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
   {% endunless %}
 
   <div class="terminal-select-wrapper" style="margin-top: 15px;">
@@ -174,7 +178,7 @@
       "id": "show_discount_promotion",
       "label": "Show discount promotion",
       "default": true,
-      "info": "Uses the same discount title as the cart when this product is in the cart. If the cart is empty, set a product metafield: namespace custom, key discount_promotion_text."
+      "info": "Shows automatic discount titles from Shopify (same as cart). When the item is not in the cart, the theme briefly adds and removes a cart line to read discount data. Optional metafield custom.discount_promotion_text if you need a manual fallback."
     },
     {
       "type": "text",
@@ -182,6 +186,24 @@
       "label": "Promotion prefix",
       "default": "Limited Time offer: ",
       "visible_if": "{{ block.settings.show_discount_promotion }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "discount_probe_enabled",
+      "label": "Load automatic discount from cart API",
+      "default": true,
+      "info": "Uses a short add/remove cart request to read the same discount titles as checkout when the product is not in the cart. Set minimum quantity below if your discount requires more than one item (e.g. Buy 2).",
+      "visible_if": "{{ block.settings.show_discount_promotion }}"
+    },
+    {
+      "type": "range",
+      "id": "discount_probe_quantity",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 1,
+      "label": "Discount probe quantity",
+      "visible_if": "{{ block.settings.show_discount_promotion and block.settings.discount_probe_enabled }}"
     },
     {
       "type": "header",

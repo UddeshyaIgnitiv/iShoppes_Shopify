@@ -1,54 +1,70 @@
 {%- doc -%}
-  Surfaces line-level discount titles to match the cart (line_level_discount_allocations).
-  Shopify does not expose automatic discount names on the product object in Liquid; when the
-  product is not in the cart, optional product metafield custom.discount_promotion_text is used.
+  Line-level discount titles match the cart. Server-rendered when the cart already has the product.
+  Client script (product-discount-promotion.js) loads automatic discount titles via Cart Ajax when needed.
 {%- enddoc -%}
 
 {%- liquid
   assign promo_prefix = promo_prefix | default: ''
   assign product_for_promo = product_for_promo | default: closest.product
-  assign cart_line_count = 0
+  assign variant_for_promo = variant_for_promo | default: product_for_promo.selected_or_first_available_variant
+  assign probe_quantity = probe_quantity | default: 1
+  assign probe_enabled = probe_enabled | default: true
 
+  assign cart_line_count = 0
   for item in cart.items
     if item.product_id == product_for_promo.id
       assign cart_line_count = cart_line_count | plus: item.line_level_discount_allocations.size
     endif
   endfor
+
+  assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
+  assign fallback_attr = ''
+  if mf_promo != blank
+    assign fallback_attr = mf_promo.value | default: mf_promo | strip
+  endif
 -%}
 
-{%- if cart_line_count > 0 -%}
-  <div class="offer-text" data-offer-source="cart">
-    {%- assign prefix_shown = false -%}
-    {%- for item in cart.items -%}
-      {%- if item.product_id == product_for_promo.id -%}
-        {%- for discount in item.line_level_discount_allocations -%}
-          <div class="offer-text__line">
-            {%- if prefix_shown == false and promo_prefix != blank -%}
-              <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
-              {%- assign prefix_shown = true -%}
-            {%- endif -%}
-            <span class="offer-text__body">{{ discount.discount_application.title | escape }}</span>
-          </div>
-        {%- endfor -%}
-      {%- endif -%}
-    {%- endfor -%}
-  </div>
-{%- else -%}
-  {%- liquid
-    assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
-    assign inner_message = ''
-    if mf_promo != blank
-      assign inner_message = mf_promo.value | default: mf_promo
-    endif
-  -%}
-  {%- if inner_message != blank -%}
+<product-discount-promotion
+  class="product-discount-promotion"
+  data-product-id="{{ product_for_promo.id }}"
+  data-variant-id="{{ variant_for_promo.id }}"
+  data-probe-quantity="{{ probe_quantity }}"
+  data-probe-enabled="{% if probe_enabled == false %}false{% else %}true{% endif %}"
+  data-promo-prefix="{{ promo_prefix | escape }}"
+  data-cart-js-url="{{ routes.cart_url | append: '.js' }}"
+  data-cart-add-url="{{ routes.cart_add_url | append: '.js' }}"
+  data-cart-change-url="{{ routes.cart_change_url | append: '.js' }}"
+  {% if fallback_attr != blank %}
+    data-fallback-text="{{ fallback_attr | escape }}"
+  {% endif %}
+  role="region"
+  aria-live="polite"
+>
+  {%- if cart_line_count > 0 -%}
+    <div class="offer-text" data-offer-source="cart">
+      {%- assign prefix_shown = false -%}
+      {%- for item in cart.items -%}
+        {%- if item.product_id == product_for_promo.id -%}
+          {%- for discount in item.line_level_discount_allocations -%}
+            <div class="offer-text__line">
+              {%- if prefix_shown == false and promo_prefix != blank -%}
+                <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
+                {%- assign prefix_shown = true -%}
+              {%- endif -%}
+              <span class="offer-text__body">{{ discount.discount_application.title | escape }}</span>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- elsif fallback_attr != blank -%}
     <div class="offer-text" data-offer-source="metafield">
       <div class="offer-text__line">
         {%- if promo_prefix != blank -%}
           <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
         {%- endif -%}
-        <span class="offer-text__body">{{ inner_message | escape }}</span>
+        <span class="offer-text__body">{{ fallback_attr | escape }}</span>
       </div>
     </div>
   {%- endif -%}
-{%- endif -%}
+</product-discount-promotion>

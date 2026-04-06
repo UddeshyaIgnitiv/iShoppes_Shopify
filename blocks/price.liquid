@@ -46,6 +46,10 @@
     color: #000;
     margin-top: 10px;
     font-size: 0.9rem;
+    line-height: 1.35;
+  }
+  .offer-text__line + .offer-text__line {
+    margin-top: 0.25rem;
   }
   .terminal-select-btn {
     font-size: 16px;
@@ -76,10 +80,13 @@
     show_sale_price_first: block_settings.show_sale_price_first
   %}
 
-  {% comment %} <div class="offer-text">
-    Limited Time offer: Buy 4 Makeup/Skincare Products, Get 10% Off
-  </div> {% endcomment %}
-  
+  {% unless block_settings.show_discount_promotion == false %}
+    {% render 'product-discount-promotion',
+      product_for_promo: product_resource,
+      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: '
+    %}
+  {% endunless %}
+
   <div class="terminal-select-wrapper" style="margin-top: 15px;">
     <button class="terminal-select-btn">Select Terminal</button>
   </div>
@@ -160,6 +167,20 @@
       "id": "show_tax_info",
       "label": "t:settings.show_tax_info",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount_promotion",
+      "label": "Show discount promotion",
+      "default": true,
+      "info": "Uses the same discount title as the cart when this product is in the cart. If the cart is empty, set a product metafield: namespace custom, key discount_promotion_text."
+    },
+    {
+      "type": "text",
+      "id": "promotion_prefix",
+      "label": "Promotion prefix",
+      "default": "Limited Time offer: ",
+      "visible_if": "{{ block.settings.show_discount_promotion }}"
     },
     {
       "type": "header",

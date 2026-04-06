@@ -84,7 +84,8 @@
   {% unless block_settings.show_discount_promotion == false %}
     {% render 'product-discount-promotion',
       product_for_promo: product_resource,
-      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: '
+      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: ',
+      fallback_promotion_text: block_settings.fallback_promotion_text
     %}
   {% endunless %}
 
@@ -174,7 +175,7 @@
       "id": "show_discount_promotion",
       "label": "Show discount promotion",
       "default": true,
-      "info": "Uses the same discount title as the cart when this product is in the cart. If the cart is empty, set a product metafield: namespace custom, key discount_promotion_text."
+      "info": "While the product is in the cart, text comes from the cart discount (same as checkout). To show it before add to cart, use Default promotion message below, or product metafield custom.discount_promotion_text, or shop metafield custom.discount_promotion_fallback."
     },
     {
       "type": "text",
@@ -182,6 +183,14 @@
       "label": "Promotion prefix",
       "default": "Limited Time offer: ",
       "visible_if": "{{ block.settings.show_discount_promotion }}"
+    },
+    {
+      "type": "textarea",
+      "id": "fallback_promotion_text",
+      "label": "Default promotion message",
+      "default": "Buy 2 Save 15%",
+      "visible_if": "{{ block.settings.show_discount_promotion }}",
+      "info": "Shown on the product page when this item is not in the cart (Shopify does not expose automatic discount titles in Liquid until checkout). Match the discount title from Admin > Discounts. Per-product override: product metafield custom.discount_promotion_text. Global override: shop metafield custom.discount_promotion_fallback. Leave prefix empty if the full sentence is stored here."
     },
     {
       "type": "header",

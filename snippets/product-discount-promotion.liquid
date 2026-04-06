@@ -1,41 +1,19 @@
 {%- doc -%}
-  Line-level discount titles match the cart (line_level_discount_allocations). Shopify does not expose
-  automatic discount names on the product in Liquid, so when the product is not in the cart we use:
-  product metafield custom.discount_promotion_text, then block fallback, then shop metafield
-  custom.discount_promotion_fallback.
+  Surfaces line-level discount titles to match the cart (line_level_discount_allocations).
+  Shopify does not expose automatic discount names on the product object in Liquid; when the
+  product is not in the cart, optional product metafield custom.discount_promotion_text is used.
 {%- enddoc -%}
 
 {%- liquid
   assign promo_prefix = promo_prefix | default: ''
   assign product_for_promo = product_for_promo | default: closest.product
-  assign fallback_promotion_text = fallback_promotion_text | default: ''
-
   assign cart_line_count = 0
+
   for item in cart.items
     if item.product_id == product_for_promo.id
       assign cart_line_count = cart_line_count | plus: item.line_level_discount_allocations.size
     endif
   endfor
-
-  assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
-  assign product_mf_text = ''
-  if mf_promo != blank
-    assign product_mf_text = mf_promo.value | default: mf_promo | strip
-  endif
-
-  assign shop_mf = shop.metafields.custom.discount_promotion_fallback
-  assign shop_fallback_text = ''
-  if shop_mf != blank
-    assign shop_fallback_text = shop_mf.value | default: shop_mf | strip
-  endif
-
-  assign resolved_text = product_mf_text
-  if resolved_text == blank
-    assign resolved_text = fallback_promotion_text | strip
-  endif
-  if resolved_text == blank
-    assign resolved_text = shop_fallback_text
-  endif
 -%}
 
 {%- if cart_line_count > 0 -%}
@@ -55,13 +33,22 @@
       {%- endif -%}
     {%- endfor -%}
   </div>
-{%- elsif resolved_text != blank -%}
-  <div class="offer-text" data-offer-source="{% if product_mf_text != blank %}metafield{% elsif fallback_promotion_text != blank %}theme{% else %}shop_metafield{% endif %}">
-    <div class="offer-text__line">
-      {%- if promo_prefix != blank -%}
-        <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
-      {%- endif -%}
-      <span class="offer-text__body">{{ resolved_text | escape }}</span>
+{%- else -%}
+  {%- liquid
+    assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
+    assign inner_message = ''
+    if mf_promo != blank
+      assign inner_message = mf_promo.value | default: mf_promo
+    endif
+  -%}
+  {%- if inner_message != blank -%}
+    <div class="offer-text" data-offer-source="metafield">
+      <div class="offer-text__line">
+        {%- if promo_prefix != blank -%}
+          <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
+        {%- endif -%}
+        <span class="offer-text__body">{{ inner_message | escape }}</span>
+      </div>
     </div>
-  </div>
+  {%- endif -%}
 {%- endif -%}

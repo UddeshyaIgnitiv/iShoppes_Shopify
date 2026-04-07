@@ -82,12 +82,19 @@
   %}
 
   {% unless block_settings.show_discount_promotion == false %}
+    {% liquid
+      if block_settings.discount_probe_enabled == false
+        assign discount_probe_on = false
+      else
+        assign discount_probe_on = true
+      endif
+    %}
     {% render 'product-discount-promotion',
       product_for_promo: product_resource,
       variant_for_promo: selected_variant,
       promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: ',
       probe_quantity: block_settings.discount_probe_quantity | default: 1,
-      probe_enabled: block_settings.discount_probe_enabled
+      probe_enabled: discount_probe_on
     %}
     <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
   {% endunless %}

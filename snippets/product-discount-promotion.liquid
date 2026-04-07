@@ -40,11 +40,11 @@
   role="region"
   aria-live="polite"
 >
+  {{ product | json }}
+      {{ cart | json }}
   {% comment %} {%- if cart_line_count > 0 -%} {% endcomment %}
     <div class="offer-text" data-offer-source="cart">
       {%- assign prefix_shown = false -%}
-      {{ product | json }}
-      {{ cart | json }}
       {%- for item in product.items -%}
         {%- if item.product_id == product_for_promo.id -%}
           {%- for discount in item.line_level_discount_allocations -%}

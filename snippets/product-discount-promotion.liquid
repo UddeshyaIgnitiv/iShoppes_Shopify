@@ -25,7 +25,7 @@
 -%}
 
   {{ product | json }}
-      {% comment %} {{ cart.items | json }} {% endcomment %}
+      {{ cart.items | json }}
 <product-discount-promotion
   class="product-discount-promotion"
   data-product-id="{{ product_for_promo.id }}"

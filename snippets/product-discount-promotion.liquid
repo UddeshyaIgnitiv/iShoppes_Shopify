@@ -24,7 +24,7 @@
   endif
 -%}
 
-  {{ product | json }}
+  {% comment %} {{ product | json }} {% endcomment %}
       {{ cart | json }}
 <product-discount-promotion
   class="product-discount-promotion"

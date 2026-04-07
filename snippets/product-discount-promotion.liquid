@@ -40,14 +40,16 @@
   role="region"
   aria-live="polite"
 >
-  {%- if cart_line_count > 0 -%}
+  {% comment %} {%- if cart_line_count > 0 -%} {% endcomment %}
     <div class="offer-text" data-offer-source="cart">
       {%- assign prefix_shown = false -%}
-      {%- for item in cart.items -%}
+      {{ product | json }}
+      {%- for item in product.items -%}
         {%- if item.product_id == product_for_promo.id -%}
           {%- for discount in item.line_level_discount_allocations -%}
             <div class="offer-text__line">
               {%- if prefix_shown == false and promo_prefix != blank -%}
+                nithin
                 <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
                 {%- assign prefix_shown = true -%}
               {%- endif -%}
@@ -57,14 +59,14 @@
         {%- endif -%}
       {%- endfor -%}
     </div>
-  {%- elsif fallback_attr != blank -%}
+  {% comment %} {%- elsif fallback_attr != blank -%}
     <div class="offer-text" data-offer-source="metafield">
       <div class="offer-text__line">
         {%- if promo_prefix != blank -%}
-          <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
+          <span class="offer-text__prefix">vihaan{{ promo_prefix | escape }}</span>
         {%- endif -%}
         <span class="offer-text__body">{{ fallback_attr | escape }}</span>
       </div>
     </div>
-  {%- endif -%}
+  {%- endif -%} {% endcomment %}
 </product-discount-promotion>

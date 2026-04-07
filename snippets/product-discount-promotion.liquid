@@ -24,8 +24,6 @@
   endif
 -%}
 
-  {{ product | json }}
-      {% comment %} {{ cart.items | json }} {% endcomment %}
 <product-discount-promotion
   class="product-discount-promotion"
   data-product-id="{{ product_for_promo.id }}"
@@ -42,15 +40,14 @@
   role="region"
   aria-live="polite"
 >
-  {% comment %} {%- if cart_line_count > 0 -%} {% endcomment %}
+  {%- if cart_line_count > 0 -%}
     <div class="offer-text" data-offer-source="cart">
       {%- assign prefix_shown = false -%}
-      {%- for item in product.items -%}
+      {%- for item in cart.items -%}
         {%- if item.product_id == product_for_promo.id -%}
           {%- for discount in item.line_level_discount_allocations -%}
             <div class="offer-text__line">
               {%- if prefix_shown == false and promo_prefix != blank -%}
-                nithin
                 <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
                 {%- assign prefix_shown = true -%}
               {%- endif -%}
@@ -60,14 +57,14 @@
         {%- endif -%}
       {%- endfor -%}
     </div>
-  {% comment %} {%- elsif fallback_attr != blank -%}
+  {%- elsif fallback_attr != blank -%}
     <div class="offer-text" data-offer-source="metafield">
       <div class="offer-text__line">
         {%- if promo_prefix != blank -%}
-          <span class="offer-text__prefix">vihaan{{ promo_prefix | escape }}</span>
+          <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
         {%- endif -%}
         <span class="offer-text__body">{{ fallback_attr | escape }}</span>
       </div>
     </div>
-  {%- endif -%} {% endcomment %}
+  {%- endif -%}
 </product-discount-promotion>

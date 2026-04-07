@@ -23,7 +23,9 @@ class ProductDiscountPromotion extends HTMLElement {
   #abort;
 
   connectedCallback() {
-    this.#refresh();
+    requestAnimationFrame(() => {
+      this.#refresh();
+    });
     const section = this.closest('.shopify-section, dialog');
     section?.addEventListener(ThemeEvents.variantUpdate, this.#onVariantUpdate);
   }
@@ -130,7 +132,7 @@ class ProductDiscountPromotion extends HTMLElement {
   async #fetchCart(signal) {
     const url = this.dataset.cartJsUrl || (globalThis.Theme?.routes?.cart_url ? `${globalThis.Theme.routes.cart_url}.js` : null);
     if (!url) throw new Error('missing cart url');
-    const res = await fetch(url, { signal });
+    const res = await fetch(url, { credentials: 'same-origin', signal });
     return parseCartJson(res);
   }
 
@@ -190,15 +192,34 @@ class ProductDiscountPromotion extends HTMLElement {
             ],
           }),
         }),
+        credentials: 'same-origin',
         signal,
       });
-      await parseCartJson(addRes);
+      const addData = await parseCartJson(addRes);
+
+      /** Discount titles from POST /cart/add.js (often populated even when GET /cart.js omits them) */
+      let fromAdd = [];
+      const addedItems = addData.items;
+      if (Array.isArray(addedItems)) {
+        const probeItem = addedItems.find((it) => this.#isProbeLine(it, token));
+        const variantItem =
+          probeItem || addedItems.find((it) => String(it.variant_id) === String(variantId));
+        if (variantItem) {
+          fromAdd = lineDiscountTitles(variantItem);
+        }
+      }
 
       const cart = await this.#fetchCart(signal);
       const idx = (cart.items || []).findIndex((item) => this.#isProbeLine(item, token));
-      if (idx === -1) return [];
-      const linePart = lineDiscountTitles(cart.items[idx]);
-      return mergeUniqueTitles(linePart, cartLevelDiscountTitles(cart));
+      let fromCartLine = [];
+      if (idx !== -1) {
+        fromCartLine = lineDiscountTitles(cart.items[idx]);
+      }
+
+      return mergeUniqueTitles(
+        mergeUniqueTitles(fromAdd, fromCartLine),
+        cartLevelDiscountTitles(cart)
+      );
     } finally {
       await this.#cleanupProbeLine(token, signal);
     }
@@ -231,6 +252,7 @@ class ProductDiscountPromotion extends HTMLElement {
       ...fetchConfig('json', {
         body: JSON.stringify({ line, quantity }),
       }),
+      credentials: 'same-origin',
       signal,
     });
     await parseCartJson(changeRes);

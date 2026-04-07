@@ -15,9 +15,8 @@ async function parseCartJson(res) {
 }
 
 /**
- * Reads automatic / line-level discount titles the same way the cart does, using the Cart Ajax API.
- * When the PDP has no matching cart line, briefly adds the variant with a hidden property, reads
- * `discounts` from /cart.js, then removes that line.
+ * Collects all discount titles applicable to show on the PDP: line-level (per variant) plus
+ * cart-level applications from cart.js when present. Uses Cart Ajax (existing lines or probe).
  */
 class ProductDiscountPromotion extends HTMLElement {
   /** @type {AbortController | undefined} */
@@ -54,30 +53,75 @@ class ProductDiscountPromotion extends HTMLElement {
     const variantId = this.dataset.variantId;
     if (!productId || !variantId) return;
 
+    this.dataset.automaticDiscount = 'checking';
+    delete this.dataset.discountSource;
+
     const probeEnabled = this.dataset.probeEnabled !== 'false';
     const probeQty = Math.max(1, Math.min(20, parseInt(this.dataset.probeQuantity || '1', 10) || 1));
 
     try {
       const cart = await this.#fetchCart(signal);
-      let titles = this.#titlesFromCart(cart, productId, variantId);
+      const lineTitles = this.#titlesFromCart(cart, productId, variantId);
+      const cartLevel = cartLevelDiscountTitles(cart);
+      let titles = mergeUniqueTitles(lineTitles, cartLevel);
+      let discountSource = lineTitles.length > 0 ? 'cart' : cartLevel.length > 0 ? 'cart' : null;
 
-      if (titles.length === 0 && probeEnabled) {
-        titles = await this.#probe(variantId, probeQty, signal);
+      if (lineTitles.length === 0 && probeEnabled) {
+        const probed = await this.#probe(variantId, probeQty, signal);
+        if (probed.length > 0) discountSource = 'probe';
+        titles = mergeUniqueTitles(titles, probed);
       }
 
       if (titles.length > 0) {
-        this.#renderLines(titles, 'ajax');
+        const src = discountSource === 'probe' ? 'probe' : 'cart';
+        this.dataset.automaticDiscount = 'eligible';
+        this.dataset.discountSource = src;
+        this.#renderLines(titles, src);
+        this.#emitResolved(true, src, titles);
       } else if (this.dataset.fallbackText) {
+        this.dataset.automaticDiscount = 'fallback';
+        this.dataset.discountSource = 'metafield';
         this.#renderSingle(this.dataset.fallbackText, 'metafield');
+        this.#emitResolved(false, 'metafield', []);
       } else if (!this.innerHTML.trim()) {
+        this.dataset.automaticDiscount = 'none';
+        this.#emitResolved(false, 'none', []);
         this.replaceChildren();
+      } else {
+        this.dataset.automaticDiscount = 'eligible';
+        this.dataset.discountSource = 'cart-ssr';
+        this.#emitResolved(true, 'cart-ssr', []);
       }
     } catch (e) {
-      if (e?.name === 'AbortError') return;
+      if (e?.name === 'AbortError') {
+        delete this.dataset.automaticDiscount;
+        delete this.dataset.discountSource;
+        return;
+      }
       if (this.dataset.fallbackText) {
+        this.dataset.automaticDiscount = 'fallback';
+        this.dataset.discountSource = 'metafield';
         this.#renderSingle(this.dataset.fallbackText, 'metafield');
+        this.#emitResolved(false, 'metafield', []);
+      } else {
+        this.dataset.automaticDiscount = 'error';
+        this.#emitResolved(false, 'error', []);
       }
     }
+  }
+
+  /**
+   * @param {boolean} automaticEligible
+   * @param {'cart' | 'probe' | 'metafield' | 'none' | 'error' | 'cart-ssr'} source
+   * @param {string[]} titles
+   */
+  #emitResolved(automaticEligible, source, titles) {
+    this.dispatchEvent(
+      new CustomEvent('product-discount-promotion:resolved', {
+        bubbles: true,
+        detail: { automaticEligible, source, titles },
+      })
+    );
   }
 
   /**
@@ -153,7 +197,8 @@ class ProductDiscountPromotion extends HTMLElement {
       const cart = await this.#fetchCart(signal);
       const idx = (cart.items || []).findIndex((item) => this.#isProbeLine(item, token));
       if (idx === -1) return [];
-      return lineDiscountTitles(cart.items[idx]);
+      const linePart = lineDiscountTitles(cart.items[idx]);
+      return mergeUniqueTitles(linePart, cartLevelDiscountTitles(cart));
     } finally {
       await this.#cleanupProbeLine(token, signal);
     }
@@ -253,19 +298,60 @@ class ProductDiscountPromotion extends HTMLElement {
  * @returns {string[]}
  */
 function lineDiscountTitles(line) {
+  const seen = new Set();
   const out = [];
+  const push = (/** @type {string | undefined} */ t) => {
+    const s = t == null ? '' : String(t).trim();
+    if (!s || seen.has(s)) return;
+    seen.add(s);
+    out.push(s);
+  };
+
   const discounts = line.discounts;
   if (Array.isArray(discounts)) {
     for (const d of discounts) {
-      const t = d?.title || d?.discount_application?.title;
-      if (t) out.push(String(t));
+      push(d?.title || d?.discount_application?.title);
     }
   }
-  if (out.length === 0 && Array.isArray(line.line_level_discount_allocations)) {
+  if (Array.isArray(line.line_level_discount_allocations)) {
     for (const alloc of line.line_level_discount_allocations) {
-      const t = alloc?.discount_application?.title;
-      if (t) out.push(String(t));
+      push(alloc?.discount_application?.title);
     }
+  }
+  return out;
+}
+
+/**
+ * @param {any} cart
+ * @returns {string[]}
+ */
+function cartLevelDiscountTitles(cart) {
+  const apps = cart?.cart_level_discount_applications;
+  if (!Array.isArray(apps)) return [];
+  const seen = new Set();
+  const out = [];
+  for (const a of apps) {
+    const t = a?.title || a?.discount_application?.title;
+    const s = t == null ? '' : String(t).trim();
+    if (!s || seen.has(s)) continue;
+    seen.add(s);
+    out.push(s);
+  }
+  return out;
+}
+
+/**
+ * @param {string[]} a
+ * @param {string[]} b
+ */
+function mergeUniqueTitles(a, b) {
+  const seen = new Set();
+  const out = [];
+  for (const t of [...a, ...b]) {
+    const s = String(t).trim();
+    if (!s || seen.has(s)) continue;
+    seen.add(s);
+    out.push(s);
   }
   return out;
 }

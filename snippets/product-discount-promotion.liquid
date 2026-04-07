@@ -24,6 +24,8 @@
   endif
 -%}
 
+  {{ product | json }}
+      {{ cart.items | json }}
 <product-discount-promotion
   class="product-discount-promotion"
   data-product-id="{{ product_for_promo.id }}"
@@ -43,6 +45,7 @@
   {% comment %} {%- if cart_line_count > 0 -%} {% endcomment %}
     <div class="offer-text" data-offer-source="cart">
       {%- assign prefix_shown = false -%}
+      {%- for item in product.items -%}
         {%- if item.product_id == product_for_promo.id -%}
           {%- for discount in item.line_level_discount_allocations -%}
             <div class="offer-text__line">
@@ -55,6 +58,7 @@
             </div>
           {%- endfor -%}
         {%- endif -%}
+      {%- endfor -%}
     </div>
   {% comment %} {%- elsif fallback_attr != blank -%}
     <div class="offer-text" data-offer-source="metafield">

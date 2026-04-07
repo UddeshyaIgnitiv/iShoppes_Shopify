@@ -24,6 +24,8 @@
   endif
 -%}
 
+  {{ product | json }}
+      {{ cart | json }}
 <product-discount-promotion
   class="product-discount-promotion"
   data-product-id="{{ product_for_promo.id }}"
@@ -40,8 +42,6 @@
   role="region"
   aria-live="polite"
 >
-  {{ product | json }}
-      {{ cart | json }}
   {% comment %} {%- if cart_line_count > 0 -%} {% endcomment %}
     <div class="offer-text" data-offer-source="cart">
       {%- assign prefix_shown = false -%}

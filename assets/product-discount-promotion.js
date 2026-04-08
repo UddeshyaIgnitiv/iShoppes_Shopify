@@ -14,7 +14,7 @@ async function parseCartJson(res) {
 /**
  * Read-only Cart Ajax: GET /cart.js only. Shows line + cart-level discount titles when the variant
  * is already in the cart. Does not add or remove cart lines. When the cart has no matching line,
- * use product metafield custom.discount_promotion_text (rendered as data-fallback-text).
+ * use data-fallback-text (metafield and/or theme default from Liquid).
  */
 class ProductDiscountPromotion extends HTMLElement {
   /** @type {AbortController | undefined} */
@@ -70,9 +70,9 @@ class ProductDiscountPromotion extends HTMLElement {
         this.#emitResolved(true, src, titles);
       } else if (this.dataset.fallbackText) {
         this.dataset.automaticDiscount = 'fallback';
-        this.dataset.discountSource = 'metafield';
-        this.#renderSingle(this.dataset.fallbackText, 'metafield');
-        this.#emitResolved(false, 'metafield', []);
+        this.dataset.discountSource = 'fallback';
+        this.#renderSingle(this.dataset.fallbackText, 'fallback');
+        this.#emitResolved(false, 'fallback', []);
       } else if (!this.innerHTML.trim()) {
         this.dataset.automaticDiscount = 'none';
         this.#emitResolved(false, 'none', []);
@@ -90,9 +90,9 @@ class ProductDiscountPromotion extends HTMLElement {
       }
       if (this.dataset.fallbackText) {
         this.dataset.automaticDiscount = 'fallback';
-        this.dataset.discountSource = 'metafield';
-        this.#renderSingle(this.dataset.fallbackText, 'metafield');
-        this.#emitResolved(false, 'metafield', []);
+        this.dataset.discountSource = 'fallback';
+        this.#renderSingle(this.dataset.fallbackText, 'fallback');
+        this.#emitResolved(false, 'fallback', []);
       } else {
         this.dataset.automaticDiscount = 'error';
         this.#emitResolved(false, 'error', []);
@@ -102,7 +102,7 @@ class ProductDiscountPromotion extends HTMLElement {
 
   /**
    * @param {boolean} automaticEligible
-   * @param {'cart' | 'metafield' | 'none' | 'error'} source
+   * @param {'cart' | 'fallback' | 'none' | 'error'} source
    * @param {string[]} titles
    */
   #emitResolved(automaticEligible, source, titles) {

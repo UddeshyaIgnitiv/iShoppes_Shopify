@@ -90,9 +90,9 @@ class ProductDiscountPromotion extends HTMLElement {
         this.#emitResolved(false, 'none', []);
         this.replaceChildren();
       } else {
-        this.dataset.automaticDiscount = 'eligible';
-        this.dataset.discountSource = 'cart-ssr';
-        this.#emitResolved(true, 'cart-ssr', []);
+        this.dataset.automaticDiscount = 'none';
+        this.#emitResolved(false, 'none', []);
+        this.replaceChildren();
       }
     } catch (e) {
       if (e?.name === 'AbortError') {
@@ -114,7 +114,7 @@ class ProductDiscountPromotion extends HTMLElement {
 
   /**
    * @param {boolean} automaticEligible
-   * @param {'cart' | 'probe' | 'metafield' | 'none' | 'error' | 'cart-ssr'} source
+   * @param {'cart' | 'probe' | 'metafield' | 'none' | 'error'} source
    * @param {string[]} titles
    */
   #emitResolved(automaticEligible, source, titles) {

@@ -1,6 +1,8 @@
 {%- doc -%}
-  Lists all discount titles available from Shopify for this PDP: line-level (current variant) and cart-level
-  applications when present. Full resolution also runs in product-discount-promotion.js (Cart Ajax + probe).
+  Automatic discount titles are not available on the product in Liquid. This snippet only outputs the
+  custom element + optional manual metafield fallback. product-discount-promotion.js loads discounts by
+  calling Cart Ajax (GET /cart.js, and a short add/read/remove probe when the cart is empty or the line
+  has no discount data). No cart iteration happens in Liquid.
 {%- enddoc -%}
 
 {%- liquid
@@ -9,19 +11,6 @@
   assign variant_for_promo = variant_for_promo | default: product_for_promo.selected_or_first_available_variant
   assign probe_quantity = probe_quantity | default: 1
   assign probe_enabled = probe_enabled | default: true
-
-  assign cart_line_count = 0
-  for item in cart.items
-    if item.product_id == product_for_promo.id and item.variant_id == variant_for_promo.id
-      assign cart_line_count = cart_line_count | plus: item.line_level_discount_allocations.size
-    endif
-  endfor
-
-  assign cart_level_count = cart.cart_level_discount_applications | size
-  assign has_cart_discount_ssr = false
-  if cart_line_count > 0 or cart_level_count > 0
-    assign has_cart_discount_ssr = true
-  endif
 
   assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
   assign fallback_attr = ''
@@ -46,34 +35,8 @@
   role="region"
   aria-live="polite"
 >
-  {%- if has_cart_discount_ssr -%}
-    <div class="offer-text" data-offer-source="cart">
-      {%- assign prefix_shown = false -%}
-      {%- for item in cart.items -%}
-        {%- if item.product_id == product_for_promo.id and item.variant_id == variant_for_promo.id -%}
-          {%- for discount in item.line_level_discount_allocations -%}
-            <div class="offer-text__line offer-text__line--line-level">
-              {%- if prefix_shown == false and promo_prefix != blank -%}
-                <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
-                {%- assign prefix_shown = true -%}
-              {%- endif -%}
-              <span class="offer-text__body">{{ discount.discount_application.title | escape }}</span>
-            </div>
-          {%- endfor -%}
-        {%- endif -%}
-      {%- endfor -%}
-      {%- for application in cart.cart_level_discount_applications -%}
-        <div class="offer-text__line offer-text__line--cart-level">
-          {%- if prefix_shown == false and promo_prefix != blank -%}
-            <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
-            {%- assign prefix_shown = true -%}
-          {%- endif -%}
-          <span class="offer-text__body">{{ application.title | escape }}</span>
-        </div>
-      {%- endfor -%}
-    </div>
-  {%- elsif fallback_attr != blank -%}
-    <div class="offer-text" data-offer-source="metafield">
+  {%- if fallback_attr != blank -%}
+    <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
       <div class="offer-text__line">
         {%- if promo_prefix != blank -%}
           <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>

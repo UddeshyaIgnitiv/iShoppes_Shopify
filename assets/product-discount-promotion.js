@@ -4,7 +4,7 @@ import { ThemeEvents } from '@theme/events';
 const PROBE_KEY = '_pdp_discount_probe';
 
 /** @param {Response} res */
-async function parseCartJson(res) {
+async function parseCartJson(res) { 
   const data = await res.json();
   if (!res.ok) throw new Error(data?.description || data?.message || 'request failed');
   const s = data?.status;
@@ -69,7 +69,7 @@ class ProductDiscountPromotion extends HTMLElement {
       let discountSource = lineTitles.length > 0 ? 'cart' : cartLevel.length > 0 ? 'cart' : null;
 
       if (lineTitles.length === 0 && probeEnabled) {
-        const probed = await this.#probe(variantId, probeQty, signal);
+        const probed = await this.#probeSequence(variantId, probeQty, signal);
         if (probed.length > 0) discountSource = 'probe';
         titles = mergeUniqueTitles(titles, probed);
       }
@@ -167,6 +167,23 @@ class ProductDiscountPromotion extends HTMLElement {
     if (v == null || v === '') return false;
     if (token != null && token !== '') return String(v) === String(token);
     return true;
+  }
+
+  /**
+   * Tries the configured probe quantity first. If no discount titles (typical for "Buy 2" rules when qty was 1),
+   * retries once at quantity 2 when the first attempt used qty 1.
+   *
+   * @param {string} variantId
+   * @param {number} configuredQty
+   * @param {AbortSignal} signal
+   */
+  async #probeSequence(variantId, configuredQty, signal) {
+    let found = await this.#probe(variantId, configuredQty, signal);
+    if (found.length > 0) return found;
+    if (configuredQty === 1) {
+      found = await this.#probe(variantId, 2, signal);
+    }
+    return found;
   }
 
   /**

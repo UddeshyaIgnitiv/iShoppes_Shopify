@@ -1,21 +1,21 @@
 {%- doc -%}
-  Automatic discount titles are not available on the product in Liquid. This snippet only outputs the
-  custom element + optional manual metafield fallback. product-discount-promotion.js loads discounts by
-  calling Cart Ajax (GET /cart.js, and a short add/read/remove probe when the cart is empty or the line
-  has no discount data). No cart iteration happens in Liquid.
+  Live automatic discount titles: read-only GET /cart.js when the variant is in the cart (no add/remove).
+  When the cart is empty: product metafield custom.discount_promotion_text overrides; otherwise the Price block
+  “Default promotion (empty cart)” setting is used.
 {%- enddoc -%}
 
 {%- liquid
   assign promo_prefix = promo_prefix | default: ''
   assign product_for_promo = product_for_promo | default: closest.product
   assign variant_for_promo = variant_for_promo | default: product_for_promo.selected_or_first_available_variant
-  assign probe_quantity = probe_quantity | default: 1
-  assign probe_enabled = probe_enabled | default: true
+  assign empty_cart_promotion = empty_cart_promotion | default: ''
 
   assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
   assign fallback_attr = ''
   if mf_promo != blank
     assign fallback_attr = mf_promo.value | default: mf_promo | strip
+  elsif empty_cart_promotion != blank
+    assign fallback_attr = empty_cart_promotion | strip
   endif
 -%}
 
@@ -23,12 +23,8 @@
   class="product-discount-promotion"
   data-product-id="{{ product_for_promo.id }}"
   data-variant-id="{{ variant_for_promo.id }}"
-  data-probe-quantity="{{ probe_quantity }}"
-  data-probe-enabled="{% if probe_enabled == false %}false{% else %}true{% endif %}"
   data-promo-prefix="{{ promo_prefix | escape }}"
   data-cart-js-url="{{ routes.cart_url | append: '.js' }}"
-  data-cart-add-url="{{ routes.cart_add_url | append: '.js' }}"
-  data-cart-change-url="{{ routes.cart_change_url | append: '.js' }}"
   {% if fallback_attr != blank %}
     data-fallback-text="{{ fallback_attr | escape }}"
   {% endif %}
@@ -36,7 +32,7 @@
   aria-live="polite"
 >
   {%- if fallback_attr != blank -%}
-    <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
+    <div class="offer-text offer-text--placeholder" data-offer-source="fallback">
       <div class="offer-text__line">
         {%- if promo_prefix != blank -%}
           <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>

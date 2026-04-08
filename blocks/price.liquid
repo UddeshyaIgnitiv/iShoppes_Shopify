@@ -85,7 +85,8 @@
     {% render 'product-discount-promotion',
       product_for_promo: product_resource,
       variant_for_promo: selected_variant,
-      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: '
+      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: ',
+      empty_cart_promotion: block_settings.empty_cart_promotion_text | default: 'Buy 2 Save 15%: Grey Goose Buy 2 Save 15% All Flavors'
     %}
     <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
   {% endunless %}
@@ -176,7 +177,7 @@
       "id": "show_discount_promotion",
       "label": "Show discount promotion",
       "default": true,
-      "info": "Reads discount titles with GET /cart.js only (no automatic add to cart). Shows live titles when this variant is in the cart. When the cart is empty, set product metafield custom.discount_promotion_text to show the same promotion copy."
+      "info": "Live discount titles use read-only GET /cart.js when this variant is in the cart (nothing is added automatically). When the cart is empty, text comes from “Default promotion (empty cart)” below, or from product metafield custom.discount_promotion_text when set."
     },
     {
       "type": "text",
@@ -184,6 +185,14 @@
       "label": "Promotion prefix",
       "default": "Limited Time offer: ",
       "visible_if": "{{ block.settings.show_discount_promotion }}"
+    },
+    {
+      "type": "textarea",
+      "id": "empty_cart_promotion_text",
+      "label": "Default promotion (empty cart)",
+      "default": "Buy 2 Save 15%: Grey Goose Buy 2 Save 15% All Flavors",
+      "visible_if": "{{ block.settings.show_discount_promotion }}",
+      "info": "Shown when this variant is not in the cart. Must match your automatic discount messaging in Admin. Per-product override: metafield custom.discount_promotion_text."
     },
     {
       "type": "header",

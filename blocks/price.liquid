@@ -82,19 +82,10 @@
   %}
 
   {% unless block_settings.show_discount_promotion == false %}
-    {% liquid
-      if block_settings.discount_probe_enabled == false
-        assign discount_probe_on = false
-      else
-        assign discount_probe_on = true
-      endif
-    %}
     {% render 'product-discount-promotion',
       product_for_promo: product_resource,
       variant_for_promo: selected_variant,
-      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: ',
-      probe_quantity: block_settings.discount_probe_quantity | default: 2,
-      probe_enabled: discount_probe_on
+      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: '
     %}
     <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
   {% endunless %}
@@ -185,7 +176,7 @@
       "id": "show_discount_promotion",
       "label": "Show discount promotion",
       "default": true,
-      "info": "Shows automatic discount titles from Shopify (same as cart). When the item is not in the cart, the theme briefly adds and removes a cart line to read discount data. Optional metafield custom.discount_promotion_text if you need a manual fallback."
+      "info": "Reads discount titles with GET /cart.js only (no automatic add to cart). Shows live titles when this variant is in the cart. When the cart is empty, set product metafield custom.discount_promotion_text to show the same promotion copy."
     },
     {
       "type": "text",
@@ -193,25 +184,6 @@
       "label": "Promotion prefix",
       "default": "Limited Time offer: ",
       "visible_if": "{{ block.settings.show_discount_promotion }}"
-    },
-    {
-      "type": "checkbox",
-      "id": "discount_probe_enabled",
-      "label": "Load automatic discount from cart API",
-      "default": true,
-      "info": "Uses a short add/remove cart request to read discount titles when the product is not in the cart. If the first attempt finds nothing, the theme retries at quantity 2 for common “Buy 2” automatic discounts.",
-      "visible_if": "{{ block.settings.show_discount_promotion }}"
-    },
-    {
-      "type": "range",
-      "id": "discount_probe_quantity",
-      "min": 1,
-      "max": 20,
-      "step": 1,
-      "default": 2,
-      "label": "Discount probe quantity",
-      "info": "Use at least the minimum units your discount requires (e.g. 2 for “Buy 2 Save 15%”). Default 2.",
-      "visible_if": "{{ block.settings.show_discount_promotion and block.settings.discount_probe_enabled }}"
     },
     {
       "type": "header",

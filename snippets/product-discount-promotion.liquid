@@ -1,21 +1,18 @@
 {%- doc -%}
-  Live automatic discount titles: read-only GET /cart.js when the variant is in the cart (no add/remove).
-  When the cart is empty: product metafield custom.discount_promotion_text overrides; otherwise the Price block
-  “Default promotion (empty cart)” setting is used.
+  Discount titles from Shopify automatic discounts are not available on the product object in Liquid.
+  This element uses read-only GET /cart.js (no add/remove) when the variant is in the cart. For visitors
+  with an empty cart, set product metafield custom.discount_promotion_text to mirror your promotion copy.
 {%- enddoc -%}
 
 {%- liquid
   assign promo_prefix = promo_prefix | default: ''
   assign product_for_promo = product_for_promo | default: closest.product
   assign variant_for_promo = variant_for_promo | default: product_for_promo.selected_or_first_available_variant
-  assign empty_cart_promotion = empty_cart_promotion | default: ''
 
   assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
   assign fallback_attr = ''
   if mf_promo != blank
     assign fallback_attr = mf_promo.value | default: mf_promo | strip
-  elsif empty_cart_promotion != blank
-    assign fallback_attr = empty_cart_promotion | strip
   endif
 -%}
 
@@ -32,7 +29,7 @@
   aria-live="polite"
 >
   {%- if fallback_attr != blank -%}
-    <div class="offer-text offer-text--placeholder" data-offer-source="fallback">
+    <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
       <div class="offer-text__line">
         {%- if promo_prefix != blank -%}
           <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>

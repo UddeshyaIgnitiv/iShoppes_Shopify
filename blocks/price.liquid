@@ -93,7 +93,7 @@
       product_for_promo: product_resource,
       variant_for_promo: selected_variant,
       promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: ',
-      probe_quantity: block_settings.discount_probe_quantity | default: 1,
+      probe_quantity: block_settings.discount_probe_quantity | default: 2,
       probe_enabled: discount_probe_on
     %}
     <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
@@ -199,7 +199,7 @@
       "id": "discount_probe_enabled",
       "label": "Load automatic discount from cart API",
       "default": true,
-      "info": "Uses a short add/remove cart request to read the same discount titles as checkout when the product is not in the cart. Set minimum quantity below if your discount requires more than one item (e.g. Buy 2).",
+      "info": "Uses a short add/remove cart request to read discount titles when the product is not in the cart. If the first attempt finds nothing, the theme retries at quantity 2 for common “Buy 2” automatic discounts.",
       "visible_if": "{{ block.settings.show_discount_promotion }}"
     },
     {
@@ -208,8 +208,9 @@
       "min": 1,
       "max": 20,
       "step": 1,
-      "default": 1,
+      "default": 2,
       "label": "Discount probe quantity",
+      "info": "Use at least the minimum units your discount requires (e.g. 2 for “Buy 2 Save 15%”). Default 2.",
       "visible_if": "{{ block.settings.show_discount_promotion and block.settings.discount_probe_enabled }}"
     },
     {
@@ -509,7 +510,7 @@
       "unit": "px",
       "default": 0
     }
-  ],
+  ], 
   "presets": [
     {
       "name": "t:names.product_price",

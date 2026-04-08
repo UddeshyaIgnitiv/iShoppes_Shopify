@@ -1,10 +1,7 @@
-import { fetchConfig } from '@theme/utilities';
 import { ThemeEvents } from '@theme/events';
 
-const PROBE_KEY = '_pdp_discount_probe';
-
 /** @param {Response} res */
-async function parseCartJson(res) { 
+async function parseCartJson(res) {
   const data = await res.json();
   if (!res.ok) throw new Error(data?.description || data?.message || 'request failed');
   const s = data?.status;
@@ -15,8 +12,9 @@ async function parseCartJson(res) {
 }
 
 /**
- * Collects all discount titles applicable to show on the PDP: line-level (per variant) plus
- * cart-level applications from cart.js when present. Uses Cart Ajax (existing lines or probe).
+ * Read-only Cart Ajax: GET /cart.js only. Shows line + cart-level discount titles when the variant
+ * is already in the cart. Does not add or remove cart lines. When the cart has no matching line,
+ * use product metafield custom.discount_promotion_text (rendered as data-fallback-text).
  */
 class ProductDiscountPromotion extends HTMLElement {
   /** @type {AbortController | undefined} */
@@ -58,24 +56,14 @@ class ProductDiscountPromotion extends HTMLElement {
     this.dataset.automaticDiscount = 'checking';
     delete this.dataset.discountSource;
 
-    const probeEnabled = this.dataset.probeEnabled !== 'false';
-    const probeQty = Math.max(1, Math.min(20, parseInt(this.dataset.probeQuantity || '1', 10) || 1));
-
     try {
       const cart = await this.#fetchCart(signal);
       const lineTitles = this.#titlesFromCart(cart, productId, variantId);
       const cartLevel = cartLevelDiscountTitles(cart);
-      let titles = mergeUniqueTitles(lineTitles, cartLevel);
-      let discountSource = lineTitles.length > 0 ? 'cart' : cartLevel.length > 0 ? 'cart' : null;
-
-      if (lineTitles.length === 0 && probeEnabled) {
-        const probed = await this.#probeSequence(variantId, probeQty, signal);
-        if (probed.length > 0) discountSource = 'probe';
-        titles = mergeUniqueTitles(titles, probed);
-      }
+      const titles = mergeUniqueTitles(lineTitles, cartLevel);
 
       if (titles.length > 0) {
-        const src = discountSource === 'probe' ? 'probe' : 'cart';
+        const src = 'cart';
         this.dataset.automaticDiscount = 'eligible';
         this.dataset.discountSource = src;
         this.#renderLines(titles, src);
@@ -114,7 +102,7 @@ class ProductDiscountPromotion extends HTMLElement {
 
   /**
    * @param {boolean} automaticEligible
-   * @param {'cart' | 'probe' | 'metafield' | 'none' | 'error'} source
+   * @param {'cart' | 'metafield' | 'none' | 'error'} source
    * @param {string[]} titles
    */
   #emitResolved(automaticEligible, source, titles) {
@@ -147,7 +135,6 @@ class ProductDiscountPromotion extends HTMLElement {
     for (const item of cart.items || []) {
       if (String(item.product_id) !== String(productId)) continue;
       if (String(item.variant_id) !== String(variantId)) continue;
-      if (this.#isProbeLine(item)) continue;
       for (const t of lineDiscountTitles(item)) {
         if (t && !seen.has(t)) {
           seen.add(t);
@@ -156,123 +143,6 @@ class ProductDiscountPromotion extends HTMLElement {
       }
     }
     return titles;
-  }
-
-  /**
-   * @param {any} item
-   * @param {string} [token] If set, match exact probe token; otherwise any probe line.
-   */
-  #isProbeLine(item, token) {
-    const v = item.properties?.[PROBE_KEY];
-    if (v == null || v === '') return false;
-    if (token != null && token !== '') return String(v) === String(token);
-    return true;
-  }
-
-  /**
-   * Tries the configured probe quantity first. If no discount titles (typical for "Buy 2" rules when qty was 1),
-   * retries once at quantity 2 when the first attempt used qty 1.
-   *
-   * @param {string} variantId
-   * @param {number} configuredQty
-   * @param {AbortSignal} signal
-   */
-  async #probeSequence(variantId, configuredQty, signal) {
-    let found = await this.#probe(variantId, configuredQty, signal);
-    if (found.length > 0) return found;
-    if (configuredQty === 1) {
-      found = await this.#probe(variantId, 2, signal);
-    }
-    return found;
-  }
-
-  /**
-   * @param {string} variantId
-   * @param {number} quantity
-   * @param {AbortSignal} signal
-   */
-  async #probe(variantId, quantity, signal) {
-    const token = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-    const addUrl = this.dataset.cartAddUrl || globalThis.Theme?.routes?.cart_add_url;
-    if (!addUrl) throw new Error('missing cart add url');
-
-    try {
-      const addRes = await fetch(addUrl, {
-        ...fetchConfig('json', {
-          body: JSON.stringify({
-            items: [
-              {
-                id: Number(variantId),
-                quantity,
-                properties: { [PROBE_KEY]: token },
-              },
-            ],
-          }),
-        }),
-        credentials: 'same-origin',
-        signal,
-      });
-      const addData = await parseCartJson(addRes);
-
-      /** Discount titles from POST /cart/add.js (often populated even when GET /cart.js omits them) */
-      let fromAdd = [];
-      const addedItems = addData.items;
-      if (Array.isArray(addedItems)) {
-        const probeItem = addedItems.find((it) => this.#isProbeLine(it, token));
-        const variantItem =
-          probeItem || addedItems.find((it) => String(it.variant_id) === String(variantId));
-        if (variantItem) {
-          fromAdd = lineDiscountTitles(variantItem);
-        }
-      }
-
-      const cart = await this.#fetchCart(signal);
-      const idx = (cart.items || []).findIndex((item) => this.#isProbeLine(item, token));
-      let fromCartLine = [];
-      if (idx !== -1) {
-        fromCartLine = lineDiscountTitles(cart.items[idx]);
-      }
-
-      return mergeUniqueTitles(
-        mergeUniqueTitles(fromAdd, fromCartLine),
-        cartLevelDiscountTitles(cart)
-      );
-    } finally {
-      await this.#cleanupProbeLine(token, signal);
-    }
-  }
-
-  /**
-   * @param {string} token
-   * @param {AbortSignal} signal
-   */
-  async #cleanupProbeLine(token, signal) {
-    try {
-      const cart = await this.#fetchCart(signal);
-      const idx = (cart.items || []).findIndex((item) => this.#isProbeLine(item, token));
-      if (idx === -1) return;
-      await this.#setLineQuantity(idx + 1, 0, signal);
-    } catch {
-      /* ignore */
-    }
-  }
-
-  /**
-   * @param {number} line 1-based
-   * @param {number} quantity
-   * @param {AbortSignal} signal
-   */
-  async #setLineQuantity(line, quantity, signal) {
-    const changeUrl = this.dataset.cartChangeUrl || globalThis.Theme?.routes?.cart_change_url;
-    if (!changeUrl) throw new Error('missing cart change url');
-    const changeRes = await fetch(changeUrl, {
-      ...fetchConfig('json', {
-        body: JSON.stringify({ line, quantity }),
-      }),
-      credentials: 'same-origin',
-      signal,
-    });
-    await parseCartJson(changeRes);
   }
 
   /**

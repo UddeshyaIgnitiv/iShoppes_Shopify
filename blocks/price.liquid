@@ -176,7 +176,7 @@
       "id": "show_discount_promotion",
       "label": "Show discount promotion",
       "default": true,
-      "info": "Shows automatic discount titles from Shopify: uses the cart when this variant is already in the cart; otherwise briefly adds the variant, reads discounts, then removes the line (cart count is restored). Optional metafield custom.discount_promotion_text is a fallback if preview fails or you want fixed copy."
+      "info": "Reads discount titles with GET /cart.js only (no automatic add to cart). Shows live titles when this variant is in the cart. When the cart is empty, set product metafield custom.discount_promotion_text to show the same promotion copy."
     },
     {
       "type": "text",

@@ -1,8 +1,7 @@
 {%- doc -%}
-  Automatic discount titles are not on the product object in Liquid. This element reads GET /cart.js
-  when the variant is already in the cart. If not, it briefly POSTs /cart/add.js then /cart/change.js
-  to read real discount allocations (then restores the cart). Optional metafield custom.discount_promotion_text
-  is used when preview is off or as fallback copy.
+  Discount titles from Shopify automatic discounts are not available on the product object in Liquid.
+  This element uses read-only GET /cart.js (no add/remove) when the variant is in the cart. For visitors
+  with an empty cart, set product metafield custom.discount_promotion_text to mirror your promotion copy.
 {%- enddoc -%}
 
 {%- liquid
@@ -23,9 +22,6 @@
   data-variant-id="{{ variant_for_promo.id }}"
   data-promo-prefix="{{ promo_prefix | escape }}"
   data-cart-js-url="{{ routes.cart_url | append: '.js' }}"
-  data-cart-add-url="{{ routes.cart_add_url | append: '.js' }}"
-  data-cart-change-url="{{ routes.cart_change_url }}"
-  data-preview-discounts="true"
   {% if fallback_attr != blank %}
     data-fallback-text="{{ fallback_attr | escape }}"
   {% endif %}

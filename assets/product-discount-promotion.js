@@ -60,6 +60,7 @@ class ProductDiscountPromotion extends HTMLElement {
 
     try {
       const cart = await this.#fetchCart(signal);
+      console.log('nithincart',cart)
       const lineTitles = this.#titlesFromCart(cart, productId, variantId);
       const cartLevel = cartLevelDiscountTitles(cart);
       let titles = mergeUniqueTitles(lineTitles, cartLevel);

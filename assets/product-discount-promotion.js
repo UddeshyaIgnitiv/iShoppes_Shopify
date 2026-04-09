@@ -12,9 +12,10 @@ async function parseCartJson(res) {
 }
 
 /**
- * Read-only Cart Ajax: GET /cart.js only. Shows line + cart-level discount titles when the variant
- * is already in the cart. Does not add or remove cart lines. When the cart has no matching line,
- * use product metafield custom.discount_promotion_text (rendered as data-fallback-text).
+ * Read-only Cart Ajax: GET /cart.js only. Shows discount titles when this variant is in the cart.
+ * Shopify does not expose automatic / BXGY discount eligibility on the product in Liquid or via
+ * cart.js without a matching line — use product metafield custom.discount_promotion_text (or shop
+ * fallback in Liquid) for PDP copy when the cart cannot evaluate the promotion.
  */
 class ProductDiscountPromotion extends HTMLElement {
   /** @type {AbortController | undefined} */
@@ -58,8 +59,9 @@ class ProductDiscountPromotion extends HTMLElement {
 
     try {
       const cart = await this.#fetchCart(signal);
-      const lineTitles = this.#titlesFromCart(cart, productId, variantId);
-      const cartLevel = cartLevelDiscountTitles(cart);
+      const hasLine = this.#hasMatchingLine(cart, productId, variantId);
+      const lineTitles = hasLine ? this.#titlesFromCart(cart, productId, variantId) : [];
+      const cartLevel = hasLine ? cartLevelDiscountTitles(cart) : [];
       const titles = mergeUniqueTitles(lineTitles, cartLevel);
 
       if (titles.length > 0) {
@@ -122,6 +124,20 @@ class ProductDiscountPromotion extends HTMLElement {
     if (!url) throw new Error('missing cart url');
     const res = await fetch(url, { credentials: 'same-origin', signal });
     return parseCartJson(res);
+  }
+
+  /**
+   * @param {any} cart
+   * @param {string} productId
+   * @param {string} variantId
+   */
+  #hasMatchingLine(cart, productId, variantId) {
+    for (const item of cart.items || []) {
+      if (String(item.product_id) !== String(productId)) continue;
+      if (String(item.variant_id) !== String(variantId)) continue;
+      return true;
+    }
+    return false;
   }
 
   /**

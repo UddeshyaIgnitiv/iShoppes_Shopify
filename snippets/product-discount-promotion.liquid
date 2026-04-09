@@ -15,7 +15,6 @@
     assign fallback_attr = mf_promo.value | default: mf_promo | strip
   endif
 -%}
-{{ product_for_promo.metafields | json }}
 
 <product-discount-promotion
   class="product-discount-promotion"

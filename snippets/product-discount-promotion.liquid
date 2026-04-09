@@ -1,7 +1,11 @@
 {%- doc -%}
-  Discount titles from Shopify automatic discounts are not available on the product object in Liquid.
-  This element uses read-only GET /cart.js (no add/remove) when the variant is in the cart. For visitors
-  with an empty cart, set product metafield custom.discount_promotion_text to mirror your promotion copy.
+  Automatic discounts (amount off, Buy X Get Y, etc.) are not exposed on the product in Liquid or
+  via cart.js until this variant exists as a cart line. This block uses read-only GET /cart.js to
+  show live discount titles only when the current variant is already in the cart. For all other
+  visitors (empty cart or product not yet added), set copy on the product metafield
+  custom.discount_promotion_text, and optionally shop metafields.custom.discount_promotion_fallback
+  for a store-wide default when the product metafield is empty. Match the wording to your automatic
+  discount in Admin so the PDP matches checkout.
 {%- enddoc -%}
 
 {%- liquid
@@ -9,10 +13,16 @@
   assign product_for_promo = product_for_promo | default: closest.product
   assign variant_for_promo = variant_for_promo | default: product_for_promo.selected_or_first_available_variant
 
-  assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
   assign fallback_attr = ''
+  assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
   if mf_promo != blank
     assign fallback_attr = mf_promo.value | default: mf_promo | strip
+  endif
+  if fallback_attr == blank
+    assign mf_shop = shop.metafields.custom.discount_promotion_fallback
+    if mf_shop != blank
+      assign fallback_attr = mf_shop.value | default: mf_shop | strip
+    endif
   endif
 -%}
 

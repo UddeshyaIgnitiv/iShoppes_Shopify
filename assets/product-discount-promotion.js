@@ -1,4 +1,5 @@
-import { ThemeEvents } from '@theme/events';
+import { ThemeEvents, CartUpdateEvent } from '@theme/events';
+import { fetchConfig } from '@theme/utilities';
 
 /** @param {Response} res */
 async function parseCartJson(res) {
@@ -12,9 +13,10 @@ async function parseCartJson(res) {
 }
 
 /**
- * Read-only Cart Ajax: GET /cart.js only. Shows line + cart-level discount titles when the variant
- * is already in the cart. Does not add or remove cart lines. When the cart has no matching line,
- * use product metafield custom.discount_promotion_text (rendered as data-fallback-text).
+ * Cart Ajax: GET /cart.js for discount titles when the variant is already in the cart. If not,
+ * optionally POST /cart/add.js then /cart/change.js to read real automatic discount allocations,
+ * then restore the cart (see data-preview-discounts). Metafield custom.discount_promotion_text
+ * is fallback when preview is off or requests fail.
  */
 class ProductDiscountPromotion extends HTMLElement {
   /** @type {AbortController | undefined} */
@@ -60,7 +62,12 @@ class ProductDiscountPromotion extends HTMLElement {
       const cart = await this.#fetchCart(signal);
       const lineTitles = this.#titlesFromCart(cart, productId, variantId);
       const cartLevel = cartLevelDiscountTitles(cart);
-      const titles = mergeUniqueTitles(lineTitles, cartLevel);
+      let titles = mergeUniqueTitles(lineTitles, cartLevel);
+
+      if (titles.length === 0 && this.#previewDiscountsEnabled() && !this.#hasVariantLine(cart, productId, variantId)) {
+        const previewTitles = await this.#previewAutomaticDiscounts(signal, productId, variantId);
+        if (previewTitles?.length) titles = previewTitles;
+      }
 
       if (titles.length > 0) {
         const src = 'cart';
@@ -122,6 +129,138 @@ class ProductDiscountPromotion extends HTMLElement {
     if (!url) throw new Error('missing cart url');
     const res = await fetch(url, { credentials: 'same-origin', signal });
     return parseCartJson(res);
+  }
+
+  #previewDiscountsEnabled() {
+    return this.dataset.previewDiscounts !== 'false';
+  }
+
+  /**
+   * @param {any} cart
+   * @param {string} productId
+   * @param {string} variantId
+   */
+  #hasVariantLine(cart, productId, variantId) {
+    for (const item of cart.items || []) {
+      if (String(item.product_id) === String(productId) && String(item.variant_id) === String(variantId)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Temporarily add one unit, read discount titles, remove the line, notify cart UI.
+   * @param {AbortSignal} signal
+   * @param {string} productId
+   * @param {string} variantId
+   * @returns {Promise<string[] | null>}
+   */
+  async #previewAutomaticDiscounts(signal, productId, variantId) {
+    const addUrl = globalThis.Theme?.routes?.cart_add_url || this.dataset.cartAddUrl;
+    const changeUrl = globalThis.Theme?.routes?.cart_change_url || this.dataset.cartChangeUrl;
+    if (!addUrl || !changeUrl) return null;
+
+    const variantIdNum = Number.parseInt(String(variantId), 10);
+    if (Number.isNaN(variantIdNum)) return null;
+
+    let lineKey = null;
+    try {
+      const addRes = await fetch(addUrl, {
+        ...fetchConfig('json', {
+          body: JSON.stringify({ items: [{ id: variantIdNum, quantity: 1 }] }),
+        }),
+        credentials: 'same-origin',
+        signal,
+      });
+      const addData = await parseCartJson(addRes);
+      const line = this.#findLine(addData, productId, variantId);
+      if (!line?.key) return null;
+
+      lineKey = line.key;
+      const lineT = lineDiscountTitles(line);
+      const cartLevel = cartLevelDiscountTitles(addData);
+      const titles = mergeUniqueTitles(lineT, cartLevel);
+
+      await this.#removeCartLine(changeUrl, lineKey, signal);
+
+      const finalCart = await this.#fetchCart(signal);
+      document.dispatchEvent(
+        new CartUpdateEvent(finalCart, 'product-discount-promotion', {
+          itemCount: finalCart.item_count ?? 0,
+          source: 'product-discount-promotion',
+        })
+      );
+
+      return titles.length > 0 ? titles : null;
+    } catch (e) {
+      if (e?.name === 'AbortError') throw e;
+      if (lineKey) {
+        try {
+          await this.#removeCartLine(
+            globalThis.Theme?.routes?.cart_change_url || this.dataset.cartChangeUrl,
+            lineKey,
+            signal
+          );
+          const finalCart = await this.#fetchCart(signal);
+          document.dispatchEvent(
+            new CartUpdateEvent(finalCart, 'product-discount-promotion', {
+              itemCount: finalCart.item_count ?? 0,
+              source: 'product-discount-promotion',
+            })
+          );
+        } catch (_) {
+          /* best-effort cleanup */
+        }
+      }
+      return null;
+    }
+  }
+
+  /**
+   * @param {any} cart
+   * @param {string} productId
+   * @param {string} variantId
+   */
+  #findLine(cart, productId, variantId) {
+    const items = cart.items || (cart.item ? [cart.item] : []);
+    for (const item of items) {
+      if (String(item.product_id) === String(productId) && String(item.variant_id) === String(variantId)) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * @param {string} changeUrl
+   * @param {string} lineKey
+   * @param {AbortSignal} signal
+   */
+  async #removeCartLine(changeUrl, lineKey, signal) {
+    const res = await fetch(changeUrl, {
+      ...fetchConfig('json', {
+        body: JSON.stringify({ line: lineKey, quantity: 0 }),
+      }),
+      credentials: 'same-origin',
+      signal,
+    });
+    const text = await res.text();
+    if (!res.ok) {
+      let msg = 'change failed';
+      try {
+        const err = JSON.parse(text);
+        msg = err?.description || err?.message || msg;
+      } catch (_) {}
+      throw new Error(msg);
+    }
+    try {
+      const data = JSON.parse(text);
+      if (data?.errors) throw new Error(data.errors);
+    } catch (e) {
+      if (e instanceof SyntaxError) return;
+      throw e;
+    }
   }
 
   /**

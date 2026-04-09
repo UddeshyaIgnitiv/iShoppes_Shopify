@@ -15,7 +15,7 @@
     assign fallback_attr = mf_promo.value | default: mf_promo | strip
   endif
 -%}
-{{ routes.cart_url| json }}
+{{ mf_promo | json }}
 
 <product-discount-promotion
   class="product-discount-promotion"

@@ -278,7 +278,7 @@
                   endif
                 endif
               %}
-              {% comment %} {{ cleanedvalue }} {% endcomment %}
+              {{ value.value }}
               {% unless skip_tag_value %}
               {% liquid
                 assign visible_index = visible_index | plus: 1

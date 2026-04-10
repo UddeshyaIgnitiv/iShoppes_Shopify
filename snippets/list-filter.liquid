@@ -273,7 +273,6 @@
                   if tag_is_vendor
                     assign skip_tag_value = true
                   endif
-                  assign cleanedvalue = value.value | replace: "'", ''
                   if value.value == "c-Brands" or value.value == "c-Special Offers" or value.value == 'c-Food' or value.value == 'c-Travel Exclusives' or value.value == 'c-Liquor & Wine' or value.value == 'c-Shopddf Category' or value.value == 'c-BEAUTY BRANDS' or value.value == 'c-Default Category' or value.value == 'c-Liquor Wine' or value.value == 'c-LIQUOR WINE BRANDS' or value.value == 'c-Liquor\' or value.value == 'c-Lancme' or value.value == 'c-Este Lauder' or value.value == 'c-haribo' or value.value == 'c-haribo(mix&match)' or value.value == 'c-Mens Skincare' or value.value == 'c-Womens Fragrance' or value.value == 'c-Womens Skincare' or value.value == 'c-Mens Fragrance' or value.value == 'c-LB' or value.value == 'c-haribbomixmatch' or value.value == 'c-Beauty Brands' or value.value == "J'adore" or value.value == 'c-Miss Dior' or value.value == 'c-Poison' or value.value == 'c-Sauvage' or value.value == 'c-Skin Caviar' or value.value == 'c-Swiss Cellular' or value.value == 'c-Eye Care' or value.value == 'c-Collections' or value.value == 'c-Best Seller' or tag_label_handle == last_url_segment_handle
                     assign skip_tag_value = true
                   endif

@@ -6,9 +6,14 @@
 
 {% style %}
   .ai-video-hero-{{ ai_gen_id }} {
+    /* Break out of any page-width parent so the hero always spans the full viewport */
     position: relative;
-    width: 100%;
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
     min-height: {{ block.settings.min_height_desktop }}px;
+    --ai-hero-height: {{ block.settings.min_height_desktop }}px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,7 +23,8 @@
 
   @media screen and (max-width: 749px) {
     .ai-video-hero-{{ ai_gen_id }} {
-      min-height: {{ block.settings.min_height_mobile }}px;
+      min-height: 242px;
+      --ai-hero-height: 242px;
     }
   }
 
@@ -96,26 +102,19 @@
     background-color: {{ block.settings.button_hover_background }};
   }
 
+  /* Cover-fit the 16:9 YouTube iframe inside the hero box regardless of container aspect.
+     Width is max of (100% of container width) or (hero height * 16/9).
+     Height is max of (hero height) or (100vw * 9/16).
+     This mirrors object-fit: cover for iframe embeds. */
   .ai-video-hero__iframe-{{ ai_gen_id }} {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100vw;
-    height: 100vh;
     transform: translate(-50%, -50%);
+    width: max(100vw, calc(var(--ai-hero-height) * 16 / 9));
+    height: max(var(--ai-hero-height), calc(100vw * 9 / 16));
     pointer-events: none;
-  }
-
-  @media (min-aspect-ratio: 16/9) {
-    .ai-video-hero__iframe-{{ ai_gen_id }} {
-      height: 56.25vw;
-    }
-  }
-
-  @media (max-aspect-ratio: 16/9) {
-    .ai-video-hero__iframe-{{ ai_gen_id }} {
-      width: 177.78vh;
-    }
+    border: 0;
   }
 {% endstyle %}
 

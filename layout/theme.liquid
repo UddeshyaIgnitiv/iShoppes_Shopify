@@ -138,6 +138,8 @@
         select.disabled = false;
     }
 
+    let selectedTerminalEmail = '';
+
     // Load airlines when airport changes
     airportSelect.addEventListener('change', async () => {
         resetSelect(airlineSelect);
@@ -145,6 +147,10 @@
         resetSelect(destinationSelect);
 
         if (!airportSelect.value) return;
+
+        const airportRes = await fetch(`${API_BASE}/airports/${airportSelect.value}`);
+        const airportData = await airportRes.json();
+        selectedTerminalEmail = airportData.terminal_email || '';
 
         const res = await fetch(`${API_BASE}/airports/${airportSelect.value}/airlines`);
         const airlines = await res.json();
@@ -331,7 +337,8 @@
                 DepartureDate: departuredate?.value || '',
                 DepartureTime: `${departurehours?.value || ''}:${departureminutes?.value || ''} ${departuremeridiem?.value || ''}`,
                 Seat: seatno?.value || '',
-                Connecting Flight: finalDestinationCheck?.checked ? 'Yes' : 'No'
+                Connecting Flight: finalDestinationCheck?.checked ? 'Yes' : 'No',
+                TerminalEmail: selectedTerminalEmail || ''
               };
             } catch (e) {
               return {};

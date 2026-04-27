@@ -269,12 +269,15 @@
   
 
  <script>
-   function closePopup() {
+document.addEventListener("DOMContentLoaded", function () {
+  function closePopup() {
     document.getElementById("popup-overlay").style.display = "none";
     document.getElementById("newsletter-popup").style.display = "none";
   }
+
   document.getElementById("popup-close").onclick = closePopup;
   document.getElementById("popup-overlay").onclick = closePopup;
- </script>
+});
+</script>
 
 </section>

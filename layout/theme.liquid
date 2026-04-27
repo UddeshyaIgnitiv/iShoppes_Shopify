@@ -429,7 +429,9 @@
                   `${document.getElementById('departurehours')?.value || ''}:` +
                   `${document.getElementById('departureminutes')?.value || ''} ` +
                   `${document.getElementById('departuremeridiem')?.value || ''}`,
-                Seat: document.getElementById('seatno')?.value || ''
+                Seat: document.getElementById('seatno')?.value || '',
+                Connecting Flight: finalDestinationCheck?.checked ? 'Yes' : 'No',
+                TerminalEmail: selectedTerminalEmail || ''
               };
             } catch (e) {
               return {};

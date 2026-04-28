@@ -85,7 +85,7 @@
     {% render 'product-discount-promotion',
       product_for_promo: product_resource,
       variant_for_promo: selected_variant,
-      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: '
+      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offers: '
     %}
     <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
   {% endunless %}
@@ -176,7 +176,7 @@
       "id": "show_discount_promotion",
       "label": "Show discount promotion",
       "default": true,
-      "info": "Reads discount titles with GET /cart.js only (no automatic add to cart). Shows live titles when this variant is in the cart. When the cart is empty, set product metafield custom.discount_promotion_text to show the same promotion copy."
+      "info": "Shopify does not list automatic/BXGY discounts on the product without a cart line. Live discount titles appear only when this variant is already in the cart (GET /cart.js, read-only). For everyone else, set product metafield custom.discount_promotion_text (and optionally shop metafields.custom.discount_promotion_fallback) to match your automatic discount copy."
     },
     {
       "type": "text",

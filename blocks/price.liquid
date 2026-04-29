@@ -89,7 +89,7 @@
     %}
     <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
   {% endunless %}
-  {{ product.metafields.custom.discount_promotion_text }}
+  {{ product | json }}
 
   <div class="terminal-select-wrapper" style="margin-top: 15px;">
     <button class="terminal-select-btn">Select Terminal</button>

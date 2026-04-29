@@ -81,7 +81,6 @@
     show_sale_price_first: block_settings.show_sale_price_first
   %}
 
-  {{ product.metafields.custom.active_discount_label }}
   {% unless block_settings.show_discount_promotion == false %}
     {% render 'product-discount-promotion',
       product_for_promo: product_resource,

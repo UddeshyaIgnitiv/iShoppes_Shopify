@@ -7,7 +7,7 @@
   for a store-wide default when the product metafield is empty. Match the wording to your automatic
   discount in Admin so the PDP matches checkout.
 {%- enddoc -%}
-{{ closest.product }}
+{{ closest.product.metafields.custom.active_discount_label }}
 {%- liquid
   assign promo_prefix = promo_prefix | default: ''
   assign product_for_promo = product_for_promo | default: closest.product

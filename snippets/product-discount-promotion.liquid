@@ -24,7 +24,7 @@
     endif
   endif
 -%}
-
+{%- if closest.product.metafields.custom.active_discount_label != blank -%}
 <product-discount-promotion
   class="product-discount-promotion"
   data-product-id="{{ product_for_promo.id }}"
@@ -34,7 +34,8 @@
 
     <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
       <div class="offer-text__line">
-          <span class="offer-text__prefix">Limited Time offerss: {{ closest.product.metafields.custom.active_discount_label }}</span>
+          <span class="offer-text__prefix">Limited Time offers: {{ closest.product.metafields.custom.active_discount_label }}</span>
       </div>
     </div>
 </product-discount-promotion>
+{%-  endif -%}

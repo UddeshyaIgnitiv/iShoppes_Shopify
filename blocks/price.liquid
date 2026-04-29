@@ -81,6 +81,7 @@
     show_sale_price_first: block_settings.show_sale_price_first
   %}
 
+  {{ product.metafields.custom.active_discount_label }}
   {% unless block_settings.show_discount_promotion == false %}
     {% render 'product-discount-promotion',
       product_for_promo: product_resource,
@@ -89,7 +90,6 @@
     %}
     <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
   {% endunless %}
-  {{ product.metafields.custom.active_discount_label }}
 
   <div class="terminal-select-wrapper" style="margin-top: 15px;">
     <button class="terminal-select-btn">Select Terminal</button>

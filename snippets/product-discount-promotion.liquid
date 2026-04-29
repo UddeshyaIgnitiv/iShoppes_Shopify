@@ -42,9 +42,7 @@
   {%- if fallback_attr != blank -%}
     <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
       <div class="offer-text__line">
-        {%- if promo_prefix != blank -%}
           <span class="offer-text__prefix">{{ promo_prefix | escape }}</span>
-        {%- endif -%}
         <span class="offer-text__body">{{ fallback_attr | escape }}</span>
       </div>
     </div>

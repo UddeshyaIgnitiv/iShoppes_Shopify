@@ -7,7 +7,6 @@
   for a store-wide default when the product metafield is empty. Match the wording to your automatic
   discount in Admin so the PDP matches checkout.
 {%- enddoc -%}
-{{ closest.product.metafields.custom.active_discount_label }}
 {%- liquid
   assign promo_prefix = promo_prefix | default: ''
   assign product_for_promo = product_for_promo | default: closest.product
@@ -31,20 +30,12 @@
   data-product-id="{{ product_for_promo.id }}"
   data-variant-id="{{ variant_for_promo.id }}"
   data-promo-prefix="{{ promo_prefix | escape }}"
-  data-cart-js-url="{{ routes.cart_url | append: '.js' }}"
-  {% if fallback_attr != blank %}
-    data-fallback-text="{{ fallback_attr | escape }}"
-  {% endif %}
-  role="region"
-  aria-live="polite"
 >
 
-  {%- if fallback_attr != blank -%}
     <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
       <div class="offer-text__line">
           <span class="offer-text__prefix">{{ closest.product.metafields.custom.active_discount_label }}</span>
         <span class="offer-text__body">{{ fallback_attr | escape }}</span>
       </div>
     </div>
-  {%- endif -%}
 </product-discount-promotion>

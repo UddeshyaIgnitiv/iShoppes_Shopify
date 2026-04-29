@@ -7,23 +7,6 @@
   for a store-wide default when the product metafield is empty. Match the wording to your automatic
   discount in Admin so the PDP matches checkout.
 {%- enddoc -%}
-{%- liquid
-  assign promo_prefix = promo_prefix | default: ''
-  assign product_for_promo = product_for_promo | default: closest.product
-  assign variant_for_promo = variant_for_promo | default: product_for_promo.selected_or_first_available_variant
-
-  assign fallback_attr = ''
-  assign mf_promo = product_for_promo.metafields.custom.discount_promotion_text
-  if mf_promo != blank
-    assign fallback_attr = mf_promo.value | default: mf_promo | strip
-  endif
-  if fallback_attr == blank
-    assign mf_shop = shop.metafields.custom.discount_promotion_fallback
-    if mf_shop != blank
-      assign fallback_attr = mf_shop.value | default: mf_shop | strip
-    endif
-  endif
--%}
 {%- if closest.product.metafields.custom.active_discount_label != blank -%}
 <product-discount-promotion
   class="product-discount-promotion"

@@ -3333,7 +3333,7 @@ slideshow-slides {
     }
 
     &[size='medium'] {
-      min-height: 40rem;
+      min-height: 45rem;
     }
 
     &[size='large'] {

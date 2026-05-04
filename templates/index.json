@@ -44,8 +44,8 @@
           "type": "_slide",
           "settings": {
             "media_type_1": "image",
-            "image_1": "shopify://shop_images/brugal_home_desktop_77929ced8d.jpg",
-            "link": "/collections/vendors?q=Brugal%201888",
+            "image_1": "shopify://shop_images/UK-WGR-10311_HENDRICKS_ANO_JFK_T1_T5_DIGI_C_FB_1200x630px_V1.jpg",
+            "link": "https://ishoppes.com/search?q=hendrick&options%5Bprefix%5D=last",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",

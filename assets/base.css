@@ -4544,7 +4544,7 @@ text-component {
   text-align: center;
 }
 .macallan-section-title {
-  font-family: 'NewFrank', sans-serif !important;
+  font-family: 'TheMacallan', sans-serif !important;
   font-size: 1.5rem !important;
   text-transform: uppercase;
   margin-bottom: 30px;
@@ -4596,7 +4596,7 @@ text-component {
 }
 .macallan-whisky-overlay h3 {
   color: white;
-  font-family: 'NewFrank', sans-serif;
+  font-family: 'TheMacallan', sans-serif;
   font-size: 20px;
   margin: 0 0 20px 0;
   text-transform: uppercase;
@@ -4610,7 +4610,7 @@ text-component {
   border: 1px solid white;
   color: white;
   text-decoration: none;
-  font-family: 'NewFrank', sans-serif;
+  font-family: 'TheMacallan', sans-serif;
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.1em;

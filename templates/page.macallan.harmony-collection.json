@@ -252,6 +252,16 @@
         "padding-block-end": 20
       }
     },
+    "macallan_harmony_banners_9t2kQk": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>.macallan-harmony-banners{padding:10px 0 20px}.macallan-harmony-banners__wrap{display:flex;flex-direction:row;gap:5px;align-items:stretch;justify-content:space-between}.macallan-harmony-banners__img{flex:1;max-width:33.3333%;width:100%;height:auto;display:block;object-fit:cover}@media screen and (max-width:768px){.macallan-harmony-banners__wrap{flex-direction:column}.macallan-harmony-banners__img{max-width:100%}}</style><section class='macallan-harmony-banners'><div class='page-width macallan-harmony-banners__wrap'><img class='macallan-harmony-banners__img' src={{ 'harmonic-banner1-8e0bfb89-d849-4e68-9c6c-123e887b6cd3.png' | asset_url }} alt='Macallan Harmony banner 1' loading='lazy'><img class='macallan-harmony-banners__img' src={{ 'harmonic-banner2-8bebf19d-59bc-4f63-973e-4760d1f3b27c.png' | asset_url }} alt='Macallan Harmony banner 2' loading='lazy'><img class='macallan-harmony-banners__img' src={{ 'harmonic-banner3-7e1e1578-1d5d-4034-8f1b-47f3f30f3bc6.png' | asset_url }} alt='Macallan Harmony banner 3' loading='lazy'></div></section>",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "macallan_collection_list_UDBwpH": {
       "type": "macallan-collection-list",
       "blocks": {
@@ -294,6 +304,7 @@
     "desktop_slider",
     "mobile_slider",
     "blocks_jJNgdx",
+    "macallan_harmony_banners_9t2kQk",
     "macallan_collection_list_UDBwpH"
   ]
 }

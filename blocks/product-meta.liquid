@@ -1,14 +1,14 @@
 
 <div class="product-meta-specs spacing-style" style="padding-bottom: 1rem; font-size: 1rem;">
   <div class="meta-row" style="margin-bottom: 0.25rem;">
-    <span class="meta-label" style="font-weight: bold;">Made In:</span> <span class="meta-value">{{ product.metafields.custom.country_of_origin | default: 'United States' }}</span>
+    <span class="meta-label" style="font-weight: bold;">Made In:</span> <span class="meta-value">{{ product.metafields.custom.country_of_origin | default: '' }}</span>
   </div>
   <div class="meta-row" style="margin-bottom: 0.25rem;">
-    <span class="meta-label" style="font-weight: bold;">SKU #:</span> <span class="meta-value">{{ product.selected_or_first_available_variant.sku | default: '265457' }}</span>
+    <span class="meta-label" style="font-weight: bold;">SKU #:</span> <span class="meta-value">{{ product.selected_or_first_available_variant.sku | default: '' }}</span>
   </div>
   {% if product.selected_or_first_available_variant.option1 and product.selected_or_first_available_variant.option1 != 'Default Title' %}
   <div class="meta-row" style="margin-bottom: 1rem;">
-    <span class="meta-label" style="font-weight: bold;">Size:</span> <span class="meta-value">{{ product.selected_or_first_available_variant.option1 | default: '1000 ml' }}</span>
+    <span class="meta-label" style="font-weight: bold;">Size:</span> <span class="meta-value">{{ product.selected_or_first_available_variant.option1 | default: '' }}</span>
   </div>
   {%  endif %}
   <div class="meta-description">

@@ -149,6 +149,8 @@
                     "show_sale_price_first": true,
                     "show_installments": false,
                     "show_tax_info": false,
+                    "show_discount_promotion": true,
+                    "promotion_prefix": "Limited Time offer:",
                     "type_preset": "paragraph",
                     "width": "100%",
                     "alignment": "left",
@@ -197,6 +199,10 @@
               },
               "blocks": {}
             },
+            "unlimited_bundles_product_page_placeholder_EeGzkd": {
+              "type": "shopify://apps/unlimited-bundles/blocks/product-page-placeholder/d33d0f48-dee0-42a0-b156-2a5dce91814a",
+              "settings": {}
+            },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
@@ -238,6 +244,7 @@
             "group_icgrde",
             "divider_VJhene",
             "variant_picker_R3rGDr",
+            "unlimited_bundles_product_page_placeholder_EeGzkd",
             "buy_buttons_eYQEYi"
           ]
         }

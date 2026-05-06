@@ -418,14 +418,31 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
   try { sessionStorage.removeItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__'); } catch (e) {}
 
   // popover may mount a bit late → retry
-  let tries = 0;
   const iv = setInterval(() => {
     tries++;
-    openAccountPopover();
-    showLoginBlock();
-    // stop after some tries
+
+    // ================= MOBILE =================
+    if (window.matchMedia('(max-width: 749px)').matches) {
+
+      const mobileBtn = document.getElementById('mb-account');
+
+      if (mobileBtn) {
+        mobileBtn.click();
+      }
+
+    } else {
+
+      // ================= DESKTOP =================
+      openAccountPopover();
+    }
+
+    setTimeout(() => {
+      showLoginBlock();
+    }, 300);
+
     if (tries >= 15) clearInterval(iv);
-  }, 200);
+
+  }, 300);
 })();
 }
 

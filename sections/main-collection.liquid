@@ -75,7 +75,7 @@
       {% endif %}
     {% endif %}
     {% assign collection_title = collection.title | downcase %}
-    {{ collection_title }}
+    {{ collection | json }}
     {% if collection_title == 'liquor and wine' and active_vendor_label == blank %}
       {%  if collection.image != blank %}
       <div class="collection-banner">

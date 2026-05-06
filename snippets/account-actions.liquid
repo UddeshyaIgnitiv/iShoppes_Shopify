@@ -289,6 +289,7 @@
       <script>
         (function () {
           const root = document.currentScript?.closest('.account-actions');
+          console.log(root);
           if (!root) return;
           const $ = (sel) => root.querySelector(sel);
 
@@ -419,13 +420,9 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
   // popover may mount a bit late → retry
   let tries = 0;
   const iv = setInterval(() => {
-    console.log('test');
     tries++;
-    console.log('test1111');
     openAccountPopover();
-    console.log('test232323');
     showLoginBlock();
-    console.log('test2332435544545');
     // stop after some tries
     if (tries >= 15) clearInterval(iv);
   }, 200);

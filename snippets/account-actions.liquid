@@ -367,7 +367,7 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     return true;
   }
 
-  {% comment %} function showLoginBlock() {
+  function showLoginBlock() {
     const loginBlock = document.getElementById('LoginBlock');
     const recoverBlock = document.getElementById('RecoverBlock');
     const registerBlock = document.getElementById('RegisterBlock');
@@ -379,39 +379,6 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     if (headerTitleEl) headerTitleEl.textContent = 'Sign-in or Create an Account';
 
     document.getElementById('LoginEmail')?.focus();
-  } {% endcomment %}
-
-  function getActiveAccountRoot() {
-    const mobileRoot = document.querySelector('dialog.account-drawer__dialog[open] .account-actions');
-    if (mobileRoot) return mobileRoot;
-
-    const desktopRoot = document.querySelector('#account-popover .account-actions');
-    if (desktopRoot) return desktopRoot;
-
-    return root;
-  }
-
-  function showLoginBlock() {
-    const activeRoot = getActiveAccountRoot();
-
-    const loginBlock = activeRoot.querySelector('#LoginBlock');
-    const recoverBlock = activeRoot.querySelector('#RecoverBlock');
-    const registerBlock = activeRoot.querySelector('#RegisterBlock');
-
-    [loginBlock, recoverBlock, registerBlock].forEach(el => {
-      if (el) el.classList.add('is-hidden');
-    });
-
-    if (loginBlock) loginBlock.classList.remove('is-hidden');
-
-    const headerTitleEl = activeRoot.querySelector('#AccountHeaderTitle');
-    if (headerTitleEl) {
-      headerTitleEl.textContent = 'Sign-in or Create an Account';
-    }
-
-    setTimeout(() => {
-      activeRoot.querySelector('#LoginEmail')?.focus();
-    }, 250);
   }
 
   // 1) Before Shopify redirects: set a flag so we can open popup on /account/login
@@ -437,14 +404,10 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 
   let flag = false;
   try { flag = sessionStorage.getItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__') === '1'; } catch (e) {}
-{% comment %} 
+
   const hasLoginErrors =
     !!document.getElementById('LoginFormErrors') ||
-    !!document.querySelector('#ClassicLoginForm .form-errors'); {% endcomment %}
-
-    const hasLoginErrors =
-  !!document.querySelector('#LoginFormErrors') ||
-  !!document.querySelector('#ClassicLoginForm .form-errors');
+    !!document.querySelector('#ClassicLoginForm .form-errors');
 
   if (!isAccountLoginPage) return;
   if (!flag && !hasLoginErrors) return;
@@ -745,6 +708,140 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
   </div>
 </div>
 
+<script>
+(function () {
+  const FLAG = '__OPEN_ACCOUNT_POPOVER_ON_LOAD__';
+
+  function hasLoginError() {
+    return (
+      window.location.pathname.replace(/\/+$/, '') === '/account/login' &&
+      (
+        sessionStorage.getItem(FLAG) === '1' ||
+        document.querySelector('#LoginFormErrors') ||
+        document.querySelector('#ClassicLoginForm .form-errors')
+      )
+    );
+  }
+
+  function openMobileDrawer() {
+    const dialog = document.querySelector('dialog.account-drawer__dialog');
+
+    if (!dialog) return false;
+
+    if (!dialog.open) {
+      try {
+        dialog.showModal();
+      } catch (e) {
+        dialog.setAttribute('open', '');
+      }
+    }
+
+    dialog.setAttribute('open', '');
+    dialog.setAttribute('scroll-lock', '');
+
+    document.documentElement.classList.add('scroll-lock');
+    document.body.classList.add('scroll-lock');
+
+    return true;
+  }
+
+  function openDesktopPopover() {
+    const pop = document.querySelector('#account-popover');
+
+    if (!pop) return false;
+
+    if (typeof pop.showPopover === 'function') {
+      try {
+        pop.showPopover();
+      } catch (e) {}
+    }
+
+    pop.style.display = '';
+    pop.style.visibility = '';
+    pop.classList.add('open', 'active', 'is-open');
+
+    return true;
+  }
+
+  function getActiveRoot() {
+    return (
+      document.querySelector('dialog.account-drawer__dialog[open] .account-actions') ||
+      document.querySelector('#account-popover .account-actions') ||
+      document.querySelector('.account-actions')
+    );
+  }
+
+  function showLogin() {
+    const root = getActiveRoot();
+    if (!root) return;
+
+    const login = root.querySelector('#LoginBlock');
+    const register = root.querySelector('#RegisterBlock');
+    const recover = root.querySelector('#RecoverBlock');
+
+    [login, register, recover].forEach(el => {
+      if (el) el.classList.add('is-hidden');
+    });
+
+    if (login) login.classList.remove('is-hidden');
+
+    const title = root.querySelector('#AccountHeaderTitle');
+    if (title) title.textContent = 'Sign-in or Create an Account';
+
+    setTimeout(() => {
+      root.querySelector('#LoginEmail')?.focus();
+    }, 300);
+  }
+
+  function openAccountErrorPopup() {
+    const isMobile = window.matchMedia('(max-width: 749px)').matches;
+
+    let opened = false;
+
+    if (isMobile) {
+      opened = openMobileDrawer();
+    } else {
+      opened = openDesktopPopover();
+    }
+
+    if (opened) {
+      setTimeout(showLogin, 300);
+    }
+
+    return opened;
+  }
+
+  document.addEventListener('submit', function (e) {
+    const form = e.target.closest('#ClassicLoginForm');
+    if (!form) return;
+
+    try {
+      sessionStorage.setItem(FLAG, '1');
+    } catch (err) {}
+  }, true);
+
+  window.addEventListener('load', function () {
+    if (!hasLoginError()) return;
+
+    try {
+      sessionStorage.removeItem(FLAG);
+    } catch (e) {}
+
+    let tries = 0;
+
+    const interval = setInterval(function () {
+      tries++;
+
+      const opened = openAccountErrorPopup();
+
+      if (opened || tries >= 40) {
+        clearInterval(interval);
+      }
+    }, 250);
+  });
+})();
+</script>
+
 {% stylesheet %}
   .form-errors.is-hidden { display: none !important; }
 
@@ -838,3 +935,5 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     padding-top: 10px;
   }
 {% endstylesheet %}
+
+

@@ -76,10 +76,8 @@
     {% endif %}
     {% assign collection_title = collection.title | downcase %}
     {% comment %} {% if collection_title == 'liquor and wine' and active_vendor_label == blank %} {% endcomment %}
-     {{ collection_title }}
-    {% if collection_title == 'liquor and wine' %}
+    {% if collection_title == 'liquor and wine' or collection.title == 'liquor & wine' %}
       {%  if collection.image != blank %}
-     {{ collection.image }}
 
       <div class="collection-banner">
         <img

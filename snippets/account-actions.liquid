@@ -418,6 +418,8 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
   try { sessionStorage.removeItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__'); } catch (e) {}
 
   // popover may mount a bit late → retry
+  let tries = 0;
+
   const iv = setInterval(() => {
     tries++;
 

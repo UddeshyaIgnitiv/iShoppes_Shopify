@@ -95,7 +95,6 @@
         "slide_rGGRWe": {
           "type": "_slide",
           "name": "t:names.slide",
-          "disabled": true,
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/homepage-new-1.jpg",
@@ -151,6 +150,7 @@
         },
         "slide_VzzQtB": {
           "type": "_slide",
+          "disabled": true,
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/brugal_banner_m.jpg",

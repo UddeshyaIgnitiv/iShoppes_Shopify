@@ -7,18 +7,25 @@
   for a store-wide default when the product metafield is empty. Match the wording to your automatic
   discount in Admin so the PDP matches checkout.
 {%- enddoc -%}
-{%- if closest.product.metafields.custom.active_discount_label != blank -%}
+{%- if closest.product.metafields.custom.active_discount_labels != blank -%}
 <product-discount-promotion
   class="product-discount-promotion"
   data-product-id="{{ product_for_promo.id }}"
   data-variant-id="{{ variant_for_promo.id }}"
   data-promo-prefix="{{ promo_prefix | escape }}"
+  data-discounts="{{ closest.product.metafields.custom.active_discount_labels | json | escape }}"
 >
 
     <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
       <div class="offer-text__line">
-          <span class="offer-text__prefix">Limited Time offers: {{ closest.product.metafields.custom.active_discount_label }}</span>
+          <span class="offer-text__prefix">Limited Time offers:</span>
+          <ul class="offer-text__list">
+            {%- assign discounts = closest.product.metafields.custom.active_discount_labels | json | parse_json -%}
+            {%- for discount in discounts -%}
+              <li class="offer-text__item">{{ discount }}</li>
+            {%- endfor -%}
+          </ul>
       </div>
     </div>
 </product-discount-promotion>
-{%-  endif -%}
+{%- endif -%}

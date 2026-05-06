@@ -353,7 +353,7 @@ if (!window.__ACCOUNT_POPOVER_LOGIN_INIT__) {
 window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 (function loginWrongPasswordPopup() {
   // Uses native Popover API: <div id="account-popover" popover="auto">
-  function openAccountPopover() {
+  {% comment %} function openAccountPopover() {
     const pop = document.getElementById('account-popover');
     if (!pop) return false;
 
@@ -365,6 +365,42 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     pop.style.visibility = '';
     pop.classList.add('open', 'active', 'is-open');
     return true;
+  } {% endcomment %}
+  function openAccountPopover() {
+    const pop = document.getElementById('account-popover');
+
+    // Desktop popover
+    if (pop) {
+      if (typeof pop.showPopover === 'function') {
+        try {
+          pop.showPopover();
+          return true;
+        } catch (e) {}
+      }
+
+      pop.style.display = '';
+      pop.style.visibility = '';
+      pop.classList.add('open', 'active', 'is-open');
+      return true;
+    }
+
+    // Mobile dialog trigger fallback
+    const mobileBtn = document.querySelector(
+      '.account-button.header-actions__action[aria-label="Open account menu"], .account-button.header-actions__action'
+    );
+
+    if (mobileBtn && !mobileBtn.__accountAutoClicked) {
+      mobileBtn.__accountAutoClicked = true;
+      mobileBtn.click();
+
+      setTimeout(() => {
+        mobileBtn.__accountAutoClicked = false;
+      }, 1000);
+
+      return true;
+    }
+
+    return false;
   }
 
   function showLoginBlock() {
@@ -417,12 +453,23 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 
   // popover may mount a bit late → retry
   let tries = 0;
-  const iv = setInterval(() => {
+  {% comment %} const iv = setInterval(() => {
     tries++;
     openAccountPopover();
     showLoginBlock();
 
     // stop after some tries
+    if (tries >= 15) clearInterval(iv);
+  }, 200); {% endcomment %}
+  const iv = setInterval(() => {
+    tries++;
+
+    openAccountPopover();
+
+    setTimeout(() => {
+      showLoginBlock();
+    }, 150);
+
     if (tries >= 15) clearInterval(iv);
   }, 200);
 })();

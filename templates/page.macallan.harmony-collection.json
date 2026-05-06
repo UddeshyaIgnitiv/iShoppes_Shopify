@@ -267,12 +267,14 @@
       "blocks": {
         "product_VF7xBJ": {
           "type": "product",
+          "disabled": true,
           "settings": {
             "product": "the-macallan-oscuro-170250"
           }
         },
         "product_rrb7gq": {
           "type": "product",
+          "disabled": true,
           "settings": {
             "product": "the-macallan-no6-257438"
           }

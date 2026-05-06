@@ -48,7 +48,7 @@
       {% if active_vendor_count == 1 %}
         {% assign vendor_handle = active_vendor_label | handleize %}
         {% assign vendor_collection = collections[vendor_handle] %}
-        {{ vendor_collection.image }}
+        {{ vendor_collection | json }}
         {% if vendor_collection and vendor_collection.image != blank %}
           <div class="collection-filter-image">
             <img

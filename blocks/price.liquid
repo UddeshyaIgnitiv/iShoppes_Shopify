@@ -85,7 +85,7 @@
     {% render 'product-discount-promotion',
       product_for_promo: product_resource,
       variant_for_promo: selected_variant,
-      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offerss: '
+      promo_prefix: block_settings.promotion_prefix | default: 'Limited Time offer: '
     %}
     <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
   {% endunless %}
@@ -182,7 +182,7 @@
       "type": "text",
       "id": "promotion_prefix",
       "label": "Promotion prefix",
-      "default": "Limited Time offers: ",
+      "default": "Limited Time offer: ",
       "visible_if": "{{ block.settings.show_discount_promotion }}"
     },
     {

@@ -356,6 +356,7 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
   // Uses native Popover API: <div id="account-popover" popover="auto">
   function openAccountPopover() {
     const pop = document.getElementById('account-popover');
+    console.log(pop);
     if (!pop) return false;
 
     if (typeof pop.showPopover === 'function') {

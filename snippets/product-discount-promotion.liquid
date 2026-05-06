@@ -55,11 +55,35 @@
         // Create HTML for each discount as a separate line
         let html = '';
         discounts.forEach(discount => {
-          if(discount == 'BUY3GET25' || discount == 'BUY3GET26' || discount == 'BUY3GET27' || discount == 'BUY3GET28'){
+          if(discount == 'BUY3GET25'){
             html += `
             <div class="offer-text__line">
               <span class="offer-text__prefix">Limited Time offer:</span>
               <span class="offer-text__discount">Buy 3 Save 25%. Use coupon code ${escapeHtml(discount)}</span>
+            </div>
+          `;
+          }
+          else if(discount == 'BUY3GET26'){
+            html += `
+            <div class="offer-text__line">
+              <span class="offer-text__prefix">Limited Time offer:</span>
+              <span class="offer-text__discount">Buy 3 Save 26%. Use coupon code ${escapeHtml(discount)}</span>
+            </div>
+          `;
+          }
+          else if(discount == 'BUY3GET27'){
+            html += `
+            <div class="offer-text__line">
+              <span class="offer-text__prefix">Limited Time offer:</span>
+              <span class="offer-text__discount">Buy 3 Save 27%. Use coupon code ${escapeHtml(discount)}</span>
+            </div>
+          `;
+          }
+          else if(discount == 'BUY3GET28'){
+            html += `
+            <div class="offer-text__line">
+              <span class="offer-text__prefix">Limited Time offer:</span>
+              <span class="offer-text__discount">Buy 3 Save 28%. Use coupon code ${escapeHtml(discount)}</span>
             </div>
           `;
           }

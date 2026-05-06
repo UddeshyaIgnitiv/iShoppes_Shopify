@@ -186,6 +186,10 @@
               },
               "blocks": {}
             },
+            "unlimited_bundles_embed_all_mPQQjf": {
+              "type": "shopify://apps/unlimited-bundles/blocks/embed-all/d33d0f48-dee0-42a0-b156-2a5dce91814a",
+              "settings": {}
+            },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
@@ -198,10 +202,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "unlimited_bundles_product_page_placeholder_EeGzkd": {
-              "type": "shopify://apps/unlimited-bundles/blocks/product-page-placeholder/d33d0f48-dee0-42a0-b156-2a5dce91814a",
-              "settings": {}
             },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
@@ -243,8 +243,8 @@
           "block_order": [
             "group_icgrde",
             "divider_VJhene",
+            "unlimited_bundles_embed_all_mPQQjf",
             "variant_picker_R3rGDr",
-            "unlimited_bundles_product_page_placeholder_EeGzkd",
             "buy_buttons_eYQEYi"
           ]
         }

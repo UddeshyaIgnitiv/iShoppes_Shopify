@@ -207,10 +207,10 @@
     "new_arrivals": {
       "type": "new-arrivals",
       "blocks": {
-        "product_KykH3m": {
+        "product_BTLR3z": {
           "type": "product",
           "settings": {
-            "product": "the-macallan-rare-cask-black-224707"
+            "product": "the-macallan-rare-cask-black"
           }
         },
         "product_K6w96Y": {
@@ -233,7 +233,7 @@
         }
       },
       "block_order": [
-        "product_KykH3m",
+        "product_BTLR3z",
         "product_K6w96Y",
         "product_fKba6P",
         "product_39wVz4"

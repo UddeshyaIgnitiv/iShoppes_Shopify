@@ -3331,7 +3331,9 @@ slideshow-slides {
     &[size='small'] {
       min-height: 26.25rem;
     }
-
+    main[data-template='index'] &[size='medium'] {
+      min-height: 45rem;
+    }
     &[size='medium'] {
       min-height: 26.25rem;
     }

@@ -146,6 +146,8 @@
                 "show_sale_price_first": true,
                 "show_installments": false,
                 "show_tax_info": false,
+                "show_discount_promotion": true,
+                "promotion_prefix": "Limited Time offer:",
                 "type_preset": "h6",
                 "width": "100%",
                 "alignment": "left",
@@ -172,7 +174,7 @@
       },
       "settings": {
         "layout_type": "grid",
-        "product_card_size": "medium",
+        "product_card_size": "small",
         "mobile_product_card_size": "small",
         "product_grid_width": "centered",
         "full_width_on_mobile": true,

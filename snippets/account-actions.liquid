@@ -316,7 +316,7 @@
           }
 
           // ✅ Your theme uses native Popover API (popover="auto")
-          {% comment %} function openAccountPopover() {
+          function openAccountPopover() {
             const pop = document.getElementById('account-popover');
             if (!pop) return false;
             if (typeof pop.showPopover === 'function') {
@@ -326,60 +326,6 @@
             pop.style.display = '';
             pop.style.visibility = '';
             pop.classList.add('open', 'active', 'is-open');
-            return true;
-          } {% endcomment %}
-
-          function openAccountPopover() {
-
-            // ================= MOBILE ACCOUNT DRAWER =================
-            const dialog = document.querySelector('dialog.account-drawer__dialog');
-
-            if (dialog) {
-              try {
-
-                // open dialog
-                if (!dialog.open) {
-                  if (typeof dialog.showModal === 'function') {
-                    dialog.showModal();
-                  } else {
-                    dialog.setAttribute('open', '');
-                  }
-                }
-
-                // lock body scroll like theme
-                dialog.setAttribute('scroll-lock', '');
-                document.documentElement.classList.add('scroll-lock');
-                document.body.classList.add('scroll-lock');
-
-                // make sure dialog visible
-                dialog.style.display = '';
-                dialog.style.visibility = '';
-                dialog.style.opacity = '1';
-
-                return true;
-
-              } catch (e) {
-                dialog.setAttribute('open', '');
-                return true;
-              }
-            }
-
-            // ================= DESKTOP POPOVER =================
-            const pop = document.getElementById('account-popover');
-
-            if (!pop) return false;
-
-            if (typeof pop.showPopover === 'function') {
-              try {
-                pop.showPopover();
-                return true;
-              } catch (e) {}
-            }
-
-            pop.style.display = '';
-            pop.style.visibility = '';
-            pop.classList.add('open', 'active', 'is-open');
-
             return true;
           }
           (function setLoginReturnTo() {
@@ -407,7 +353,7 @@ if (!window.__ACCOUNT_POPOVER_LOGIN_INIT__) {
 window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 (function loginWrongPasswordPopup() {
   // Uses native Popover API: <div id="account-popover" popover="auto">
-  {% comment %} function openAccountPopover() {
+  function openAccountPopover() {
     const pop = document.getElementById('account-popover');
     if (!pop) return false;
 
@@ -419,61 +365,7 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     pop.style.visibility = '';
     pop.classList.add('open', 'active', 'is-open');
     return true;
-  } {% endcomment %}
-
-  function openAccountPopover() {
-
-  // ================= MOBILE ACCOUNT DRAWER =================
-  const dialog = document.querySelector('dialog.account-drawer__dialog');
-
-  if (dialog) {
-    try {
-
-      // open dialog
-      if (!dialog.open) {
-        if (typeof dialog.showModal === 'function') {
-          dialog.showModal();
-        } else {
-          dialog.setAttribute('open', '');
-        }
-      }
-
-      // lock body scroll like theme
-      dialog.setAttribute('scroll-lock', '');
-      document.documentElement.classList.add('scroll-lock');
-      document.body.classList.add('scroll-lock');
-
-      // make sure dialog visible
-      dialog.style.display = '';
-      dialog.style.visibility = '';
-      dialog.style.opacity = '1';
-
-      return true;
-
-    } catch (e) {
-      dialog.setAttribute('open', '');
-      return true;
-    }
   }
-
-  // ================= DESKTOP POPOVER =================
-  const pop = document.getElementById('account-popover');
-
-  if (!pop) return false;
-
-  if (typeof pop.showPopover === 'function') {
-    try {
-      pop.showPopover();
-      return true;
-    } catch (e) {}
-  }
-
-  pop.style.display = '';
-  pop.style.visibility = '';
-  pop.classList.add('open', 'active', 'is-open');
-
-  return true;
-}
 
   function showLoginBlock() {
     const loginBlock = document.getElementById('LoginBlock');
@@ -524,33 +416,15 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
   try { sessionStorage.removeItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__'); } catch (e) {}
 
   // popover may mount a bit late → retry
-// popup/dialog may mount late
-let tries = 0;
+  let tries = 0;
+  const iv = setInterval(() => {
+    tries++;
+    openAccountPopover();
+    showLoginBlock();
 
-const iv = setInterval(() => {
-
-  tries++;
-
-  const opened = openAccountPopover();
-
-  if (opened) {
-
-    setTimeout(() => {
-      showLoginBlock();
-
-      // focus email after drawer fully rendered
-      setTimeout(() => {
-        document.getElementById('LoginEmail')?.focus();
-      }, 250);
-
-    }, 150);
-  }
-
-  if (tries >= 25 || opened) {
-    clearInterval(iv);
-  }
-
-}, 300);
+    // stop after some tries
+    if (tries >= 15) clearInterval(iv);
+  }, 200);
 })();
 }
 

@@ -494,6 +494,7 @@
   }, true);
 
   function hasLoginError() {
+    console.log('jbchdb');
     return location.pathname.replace(/\/+$/, '') === '/account/login' &&
       (
         sessionStorage.getItem(FLAG) === '1' ||

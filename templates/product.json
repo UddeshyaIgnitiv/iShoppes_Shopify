@@ -67,6 +67,10 @@
             "padding-inline-end": 0
           },
           "blocks": {
+            "smart_discounts_widget_HRcQ4C": {
+              "type": "shopify://apps/smart-discounts/blocks/widget/019d1c1c-2c4b-704e-be88-ea7fd20c9afb",
+              "settings": {}
+            },
             "group_icgrde": {
               "type": "group",
               "name": "Header",
@@ -186,16 +190,6 @@
               },
               "blocks": {}
             },
-            "unlimited_bundles_embed_all_mPQQjf": {
-              "type": "shopify://apps/unlimited-bundles/blocks/embed-all/d33d0f48-dee0-42a0-b156-2a5dce91814a",
-              "settings": {}
-            },
-            "unlimited_bundles_embed_qbpPcM": {
-              "type": "shopify://apps/unlimited-bundles/blocks/embed/d33d0f48-dee0-42a0-b156-2a5dce91814a",
-              "settings": {
-                "embed_bundle_uuid": ""
-              }
-            },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
@@ -247,10 +241,9 @@
             }
           },
           "block_order": [
+            "smart_discounts_widget_HRcQ4C",
             "group_icgrde",
             "divider_VJhene",
-            "unlimited_bundles_embed_all_mPQQjf",
-            "unlimited_bundles_embed_qbpPcM",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi"
           ]

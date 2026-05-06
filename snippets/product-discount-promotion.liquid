@@ -32,10 +32,7 @@
 >
 
     <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
-      <div class="offer-text__line">
-          <span class="offer-text__prefix">Limited Time offers:</span>
-          <div class="offer-text__discounts-container"></div>
-      </div>
+      <div class="offer-text__discounts-container"></div>
     </div>
 </product-discount-promotion>
 
@@ -55,21 +52,29 @@
       if (!container) return;
       
       if (Array.isArray(discounts) && discounts.length > 0) {
-        if (discounts.length === 1) {
-          container.innerHTML = `<span class="discount-badge">${discounts[0]}</span>`;
-        } else {
-          const list = document.createElement('ul');
-          list.className = 'discount-list';
-          discounts.forEach(discount => {
-            const li = document.createElement('li');
-            li.className = 'discount-item';
-            li.textContent = discount;
-            list.appendChild(li);
-          });
-          container.innerHTML = '';
-          container.appendChild(list);
-        }
+        // Create HTML for each discount as a separate line
+        let html = '';
+        discounts.forEach(discount => {
+          html += `
+            <div class="offer-text__line">
+              <span class="offer-text__prefix">Limited Time offer:</span>
+              <span class="offer-text__discount">${escapeHtml(discount)}</span>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
       }
+      
+      // Helper function to escape HTML
+      function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+          if (m === '&') return '&amp;';
+          if (m === '<') return '&lt;';
+          if (m === '>') return '&gt;';
+          return m;
+        });
+      }
+      
     } catch(e) {
       console.error('Failed to parse discounts:', e);
       // Fallback: show raw value

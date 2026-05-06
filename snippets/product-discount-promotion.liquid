@@ -28,15 +28,56 @@
   data-product-id="{{ product_for_promo.id }}"
   data-variant-id="{{ variant_for_promo.id }}"
   data-promo-prefix="{{ promo_prefix | escape }}"
+  data-discounts="{{ closest.product.metafields.custom.active_discount_labels | escape }}"
 >
 
     <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
       <div class="offer-text__line">
           <span class="offer-text__prefix">Limited Time offers:</span>
-          <span class="offer-text__discounts">
-            {{ closest.product.metafields.custom.active_discount_labels }}
-          </span>
+          <div class="offer-text__discounts-container"></div>
       </div>
     </div>
 </product-discount-promotion>
+
+<script>
+  (function() {
+    const element = document.querySelector('product-discount-promotion');
+    if (!element) return;
+    
+    const discountsData = element.dataset.discounts;
+    if (!discountsData) return;
+    
+    try {
+      // Parse the JSON data
+      const discounts = JSON.parse(discountsData);
+      
+      const container = element.querySelector('.offer-text__discounts-container');
+      if (!container) return;
+      
+      if (Array.isArray(discounts) && discounts.length > 0) {
+        if (discounts.length === 1) {
+          container.innerHTML = `<span class="discount-badge">${discounts[0]}</span>`;
+        } else {
+          const list = document.createElement('ul');
+          list.className = 'discount-list';
+          discounts.forEach(discount => {
+            const li = document.createElement('li');
+            li.className = 'discount-item';
+            li.textContent = discount;
+            list.appendChild(li);
+          });
+          container.innerHTML = '';
+          container.appendChild(list);
+        }
+      }
+    } catch(e) {
+      console.error('Failed to parse discounts:', e);
+      // Fallback: show raw value
+      const container = element.querySelector('.offer-text__discounts-container');
+      if (container) {
+        container.textContent = discountsData;
+      }
+    }
+  })();
+</script>
 {%-  endif -%}

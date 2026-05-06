@@ -326,7 +326,6 @@
             pop.style.display = '';
             pop.style.visibility = '';
             pop.classList.add('open', 'active', 'is-open');
-            console.log('bchdbhc');
             return true;
           }
           (function setLoginReturnTo() {
@@ -366,7 +365,6 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     pop.style.visibility = '';
     pop.classList.add('open', 'active', 'is-open');
 
-    console.log('vivek1mmmm');
     return true;
   }
 
@@ -393,7 +391,6 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
       try {
         sessionStorage.setItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__', '1');
 
-        console.log('vivek1sdsddds');
       } catch (e) {}
       const btn = document.getElementById('LoginSubmitBtn');
       if (btn) { btn.disabled = true; btn.textContent = 'PLEASE WAIT...'; }
@@ -413,7 +410,6 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
   const hasLoginErrors =
     !!document.getElementById('LoginFormErrors') ||
     !!document.querySelector('#ClassicLoginForm .form-errors');
-console.log('vivek1');
   if (!isAccountLoginPage) return;
   if (!flag && !hasLoginErrors) return;
 
@@ -426,7 +422,6 @@ console.log('vivek1');
     tries++;
     openAccountPopover();
     showLoginBlock();
-console.log('vivek22221');
     // stop after some tries
     if (tries >= 15) clearInterval(iv);
   }, 200);

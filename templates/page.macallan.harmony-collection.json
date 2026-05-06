@@ -292,6 +292,9 @@
         "product_rrb7gq",
         "product_c8edBd"
       ],
+      "custom_css": [
+        ".no-products-message{display: none;}"
+      ],
       "name": "Macallan Collection List",
       "settings": {
         "heading": "THE MACALLAN COLOUR COLLECTION",

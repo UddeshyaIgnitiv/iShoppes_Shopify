@@ -367,7 +367,7 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     return true;
   }
 
-  function showLoginBlock() {
+  {% comment %} function showLoginBlock() {
     const loginBlock = document.getElementById('LoginBlock');
     const recoverBlock = document.getElementById('RecoverBlock');
     const registerBlock = document.getElementById('RegisterBlock');
@@ -379,6 +379,39 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     if (headerTitleEl) headerTitleEl.textContent = 'Sign-in or Create an Account';
 
     document.getElementById('LoginEmail')?.focus();
+  } {% endcomment %}
+
+  function getActiveAccountRoot() {
+    const mobileRoot = document.querySelector('dialog.account-drawer__dialog[open] .account-actions');
+    if (mobileRoot) return mobileRoot;
+
+    const desktopRoot = document.querySelector('#account-popover .account-actions');
+    if (desktopRoot) return desktopRoot;
+
+    return root;
+  }
+
+  function showLoginBlock() {
+    const activeRoot = getActiveAccountRoot();
+
+    const loginBlock = activeRoot.querySelector('#LoginBlock');
+    const recoverBlock = activeRoot.querySelector('#RecoverBlock');
+    const registerBlock = activeRoot.querySelector('#RegisterBlock');
+
+    [loginBlock, recoverBlock, registerBlock].forEach(el => {
+      if (el) el.classList.add('is-hidden');
+    });
+
+    if (loginBlock) loginBlock.classList.remove('is-hidden');
+
+    const headerTitleEl = activeRoot.querySelector('#AccountHeaderTitle');
+    if (headerTitleEl) {
+      headerTitleEl.textContent = 'Sign-in or Create an Account';
+    }
+
+    setTimeout(() => {
+      activeRoot.querySelector('#LoginEmail')?.focus();
+    }, 250);
   }
 
   // 1) Before Shopify redirects: set a flag so we can open popup on /account/login
@@ -404,10 +437,14 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 
   let flag = false;
   try { flag = sessionStorage.getItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__') === '1'; } catch (e) {}
-
+{% comment %} 
   const hasLoginErrors =
     !!document.getElementById('LoginFormErrors') ||
-    !!document.querySelector('#ClassicLoginForm .form-errors');
+    !!document.querySelector('#ClassicLoginForm .form-errors'); {% endcomment %}
+
+    const hasLoginErrors =
+  !!document.querySelector('#LoginFormErrors') ||
+  !!document.querySelector('#ClassicLoginForm .form-errors');
 
   if (!isAccountLoginPage) return;
   if (!flag && !hasLoginErrors) return;

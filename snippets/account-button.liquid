@@ -10,7 +10,6 @@
 {%- assign tag = tag | default: 'button' -%}
 <{{ tag }}
   class="account-button header-actions__action"
-  id="account-popover"
   aria-label="{{ 'accessibility.account' | t }}"
   {%- if popover_id -%}
     popovertarget="{{ popover_id }}"

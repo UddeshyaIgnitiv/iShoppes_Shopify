@@ -95,10 +95,11 @@
         "slide_rGGRWe": {
           "type": "_slide",
           "name": "t:names.slide",
+          "disabled": true,
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/homepage-new.jpg",
-            "link": "",
+            "link": "/search?q=hendrick&options%5Bprefix%5D=last",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",

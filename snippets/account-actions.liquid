@@ -419,28 +419,38 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 
   // popover may mount a bit late → retry
   let tries = 0;
+  let mobileClicked = false;
 
   const iv = setInterval(() => {
     tries++;
 
-    // ================= MOBILE =================
     if (window.matchMedia('(max-width: 749px)').matches) {
-
       const mobileBtn = document.querySelector('.mobile-bottom-row .account-drawer #mb-account');
 
-      if (mobileBtn) {
+      if (mobileBtn && !mobileClicked) {
+        mobileClicked = true;
         mobileBtn.click();
+
+        setTimeout(() => {
+          showLoginBlock();
+        }, 500);
+
+        clearInterval(iv);
+        return;
       }
 
     } else {
+      const opened = openAccountPopover();
 
-      // ================= DESKTOP =================
-      openAccountPopover();
+      if (opened) {
+        setTimeout(() => {
+          showLoginBlock();
+        }, 300);
+
+        clearInterval(iv);
+        return;
+      }
     }
-
-    setTimeout(() => {
-      showLoginBlock();
-    }, 300);
 
     if (tries >= 15) clearInterval(iv);
 

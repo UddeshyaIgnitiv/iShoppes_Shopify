@@ -19,43 +19,30 @@
       <nav class="account-actions__nav">
         <ul class="account-actions__list">
           <li class="account-actions__list-item">
-            <a
-              href="{{ routes.account_url }}"
-              class="account-actions__links button-secondarys"
-              {% if autofocus_enabled and customer %}
-                autofocus
-              {% endif %}
-            >
+            <a href="{{ routes.account_url }}" class="account-actions__links button-secondarys">
               <span class="account-actions__icons" aria-hidden="true"></span>
               {{ 'content.account_orders' | t }}
             </a>
           </li>
 
           <li class="account-actions__list-item">
-            <a
-              href="{{ routes.root_url }}apps/page/wishlist"
-              class="account-actions__links button-secondarys"
-            >
+            <a href="{{ routes.root_url }}apps/page/wishlist" class="account-actions__links button-secondarys">
               <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_favorites' | t }}
             </a>
           </li>
 
           <li class="account-actions__list-item">
-            <a
-              href="{{ routes.account_addresses_url }}"
-              class="account-actions__links button-secondarys"
-            >
+            <a href="{{ routes.account_addresses_url }}" class="account-actions__links button-secondarys">
               <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'content.account_profile' | t }}
             </a>
           </li>
+
           <hr class="account-actions__divider">
+
           <li class="account-actions__list-item">
-            <a
-              href="{{ routes.account_logout_url }}"
-              class="account-actions__links button-secondarys"
-            >
+            <a href="{{ routes.account_logout_url }}" class="account-actions__links button-secondarys">
               <span class="account-actions__icon" aria-hidden="true"></span>
               {{ 'actions.log_out' | t }}
             </a>
@@ -64,19 +51,13 @@
       </nav>
     {% endif %}
 
-    <!-- Global login flag for JS -->
     <script>
       window.__CUSTOMER_LOGGED_IN__ = {{ customer.id | default: 0 | json }} != 0;
     </script>
 
     {% unless customer %}
-      <!-- ================= LOGIN BLOCK ================= -->
       <div class="account-actions__sign-ins" data-skip-subtree-update="true" id="LoginBlock">
         {% form 'customer_login', id: 'ClassicLoginForm' %}
-          {%- comment -%}
-            ✅ If login fails, Shopify will go to /account/login.
-            We add a query flag so JS can open the popover and show login.
-          {%- endcomment -%}
           <input type="hidden" name="return_to" value="{{ routes.account_url }}">
 
           {% if form.errors %}
@@ -84,7 +65,6 @@
               <ul class="errors">
                 {% for field in form.errors %}
                   {% assign msg = form.errors.messages[field] | downcase %}
-
                   {% if msg contains 'incorrect' or msg contains 'password' %}
                     <li>Email id or password is not valid.</li>
                   {% else %}
@@ -95,32 +75,14 @@
             </div>
           {% endif %}
 
-
           <div class="form-field">
             <label for="LoginEmail">Email address*</label>
-            <input
-              id="LoginEmail"
-              class="input"
-              type="email"
-              name="customer[email]"
-              value="{{ form.email | escape }}"
-              autocomplete="email"
-              required
-              aria-required="true"
-            >
+            <input id="LoginEmail" class="input" type="email" name="customer[email]" value="{{ form.email | escape }}" autocomplete="email" required aria-required="true">
           </div>
 
           <div class="form-field">
             <label for="LoginPassword">Password*</label>
-            <input
-              id="LoginPassword"
-              class="input"
-              type="password"
-              name="customer[password]"
-              autocomplete="current-password"
-              required
-              aria-required="true"
-            >
+            <input id="LoginPassword" class="input" type="password" name="customer[password]" autocomplete="current-password" required aria-required="true">
           </div>
 
           <a href="#" id="ShowRecoverBtn" class="link" style="margin-inline-start:auto;">Forgot password?</a>
@@ -132,27 +94,13 @@
         {% endform %}
       </div>
 
-      <!-- ================= RECOVER BLOCK (CAPTCHA SAFE) ================= -->
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RecoverBlock">
         {% form 'recover_customer_password', id: 'RecoverPasswordForm' %}
-
           <div class="form-field" id="RecoverEmailField">
             <label for="RecoverEmail">Email*</label>
-            <input
-              id="RecoverEmail"
-              class="input"
-              type="email"
-              name="email"
-              autocomplete="email"
-              required
-              aria-required="true"
-            >
+            <input id="RecoverEmail" class="input" type="email" name="email" autocomplete="email" required aria-required="true">
           </div>
 
-          {%- comment -%}
-            ✅ On success Shopify sets posted_successfully?
-            We show success message and JS will keep popover open + auto reset.
-          {%- endcomment -%}
           {% if form.posted_successfully? %}
             <div id="RecoverAjaxSuccess" class="form-success" role="status" aria-live="polite">
               If an account exists for that email, you’ll receive a password reset email shortly.
@@ -180,7 +128,6 @@
         {% endform %}
       </div>
 
-      <!-- ================= REGISTER BLOCK (HIDDEN) ================= -->
       <div class="account-actions__sign-ins is-hidden" data-skip-subtree-update="true" id="RegisterBlock">
         {% form 'create_customer', id: 'ClassicRegisterForm' %}
           {% if form.errors %}
@@ -218,21 +165,8 @@
 
           <div class="form-field">
             <label for="RegMobile">Mobile Number*</label>
-            <input
-              id="RegMobile"
-              class="input"
-              type="text"
-              name="reg_mobile"
-              required
-              aria-required="true"
-              inputmode="numeric"
-              autocomplete="tel"
-              minlength="7"
-              maxlength="15"
-            >
-            <p id="RegMobileError" class="field-error is-hidden" role="alert" aria-live="polite">
-              Mobile Number is not valid
-            </p>
+            <input id="RegMobile" class="input" type="text" name="reg_mobile" required aria-required="true" inputmode="numeric" autocomplete="tel" minlength="7" maxlength="15">
+            <p id="RegMobileError" class="field-error is-hidden" role="alert" aria-live="polite">Mobile Number is not valid</p>
           </div>
 
           <div class="form-field">
@@ -273,7 +207,9 @@
           async function loadAirports() {
             const res = await fetch('https://ishoppes.axiomconsulting.in/airports');
             const airlines = await res.json();
+
             RegTerminal.innerHTML = '';
+
             airlines.forEach(item => {
               const option = document.createElement('option');
               option.value = item.name;
@@ -290,16 +226,13 @@
         (function () {
           const root = document.currentScript?.closest('.account-actions');
           if (!root) return;
+
           const $ = (sel) => root.querySelector(sel);
 
-          // ================= HEADER =================
           const headerTitleEl = $('#AccountHeaderTitle');
           const HEADER_DEFAULT = 'Sign-in or Create an Account';
-          const HEADER_FORGOT  = 'Forgot password';
+          const HEADER_FORGOT = 'Forgot password';
 
-          function setHeader(text) { if (headerTitleEl) headerTitleEl.textContent = text; }
-
-          // ================= BLOCKS =================
           const loginBlock = $('#LoginBlock');
           const registerBlock = $('#RegisterBlock');
           const recoverBlock = $('#RecoverBlock');
@@ -309,130 +242,165 @@
           const showRecoverBtn = $('#ShowRecoverBtn');
           const backToLoginBtn = $('#BackToLoginBtn');
 
-          function showOnly(block) {
-            [loginBlock, registerBlock, recoverBlock].forEach(el => el?.classList.add('is-hidden'));
-            block?.classList.remove('is-hidden');
-            block?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+          function setHeader(text) {
+            if (headerTitleEl) headerTitleEl.textContent = text;
           }
 
-          // ✅ Your theme uses native Popover API (popover="auto")
+          function showOnly(block) {
+            [loginBlock, registerBlock, recoverBlock].forEach(el => {
+              if (el) el.classList.add('is-hidden');
+            });
+
+            if (block) block.classList.remove('is-hidden');
+          }
+
           function openAccountPopover() {
-            const pop = document.getElementById('account-popover');
-            if (!pop) return false;
-            if (typeof pop.showPopover === 'function') {
-              try { pop.showPopover(); return true; } catch(e) {}
+            const dialog = document.querySelector('dialog.account-drawer__dialog');
+
+            if (dialog) {
+              try {
+                if (!dialog.open) {
+                  if (typeof dialog.showModal === 'function') {
+                    dialog.showModal();
+                  } else {
+                    dialog.setAttribute('open', '');
+                  }
+                }
+
+                dialog.setAttribute('scroll-lock', '');
+                document.documentElement.classList.add('scroll-lock');
+                document.body.classList.add('scroll-lock');
+
+                dialog.style.display = '';
+                dialog.style.visibility = '';
+                dialog.style.opacity = '1';
+
+                return true;
+              } catch (e) {
+                dialog.setAttribute('open', '');
+                return true;
+              }
             }
-            // fallback
+
+            const pop = document.getElementById('account-popover');
+
+            if (!pop) return false;
+
+            if (typeof pop.showPopover === 'function') {
+              try {
+                pop.showPopover();
+                return true;
+              } catch (e) {}
+            }
+
             pop.style.display = '';
             pop.style.visibility = '';
             pop.classList.add('open', 'active', 'is-open');
+
             return true;
           }
+
+          function showLoginBlockGlobal() {
+            const loginBlockGlobal = document.getElementById('LoginBlock');
+            const recoverBlockGlobal = document.getElementById('RecoverBlock');
+            const registerBlockGlobal = document.getElementById('RegisterBlock');
+
+            [loginBlockGlobal, recoverBlockGlobal, registerBlockGlobal].forEach(el => {
+              if (el) el.classList.add('is-hidden');
+            });
+
+            if (loginBlockGlobal) loginBlockGlobal.classList.remove('is-hidden');
+
+            const title = document.getElementById('AccountHeaderTitle');
+            if (title) title.textContent = HEADER_DEFAULT;
+
+            setTimeout(() => {
+              document.getElementById('LoginEmail')?.focus();
+            }, 250);
+          }
+
           (function setLoginReturnTo() {
-  const form = $('#ClassicLoginForm');
-  if (!form) return;
+            const form = $('#ClassicLoginForm');
+            if (!form) return;
 
-  const input = form.querySelector('input[name="return_to"]');
-  if (!input) return;
+            const input = form.querySelector('input[name="return_to"]');
+            if (!input) return;
 
-  // if they are already on /account/login, go to /account on success
-  const isAccountLogin = (window.location.pathname || '').replace(/\/+$/, '') === '/account/login';
+            const isAccountLogin = (window.location.pathname || '').replace(/\/+$/, '') === '/account/login';
 
-  if (isAccountLogin) {
-    input.value = '/account';
-    return;
-  }
+            if (isAccountLogin) {
+              input.value = '/account';
+              return;
+            }
 
-  // otherwise return to current page after login
-  input.value = window.location.pathname + window.location.search + window.location.hash;
-})();
+            input.value = window.location.pathname + window.location.search + window.location.hash;
+          })();
 
+          if (!window.__ACCOUNT_POPOVER_LOGIN_INIT__) {
+            window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 
-          /* ====================== LOGIN WRONG PASSWORD -> OPEN POPOVER (SESSION FLAG) ====================== */
-if (!window.__ACCOUNT_POPOVER_LOGIN_INIT__) {
-window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
-(function loginWrongPasswordPopup() {
-  // Uses native Popover API: <div id="account-popover" popover="auto">
-  function openAccountPopover() {
-    const pop = document.getElementById('account-popover');
-    if (!pop) return false;
+            (function loginWrongPasswordPopup() {
+              const FLAG = '__OPEN_ACCOUNT_POPOVER_ON_LOAD__';
 
-    if (typeof pop.showPopover === 'function') {
-      try { pop.showPopover(); return true; } catch (e) {}
-    }
-    // fallback
-    pop.style.display = '';
-    pop.style.visibility = '';
-    pop.classList.add('open', 'active', 'is-open');
-    return true;
-  }
+              const loginForm = document.getElementById('ClassicLoginForm');
 
-  function showLoginBlock() {
-    const loginBlock = document.getElementById('LoginBlock');
-    const recoverBlock = document.getElementById('RecoverBlock');
-    const registerBlock = document.getElementById('RegisterBlock');
+              if (loginForm && !loginForm.__openFlagBound) {
+                loginForm.__openFlagBound = true;
 
-    [loginBlock, recoverBlock, registerBlock].forEach(el => el?.classList.add('is-hidden'));
-    loginBlock?.classList.remove('is-hidden');
+                loginForm.addEventListener('submit', function () {
+                  try {
+                    sessionStorage.setItem(FLAG, '1');
+                  } catch (e) {}
 
-    const headerTitleEl = document.getElementById('AccountHeaderTitle');
-    if (headerTitleEl) headerTitleEl.textContent = 'Sign-in or Create an Account';
+                  const btn = document.getElementById('LoginSubmitBtn');
 
-    document.getElementById('LoginEmail')?.focus();
-  }
+                  if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = 'PLEASE WAIT...';
+                  }
+                });
+              }
 
-  // 1) Before Shopify redirects: set a flag so we can open popup on /account/login
-  const loginForm = document.getElementById('ClassicLoginForm');
-  if (loginForm && !loginForm.__openFlagBound) {
-    loginForm.__openFlagBound = true;
+              const path = window.location.pathname || '';
+              const isAccountLoginPage = path.replace(/\/+$/, '') === '/account/login';
 
-    loginForm.addEventListener('submit', function () {
-      try {
-        sessionStorage.setItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__', '1');
-      } catch (e) {}
-      const btn = document.getElementById('LoginSubmitBtn');
-      if (btn) { btn.disabled = true; btn.textContent = 'PLEASE WAIT...'; }
-    });
-  }
+              let flag = false;
 
-  // 2) On load: if we are on /account/login and either
-  //    A) session flag exists (meaning user tried login)
-  //    B) login errors exist in markup (wrong password)
-  // then open popover and show login
-  const path = window.location.pathname || '';
-  const isAccountLoginPage = path.replace(/\/+$/, '') === '/account/login';
+              try {
+                flag = sessionStorage.getItem(FLAG) === '1';
+              } catch (e) {}
 
-  let flag = false;
-  try { flag = sessionStorage.getItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__') === '1'; } catch (e) {}
+              const hasLoginErrors =
+                !!document.getElementById('LoginFormErrors') ||
+                !!document.querySelector('#ClassicLoginForm .form-errors');
 
-  const hasLoginErrors =
-    !!document.getElementById('LoginFormErrors') ||
-    !!document.querySelector('#ClassicLoginForm .form-errors');
+              if (!isAccountLoginPage) return;
+              if (!flag && !hasLoginErrors) return;
 
-  if (!isAccountLoginPage) return;
-  if (!flag && !hasLoginErrors) return;
+              try {
+                sessionStorage.removeItem(FLAG);
+              } catch (e) {}
 
-  // clear flag so it doesn't open every time
-  try { sessionStorage.removeItem('__OPEN_ACCOUNT_POPOVER_ON_LOAD__'); } catch (e) {}
+              let tries = 0;
 
-  // popover may mount a bit late → retry
-  let tries = 0;
-  const iv = setInterval(() => {
-    tries++;
-    openAccountPopover();
-    showLoginBlock();
+              const iv = setInterval(() => {
+                tries++;
 
-    // stop after some tries
-    if (tries >= 15) clearInterval(iv);
-  }, 200);
-})();
-}
+                const opened = openAccountPopover();
 
+                if (opened) {
+                  setTimeout(() => {
+                    showLoginBlockGlobal();
+                  }, 250);
+                }
 
-          // Initial header
+                if (tries >= 30 || opened) clearInterval(iv);
+              }, 300);
+            })();
+          }
+
           setHeader(HEADER_DEFAULT);
 
-          // LOGIN -> REGISTER
           showRegisterBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -440,7 +408,6 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
             $('#RegFirst')?.focus();
           });
 
-          // REGISTER -> LOGIN
           cancelRegisterBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_DEFAULT);
@@ -448,7 +415,6 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
             $('#LoginEmail')?.focus();
           });
 
-          // LOGIN -> RECOVER
           showRecoverBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             setHeader(HEADER_FORGOT);
@@ -456,23 +422,28 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
             $('#RecoverEmail')?.focus();
           });
 
-          // RECOVER -> LOGIN
           backToLoginBtn?.addEventListener('click', (e) => {
             e.preventDefault();
+
             setHeader(HEADER_DEFAULT);
             showOnly(loginBlock);
 
             const success = $('#RecoverAjaxSuccess');
             success?.classList.add('is-hidden');
+
             const field = $('#RecoverEmailField');
             if (field) field.style.display = '';
+
             const btn = $('#RecoverSubmitBtn');
-            if (btn) { btn.disabled = false; btn.textContent = 'SEND RESET LINK'; }
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = 'SEND RESET LINK';
+            }
+
             $('#RecoverPasswordForm')?.reset();
             $('#LoginEmail')?.focus();
           });
 
-          // ================= REGISTER VALIDATION + CONTROLLED SUBMIT =================
           const regForm = $('#ClassicRegisterForm');
           const regSubmitBtn = $('#RegisterSubmitBtn');
 
@@ -489,6 +460,7 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
             if (errorEl) errorEl.classList.remove('is-hidden');
             input?.setAttribute('aria-invalid', 'true');
           }
+
           function hideInlineError(input, errorEl) {
             if (errorEl) errorEl.classList.add('is-hidden');
             input?.removeAttribute('aria-invalid');
@@ -507,13 +479,17 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 
           RegPassword?.addEventListener('input', () => hideInlineError(RegPassword, RegPasswordError));
 
-          function isValidMobile(v) { return /^[0-9]{7,15}$/.test(v); }
+          function isValidMobile(v) {
+            return /^[0-9]{7,15}$/.test(v);
+          }
+
           function isValidPassword(v) {
             return /[a-z]/.test(v) && /[A-Z]/.test(v) && /[0-9]/.test(v) && /[^A-Za-z0-9]/.test(v);
           }
 
           function validateRegisterForm() {
             let ok = true;
+
             hideInlineError(RegMobile, RegMobileError);
             hideInlineError(RegPassword, RegPasswordError);
 
@@ -523,21 +499,28 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
             }
 
             const mobile = (RegMobile?.value || '').trim();
-            if (!isValidMobile(mobile)) { showInlineError(RegMobile, RegMobileError); ok = false; }
+            if (!isValidMobile(mobile)) {
+              showInlineError(RegMobile, RegMobileError);
+              ok = false;
+            }
 
-            const pw = (RegPassword?.value || '');
-            if (!isValidPassword(pw)) { showInlineError(RegPassword, RegPasswordError); ok = false; }
+            const pw = RegPassword?.value || '';
+            if (!isValidPassword(pw)) {
+              showInlineError(RegPassword, RegPasswordError);
+              ok = false;
+            }
 
             if (!ok) {
               if (RegMobile && !isValidMobile(mobile)) RegMobile.focus();
               else if (RegPassword && !isValidPassword(pw)) RegPassword.focus();
             }
+
             return ok;
           }
 
           function packNote() {
             const first = ($('#RegFirst')?.value || '').trim();
-            const last  = ($('#RegLast')?.value || '').trim();
+            const last = ($('#RegLast')?.value || '').trim();
             const country = RegCountry?.value || '';
             const terminal = RegTerminal?.value || '';
             const mobile = (RegMobile?.value || '').trim();
@@ -548,47 +531,66 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
               `Terminal: ${terminal}`,
               `Name: ${first} ${last}`.trim()
             ];
+
             if (RegNote) RegNote.value = parts.filter(Boolean).join(' | ');
           }
 
-          regForm?.addEventListener('submit', (e) => { e.preventDefault(); return false; });
+          regForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            return false;
+          });
+
           regForm?.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') { e.preventDefault(); regSubmitBtn?.click(); }
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              regSubmitBtn?.click();
+            }
           });
 
           regSubmitBtn?.addEventListener('click', () => {
             const ok = validateRegisterForm();
             if (!ok) return;
+
             packNote();
+
             regSubmitBtn.disabled = true;
             regSubmitBtn.textContent = 'PLEASE WAIT...';
+
             regForm.submit();
           });
 
-          /* ====================== LOGIN FAILED HANDLER ====================== */
           (function handleLoginFailed() {
             const params = new URLSearchParams(window.location.search || '');
             if (params.get('login_failed') !== '1') return;
 
-            // clean URL
             params.delete('login_failed');
-            const cleanUrl = window.location.pathname +
+
+            const cleanUrl =
+              window.location.pathname +
               (params.toString() ? '?' + params.toString() : '') +
               window.location.hash;
-            try { history.replaceState({}, '', cleanUrl); } catch(e) {}
+
+            try {
+              history.replaceState({}, '', cleanUrl);
+            } catch (e) {}
 
             let tries = 0;
+
             const iv = setInterval(() => {
               tries++;
-              openAccountPopover();
-              setHeader(HEADER_DEFAULT);
-              showOnly(loginBlock);
-              $('#LoginEmail')?.focus();
-              if (tries >= 12) clearInterval(iv);
-            }, 200);
+
+              const opened = openAccountPopover();
+
+              if (opened) {
+                setHeader(HEADER_DEFAULT);
+                showOnly(loginBlock);
+                $('#LoginEmail')?.focus();
+              }
+
+              if (tries >= 30 || opened) clearInterval(iv);
+            }, 300);
           })();
 
-          /* ====================== RECOVER SUCCESS HANDLER (posted_successfully?) ====================== */
           (function handleRecoverSuccess() {
             const successEl = $('#RecoverAjaxSuccess');
             if (!successEl) return;
@@ -597,17 +599,22 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
             if (!visible) return;
 
             let tries = 0;
+
             const iv = setInterval(() => {
               tries++;
-              openAccountPopover();
-              setHeader(HEADER_FORGOT);
-              showOnly(recoverBlock);
 
-              const emailField = $('#RecoverEmailField');
-              if (emailField) emailField.style.display = 'none';
+              const opened = openAccountPopover();
 
-              if (tries >= 8) clearInterval(iv);
-            }, 200);
+              if (opened) {
+                setHeader(HEADER_FORGOT);
+                showOnly(recoverBlock);
+
+                const emailField = $('#RecoverEmailField');
+                if (emailField) emailField.style.display = 'none';
+              }
+
+              if (tries >= 20 || opened) clearInterval(iv);
+            }, 300);
 
             setTimeout(() => {
               $('#RecoverPasswordForm')?.reset();
@@ -617,14 +624,16 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
               if (emailField) emailField.style.display = '';
 
               const btn = $('#RecoverSubmitBtn');
-              if (btn) { btn.disabled = false; btn.textContent = 'SEND RESET LINK'; }
+              if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'SEND RESET LINK';
+              }
 
               setHeader(HEADER_DEFAULT);
               showOnly(loginBlock);
             }, 4000);
           })();
 
-          /* ====================== WISHLIST AUTH GUARD (APP INJECTED) ====================== */
           (function wishlistAuthGuard() {
             if (window.__CUSTOMER_LOGGED_IN__) return;
 
@@ -632,6 +641,7 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 
             function isWishlistUrl(href) {
               if (!href) return false;
+
               try {
                 const url = new URL(href, window.location.origin);
                 return url.pathname.replace(/\/+$/, '') === '/apps/page/wishlist';
@@ -649,24 +659,33 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
               toast.setAttribute('role', 'status');
               toast.setAttribute('aria-live', 'polite');
               toast.className = 'wishlist-auth-toast';
+
               document.body.appendChild(toast);
+
               return toast;
             }
 
             function showToast(msg) {
               const toast = getToast();
+
               toast.textContent = msg;
               toast.classList.add('is-visible');
+
               clearTimeout(toast._t);
-              toast._t = setTimeout(() => toast.classList.remove('is-visible'), 3500);
+
+              toast._t = setTimeout(() => {
+                toast.classList.remove('is-visible');
+              }, 3500);
             }
 
             function hideCounters() {
-              document.querySelectorAll('.Vtl-WishlistHeader__HeartCounter')
-                .forEach(el => el.style.display = 'none');
+              document.querySelectorAll('.Vtl-WishlistHeader__HeartCounter').forEach(el => {
+                el.style.display = 'none';
+              });
             }
 
             hideCounters();
+
             const mo = new MutationObserver(hideCounters);
             mo.observe(document.documentElement, { childList: true, subtree: true });
 
@@ -674,6 +693,7 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
               const t = e.target;
 
               const a = t?.closest?.('a');
+
               if (a && isWishlistUrl(a.getAttribute('href') || '')) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -683,6 +703,7 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
               }
 
               const plpBtn = t?.closest?.('.Vtl-WishlistButton__WishlistIconButton, [class*="Vtl-WishlistIcon__Wrapper--Id-"]');
+
               if (plpBtn) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -692,16 +713,15 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
               }
 
               const pdpBtn = t?.closest?.('.Vtl-WishlistButton__AddToWishlist, .Vtl-WishlistButtonWrapper');
+
               if (pdpBtn) {
                 e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation?.();
                 showToast(MSG);
-                return;
               }
             }, true);
           })();
-
         })();
       </script>
     {% endunless %}
@@ -711,8 +731,7 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
 {% stylesheet %}
   .form-errors.is-hidden { display: none !important; }
 
-  /* Toast for wishlist auth */
-  .wishlist-auth-toast{
+  .wishlist-auth-toast {
     position: fixed;
     right: 20px;
     bottom: 20px;
@@ -730,18 +749,42 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     pointer-events: none;
     transition: opacity .25s ease, transform .25s ease;
   }
-  .wishlist-auth-toast.is-visible{
+
+  .wishlist-auth-toast.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
 
   .form-success.is-hidden { display: none !important; }
 
-  #account-popover{ width: 25%; }
+  #account-popover { width: 25%; }
 
-  .account-actions { background-color: var(--color-background); display: flex; flex-direction: column; position: relative; transition: height var(--animation-values); &:has([data-active]) .account-actions__main-menu { visibility: hidden; } }
-  .account-actions__header { padding: var(--padding-xl); display: flex; flex-direction: column; gap: var(--gap-2xs); }
-  .account-actions__title { --font-h5--size: var(--font-size--lg); margin: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .account-actions {
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: height var(--animation-values);
+  }
+
+  .account-actions:has([data-active]) .account-actions__main-menu {
+    visibility: hidden;
+  }
+
+  .account-actions__header {
+    padding: var(--padding-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-2xs);
+  }
+
+  .account-actions__title {
+    --font-h5--size: var(--font-size--lg);
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 
   .account-actions__sign-ins {
     padding: var(--padding-xl);
@@ -760,43 +803,138 @@ window.__ACCOUNT_POPOVER_LOGIN_INIT__ = true;
     scrollbar-gutter: stable;
   }
 
-  .account-actions__sign-ins.is-hidden { display: none !important; opacity: 0; pointer-events: none; }
-  .account-actions__nav { padding: var(--padding-xl); padding-block-start: 0; }
+  .account-actions__sign-ins.is-hidden {
+    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+  }
 
-  .account-actions__list { display: block; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); width: 100%; list-style: none; margin: 0; padding: 0; }
+  .account-actions__nav {
+    padding: var(--padding-xl);
+    padding-block-start: 0;
+  }
 
-  .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
-  .form-field label { font-weight: 600; font-size: 0.9rem; }
+  .account-actions__list {
+    display: block;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap-sm);
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
-  .form-field .input { padding: 0.6rem 0.8rem; border: 1px solid rgb(var(--color-foreground-rgb) / 0.3); border-radius: var(--style-border-radius-buttons-secondary); background: var(--color-background); width: 100%; box-sizing: border-box; }
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
 
-  .form-errors { background: rgb(255 0 0 / 0.1); border: 1px solid red; color: red; padding: 0.5rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
+  .form-field label {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
 
-  .form-success { background: rgb(0 128 0 / 0.10); border: 1px solid rgb(0 128 0 / 0.35); color: rgb(0 80 0); padding: 0.5rem 1rem; border-radius: 4px; margin-bottom: 1rem; }
+  .form-field .input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.3);
+    border-radius: var(--style-border-radius-buttons-secondary);
+    background: var(--color-background);
+    width: 100%;
+    box-sizing: border-box;
+  }
 
-  .form-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 1rem; align-items: stretch; }
+  .form-errors {
+    background: rgb(255 0 0 / 0.1);
+    border: 1px solid red;
+    color: red;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .form-success {
+    background: rgb(0 128 0 / 0.10);
+    border: 1px solid rgb(0 128 0 / 0.35);
+    color: rgb(0 80 0);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 1rem;
+    align-items: stretch;
+  }
 
   .form-actions .button,
-  .form-actions .button-secondary { width: 100%; text-align: center; padding: 0.75rem 1rem; font-weight: 600; border-radius: var(--style-border-radius-buttons-primary); transition: all 0.2s ease-in-out; }
+  .form-actions .button-secondary {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    border-radius: var(--style-border-radius-buttons-primary);
+    transition: all 0.2s ease-in-out;
+  }
 
-  .form-actions .button { background: #ffffff; color: #000000; border: 1px solid #000000; }
-  .form-actions .button:hover { background: #f3f3f3; }
+  .form-actions .button {
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+  }
 
-  .form-actions .button-secondary { background: #000000; color: #ffffff; border: 1px solid #000000; }
-  .form-actions .button-secondary:hover { background: #222222; }
+  .form-actions .button:hover {
+    background: #f3f3f3;
+  }
 
-  .link { font-size: 0.9rem; text-decoration: underline; text-align: center; margin-top: .25rem; }
+  .form-actions .button-secondary {
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid #000000;
+  }
 
-  .field-error { margin: 6px 0 0; font-size: 0.85rem; line-height: 1.2; color: #d10000; }
-  .field-error.is-hidden { display: none !important; }
+  .form-actions .button-secondary:hover {
+    background: #222222;
+  }
 
-  .input[aria-invalid="true"] { border-color: #d10000; }
+  .link {
+    font-size: 0.9rem;
+    text-decoration: underline;
+    text-align: center;
+    margin-top: .25rem;
+  }
 
-  .Vtl-WishlistProduct__AddToCart{ display: none; }
-  .Vtl-WishlistPage .Vtl-WishlistPage__Title{ font-size: 30px; }
+  .field-error {
+    margin: 6px 0 0;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    color: #d10000;
+  }
+
+  .field-error.is-hidden {
+    display: none !important;
+  }
+
+  .input[aria-invalid="true"] {
+    border-color: #d10000;
+  }
+
+  .Vtl-WishlistProduct__AddToCart {
+    display: none;
+  }
+
+  .Vtl-WishlistPage .Vtl-WishlistPage__Title {
+    font-size: 30px;
+  }
+
   .account-actions__links {
     font-weight: 600;
   }
+
   .account-actions__list-item {
     padding-top: 10px;
   }

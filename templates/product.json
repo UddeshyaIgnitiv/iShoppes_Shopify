@@ -190,6 +190,12 @@
               "type": "shopify://apps/unlimited-bundles/blocks/embed-all/d33d0f48-dee0-42a0-b156-2a5dce91814a",
               "settings": {}
             },
+            "unlimited_bundles_embed_qbpPcM": {
+              "type": "shopify://apps/unlimited-bundles/blocks/embed/d33d0f48-dee0-42a0-b156-2a5dce91814a",
+              "settings": {
+                "embed_bundle_uuid": ""
+              }
+            },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
@@ -244,6 +250,7 @@
             "group_icgrde",
             "divider_VJhene",
             "unlimited_bundles_embed_all_mPQQjf",
+            "unlimited_bundles_embed_qbpPcM",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi"
           ]

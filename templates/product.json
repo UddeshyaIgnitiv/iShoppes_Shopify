@@ -67,10 +67,6 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "smart_discounts_widget_HRcQ4C": {
-              "type": "shopify://apps/smart-discounts/blocks/widget/019d1c1c-2c4b-704e-be88-ea7fd20c9afb",
-              "settings": {}
-            },
             "group_icgrde": {
               "type": "group",
               "name": "Header",
@@ -203,6 +199,10 @@
               },
               "blocks": {}
             },
+            "smart_discounts_widget_HRcQ4C": {
+              "type": "shopify://apps/smart-discounts/blocks/widget/019d1c1c-2c4b-704e-be88-ea7fd20c9afb",
+              "settings": {}
+            },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
@@ -241,10 +241,10 @@
             }
           },
           "block_order": [
-            "smart_discounts_widget_HRcQ4C",
             "group_icgrde",
             "divider_VJhene",
             "variant_picker_R3rGDr",
+            "smart_discounts_widget_HRcQ4C",
             "buy_buttons_eYQEYi"
           ]
         }

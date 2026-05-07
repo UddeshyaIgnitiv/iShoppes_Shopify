@@ -152,6 +152,7 @@
     "discount_code": "Discount code",
     "shipping_discount_error": "Shipping discounts are shown at checkout after adding an address",
     "discount_code_error": "Discount code cannot be applied to your cart",
+    "bxgy_min_qty_error": "Add at least the qualifying items to your cart before applying this code.",
     "discounts": "Discounts",
     "duties_and_taxes_included": "Duties and taxes included.",
     "duties_and_taxes_included_shipping_at_checkout_with_policy_html": "Duties and taxes included. Discounts and <a href=\"{{ link }}\">shipping</a> calculated at checkout.",

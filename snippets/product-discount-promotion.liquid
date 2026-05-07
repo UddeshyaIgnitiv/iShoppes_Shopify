@@ -119,6 +119,14 @@
             </div>
           `;
           }
+          else if(discount == 'BUY3FOR42D'){
+            html += `
+            <div class="offer-text__line">
+              <span class="offer-text__prefix">Limited Time offer:</span>
+              <span class="offer-text__discount">Buy 3 For $42. Use coupon code ${escapeHtml(discount)}</span>
+            </div>
+          `;
+          }
           else if(discount == 'B3DEWARS25P' || discount == 'Buy6GET30'){
             html += ``;
           }

@@ -55,7 +55,6 @@
         // Create HTML for each discount as a separate line
         let html = '';
         discounts.forEach(discount => {
-          alert(discount)
           if(discount == 'BUY3GET25'){
             html += `
             <div class="offer-text__line">
@@ -149,6 +148,15 @@
             <div class="offer-text__line">
               <span class="offer-text__prefix">Limited Time offer:</span>
               <span class="offer-text__discount">Buy 1 Get 1 Free. Use coupon code ${escapeHtml(discount)}</span>
+            </div>
+          `;
+          }
+
+          else if(discount == 'BUY3GET2FREE'){
+            html += `
+            <div class="offer-text__line">
+              <span class="offer-text__prefix">Limited Time offer:</span>
+              <span class="offer-text__discount">Buy 3 Get 2 Free. Use coupon code ${escapeHtml(discount)}</span>
             </div>
           `;
           }

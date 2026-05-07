@@ -135,6 +135,22 @@
             </div>
           `;
           }
+          else if(discount == 'BUY2GET1FREE'){
+            html += `
+            <div class="offer-text__line">
+              <span class="offer-text__prefix">Limited Time offer:</span>
+              <span class="offer-text__discount">Buy 2 Get 1 Free. Use coupon code ${escapeHtml(discount)}</span>
+            </div>
+          `;
+          }
+          else if(discount == 'BUY1GET1FREE'){
+            html += `
+            <div class="offer-text__line">
+              <span class="offer-text__prefix">Limited Time offer:</span>
+              <span class="offer-text__discount">Buy 1 Get 1 Free. Use coupon code ${escapeHtml(discount)}</span>
+            </div>
+          `;
+          }
           else if(discount == 'B3DEWARS25P' || discount == 'Buy6GET30'){
             html += ``;
           }

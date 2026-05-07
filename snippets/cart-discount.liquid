@@ -22,15 +22,6 @@
   else
     assign disclosure_expanded = true
   endif
-
-  # Buy X Get Y rules pulled from shop metafield `custom.bxgy_rules` (JSON metafield).
-  # Expected shape: { "CODE": { "buy": 2, "get": 1 }, ... }. Codes are matched case-insensitively.
-  assign bxgy_rules_raw = shop.metafields.custom.bxgy_rules
-  if bxgy_rules_raw == blank
-    assign bxgy_rules_json = '{}'
-  else
-    assign bxgy_rules_json = bxgy_rules_raw | json
-  endif
 %}
 <disclosure-custom class="cart-discount">
   {% render 'disclosure-trigger',
@@ -42,7 +33,6 @@
   {% capture discount_content %}
     <cart-discount-component
       data-section-id="{{ section_id }}"
-      data-bxgy-rules="{{ bxgy_rules_json | escape }}"
     >
       <div class="cart-discount__content">
         <form
@@ -93,22 +83,6 @@
         >
           {{ 'content.shipping_discount_error' | t }}
         </small>
-        <small
-          class="cart-discount__error-text cart-primary-typography hidden"
-          ref="cartDiscountErrorBxgyMin"
-        >
-          {{ 'content.bxgy_min_qty_error' | t }}
-        </small>
-      </div>
-      <div
-        class="cart-discount__info hidden"
-        role="status"
-        ref="cartDiscountInfo"
-      >
-        <small
-          class="cart-discount__info-text cart-primary-typography"
-          ref="cartDiscountInfoText"
-        ></small>
       </div>
       <ul class="cart-discount__codes">
         {% for discount_code in discount_codes %}
@@ -237,18 +211,6 @@
 
   .cart-discount__error-text {
     margin-block-start: var(--margin-3xs);
-  }
-
-  .cart-discount__info {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding-block: var(--padding-2xs) var(--padding-sm);
-  }
-
-  .cart-discount__info-text {
-    margin-block-start: var(--margin-3xs);
-    color: var(--color-foreground);
   }
   @media screen and (max-width: 749px) {
     .cart-discount__pill-remove{

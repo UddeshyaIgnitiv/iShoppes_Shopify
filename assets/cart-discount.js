@@ -21,6 +21,7 @@ class CartDiscount extends Component {
 
   /** @type {AbortController | null} */
   #activeFetch = null;
+  #isApplyingDiscount = false;
 
   #createAbortController() {
     if (this.#activeFetch) {
@@ -47,12 +48,19 @@ class CartDiscount extends Component {
 
     const discountCode = form.querySelector('input[name="discount"]');
     if (!(discountCode instanceof HTMLInputElement) || typeof this.dataset.sectionId !== 'string') return;
+    const submitButton = form.querySelector('button[type="submit"]');
 
     const discountCodeValue = discountCode.value;
+    if (!discountCodeValue || this.#isApplyingDiscount) return;
 
     const abortController = this.#createAbortController();
 
     try {
+      this.#isApplyingDiscount = true;
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = true;
+      }
+
       const existingDiscounts = this.#existingDiscounts();
       if (existingDiscounts.includes(discountCodeValue)) return;
 
@@ -84,7 +92,9 @@ class CartDiscount extends Component {
         return;
       }
 
-      const newHtml = data.sections[this.dataset.sectionId];
+      const finalData = (await this.#applyBuyXGetYAutoAddition(discountCodeValue, data)) || data;
+
+      const newHtml = finalData.sections[this.dataset.sectionId];
       const parsedHtml = new DOMParser().parseFromString(newHtml, 'text/html');
       const section = parsedHtml.getElementById(`shopify-section-${this.dataset.sectionId}`);
       const discountCodes = section?.querySelectorAll('.cart-discount__pill') || [];
@@ -108,14 +118,71 @@ class CartDiscount extends Component {
         }
       }
 
-      document.dispatchEvent(new DiscountUpdateEvent(data, this.id));
+      document.dispatchEvent(new DiscountUpdateEvent(finalData, this.id));
       morphSection(this.dataset.sectionId, newHtml);
     } catch (error) {
     } finally {
       this.#activeFetch = null;
+      this.#isApplyingDiscount = false;
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = false;
+      }
       cartPerformance.measureFromEvent('discount-update:user-action', event);
     }
   };
+
+  /**
+   * Auto-add free quantity for BUYxGETy discount codes.
+   * @param {string} discountCode
+   * @param {any} data
+   * @returns {Promise<any | null>}
+   */
+  async #applyBuyXGetYAutoAddition(discountCode, data) {
+    const pattern = this.#parseBuyXGetY(discountCode);
+    if (!pattern) return null;
+
+    const { buyQuantity, freeQuantity } = pattern;
+    const items = Array.isArray(data?.items) ? data.items : [];
+    const updates = {};
+
+    for (const item of items) {
+      const quantity = Number(item?.quantity || 0);
+      if (!item?.key || quantity !== buyQuantity) continue;
+
+      updates[item.key] = quantity + freeQuantity;
+    }
+
+    if (Object.keys(updates).length === 0) return null;
+
+    const config = fetchConfig('json', {
+      body: JSON.stringify({
+        updates,
+        sections: [this.dataset.sectionId],
+      }),
+    });
+
+    const response = await fetch(Theme.routes.cart_update_url, config);
+    return response.json();
+  }
+
+  /**
+   * Parse BUYxGETy-style discount code values.
+   * @param {string} discountCode
+   * @returns {{ buyQuantity: number; freeQuantity: number } | null}
+   */
+  #parseBuyXGetY(discountCode) {
+    const normalized = String(discountCode).toUpperCase().replace(/[^A-Z0-9]/g, '');
+    const match = normalized.match(/(?:BUY|B)(\d+)(?:GET|G)(\d+)/);
+    if (!match) return null;
+
+    const buyQuantity = Number(match[1]);
+    const freeQuantity = Number(match[2]);
+
+    if (!Number.isFinite(buyQuantity) || !Number.isFinite(freeQuantity)) return null;
+    if (buyQuantity <= 0 || freeQuantity <= 0) return null;
+
+    return { buyQuantity, freeQuantity };
+  }
 
   /**
    * Handles removing a discount from the cart.

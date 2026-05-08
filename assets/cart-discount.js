@@ -94,8 +94,7 @@ class CartDiscount extends Component {
         return;
       }
 
-      const finalData = (await this.#applyBuyXGetYAutoAddition(discountCodeValue, data)) || data;
-
+      const finalData = data;
       const newHtml = finalData.sections[this.dataset.sectionId];
       const parsedHtml = new DOMParser().parseFromString(newHtml, 'text/html');
       const section = parsedHtml.getElementById(`shopify-section-${this.dataset.sectionId}`);
@@ -155,8 +154,13 @@ class CartDiscount extends Component {
 
     for (const item of items) {
       const quantity = Number(item?.quantity || 0);
-      if (!item?.key || quantity !== buyQuantity) continue;
+      const hasLineDiscount =
+        (Array.isArray(item?.discounts) && item.discounts.length > 0) ||
+        (Array.isArray(item?.line_level_discount_allocations) && item.line_level_discount_allocations.length > 0);
+      const isFreeLine = Number(item?.final_line_price || 0) === 0;
+      if (!item?.key || quantity !== buyQuantity || hasLineDiscount || isFreeLine) continue;
       updates[item.key] = quantity + freeQuantity;
+      break;
     }
 
     if (Object.keys(updates).length === 0) return;
@@ -169,41 +173,6 @@ class CartDiscount extends Component {
     });
 
     await fetch(Theme.routes.cart_update_url, config);
-  }
-
-  /**
-   * Auto-add free quantity for BUYxGETy discount codes.
-   * @param {string} discountCode
-   * @param {any} data
-   * @returns {Promise<any | null>}
-   */
-  async #applyBuyXGetYAutoAddition(discountCode, data) {
-    const pattern = this.#parseBuyXGetY(discountCode);
-    if (!pattern) return null;
-
-    const { buyQuantity, freeQuantity } = pattern;
-    const items = Array.isArray(data?.items) ? data.items : [];
-    /** @type {Record<string, number>} */
-    const updates = {};
-
-    for (const item of items) {
-      const quantity = Number(item?.quantity || 0);
-      if (!item?.key || quantity !== buyQuantity) continue;
-
-      updates[item.key] = quantity + freeQuantity;
-    }
-
-    if (Object.keys(updates).length === 0) return null;
-
-    const config = fetchConfig('json', {
-      body: JSON.stringify({
-        updates,
-        sections: [this.dataset.sectionId],
-      }),
-    });
-
-    const response = await fetch(Theme.routes.cart_update_url, config);
-    return response.json();
   }
 
   /**

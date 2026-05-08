@@ -61,6 +61,8 @@ class CartDiscount extends Component {
         submitButton.disabled = true;
       }
 
+      await this.#prepareCartForBuyXGetY(discountCodeValue);
+
       const existingDiscounts = this.#existingDiscounts();
       if (existingDiscounts.includes(discountCodeValue)) return;
 
@@ -132,6 +134,44 @@ class CartDiscount extends Component {
   };
 
   /**
+   * Prepares the cart for BUYxGETy discounts before applying code validation.
+   * This lets BXGY codes become applicable when cart only has the "buy" quantity.
+   * @param {string} discountCode
+   */
+  async #prepareCartForBuyXGetY(discountCode) {
+    const pattern = this.#parseBuyXGetY(discountCode);
+    if (!pattern) return;
+
+    const cartUrl = Theme?.routes?.cart_url;
+    if (!cartUrl) return;
+
+    const cartResponse = await fetch(`${cartUrl}.js`);
+    const cartData = await cartResponse.json();
+    const items = Array.isArray(cartData?.items) ? cartData.items : [];
+
+    const { buyQuantity, freeQuantity } = pattern;
+    /** @type {Record<string, number>} */
+    const updates = {};
+
+    for (const item of items) {
+      const quantity = Number(item?.quantity || 0);
+      if (!item?.key || quantity !== buyQuantity) continue;
+      updates[item.key] = quantity + freeQuantity;
+    }
+
+    if (Object.keys(updates).length === 0) return;
+
+    const config = fetchConfig('json', {
+      body: JSON.stringify({
+        updates,
+        sections: [this.dataset.sectionId],
+      }),
+    });
+
+    await fetch(Theme.routes.cart_update_url, config);
+  }
+
+  /**
    * Auto-add free quantity for BUYxGETy discount codes.
    * @param {string} discountCode
    * @param {any} data
@@ -143,6 +183,7 @@ class CartDiscount extends Component {
 
     const { buyQuantity, freeQuantity } = pattern;
     const items = Array.isArray(data?.items) ? data.items : [];
+    /** @type {Record<string, number>} */
     const updates = {};
 
     for (const item of items) {

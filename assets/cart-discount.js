@@ -178,6 +178,7 @@ class CartDiscount extends Component {
    */
   #parseBuyXGetY(discountCode) {
     const normalized = String(discountCode).toUpperCase().replace(/[^A-Z0-9]/g, '');
+    const hasFreeToken = normalized.includes('FREE');
     const match = normalized.match(/(?:BUY|B)(\d+)(?:GET|G)(\d+)/);
     if (!match) return null;
 
@@ -186,6 +187,10 @@ class CartDiscount extends Component {
 
     if (!Number.isFinite(buyQuantity) || !Number.isFinite(freeQuantity)) return null;
     if (buyQuantity <= 0 || freeQuantity <= 0) return null;
+    // Guardrail: only treat code as BXGY item-quantity promo when it clearly looks
+    // like free-item logic (e.g. BUY2GET1, BUY1GET1FREE), not amount-off codes such
+    // as BUY3GET26 where "26" means percent/value discount.
+    if (freeQuantity > 5 && !hasFreeToken) return null;
 
     return { buyQuantity, freeQuantity };
   }

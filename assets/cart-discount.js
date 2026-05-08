@@ -61,10 +61,9 @@ class CartDiscount extends Component {
         submitButton.disabled = true;
       }
 
-      await this.#prepareCartForBuyXGetY(discountCodeValue);
-
       const existingDiscounts = this.#existingDiscounts();
       if (existingDiscounts.includes(discountCodeValue)) return;
+      await this.#prepareCartForBuyXGetY(discountCodeValue);
 
       cartDiscountError.classList.add('hidden');
       cartDiscountErrorDiscountCode.classList.add('hidden');
@@ -154,11 +153,8 @@ class CartDiscount extends Component {
 
     for (const item of items) {
       const quantity = Number(item?.quantity || 0);
-      const hasLineDiscount =
-        (Array.isArray(item?.discounts) && item.discounts.length > 0) ||
-        (Array.isArray(item?.line_level_discount_allocations) && item.line_level_discount_allocations.length > 0);
       const isFreeLine = Number(item?.final_line_price || 0) === 0;
-      if (!item?.key || quantity !== buyQuantity || hasLineDiscount || isFreeLine) continue;
+      if (!item?.key || quantity !== buyQuantity || isFreeLine) continue;
       updates[item.key] = quantity + freeQuantity;
       break;
     }

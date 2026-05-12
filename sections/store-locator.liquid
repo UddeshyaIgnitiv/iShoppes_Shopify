@@ -6,7 +6,7 @@
 <div class="store-locator-section container" style="display:flex; padding-bottom:20px;">
   <div id="airportList"></div>
   <div id="airportmap">
-    <img src="https://cdn.shopify.com/s/files/1/0725/3553/9901/files/map.png?v=1774332723">
+    <img src="https://cdn.shopify.com/s/files/1/0725/3553/9901/files/USAmap.jpg?v=1778589673">
     <div id="locationSelector"></div>
   </div>
 </div>
@@ -33,8 +33,12 @@ display:none;
 }
 #airportList {
     width: 34%;
-    overflow: auto;
-    padding:0 15px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+    padding: 0 15px;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
 }
 #airportmap {
   width:66%;
@@ -135,24 +139,32 @@ display:none;
 position:absolute;
 }
 .locationImage.locatioBDL {
-    top: 36%;
-    left: 89%;
+  top: 32%;
+  left: 86%;
 }
 .locationImage.locatioBWI {
-    top: 43%;
-    left: 82%;
+  top: 41%;
+  left: 81%;
 }
 .locationImage.locatioIAD {
-    top: 44%;
-    left: 87%;
+  top: 44%;
+  left: 80%;
 }
 .locationImage.locatioJFK {
-    top: 39%;
-    left: 86%;
+  top: 38%;
+  left: 82%;
 }
 .locationImage.locatioIAH {
-    top: 67%;
-    left: 50%;
+  top: 67%;
+  left: 50%;
+}
+.locationImage.locatioHNL {
+  top: 76%;
+  left: 37%;
+}
+.locationImage.locatioOGG {
+  top: 73%;
+  left: 35%;
 }
 .tooltip{
     position: absolute;
@@ -424,6 +436,67 @@ const airports = [
       ]
     }
   ]
+},
+{
+  code: "HNL",
+  city: "Honolulu, HI",
+  name: "Daniel K. Inouye International Airport",
+  terminals: [
+    {
+      name: "Terminal 1",
+      image: "",
+      stores: [
+        { name: "Terminal 1 iS From Hawaii with Love", image: "" },
+        { name: "Terminal 1 iS From Hawaii with Love", image: "" }
+      ]
+    },
+    {
+      name: "Terminal 2",
+      image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/IS-DUTY-FREE-220.jpg?v=1778585657",
+      stores: [
+        { name: "Terminal 2 iS Duty Free", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/IS-DUTY-FREE-220.jpg?v=1778585657" },
+        { name: "Terminal 2 Longchamp", image: "" },
+        { name: "Terminal 2 HALE LOLE", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/HALE-ONO-218.jpg?v=1778585787" },
+        { name: "Terminal 2 HALE ONO", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/HALE-ONO-217.jpg?v=1778585882" },
+        { name: "Terminal 2 ALOHA Collection", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/ALOHA-257.jpg?v=1778585954" },
+        { name: "Terminal 2 Mana UP", image: "" },
+        { name: "Terminal 2 Greeters of Hawaii", image: "" },
+        { name: "Terminal 2 iS Beauty", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/iSBeauty-221.jpg?v=1778587411" },
+        { name: "Terminal 2 iS From Hawaii with Love", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/FHWL_228.png?v=1778587499" },
+        { name: "Terminal 2 iS From Hawaii with Love", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/fhwl-202.jpg?v=1778587612" },
+        { name: "Terminal 2 iS From Hawaii with Love", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/FHWL-283.jpg?v=1778587699" },
+        { name: "Terminal 2 iS Beauty", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/IS_BEAUTY-273.jpg?v=1778588073" },
+        { name: "Terminal 2 iS From Hawaii with Love", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/FHWL-255.jpg?v=1778588975" },
+        { name: "Terminal 2 iS From Hawaii with Love", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/FHWL-245.jpg?v=1778589058" },
+        { name: "Terminal 2 COACH", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/COACH-282.jpg?v=1778589137" },
+        { name: "Terminal 2 Maui Divers", image: "" },
+        { name: "Terminal 2 Ripcurl", image: "" },
+        { name: "Terminal 2 Greeters of Hawaii", image: "" },
+        { name: "Terminal 2 iS Style", image: "" },
+        { name: "Terminal 2 iS From Hawaii with Love", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/FHWL-258.jpg?v=1778589487" },
+      ]
+    }
+  ]
+},
+{
+  code: "OGG",
+  city: "Maui, HI",
+  name: "Kahului Airport",
+  terminals: [
+    {
+      name: "Terminal 1",
+      image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/Kahului-Trading-Co_OGG_311.jpg?v=1778583516",
+      stores: [
+        { name: "Terminal 1 Kahului Trading Co", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/Kahului-Trading-Co_OGG_311.jpg?v=1778583516" },
+        { name: "Terminal 1 Mana UP", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/Mana-Market_OGG_312.jpg?v=1778583764" },
+        { name: "Terminal 1 Kahului Trading Co", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/Kahului-Trading-Co_OGG_313.jpg?v=1778583879" },
+        { name: "Terminal 1 iS From Hawaii with Love", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/Hawaii-With-Love_OGG_316.jpg?v=1778583992" },
+        { name: "Terminal 1 Maui Market", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/Maui-Market_OGG_315.jpg?v=1778584082" },
+        { name: "Terminal 1 Maui Divers", image: "" },
+        { name: "Terminal 1 Maui Market", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/Maui-Market_OGG_323.jpg?v=1778584235" }
+      ]
+    }
+  ]
 }
 ];
 
@@ -438,6 +511,24 @@ airportList.innerHTML+=`
   <button onclick="showTerminals(${i})">View Terminals</button>
 </div>`;
 });
+
+function setAirportListMaxHeight() {
+  const list = document.getElementById("airportList");
+  if (!list) return;
+  const cards = list.querySelectorAll(".airport-card");
+  if (!cards.length) return;
+  const gap =
+    parseFloat(window.getComputedStyle(cards[0]).marginBottom) || 14;
+  const visible = Math.min(5, cards.length);
+  let total = 0;
+  for (let i = 0; i < visible; i++) {
+    total += cards[i].offsetHeight;
+    if (i < visible - 1) total += gap;
+  }
+  list.style.maxHeight = total + "px";
+}
+setAirportListMaxHeight();
+window.addEventListener("resize", setAirportListMaxHeight);
 
 airports.forEach((a, i) => {
   locationSelector.innerHTML += `
@@ -475,7 +566,7 @@ window.showTerminals = (i) => {
   document.getElementById("terminalCards").innerHTML =
     a.terminals.map((t, j) => `
       <div class="terminal-card" onclick="showStores(${i},${j})">
-        <img src="${t.image}">
+        ${t.image ? `<img src="${t.image}" alt="">` : ""}
         <div class="card-name">${t.name}</div>
       </div>
     `).join("");
@@ -518,7 +609,7 @@ window.showStores = (i,j) => {
           ${t.stores.map(s=>`
             <div class="swiper-slide">
               <div class="store-card">
-                <img src="${s.image}">
+                ${s.image ? `<img src="${s.image}" alt="">` : ""}
                 <div class="card-name">${s.name}</div>
               </div>
             </div>
@@ -545,7 +636,7 @@ window.showStores = (i,j) => {
   } else {
     storeCards.innerHTML = t.stores.map(s=>`
       <div class="store-card">
-        <img src="${s.image}">
+        ${s.image ? `<img src="${s.image}" alt="">` : ""}
         <div class="card-name">${s.name}</div>
       </div>
     `).join("");

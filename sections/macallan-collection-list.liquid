@@ -68,6 +68,16 @@
     row-gap: 80px;
   }
 
+  /* One product in a 2-column grid sits in column 1 only; center the row */
+  .macallan-grid--single {
+    grid-template-columns: 1fr;
+  }
+
+  .macallan-grid--single .macallan-card {
+    max-width: 800px;
+    margin-inline: auto;
+  }
+
   .macallan-card {
     display: flex;
     justify-content: space-between;
@@ -227,8 +237,24 @@
         {% endif %}
       {% endfor %}
     {% endif %}
+
+    {% liquid
+      assign macallan_card_count = 0
+      if section.blocks.size > 0
+        for block in section.blocks
+          assign block_product = all_products[block.settings.product]
+          if block_product != blank
+            assign macallan_card_count = macallan_card_count | plus: 1
+          endif
+        endfor
+      elsif tagged_products.size > 0
+        for product in tagged_products limit: product_limit
+          assign macallan_card_count = macallan_card_count | plus: 1
+        endfor
+      endif
+    %}
     
-    <div class="macallan-grid">
+    <div class="macallan-grid{% if macallan_card_count == 1 %} macallan-grid--single{% endif %}">
       {% if tagged_products.size == 0 and section.blocks.size == 0 %}
           <div class="no-products-message">
             <p>No products found with the "{{ tag_to_filter }}" tag or manually added.</p>

@@ -265,6 +265,12 @@
     "macallan_collection_list_UDBwpH": {
       "type": "macallan-collection-list",
       "blocks": {
+        "product_cBD8Xq": {
+          "type": "product",
+          "settings": {
+            "product": "the-macallan-harmony-collection-cherrywood-lapsang"
+          }
+        },
         "product_VF7xBJ": {
           "type": "product",
           "disabled": true,
@@ -288,12 +294,13 @@
         }
       },
       "block_order": [
+        "product_cBD8Xq",
         "product_VF7xBJ",
         "product_rrb7gq",
         "product_c8edBd"
       ],
       "custom_css": [
-        ".no-products-message{display: none;}"
+        ".no-products-message {display: none;}"
       ],
       "name": "Macallan Collection List",
       "settings": {

@@ -1,23 +1,59 @@
+{%- liquid
+  assign product_resource = closest.product | default: product
+  assign selected_variant = product_resource.selected_or_first_available_variant
+  assign size_option_index = 1
+  for opt in product_resource.options
+    assign opt_down = opt | downcase
+    if opt_down == 'size'
+      assign size_option_index = forloop.index
+      break
+    endif
+  endfor
+  if size_option_index == 1
+    assign size_value = selected_variant.option1
+  elsif size_option_index == 2
+    assign size_value = selected_variant.option2
+  else
+    assign size_value = selected_variant.option3
+  endif
+-%}
 
-<div class="product-meta-specs spacing-style" style="padding-bottom: 1rem; font-size: 1rem;">
+<product-meta
+  class="product-meta-specs spacing-style"
+  style="padding-bottom: 1rem; font-size: 1rem;"
+  data-product-id="{{ product_resource.id }}"
+  data-size-option-index="{{ size_option_index }}"
+  {{ block.shopify_attributes }}
+>
   <div class="meta-row" style="margin-bottom: 0.25rem;">
-    <span class="meta-label" style="font-weight: bold;">Made In:</span> <span class="meta-value">{{ product.metafields.custom.country_of_origin | default: '' }}</span>
+    <span class="meta-label" style="font-weight: bold;">Made In:</span>
+    <span class="meta-value">{{ product_resource.metafields.custom.country_of_origin | default: '' }}</span>
   </div>
   <div class="meta-row" style="margin-bottom: 0.25rem;">
-    <span class="meta-label" style="font-weight: bold;">SKU #:</span> <span class="meta-value">{{ product.selected_or_first_available_variant.sku | default: '' }}</span>
+    <span class="meta-label" style="font-weight: bold;">SKU #:</span>
+    <span class="meta-value" data-product-meta-sku>{{ selected_variant.sku | default: '' }}</span>
   </div>
-  {% if product.selected_or_first_available_variant.option1 and product.selected_or_first_available_variant.option1 != 'Default Title' %}
-  <div class="meta-row" style="margin-bottom: 1rem;">
-    <span class="meta-label" style="font-weight: bold;">Size:</span> <span class="meta-value">{{ product.selected_or_first_available_variant.option1 | default: '' }}</span>
+  <div
+    class="meta-row"
+    style="margin-bottom: 1rem;"
+    data-product-meta-size-row
+    {% if size_value == blank or size_value == 'Default Title' %}
+      hidden
+    {% endif %}
+  >
+    <span class="meta-label" style="font-weight: bold;">Size:</span>
+    <span class="meta-value" data-product-meta-size>
+      {%- if size_value != blank and size_value != 'Default Title' -%}
+        {{- size_value -}}
+      {%- endif -%}
+    </span>
   </div>
-  {%  endif %}
   <div class="meta-description">
-    {% if product.description != blank %}
-      {{ product.description }}
+    {% if product_resource.description != blank %}
+      {{ product_resource.description }}
     {% endif %}
   </div>
-
-</div>
+</product-meta>
 {% schema %}
 {
   "name": "Product Meta Specs",

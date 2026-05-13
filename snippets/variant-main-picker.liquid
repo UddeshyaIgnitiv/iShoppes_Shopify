@@ -249,7 +249,7 @@
   }
 
   .variant-option__button-label {
-    --variant-picker-stroke-color: var(--color-variant-border);
+    /* --variant-picker-stroke-color: var(--color-variant-border); */
 
     display: flex;
     flex: 0 0 calc(3ch + 1.3em);
@@ -303,7 +303,7 @@
   }
 
   .variant-option__button-label:has(:focus-visible) {
-    --variant-picker-stroke-color: var(--color-foreground);
+    /* --variant-picker-stroke-color: var(--color-foreground); */
 
     border-color: var(--color-foreground);
     outline: var(--focus-outline-width) solid var(--color-foreground);
@@ -406,7 +406,7 @@
   }
 
   .variant-option__button-label:has([data-option-available='false']):has(:checked) {
-    --variant-picker-stroke-color: rgb(var(--color-variant-text-rgb) / var(--opacity-60));
+    /* --variant-picker-stroke-color: rgb(var(--color-variant-text-rgb) / var(--opacity-60)); */
 
     background-color: inherit;
     color: rgb(var(--color-variant-text-rgb) / var(--opacity-60));
@@ -436,7 +436,7 @@
     cursor: pointer;
     pointer-events: none;
     stroke-width: var(--style-border-width);
-    stroke: var(--variant-picker-stroke-color);
+    /* stroke: var(--variant-picker-stroke-color); */
   }
 
   .variant-option__select-wrapper {
@@ -508,5 +508,101 @@
   .variant-picker--right .variant-option {
     text-align: right;
     justify-content: right;
+  }
+
+  /**
+   * PDP only: wide rounded-rect size buttons (ref: soft corners, not full capsules).
+   * Default: white + #e0e0e0 border + black text. Selected: black fill + white text.
+   */
+  variant-picker[data-template-product-match='true'] .variant-option--buttons:not(.variant-option--swatches) {
+    --options-border-radius: 12px;
+    --options-border-width: 1px;
+    gap: 0.75rem;
+
+    --color-variant-background: #fff;
+    --color-variant-border: #e0e0e0;
+    --color-variant-text: #000;
+    --color-variant-text-rgb: 0 0 0;
+    --color-variant-hover-background: #fafafa;
+    --color-variant-hover-border: #d0d0d0;
+    --color-variant-hover-text: #000;
+
+    --color-selected-variant-background: #000;
+    --color-selected-variant-border: #000;
+    --color-selected-variant-text: #fff;
+    --color-selected-variant-hover-background: #1a1a1a;
+    --color-selected-variant-hover-border: #1a1a1a;
+    --color-selected-variant-hover-text: #fff;
+  }
+
+  variant-picker[data-template-product-match='true']
+    .variant-option--buttons:not(.variant-option--swatches)
+    .variant-option__button-label:not(.variant-option__button-label--has-swatch) {
+    /* --variant-picker-stroke-color: #c8c8c8; */
+
+    background-color: var(--color-variant-background);
+    color: var(--color-variant-text);
+    border: 1px solid var(--color-variant-border);
+    font-weight: 500;
+    min-height: 2.875rem;
+    padding-block: 0.5625rem;
+    padding-inline: 1.125rem;
+  }
+
+  variant-picker[data-template-product-match='true']
+    .variant-option--buttons:not(.variant-option--swatches)
+    .variant-option__button-label:not(.variant-option__button-label--has-swatch)
+    .variant-option__button-label__text {
+    color: inherit;
+  }
+
+  variant-picker[data-template-product-match='true']
+    .variant-option--buttons:not(.variant-option--swatches)
+    .variant-option__button-label:not(.variant-option__button-label--has-swatch):hover {
+    background-color: var(--color-variant-hover-background);
+    border-color: var(--color-variant-hover-border);
+    color: var(--color-variant-hover-text);
+  }
+
+  variant-picker[data-template-product-match='true']
+    .variant-option--buttons:not(.variant-option--swatches)
+    .variant-option__button-label:not(.variant-option__button-label--has-swatch):has(:checked) {
+    /* --variant-picker-stroke-color: rgb(255 255 255 / 0.55); */
+
+    background-color: var(--color-selected-variant-background);
+    border-color: var(--color-selected-variant-border);
+    color: var(--color-selected-variant-text);
+  }
+
+  variant-picker[data-template-product-match='true']
+    .variant-option--buttons:not(.variant-option--swatches)
+    .variant-option__button-label:not(.variant-option__button-label--has-swatch):has(:checked):hover {
+    background-color: var(--color-selected-variant-hover-background);
+    border-color: var(--color-selected-variant-hover-border);
+    color: var(--color-selected-variant-hover-text);
+  }
+
+  variant-picker[data-template-product-match='true']
+    .variant-option--buttons:not(.variant-option--swatches)
+    .variant-option__button-label:not(.variant-option__button-label--has-swatch):has([data-option-available='false']) {
+    color: rgb(0 0 0 / 0.45);
+  }
+
+  variant-picker[data-template-product-match='true']
+    .variant-option--buttons:not(.variant-option--swatches)
+    .variant-option__button-label:not(.variant-option__button-label--has-swatch):has([data-option-available='false']):has(:checked) {
+    /* --variant-picker-stroke-color: rgb(0 0 0 / 0.35); */
+
+    background-color: black;
+    border-color: rgb(0 0 0 / 0.18);
+    color: white;
+  }
+
+  variant-picker[data-template-product-match='true']
+    .variant-option--buttons:not(.variant-option--swatches)
+    legend {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #000;
   }
 {% endstylesheet %}

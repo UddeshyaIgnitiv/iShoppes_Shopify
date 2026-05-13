@@ -442,14 +442,14 @@ const airports = [
   city: "Honolulu, HI",
   name: "Daniel K. Inouye International Airport",
   terminals: [
-    {
+    {% comment %} {
       name: "Terminal 1",
       image: "",
       stores: [
         { name: "Terminal 1 iS From Hawaii with Love", image: "" },
         { name: "Terminal 1 iS From Hawaii with Love", image: "" }
       ]
-    },
+    }, {% endcomment %}
     {
       name: "Terminal 2",
       image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/IS-DUTY-FREE-220.jpg?v=1778585657",
@@ -459,7 +459,7 @@ const airports = [
         { name: "Terminal 2 HALE LOLE", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/HALE-ONO-218.jpg?v=1778585787" },
         { name: "Terminal 2 HALE ONO", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/HALE-ONO-217.jpg?v=1778585882" },
         { name: "Terminal 2 ALOHA Collection", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/ALOHA-257.jpg?v=1778585954" },
-        { name: "Terminal 2 Mana UP", image: "" },
+        {% comment %} { name: "Terminal 2 Mana UP", image: "" }, {% endcomment %}
         { name: "Terminal 2 Greeters of Hawaii", image: "" },
         { name: "Terminal 2 iS Beauty", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/iSBeauty-221.jpg?v=1778587411" },
         { name: "Terminal 2 iS From Hawaii with Love", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/FHWL_228.png?v=1778587499" },
@@ -472,7 +472,7 @@ const airports = [
         { name: "Terminal 2 Maui Divers", image: "" },
         { name: "Terminal 2 Ripcurl", image: "" },
         { name: "Terminal 2 Greeters of Hawaii", image: "" },
-        { name: "Terminal 2 iS Style", image: "" },
+        {% comment %} { name: "Terminal 2 iS Style", image: "" }, {% endcomment %}
         { name: "Terminal 2 iS From Hawaii with Love", image: "https://cdn.shopify.com/s/files/1/0725/3553/9901/files/FHWL-258.jpg?v=1778589487" },
       ]
     }

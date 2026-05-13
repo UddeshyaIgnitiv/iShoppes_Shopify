@@ -15,7 +15,7 @@
 %}
 
 <quantity-selector-component
-  class="quantity-selector{% if class %} {{ class }}{% endif %}"
+  class="quantity-selector{% if class %} {{ class }}{% endif %}{% if line_index == blank %} quantity-selector--product-form{% endif %}"
   {% if line_index == null %}
     {{- block.shopify_attributes -}}
   {% endif %}
@@ -31,6 +31,11 @@
         font-size: 22px;
         font-weight: 500;
     }
+    .quantity-selector--product-form .quantity-header {
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: #000;
+    }
     .cart-drawer .quantity-header {
         font-size: 14px;
         font-weight: 400;
@@ -40,10 +45,9 @@
         align-items: center;
         background: #fff;
         border: 1px solid #e0e0e0;
-        border-radius: 50px;
+        border-radius: 12px;
         padding: 4px;
         width: fit-content;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     .quantity-selector button {
         width: 32px;

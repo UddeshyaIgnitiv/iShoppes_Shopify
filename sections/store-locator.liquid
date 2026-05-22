@@ -49,6 +49,8 @@ display:none;
   position: relative;
   padding: 20px;
   max-width: 860px;
+  isolation: isolate;
+  z-index: 0;
  }
 #airportmap img { 
   width:100%;
@@ -137,6 +139,7 @@ display:none;
 }
 .locationImage{
 position:absolute;
+z-index: 1;
 }
 .locationImage.locatioBDL {
   top: 32%;
@@ -171,7 +174,7 @@ position:absolute;
     top: 2px;
     left: 4em;
     background: #000;
-    z-index: 111;
+    z-index: 1;
     color: #fff;
     font-weight: 600;
     padding: 2px 13px;
@@ -188,6 +191,10 @@ span.tooltip:before {
     border: 12px solid transparent;
     border-right-color: #000;
     top: 0;
+}
+.locationImage:hover,
+.locationImage:has(img.active) {
+  z-index: 2;
 }
 .locationImage:hover .tooltip{
   display:block !important;

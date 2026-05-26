@@ -392,7 +392,6 @@
 
     // Use event delegation because slides may be added dynamically
     document.body.addEventListener('click', function(event) {
-      alert(2)
       const slideLink = event.target.closest('.slide__image-container');
       // if (!slideLink) return;
 

@@ -446,8 +446,9 @@
    * Fire the same GA alias used for manual slider intent when users click the hero.
    */
   function initShopddfStaticHeroClickTracking() {
+    alert(2)
     if (config.templateSuffix !== 'shopddf-home-page') return;
-
+alert(1)
     document.addEventListener(
       'click',
       function (event) {

@@ -394,6 +394,7 @@
     alert(1);
     containers.forEach(container => {
       container.addEventListener('slidechange', function(event) {
+        alert(2);
         // Now event.target, event.detail are available
         const slideshow = event.target;
         if (!(slideshow instanceof Element)) return;

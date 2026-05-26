@@ -387,12 +387,33 @@
     );
   }
 
+  /**
+   * Theme slideshow fires SlideshowSelectEvent (name: slideshow:select) from
+   * <slideshow-component> — not from <slideshow-slide>. The event bubbles, so
+   * listening on document is valid. We resolve the host via composedPath() in
+   * case target/retargeting ever differs from the slideshow host.
+   * @param {Event} event
+   * @returns {Element | null}
+   */
+  function getSlideshowComponentFromEvent(event) {
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+    const fromPath = path.find(function (n) {
+      return n instanceof Element && n.tagName === 'SLIDESHOW-COMPONENT';
+    });
+    if (fromPath) return fromPath;
+    const t = event.target;
+    if (t instanceof Element && t.tagName === 'SLIDESHOW-COMPONENT') return t;
+    if (t instanceof Element) return t.closest('slideshow-component');
+    return null;
+  }
+
   function initHomeSliderTracking() {
     if (!config.isHomePage) return;
 
     document.addEventListener('slideshow:select', function (event) {
-      const slideshow = event.target;
-      if (!(slideshow instanceof Element)) return;
+      const slideshow = getSlideshowComponentFromEvent(event);
+      if (!slideshow) return;
+      // Hero slideshow from sections/slideshow.liquid — ignore nested carousels (e.g. product cards).
       if (!slideshow.closest('.slideshow-margin-wrapper')) return;
 
       const detail = event.detail || {};
@@ -420,6 +441,35 @@
     });
   }
 
+  /**
+   * ShopDDF home template has no <slideshow-component>; hero is a static <picture>.
+   * Fire the same GA alias used for manual slider intent when users click the hero.
+   */
+  function initShopddfStaticHeroClickTracking() {
+    if (config.templateSuffix !== 'shopddf-home-page') return;
+
+    document.addEventListener(
+      'click',
+      function (event) {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const hero = target.closest('.shopddf-home__hero');
+        if (!hero) return;
+
+        const interactive = target.closest('a[href], button, [role="button"]');
+        const href = interactive && interactive instanceof HTMLAnchorElement ? interactive.href : '';
+
+        sendEvent('home_page_slider_click', {
+          slide_id: '',
+          interaction_type: 'static_hero',
+          trigger: 'click',
+          link_url: href || undefined,
+        });
+      },
+      true
+    );
+  }
+
   function init() {
     // trackSessionStart();
     // trackFirstVisit();
@@ -431,6 +481,7 @@
     // initPurchaseTracking();
     // initFormStartTracking();
     initHomeSliderTracking();
+    initShopddfStaticHeroClickTracking();
   }
 
   if (document.readyState === 'loading') {

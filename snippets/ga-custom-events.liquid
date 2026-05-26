@@ -1,0 +1,112 @@
+{% comment %}
+  GA4 ecommerce events for AB Google Analytics.
+  view_category / view_item_list (collection), view_item (product), search, add_to_cart,
+  begin_checkout (checkout button), purchase (when config.purchase is set).
+  Purchase on Shopify Checkout is usually tracked by the AB Google Analytics app pixel.
+{% endcomment %}
+
+{% liquid
+  assign ga_page_event = nil
+  assign ga_search_term = nil
+  assign ga_item_list_id = nil
+  assign ga_item_list_name = nil
+%}
+
+{% if template.name == 'product' and product != blank %}
+  {% assign ga_page_event = 'view_item' %}
+  {% assign ga_variant = product.selected_or_first_available_variant %}
+{% elsif template.name == 'collection' and collection != blank %}
+  {% assign ga_page_event = 'view_item_list' %}
+  {% assign ga_item_list_id = collection.id %}
+  {% assign ga_item_list_name = collection.title %}
+{% elsif template.name == 'search' %}
+  {% assign ga_page_event = 'search' %}
+  {% if search.performed %}
+    {% assign ga_search_term = search.terms | escape %}
+  {% endif %}
+{% endif %}
+
+<script>
+  window.__gaCustomEventsConfig = {
+    // This theme uses custom page templates with suffixes (e.g. `shopddf-home-page`)
+    // so rely on either the default `index` template or our known home suffix.
+    isHomePage: {{ template.name == 'index' or template.suffix == 'shopddf-home-page' | json }},
+    pageType: {{ request.page_type | json }},
+    templateName: {{ template.name | json }},
+    currency: {{ cart.currency.iso_code | default: shop.currency | json }},
+    pageEvent: {{ ga_page_event | json }},
+    searchTerm: {{ ga_search_term | json }},
+    itemListId: {{ ga_item_list_id | json }},
+    itemListName: {{ ga_item_list_name | json }},
+    {% if template.name == 'product' and product != blank %}
+    product: {
+      id: {{ product.id | json }},
+      title: {{ product.title | json }},
+      vendor: {{ product.vendor | json }},
+      type: {{ product.type | json }},
+      url: {{ product.url | json }},
+      variantId: {{ ga_variant.id | json }},
+      variantTitle: {{ ga_variant.title | json }},
+      sku: {{ ga_variant.sku | json }},
+      price: {{ ga_variant.price | divided_by: 100.0 }},
+      available: {{ ga_variant.available | json }}
+    },
+    {% endif %}
+    {% if template.name == 'collection' and collection != blank %}
+    collection: {
+      id: {{ collection.id | json }},
+      title: {{ collection.title | json }},
+      handle: {{ collection.handle | json }}
+    },
+    listItems: [
+      {% for item in collection.products limit: 30 %}
+        {% assign v = item.selected_or_first_available_variant %}
+        {
+          item_id: {{ v.id | json }},
+          item_name: {{ item.title | json }},
+          item_brand: {{ item.vendor | json }},
+          item_category: {{ item.type | json }},
+          item_variant: {{ v.title | json }},
+          price: {{ v.price | divided_by: 100.0 }},
+          quantity: 1,
+          index: {{ forloop.index0 }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ],
+    {% endif %}
+    {% if template.name == 'search' and search.performed %}
+    searchItems: [
+      {% assign ga_search_products = search.results | where: 'object_type', 'product' %}
+      {% for item in ga_search_products limit: 30 %}
+        {% assign v = item.selected_or_first_available_variant | default: item.variants.first %}
+        {
+          item_id: {{ v.id | json }},
+          item_name: {{ item.title | json }},
+          item_brand: {{ item.vendor | json }},
+          item_category: {{ item.type | json }},
+          price: {{ v.price | divided_by: 100.0 }},
+          quantity: 1,
+          index: {{ forloop.index0 }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ],
+    {% endif %}
+    cart: {
+      total: {{ cart.total_price | divided_by: 100.0 }},
+      itemCount: {{ cart.item_count | json }},
+      items: [
+        {% for item in cart.items %}
+        {
+          item_id: {{ item.variant_id | json }},
+          item_name: {{ item.product.title | json }},
+          item_brand: {{ item.vendor | json }},
+          item_variant: {{ item.variant.title | json }},
+          price: {{ item.final_price | divided_by: 100.0 }},
+          quantity: {{ item.quantity | json }}
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    }
+  };
+</script>
+<script src="{{ 'ga-custom-events.js' | asset_url }}" defer></script>

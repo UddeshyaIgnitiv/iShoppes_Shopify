@@ -410,7 +410,7 @@
       // Optional: Get the link URL (if needed)
       const linkUrl = slideLink.getAttribute('href') || '';
 
-      sendEvent('home_slider_click', {
+      sendEvent('home_banner_click', {
         slide_index: slideIndex,
         slide_id: slideId,
         link_url: linkUrl,
@@ -418,7 +418,7 @@
       });
 
       // Also send the generic 'home_slider' event with manual flag (if you want compatibility)
-      sendEvent('home_slider', {
+      sendEvent('home_banner', {
         slide_index: slideIndex,
         slide_id: slideId,
         interaction_type: 'manual',

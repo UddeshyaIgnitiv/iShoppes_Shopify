@@ -448,10 +448,10 @@
   function initShopddfStaticHeroClickTracking() {
     alert(2)
     // if (config.templateSuffix !== 'shopddf-home-page') return;
-alert(1)
     document.addEventListener(
       'click',
       function (event) {
+alert(1)
         const target = event.target;
         if (!(target instanceof Element)) return;
         const hero = target.closest('.shopddf-home__hero');

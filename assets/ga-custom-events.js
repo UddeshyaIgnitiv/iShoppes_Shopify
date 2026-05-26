@@ -390,34 +390,37 @@
   function initHomeSliderTracking() {
     if (!config.isHomePage) return;
 
-    document.querySelectorAll('.slide__image-container', function (event) {
-      alert(2);
-      const slideshow = event.target;
-      if (!(slideshow instanceof Element)) return;
-      if (!slideshow.closest('.slideshow-margin-wrapper')) return;
+    const containers = document.querySelectorAll('.slide__image-container');
 
-      const detail = event.detail || {};
-      const slideKey = (detail.id || '') + '::' + String(detail.index);
+    containers.forEach(container => {
+      container.addEventListener('slidechange', function(event) {
+        // Now event.target, event.detail are available
+        const slideshow = event.target;
+        if (!(slideshow instanceof Element)) return;
+        if (!slideshow.closest('.slideshow-margin-wrapper')) return;
 
-      if (!detail.userInitiated && sliderSlidesSeen.has(slideKey)) return;
-      sliderSlidesSeen.add(slideKey);
+        const detail = event.detail || {};
+        const slideKey = (detail.id || '') + '::' + String(detail.index);
 
-      sendEvent('home_slider', {
-        slide_index: detail.index,
-        slide_id: detail.id || '',
-        interaction_type: detail.userInitiated ? 'manual' : 'auto',
-        trigger: detail.trigger || 'select',
-      });
+        if (!detail.userInitiated && sliderSlidesSeen.has(slideKey)) return;
+        sliderSlidesSeen.add(slideKey);
 
-      // Alias specifically for user-initiated interaction.
-      if (detail.userInitiated) {
-        sendEvent('home_page_slider_click', {
+        sendEvent('home_slider', {
           slide_index: detail.index,
           slide_id: detail.id || '',
-          interaction_type: 'manual',
+          interaction_type: detail.userInitiated ? 'manual' : 'auto',
           trigger: detail.trigger || 'select',
         });
-      }
+
+        if (detail.userInitiated) {
+          sendEvent('home_page_slider_click', {
+            slide_index: detail.index,
+            slide_id: detail.id || '',
+            interaction_type: 'manual',
+            trigger: detail.trigger || 'select',
+          });
+        }
+      });
     });
   }
 

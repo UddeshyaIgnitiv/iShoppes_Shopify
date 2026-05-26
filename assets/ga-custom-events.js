@@ -392,9 +392,9 @@
 
     const slideshow = document.querySelector('slideshow-slides');
     if (!slideshow) return;
-
+alert(9);
     slideshow.addEventListener('slidechange', function(event) {
-      alert(9);
+      
       const detail = event.detail || {};
       const slideKey = (detail.id || '') + '::' + String(detail.index);
 

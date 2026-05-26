@@ -389,8 +389,8 @@
 
   function initHomeSliderTracking() {
     if (!config.isHomePage) return;
+
     document.addEventListener('slideshow:select', function (event) {
-alert(1);
       const slideshow = event.target;
       if (!(slideshow instanceof Element)) return;
       if (!slideshow.closest('.slideshow-margin-wrapper')) return;

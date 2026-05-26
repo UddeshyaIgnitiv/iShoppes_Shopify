@@ -389,7 +389,7 @@
 
   function initHomeSliderTracking() {
     if (!config.isHomePage) return;
-
+alert(1);
     document.addEventListener('slideshow:select', function (event) {
       const slideshow = event.target;
       if (!(slideshow instanceof Element)) return;

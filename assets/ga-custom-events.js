@@ -451,7 +451,6 @@
     document.addEventListener(
       'click',
       function (event) {
-        alert(2)
         const target = event.target;
         if (!(target instanceof Element)) return;
         const hero = target.closest('.shopddf-home__hero');

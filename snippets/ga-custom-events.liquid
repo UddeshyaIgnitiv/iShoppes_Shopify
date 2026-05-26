@@ -26,13 +26,21 @@
   {% endif %}
 {% endif %}
 
+{% liquid
+  assign ga_is_home_page = false
+  if template.name == 'index' or template.suffix == 'shopddf-home-page'
+    assign ga_is_home_page = true
+  endif
+%}
+
 <script>
   window.__gaCustomEventsConfig = {
     // This theme uses custom page templates with suffixes (e.g. `shopddf-home-page`)
     // so rely on either the default `index` template or our known home suffix.
-    isHomePage: {{ template.name == 'index' or template.suffix == 'shopddf-home-page' | json }},
+    isHomePage: {{ ga_is_home_page | json }},
     pageType: {{ request.page_type | json }},
     templateName: {{ template.name | json }},
+    templateSuffix: {{ template.suffix | json }},
     currency: {{ cart.currency.iso_code | default: shop.currency | json }},
     pageEvent: {{ ga_page_event | json }},
     searchTerm: {{ ga_search_term | json }},

@@ -394,6 +394,7 @@
     if (!slideshow) return;
 
     slideshow.addEventListener('slidechange', function(event) {
+      alert(9);
       const detail = event.detail || {};
       const slideKey = (detail.id || '') + '::' + String(detail.index);
 

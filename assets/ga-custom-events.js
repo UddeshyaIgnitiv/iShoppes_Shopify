@@ -390,7 +390,8 @@
   function initHomeSliderTracking() {
     if (!config.isHomePage) return;
 
-    document.addEventListener('slideshow:select', function (event) {
+    document.querySelectorAll('.slide__image-container', function (event) {
+      alert(2);
       const slideshow = event.target;
       if (!(slideshow instanceof Element)) return;
       if (!slideshow.closest('.slideshow-margin-wrapper')) return;

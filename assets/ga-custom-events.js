@@ -390,32 +390,41 @@
   function initHomeSliderTracking() {
     if (!config.isHomePage) return;
 
-    const slideshow = document.querySelector('slideshow-slides');
-    if (!slideshow) return;
-alert(9);
-    slideshow.addEventListener('slidechange', function(event) {
-      
-      const detail = event.detail || {};
-      const slideKey = (detail.id || '') + '::' + String(detail.index);
+    // Use event delegation because slides may be added dynamically
+    document.body.addEventListener('click', function(event) {
+      alert(2)
+      const slideLink = event.target.closest('.slide__image-container');
+      if (!slideLink) return;
 
-      if (!detail.userInitiated && sliderSlidesSeen.has(slideKey)) return;
-      sliderSlidesSeen.add(slideKey);
+      // Find the parent <slideshow-slide> to get slide index and ID
+      const slide = slideLink.closest('slideshow-slide');
+      if (!slide) return;
 
-      sendEvent('home_slider', {
-        slide_index: detail.index,
-        slide_id: detail.id || '',
-        interaction_type: detail.userInitiated ? 'manual' : 'auto',
-        trigger: detail.trigger || 'select',
+      const slideshow = slide.closest('slideshow-slides');
+      if (!slideshow) return;
+
+      // Get the slide index
+      const slides = Array.from(slideshow.querySelectorAll('slideshow-slide'));
+      const slideIndex = slides.indexOf(slide);
+      const slideId = slide.id || '';
+
+      // Optional: Get the link URL (if needed)
+      const linkUrl = slideLink.getAttribute('href') || '';
+
+      sendEvent('home_slider_click', {
+        slide_index: slideIndex,
+        slide_id: slideId,
+        link_url: linkUrl,
+        interaction_type: 'click',
       });
 
-      if (detail.userInitiated) {
-        sendEvent('home_page_slider_click', {
-          slide_index: detail.index,
-          slide_id: detail.id || '',
-          interaction_type: 'manual',
-          trigger: detail.trigger || 'select',
-        });
-      }
+      // Also send the generic 'home_slider' event with manual flag (if you want compatibility)
+      sendEvent('home_slider', {
+        slide_index: slideIndex,
+        slide_id: slideId,
+        interaction_type: 'manual',
+        trigger: 'click',
+      });
     });
   }
 

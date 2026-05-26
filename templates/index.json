@@ -45,7 +45,7 @@
           "settings": {
             "media_type_1": "image",
             "image_1": "shopify://shop_images/UK-WGR-10311_HENDRICKS_ANO_JFK_T1_T5_DIGI_C_FB_1200x630px_V1_e012883a-5454-4fb1-9c01-254f4f5ee079.jpg",
-            "link": "/search?q=hendrick",
+            "link": "#",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",

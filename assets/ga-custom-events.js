@@ -394,14 +394,14 @@
     document.body.addEventListener('click', function(event) {
       alert(2)
       const slideLink = event.target.closest('.slide__image-container');
-      if (!slideLink) return;
+      // if (!slideLink) return;
 
       // Find the parent <slideshow-slide> to get slide index and ID
       const slide = slideLink.closest('slideshow-slide');
-      if (!slide) return;
+      // if (!slide) return;
 
       const slideshow = slide.closest('slideshow-slides');
-      if (!slideshow) return;
+      // if (!slideshow) return;
 
       // Get the slide index
       const slides = Array.from(slideshow.querySelectorAll('slideshow-slide'));

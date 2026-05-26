@@ -391,7 +391,7 @@
     if (!config.isHomePage) return;
 
     const containers = document.querySelectorAll('.slide__image-container');
-
+    alert(1);
     containers.forEach(container => {
       container.addEventListener('slidechange', function(event) {
         // Now event.target, event.detail are available

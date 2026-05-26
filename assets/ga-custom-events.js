@@ -388,6 +388,7 @@
   }
 
   function initHomeSliderTracking() {
+    alert(config.isHomePage)
     if (!config.isHomePage) return;
 
     document.querySelectorAll('.slide__image-container', function (event) {

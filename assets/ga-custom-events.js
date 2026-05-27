@@ -416,14 +416,6 @@
         link_url: linkUrl,
         interaction_type: 'click',
       });
-
-      // Also send the generic 'home_slider' event with manual flag (if you want compatibility)
-      sendEvent('home_banner', {
-        slide_index: slideIndex,
-        slide_id: slideId,
-        interaction_type: 'manual',
-        trigger: 'click',
-      });
     });
   }
 

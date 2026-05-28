@@ -391,40 +391,40 @@
     );
   }
 
-  function initHomeSliderTracking() {
-    alert(config.isHomePage)
-    if (!config.isHomePage) return;
+  function sendEvent(eventName, params) {
+  console.log('[GA Debug] sendEvent called', { eventName, params });
 
-    // Use event delegation because slides may be added dynamically
-    document.body.addEventListener('click', function(event) {
-      console.log('nithin',event);
-      const slideLink = event.target.closest('.slide__image-container');
-      alert(slideLink);
-      if (!slideLink) return;
+  const payload = Object.assign(
+    {
+      event_name: eventName,
+      page_location: window.location.href,
+      page_path: window.location.pathname,
+      currency: config.currency || '',
+    },
+    params || {}
+  );
 
-      // Find the parent <slideshow-slide> to get slide index and ID
-      const slide = slideLink.closest('slideshow-slide');
-      if (!slide) return;
+  console.log('[GA Debug] Final payload:', payload);
 
-      const slideshow = slide.closest('slideshow-slides');
-      if (!slideshow) return;
-
-      // Get the slide index
-      const slides = Array.from(slideshow.querySelectorAll('slideshow-slide'));
-      const slideIndex = slides.indexOf(slide);
-      const slideId = slide.id || '';
-
-      // Optional: Get the link URL (if needed)
-      const linkUrl = slideLink.getAttribute('href') || '';
-
-      sendEvent('home_banner_click', {
-        slide_index: slideIndex,
-        slide_id: slideId,
-        link_url: linkUrl,
-        interaction_type: 'click',
-      });
-    });
+  if (typeof window.gtag === 'function') {
+    console.log('[GA Debug] Using gtag to send event');
+    window.gtag('event', eventName, payload);
+  } else if (Array.isArray(window.dataLayer)) {
+    console.log('[GA Debug] Using dataLayer push');
+    window.dataLayer.push(Object.assign({ event: eventName }, payload));
+  } else {
+    console.warn('[GA Debug] Neither gtag nor dataLayer available');
   }
+
+  if (typeof Shopify !== 'undefined' && Shopify.analytics && typeof Shopify.analytics.publish === 'function') {
+    try {
+      Shopify.analytics.publish(CUSTOM_EVENT_PREFIX + eventName, payload);
+      console.log('[GA Debug] Shopify analytics published');
+    } catch (e) {
+      console.error('[GA Debug] Shopify analytics publish failed:', e);
+    }
+  }
+}
 
   function init() {
     // trackSessionStart();

@@ -409,9 +409,11 @@
     window.addEventListener('click', function(event) {
       console.log('[GA Debug] Global click event captured (phase: capture)', 'target:', event.target);
 
-      // Find the clickable slide link (the actual <a> that wraps the image)
-      const slideLink = event.target.closest('.slide__image-container');
-      console.log('[GA Debug] .slide__image-container found?', slideLink);
+      // Support both click targets used by this theme's slideshow:
+      // 1) image wrapper link: a.slide__image-container
+      // 2) content overlay link: a.group-block-content
+      const slideLink = event.target.closest('a.slide__image-container, a.group-block-content');
+      console.log('[GA Debug] banner link found?', slideLink);
 
       if (!slideLink) {
         console.log('[GA Debug] Not a banner click, ignoring');
@@ -435,18 +437,18 @@
 
       // --- Extract required parameters ---
       // link_url: the href of the banner
-      const linkUrl = slideLink.getAttribute('href') || '';
+      const linkUrl = slideLink.getAttribute('href') || slideLink.href || '';
       console.log('[GA Debug] link_url extracted:', linkUrl);
 
       // banner_name: use image alt text, or slide index + URL as fallback
-      const img = slideLink.querySelector('img');
+      const slide = slideLink.closest('slideshow-slide');
+      const img = slideLink.querySelector('img') || slide?.querySelector('.slide__image-container img');
       let bannerName = img?.getAttribute('alt') || '';
       console.log('[GA Debug] img element found?', img, 'alt text:', bannerName);
 
       if (!bannerName) {
         console.log('[GA Debug] No alt text, falling back to slide index');
         // Fallback: try to get slide index from parent <slideshow-slide>
-        const slide = slideLink.closest('slideshow-slide');
         const slides = slide?.parentElement?.querySelectorAll('slideshow-slide') || [];
         const index = Array.from(slides).indexOf(slide);
         bannerName = index !== -1 ? `Slide ${index + 1}` : 'Home Banner';
@@ -461,7 +463,6 @@
       // Get slide index for extra metadata
       let slideIndex = -1;
       try {
-        const slide = slideLink.closest('slideshow-slide');
         const slides = slide?.parentElement?.querySelectorAll('slideshow-slide') || [];
         slideIndex = Array.from(slides).indexOf(slide);
         console.log('[GA Debug] slide_index computed:', slideIndex);

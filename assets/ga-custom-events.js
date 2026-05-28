@@ -392,6 +392,7 @@
   }
 
   function initHomeSliderTracking() {
+    alert(config.isHomePage)
     if (!config.isHomePage) return;
 
     // Use event delegation because slides may be added dynamically

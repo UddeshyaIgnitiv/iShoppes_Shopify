@@ -398,6 +398,7 @@
     document.body.addEventListener('click', function(event) {
       alert(1);
       const slideLink = event.target.closest('.slide__image-container');
+      alert(slideLink);
       // if (!slideLink) return;
 
       // Find the parent <slideshow-slide> to get slide index and ID

@@ -33,6 +33,7 @@
     );
 
     if (typeof window.gtag === 'function') {
+      console.log(`GA triggered for event ${eventName} with parameters ${JSON.stringify(payload)}`);
       window.gtag('event', eventName, payload);
     } else if (Array.isArray(window.dataLayer)) {
       window.dataLayer.push(Object.assign({ event: eventName }, payload));
@@ -392,6 +393,7 @@
 
     // Use event delegation because slides may be added dynamically
     document.body.addEventListener('click', function(event) {
+      alert(1);
       const slideLink = event.target.closest('.slide__image-container');
       // if (!slideLink) return;
 

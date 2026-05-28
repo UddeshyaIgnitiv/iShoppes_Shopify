@@ -36,7 +36,7 @@
       console.log('nithin1',`GA triggered for event ${eventName} with parameters ${JSON.stringify(payload)}`);
       window.gtag('event', eventName, payload);
     } else if (Array.isArray(window.dataLayer)) {
-      console.log('nithin2','GA not triggered')
+      console.log('nithin2','GA not triggered',`${eventName} with parameters ${JSON.stringify(payload)}`)
       window.dataLayer.push(Object.assign({ event: eventName }, payload));
     }
 

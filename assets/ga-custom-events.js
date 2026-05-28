@@ -33,19 +33,15 @@
     );
 
     if (typeof window.gtag === 'function') {
-      console.log('nithin1',`GA triggered for event ${eventName} with parameters ${JSON.stringify(payload)}`);
       window.gtag('event', eventName, payload);
     } else if (Array.isArray(window.dataLayer)) {
-      console.log('nithin2','GA not triggered',`${eventName} with parameters ${JSON.stringify(payload)}`)
       window.dataLayer.push(Object.assign({ event: eventName }, payload));
     }
 
     if (typeof Shopify !== 'undefined' && Shopify.analytics && typeof Shopify.analytics.publish === 'function') {
       try {
         Shopify.analytics.publish(CUSTOM_EVENT_PREFIX + eventName, payload);
-        console.log('nithin3','GA triggered successully with GA account')
       } catch (e) {
-        console.log('nithin4','GA not transferred into GA account')
         /* unavailable in some contexts */
       }
     }
@@ -392,7 +388,6 @@
   }
 
   function initHomeSliderTracking() {
-    console.log('[GA Debug] initHomeSliderTracking called');
 
     // Only run on the homepage (support both root and trailing slash)
     const isHomePage = window.location.pathname === '/' || window.location.pathname === '';

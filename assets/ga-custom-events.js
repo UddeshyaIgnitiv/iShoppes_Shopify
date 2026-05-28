@@ -396,7 +396,7 @@
 
     // Use event delegation because slides may be added dynamically
     document.body.addEventListener('click', function(event) {
-      alert(1);
+      console.log('nithin',event);
       const slideLink = event.target.closest('.slide__image-container');
       alert(slideLink);
       // if (!slideLink) return;

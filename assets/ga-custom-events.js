@@ -391,40 +391,105 @@
     );
   }
 
-  function sendEvent(eventName, params) {
-  console.log('[GA Debug] sendEvent called', { eventName, params });
+  function initHomeSliderTracking() {
+    console.log('[GA Debug] initHomeSliderTracking called');
 
-  const payload = Object.assign(
-    {
-      event_name: eventName,
-      page_location: window.location.href,
-      page_path: window.location.pathname,
-      currency: config.currency || '',
-    },
-    params || {}
-  );
+    // Only run on the homepage (support both root and trailing slash)
+    const isHomePage = window.location.pathname === '/' || window.location.pathname === '';
+    console.log('[GA Debug] Current pathname:', window.location.pathname, 'isHomePage:', isHomePage);
 
-  console.log('[GA Debug] Final payload:', payload);
-
-  if (typeof window.gtag === 'function') {
-    console.log('[GA Debug] Using gtag to send event');
-    window.gtag('event', eventName, payload);
-  } else if (Array.isArray(window.dataLayer)) {
-    console.log('[GA Debug] Using dataLayer push');
-    window.dataLayer.push(Object.assign({ event: eventName }, payload));
-  } else {
-    console.warn('[GA Debug] Neither gtag nor dataLayer available');
-  }
-
-  if (typeof Shopify !== 'undefined' && Shopify.analytics && typeof Shopify.analytics.publish === 'function') {
-    try {
-      Shopify.analytics.publish(CUSTOM_EVENT_PREFIX + eventName, payload);
-      console.log('[GA Debug] Shopify analytics published');
-    } catch (e) {
-      console.error('[GA Debug] Shopify analytics publish failed:', e);
+    if (!isHomePage) {
+      console.log('[GA Debug] Not homepage, exiting initHomeSliderTracking');
+      return;
     }
+
+    console.log('[GA Debug] Homepage detected, attaching click listener (capture phase)');
+
+    // Use capture phase to catch clicks before the slideshow's internal handlers
+    window.addEventListener('click', function(event) {
+      console.log('[GA Debug] Global click event captured (phase: capture)', 'target:', event.target);
+
+      // Find the clickable slide link (the actual <a> that wraps the image)
+      const slideLink = event.target.closest('.slide__image-container');
+      console.log('[GA Debug] .slide__image-container found?', slideLink);
+
+      if (!slideLink) {
+        console.log('[GA Debug] Not a banner click, ignoring');
+        return;
+      }
+
+      console.log('[GA Debug] Banner click detected, slideLink:', slideLink);
+
+      // Prevent double-triggering if multiple listeners fire (optional)
+      const alreadyTracked = slideLink.getAttribute('data-ga-tracked') === 'true';
+      console.log('[GA Debug] Already tracked?', alreadyTracked);
+      if (alreadyTracked) return;
+
+      slideLink.setAttribute('data-ga-tracked', 'true');
+      console.log('[GA Debug] Set data-ga-tracked="true" on slideLink');
+
+      setTimeout(() => {
+        slideLink.removeAttribute('data-ga-tracked');
+        console.log('[GA Debug] Removed data-ga-tracked attribute after 500ms');
+      }, 500);
+
+      // --- Extract required parameters ---
+      // link_url: the href of the banner
+      const linkUrl = slideLink.getAttribute('href') || '';
+      console.log('[GA Debug] link_url extracted:', linkUrl);
+
+      // banner_name: use image alt text, or slide index + URL as fallback
+      const img = slideLink.querySelector('img');
+      let bannerName = img?.getAttribute('alt') || '';
+      console.log('[GA Debug] img element found?', img, 'alt text:', bannerName);
+
+      if (!bannerName) {
+        console.log('[GA Debug] No alt text, falling back to slide index');
+        // Fallback: try to get slide index from parent <slideshow-slide>
+        const slide = slideLink.closest('slideshow-slide');
+        const slides = slide?.parentElement?.querySelectorAll('slideshow-slide') || [];
+        const index = Array.from(slides).indexOf(slide);
+        bannerName = index !== -1 ? `Slide ${index + 1}` : 'Home Banner';
+        console.log('[GA Debug] Fallback banner_name:', bannerName, 'slide index:', index);
+      }
+
+      // link_text: any text inside the anchor (if present), otherwise fallback to banner_name
+      let linkText = slideLink.innerText?.trim() || '';
+      if (!linkText) linkText = bannerName;
+      console.log('[GA Debug] link_text extracted:', linkText);
+
+      // Get slide index for extra metadata
+      let slideIndex = -1;
+      try {
+        const slide = slideLink.closest('slideshow-slide');
+        const slides = slide?.parentElement?.querySelectorAll('slideshow-slide') || [];
+        slideIndex = Array.from(slides).indexOf(slide);
+        console.log('[GA Debug] slide_index computed:', slideIndex);
+      } catch (err) {
+        console.error('[GA Debug] Error computing slide_index:', err);
+      }
+
+      // Send GA4 event
+      const eventParams = {
+        link_text: linkText,
+        link_url: linkUrl,
+        banner_name: bannerName,
+        slide_index: slideIndex,
+      };
+      console.log('[GA Debug] About to send event "home_banner_click" with params:', eventParams);
+
+      try {
+        sendEvent('home_banner_click', eventParams);
+        console.log('[GA Debug] sendEvent executed successfully');
+      } catch (err) {
+        console.error('[GA Debug] sendEvent threw an error:', err);
+      }
+
+      console.log('[GA Debug] Banner click tracking complete for:', linkUrl);
+    }, true); // capture phase ensures we get the event before the slideshow component
+
+    console.log('[GA Debug] Click listener attached successfully');
   }
-}
 
   function init() {
     // trackSessionStart();

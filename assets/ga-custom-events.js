@@ -33,19 +33,19 @@
     );
 
     if (typeof window.gtag === 'function') {
-      console.log(`GA triggered for event ${eventName} with parameters ${JSON.stringify(payload)}`);
+      console.log('nithin1',`GA triggered for event ${eventName} with parameters ${JSON.stringify(payload)}`);
       window.gtag('event', eventName, payload);
     } else if (Array.isArray(window.dataLayer)) {
-      console.log('GA not triggered')
+      console.log('nithin2','GA not triggered')
       window.dataLayer.push(Object.assign({ event: eventName }, payload));
     }
 
     if (typeof Shopify !== 'undefined' && Shopify.analytics && typeof Shopify.analytics.publish === 'function') {
       try {
         Shopify.analytics.publish(CUSTOM_EVENT_PREFIX + eventName, payload);
-        console.log('GA triggered successully with GA account')
+        console.log('nithin3','GA triggered successully with GA account')
       } catch (e) {
-        console.log('GA not transferred into GA account')
+        console.log('nithin4','GA not transferred into GA account')
         /* unavailable in some contexts */
       }
     }

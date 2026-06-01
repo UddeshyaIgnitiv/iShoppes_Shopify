@@ -17,7 +17,7 @@
           "name": "t:names.slide",
           "settings": {
             "media_type_1": "image",
-            "image_1": "shopify://shop_images/banner-worldcup.jpg",
+            "image_1": "shopify://shop_images/banner-worldcup-desk.jpg",
             "link": "/products/gran-centario-reposado-world-cup-special-edition",
             "content_direction": "column",
             "vertical_on_mobile": true,

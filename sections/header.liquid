@@ -363,13 +363,7 @@
 
   <!-- Header Drawer Mobile Menu -->
 </div>
-{%- assign is_employee = false -%}
-{%- if customer -%}
-  {%- if customer.tags contains 'Employee' or customer.tags contains 'employee' -%}
-    {%- assign is_employee = true -%}
-  {%- endif -%}
-{%- endif -%}
-{%- unless is_employee -%}
+
 <div id="terminal-selection-div" class="header-departureform-1j0 undefined">
     <form class="account-form">
         <div class="header-closedepartureform-AsZ modal-close-dep">
@@ -688,7 +682,6 @@
         </p>
     </form>
 </div>
-{%- endunless -%}
 
 <style>
   #terminal-selection-div {

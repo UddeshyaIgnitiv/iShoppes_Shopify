@@ -22,22 +22,20 @@
         {{ 'icon-search.svg' | inline_asset_content }}
       </span>
     </button>
+    {%- assign is_employee = false -%}
+    {%- if customer -%}
+      {%- if customer.tags contains 'Employee' or customer.tags contains 'employee' -%}
+        {%- assign is_employee = true -%}
+      {%- endif -%}
+    {%- endif -%}
     {% if cart.attributes.Airport and cart.attributes.Airport != blank %}
     <div class="header-terminalInfo text-white terminal-update-btn font-medium js-terminal-info-display">
       <span class="js-terminal-info-text">
-        {%- assign is_employee = false -%}
-        {%- if customer -%}
-          {%- if customer.tags contains 'Employee' or customer.tags contains 'employee' -%}
-            {%- assign is_employee = true -%}
-          {%- endif -%}
-        {%- endif -%}
-        {%-  if is_employee -%}
-          {{ 'ShopDDF' }}
-        {%-  else -%}
-          {{ cart.attributes.Airport }}
-        {%-  endif -%}
+        {{ cart.attributes.Airport }}
       </span>
     </div>
+  {%-  elsif is_employee -%}
+        {{ 'ShopDDF' }}
     {% else %}
     <div class="header-terminalInfoDefault terminal-select-btn js-terminal-info-default">
       <span>

@@ -89,10 +89,17 @@
     %}
     <script src="{{ 'product-discount-promotion.js' | asset_url }}" type="module"></script>
   {% endunless %}
-
-  <div class="terminal-select-wrapper" style="margin-top: 15px;">
-    <button class="terminal-select-btn">Select Terminal</button>
-  </div>
+  {%- assign is_employee = false -%}
+  {%- if customer -%}
+    {%- if customer.tags contains 'Employee' or customer.tags contains 'employee' -%}
+      {%- assign is_employee = true -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- unless is_employee -%}
+    <div class="terminal-select-wrapper" style="margin-top: 15px;">
+      <button class="terminal-select-btn">Select Terminal</button>
+    </div>
+  {%- endunless -%}
 
   {% if block_settings.show_tax_info %}
     <div class="tax-note">

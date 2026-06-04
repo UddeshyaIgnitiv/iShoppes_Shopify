@@ -490,5 +490,57 @@
         }
       })();
     </script>
+    {%- liquid
+      assign is_employee = false
+      if customer
+        if customer.tags contains 'Employee' or customer.tags contains 'employee'
+          assign is_employee = true
+        endif
+      endif
+    -%}
+    <script>
+      (function () {
+        try {
+          var isEmployee = {% if is_employee %}true{% else %}false{% endif %};
+          if (!isEmployee) return;
+
+          function getCookie(name) {
+            try {
+              var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+              return match ? decodeURIComponent(match[2]) : null;
+            } catch (e) {
+              return null;
+            }
+          }
+
+          function setCookie(name, value, hrs) {
+            try {
+              var d = new Date();
+              d.setTime(d.getTime() + (hrs || 48) * 60 * 60 * 1000);
+              document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + d.toUTCString() + ';path=/';
+            } catch (e) {}
+          }
+
+          // Already set for this employee, nothing to do (prevents reload loop)
+          if (getCookie('Airport') === 'ShopDDF') return;
+
+          setCookie('Airport', 'ShopDDF', 48);
+
+          fetch('/cart/update.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ attributes: { Airport: 'ShopDDF' } })
+          })
+            .then(function () {
+              window.location.reload();
+            })
+            .catch(function () {
+              window.location.reload();
+            });
+        } catch (e) {
+          console.warn('Employee airport cookie script skipped safely');
+        }
+      })();
+    </script>
   </body>
 </html>

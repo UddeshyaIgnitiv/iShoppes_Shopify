@@ -364,7 +364,7 @@
   <!-- Header Drawer Mobile Menu -->
 </div>
 {%  if customer %}
-{{ customer.metafields.custom.segment_level | json }}
+{{ customer.tags | json }}
 {%  endif %}
 <div id="terminal-selection-div" class="header-departureform-1j0 undefined">
     <form class="account-form">

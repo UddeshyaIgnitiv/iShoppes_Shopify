@@ -363,7 +363,9 @@
 
   <!-- Header Drawer Mobile Menu -->
 </div>
-{{ customer.email }}
+{%  if customer %}
+{{ customer.tags | join: ', ' }}
+{%  endif %}
 <div id="terminal-selection-div" class="header-departureform-1j0 undefined">
     <form class="account-form">
         <div class="header-closedepartureform-AsZ modal-close-dep">

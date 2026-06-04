@@ -35,7 +35,11 @@
       </span>
     </div>
   {%-  elsif is_employee -%}
+    <div class="header-terminalInfo text-white terminal-update-btn font-medium js-terminal-info-display">
+      <span class="js-terminal-info-text">
         {{ 'ShopDDF' }}
+      </span>
+    </div>
     {% else %}
     <div class="header-terminalInfoDefault terminal-select-btn js-terminal-info-default">
       <span>

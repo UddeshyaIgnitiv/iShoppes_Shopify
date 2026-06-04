@@ -28,16 +28,16 @@
         {%- assign is_employee = true -%}
       {%- endif -%}
     {%- endif -%}
-    {% if cart.attributes.Airport and cart.attributes.Airport != blank %}
-    <div class="header-terminalInfo text-white terminal-update-btn font-medium js-terminal-info-display">
-      <span class="js-terminal-info-text">
-        {{ cart.attributes.Airport }}
-      </span>
-    </div>
-  {%-  elsif is_employee -%}
+    {%-  if is_employee -%}
     <div class="header-terminalInfo text-white terminal-update-btn font-medium js-terminal-info-display">
       <span class="js-terminal-info-text">
         {{ 'ShopDDF' }}
+      </span>
+    </div>
+  {% elsif cart.attributes.Airport and cart.attributes.Airport != blank %}
+    <div class="header-terminalInfo text-white terminal-update-btn font-medium js-terminal-info-display">
+      <span class="js-terminal-info-text">
+        {{ cart.attributes.Airport }}
       </span>
     </div>
     {% else %}

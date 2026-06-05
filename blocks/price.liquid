@@ -95,11 +95,11 @@
       {%- assign is_employee = true -%}
     {%- endif -%}
   {%- endif -%}
-  {%- unless is_employee -%}
+  {% comment %} {%- unless is_employee -%} {% endcomment %}
     <div class="terminal-select-wrapper" style="margin-top: 15px;">
       <button class="terminal-select-btn">Select Terminal</button>
     </div>
-  {%- endunless -%}
+  {% comment %} {%- endunless -%} {% endcomment %}
 
   {% if block_settings.show_tax_info %}
     <div class="tax-note">

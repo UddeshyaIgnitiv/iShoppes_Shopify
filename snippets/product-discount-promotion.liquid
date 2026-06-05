@@ -30,10 +30,18 @@
   data-promo-prefix="{{ promo_prefix | escape }}"
   data-discounts="{{ closest.product.metafields.custom.active_discount_labels | escape }}"
 >
-
+    {%- assign is_employee = false -%}
+    {%- if customer -%}
+      {%- if customer.tags contains 'Employee' or customer.tags contains 'employee' -%}
+        {%- assign is_employee = true -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- unless is_employee -%}
     <div class="offer-text offer-text--placeholder" data-offer-source="metafield">
       <div class="offer-text__discounts-container"></div>
     </div>
+    {%- endunless -%}
+    
 </product-discount-promotion>
 
 <script>

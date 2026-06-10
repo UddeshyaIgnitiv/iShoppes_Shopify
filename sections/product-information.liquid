@@ -127,6 +127,24 @@
       }
     })();
   </script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    dataLayer.push({
+      'event': 'view_item',
+      'ecommerce': {
+        'detail': {
+          'products': [{
+            'name': '{{ product.title | escape }}',
+            'id': '{{ product.variants.first.sku | default: product.variants.first.id }}',
+            'price': {{ product.price | money_without_currency }},
+            'brand': '{{ product.vendor | escape }}',
+            'category': '{{ product.collections.first.title | escape }}',
+            'variant': '{{ product.variants.first.title | escape }}'
+          }]
+        }
+      }
+    });
+  </script>
   {% if section.settings.desktop_media_position == 'left' and product_has_media %}
     {% assign product_href = '#ProductInformation-' | append: section.id %}
     {% render 'skip-to-content-link', href: product_href, text: 'accessibility.skip_to_product_info' %}

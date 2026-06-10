@@ -196,3 +196,108 @@
     })();
   </script>
 {% endif %}
+
+{% comment %}
+  Enhanced Ecommerce (UA/GTM-style) remove_from_cart dataLayer push.
+  Item removals and quantity decreases happen over AJAX through the
+  `cart-items-component` web component (remove button + quantity selector going
+  down), which fires a `cart:update` event that does not say which line changed.
+  To know what was removed we keep a snapshot of the cart and, on every cart
+  update, diff it against a fresh `/cart.js`. Any line whose quantity dropped is
+  reported as remove_from_cart with the removed quantity. Runs on all pages so
+  it also covers removals from the cart drawer.
+{% endcomment %}
+<script>
+  (function () {
+    'use strict';
+
+    var CURRENCY = {{ shop.currency | json }};
+    var snapshot = {};
+
+    function mapLine(line) {
+      return {
+        name: line.product_title || line.title || '',
+        id: line.sku || String(line.variant_id || line.id),
+        price: (line.final_price != null ? line.final_price : line.price || 0) / 100,
+        brand: line.vendor || '',
+        category: line.product_type || '',
+        variant: line.variant_title || '',
+        quantity: Number(line.quantity) || 0,
+      };
+    }
+
+    function buildSnapshot(cart) {
+      var next = {};
+      (cart.items || []).forEach(function (line) {
+        next[line.key] = mapLine(line);
+      });
+      return next;
+    }
+
+    function pushRemoveFromCart(products) {
+      if (!products.length) return;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'remove_from_cart',
+        ecommerce: {
+          currencyCode: CURRENCY,
+          remove: {
+            products: products,
+          },
+        },
+      });
+    }
+
+    function fetchCart() {
+      return fetch('/cart.js', { credentials: 'same-origin' }).then(function (res) {
+        return res.json();
+      });
+    }
+
+    function reconcile(cart) {
+      var next = buildSnapshot(cart);
+      var removed = [];
+
+      Object.keys(snapshot).forEach(function (key) {
+        var before = snapshot[key];
+        var after = next[key];
+        var beforeQty = before.quantity;
+        var afterQty = after ? after.quantity : 0;
+
+        if (afterQty < beforeQty) {
+          var product = {};
+          for (var prop in before) {
+            if (Object.prototype.hasOwnProperty.call(before, prop)) {
+              product[prop] = before[prop];
+            }
+          }
+          product.quantity = beforeQty - afterQty;
+          removed.push(product);
+        }
+      });
+
+      pushRemoveFromCart(removed);
+      snapshot = next;
+    }
+
+    fetchCart()
+      .then(function (cart) {
+        snapshot = buildSnapshot(cart);
+      })
+      .catch(function () {
+        /* ignore - snapshot stays empty */
+      });
+
+    document.addEventListener('cart:update', function (event) {
+      var detail = (event && event.detail) || {};
+      var data = detail.data || {};
+      if (data.didError) return;
+
+      fetchCart()
+        .then(reconcile)
+        .catch(function () {
+          /* network/parse failure - skip */
+        });
+    });
+  })();
+</script>

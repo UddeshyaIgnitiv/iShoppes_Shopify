@@ -385,3 +385,93 @@
     );
   })();
 </script>
+
+{% comment %}
+  Enhanced Ecommerce (UA/GTM-style) begin_checkout dataLayer push.
+  Fires when the cart "Checkout" button is clicked. The click submits the cart
+  form and navigates away immediately, so an async /cart.js fetch would not
+  finish in time. Instead we keep a live snapshot of the cart (seeded from the
+  server-rendered cart, refreshed on cart:update) and push synchronously on
+  click. Matches the add_to_cart / remove_from_cart / view_cart pushes.
+{% endcomment %}
+<script>
+  (function () {
+    'use strict';
+
+    var CURRENCY = {{ shop.currency | json }};
+
+    var currentItems = [
+      {% for item in cart.items %}
+        {
+          name: {{ item.product.title | json }},
+          id: {{ item.sku | default: item.variant_id | json }},
+          price: {{ item.final_price | divided_by: 100.0 }},
+          brand: {{ item.product.vendor | json }},
+          category: {{ item.product.collections.first.title | json }},
+          variant: {{ item.variant.title | json }},
+          quantity: {{ item.quantity }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ];
+
+    function mapLine(line) {
+      return {
+        name: line.product_title || line.title || '',
+        id: line.sku || String(line.variant_id || line.id),
+        price: (line.final_price != null ? line.final_price : line.price || 0) / 100,
+        brand: line.vendor || '',
+        category: line.product_type || '',
+        variant: line.variant_title || '',
+        quantity: Number(line.quantity) || 0,
+      };
+    }
+
+    function refresh() {
+      fetch('/cart.js', { credentials: 'same-origin' })
+        .then(function (res) {
+          return res.json();
+        })
+        .then(function (cart) {
+          currentItems = (cart.items || []).map(mapLine);
+        })
+        .catch(function () {
+          /* keep last known snapshot */
+        });
+    }
+
+    function pushBeginCheckout() {
+      if (!currentItems.length) return;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'begin_checkout',
+        ecommerce: {
+          currencyCode: CURRENCY,
+          checkout: {
+            actionField: { step: 1 },
+            products: currentItems,
+          },
+        },
+      });
+    }
+
+    document.addEventListener('cart:update', function (event) {
+      var data = (event && event.detail && event.detail.data) || {};
+      if (data.didError) return;
+      refresh();
+    });
+
+    document.addEventListener(
+      'click',
+      function (event) {
+        var target = event.target;
+        if (!(target instanceof Element)) return;
+
+        var checkoutBtn = target.closest('button[name="checkout"], #checkout');
+        if (!checkoutBtn) return;
+
+        pushBeginCheckout();
+      },
+      true
+    );
+  })();
+</script>

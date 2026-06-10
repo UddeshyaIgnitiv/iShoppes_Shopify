@@ -129,7 +129,7 @@
 {% endcomment %}
 {% if template.name == 'product' and product != blank %}
   <script>
-    (function () {
+    {% comment %} (function () {
       'use strict';
       function pushAddToCart(productData, quantity) {
         window.dataLayer = window.dataLayer || [];
@@ -193,7 +193,7 @@
             /* network/parse failure - skip the push */
           });
       });
-    })();
+    })(); {% endcomment %}
   </script>
 {% endif %}
 

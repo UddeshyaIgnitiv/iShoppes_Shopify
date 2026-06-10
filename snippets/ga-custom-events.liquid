@@ -24,6 +24,8 @@
   {% if search.performed %}
     {% assign ga_search_term = search.terms | escape %}
   {% endif %}
+{% elsif template.name == 'cart' %}
+  {% assign ga_page_event = 'view_cart' %}
 {% endif %}
 
 {% liquid

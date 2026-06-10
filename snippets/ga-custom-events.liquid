@@ -118,3 +118,81 @@
   };
 </script>
 <script src="{{ 'ga-custom-events.js' | asset_url }}" defer></script>
+
+{% comment %}
+  Enhanced Ecommerce (UA/GTM-style) add_to_cart dataLayer push.
+  This theme adds to cart over AJAX through the `product-form-component` web
+  component (it calls event.preventDefault() on the form), so a classic
+  `form[action="/cart/add"]` submit listener never fires. Instead we listen for
+  the theme's `cart:update` success event and push the add_to_cart payload then.
+  Only runs on the product template, where `product.handle` is available.
+{% endcomment %}
+{% if template.name == 'product' and product != blank %}
+  <script>
+    (function () {
+      'use strict';
+      function pushAddToCart(productData, quantity) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'add_to_cart',
+          ecommerce: {
+            currencyCode: {{ shop.currency | json }},
+            add: {
+              products: [
+                {
+                  name: productData.name,
+                  id: productData.sku || productData.id,
+                  price: productData.price,
+                  brand: productData.brand,
+                  category: productData.category,
+                  variant: productData.variant,
+                  quantity: quantity,
+                },
+              ],
+            },
+          },
+        });
+      }
+      var PRODUCT_HANDLE = {{ product.handle | json }};
+      var PRODUCT_ID = {{ product.id | json }};
+      document.addEventListener('cart:update', function (event) {
+        var detail = (event && event.detail) || {};
+        var data = detail.data || {};
+        // Ignore failed adds and updates that did not originate from a product form.
+        if (data.didError) return;
+        if (data.source !== 'product-form-component') return;
+        // Ignore quick-adds of other products that may exist on this page.
+        if (data.productId && String(data.productId) !== String(PRODUCT_ID)) return;
+        var variantId = String(detail.sourceId || data.variantId || '');
+        var quantity = parseInt(data.itemCount, 10) || 1;
+        fetch('/products/' + PRODUCT_HANDLE + '.js', { credentials: 'same-origin' })
+          .then(function (res) {
+            return res.json();
+          })
+          .then(function (product) {
+            var variants = product.variants || [];
+            var variant =
+              variants.find(function (v) {
+                return String(v.id) === variantId;
+              }) || {};
+            pushAddToCart(
+              {
+                name: product.title,
+                sku: variant.sku,
+                id: variant.id,
+                price: (variant.price || 0) / 100,
+                brand: product.vendor,
+                // `/products/<handle>.js` does not expose collections, so use product type as the category.
+                category: product.type || '',
+                variant: variant.title,
+              },
+              quantity
+            );
+          })
+          .catch(function () {
+            /* network/parse failure - skip the push */
+          });
+      });
+    })();
+  </script>
+{% endif %}

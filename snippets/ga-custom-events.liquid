@@ -475,3 +475,55 @@
     );
   })();
 </script>
+
+{% comment %}
+  Enhanced Ecommerce (UA/GTM-style) purchase dataLayer push.
+  NOTE: Shopify's order-confirmation (thank-you) page does NOT render theme
+  snippets, and this theme has no customer order template, so `order` is blank
+  in the contexts where this snippet loads. This block only fires where `order`
+  is available (e.g. an order status page that includes theme scripts). For
+  reliable purchase tracking, also add the equivalent push to
+  Settings > Checkout > Order status page "Additional scripts", or a Custom
+  Pixel listening for `checkout_completed`.
+{% endcomment %}
+{% if order != blank %}
+  <script>
+    (function () {
+      'use strict';
+
+      var ORDER_KEY = 'ishoppes_ga_purchase::' + {{ order.name | json }};
+      try {
+        if (sessionStorage.getItem(ORDER_KEY)) return;
+        sessionStorage.setItem(ORDER_KEY, '1');
+      } catch (e) {
+        /* ignore - still fire once per load */
+      }
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'purchase',
+        ecommerce: {
+          transaction_id: {{ order.name | json }},
+          affiliation: {{ shop.name | json }},
+          revenue: {{ order.total_price | divided_by: 100.0 }},
+          tax: {{ order.total_tax | divided_by: 100.0 }},
+          shipping: {{ order.shipping_price | divided_by: 100.0 }},
+          currency: {{ shop.currency | json }},
+          products: [
+            {% for line_item in order.line_items %}
+              {
+                name: {{ line_item.product.title | json }},
+                id: {{ line_item.sku | default: line_item.product.id | json }},
+                price: {{ line_item.price | divided_by: 100.0 }},
+                brand: {{ line_item.product.vendor | json }},
+                category: {{ line_item.product.collections.first.title | json }},
+                variant: {{ line_item.variant.title | json }},
+                quantity: {{ line_item.quantity }}
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]
+        }
+      });
+    })();
+  </script>
+{% endif %}

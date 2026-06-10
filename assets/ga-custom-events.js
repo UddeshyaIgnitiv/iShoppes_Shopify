@@ -185,19 +185,6 @@
         search_term: term,
         items: config.searchItems || [],
       });
-      return;
-    }
-
-    if (config.pageEvent === 'view_cart') {
-      const cart = config.cart || {};
-      const items = cart.items || [];
-      if (!items.length) return;
-      const value = Number(cart.total) || itemsTotalValue(items);
-      sendEvent('view_cart', {
-        currency: config.currency || '',
-        value,
-        items,
-      });
     }
   }
 

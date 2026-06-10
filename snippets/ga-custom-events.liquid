@@ -24,8 +24,6 @@
   {% if search.performed %}
     {% assign ga_search_term = search.terms | escape %}
   {% endif %}
-{% elsif template.name == 'cart' %}
-  {% assign ga_page_event = 'view_cart' %}
 {% endif %}
 
 {% liquid
@@ -301,5 +299,89 @@
           /* network/parse failure - skip */
         });
     });
+  })();
+</script>
+
+{% comment %}
+  Enhanced Ecommerce (UA/GTM-style) view_cart dataLayer push.
+  Fires on the cart page load (server-rendered items so category can use the
+  product's collection) and when the cart drawer is opened from the header cart
+  icon (fetched from /cart.js). Matches the add_to_cart / remove_from_cart
+  pushes so a single GTM trigger can map all cart events.
+{% endcomment %}
+<script>
+  (function () {
+    'use strict';
+
+    var CURRENCY = {{ shop.currency | json }};
+
+    function pushViewCart(products) {
+      if (!products.length) return;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'view_cart',
+        ecommerce: {
+          currencyCode: CURRENCY,
+          detail: {
+            products: products,
+          },
+        },
+      });
+    }
+
+    function mapLine(line) {
+      return {
+        name: line.product_title || line.title || '',
+        id: line.sku || String(line.variant_id || line.id),
+        price: (line.final_price != null ? line.final_price : line.price || 0) / 100,
+        brand: line.vendor || '',
+        category: line.product_type || '',
+        variant: line.variant_title || '',
+        quantity: Number(line.quantity) || 0,
+      };
+    }
+
+    {% if template.name == 'cart' %}
+      pushViewCart([
+        {% for item in cart.items %}
+          {
+            name: {{ item.product.title | json }},
+            id: {{ item.sku | default: item.variant_id | json }},
+            price: {{ item.final_price | divided_by: 100.0 }},
+            brand: {{ item.product.vendor | json }},
+            category: {{ item.product.collections.first.title | json }},
+            variant: {{ item.variant.title | json }},
+            quantity: {{ item.quantity }}
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]);
+    {% endif %}
+
+    document.addEventListener(
+      'click',
+      function (event) {
+        var target = event.target;
+        if (!(target instanceof Element)) return;
+
+        var cartIcon = target.closest('.header-actions__cart-icon--has-cart');
+        if (!cartIcon) return;
+
+        // When the icon links to /cart it navigates there and the page-load
+        // push above fires; only handle the drawer-open (no navigation) case.
+        if (cartIcon.closest('a[href]')) return;
+
+        fetch('/cart.js', { credentials: 'same-origin' })
+          .then(function (res) {
+            return res.json();
+          })
+          .then(function (cart) {
+            pushViewCart((cart.items || []).map(mapLine));
+          })
+          .catch(function () {
+            /* network/parse failure - skip */
+          });
+      },
+      true
+    );
   })();
 </script>

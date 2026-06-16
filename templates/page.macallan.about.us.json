@@ -212,7 +212,7 @@
       "type": "custom-liquid",
       "name": "Bottom Collections",
       "settings": {
-        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <a href=\"/pages/colour-collection\"><img src=\"{{ 'our-whisky-1.webp?v=1765817906' | file_url }}\" alt=\"Colour Collection\"></a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <a href=\"/pages/rare-cask-black\"><img src=\"{{ 'our-whisky-2.webp?v=1765817906' | file_url }}\" alt=\"Rare Cask Black\"></a>\n      </div>\n    </div>\n  </div>\n</div>",
+        "custom_liquid": "<div class=\"macallan-our-whisky-section page-width\">\n  <div class=\"macallan-whisky-grid\">\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <a href=\"/pages/colour-collection\"><img src=\"{{ 'color-block.jpg?v=1765817906' | file_url }}\" alt=\"Colour Collection\"></a>\n      </div>\n    </div>\n    <div class=\"macallan-whisky-item\">\n      <div class=\"macallan-whisky-image\">\n        <a href=\"/pages/rare-cask-black\"><img src=\"{{ 'our-whisky-2.webp?v=1765817906' | file_url }}\" alt=\"Rare Cask Black\"></a>\n      </div>\n    </div>\n  </div>\n</div>",
         "color_scheme": "",
         "section_width": "page-width",
         "padding-block-start": 0,

@@ -260,34 +260,10 @@
           "settings": {
             "product": "the-macallan-harmony-collection-cherrywood-lapsang"
           }
-        },
-        "product_VF7xBJ": {
-          "type": "product",
-          "disabled": true,
-          "settings": {
-            "product": "the-macallan-oscuro-170250"
-          }
-        },
-        "product_rrb7gq": {
-          "type": "product",
-          "disabled": true,
-          "settings": {
-            "product": "the-macallan-no6-257438"
-          }
-        },
-        "product_c8edBd": {
-          "type": "product",
-          "disabled": true,
-          "settings": {
-            "product": "the-macallan-m-257437"
-          }
         }
       },
       "block_order": [
-        "product_cBD8Xq",
-        "product_VF7xBJ",
-        "product_rrb7gq",
-        "product_c8edBd"
+        "product_cBD8Xq"
       ],
       "custom_css": [
         ".no-products-message {display: none;}"

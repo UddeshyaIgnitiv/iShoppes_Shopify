@@ -9,6 +9,7 @@ import {
   DiscountUpdateEvent,
 } from '@theme/events';
 import { cartPerformance } from '@theme/performance';
+import { adjustQuantityForBuyXGetY } from '@theme/bxgy-cart';
 
 /** @typedef {import('./utilities').TextComponent} TextComponent */
 
@@ -45,7 +46,7 @@ class CartItemsComponent extends Component {
    * @param {QuantitySelectorUpdateEvent} event - The event.
    */
   #onQuantityChange(event) {
-    const { quantity, cartLine: line } = event.detail;
+    let { quantity, cartLine: line } = event.detail;
 
     if (!line) return;
 
@@ -53,12 +54,16 @@ class CartItemsComponent extends Component {
       return this.onLineItemRemove(line);
     }
 
+    const lineItemRow = this.refs.cartItemRows[line - 1];
+    if (lineItemRow?.dataset?.bxgyDiscounts) {
+      quantity = adjustQuantityForBuyXGetY(quantity, lineItemRow.dataset.bxgyDiscounts);
+    }
+
     this.updateQuantity({
       line,
       quantity,
       action: 'change',
     });
-    const lineItemRow = this.refs.cartItemRows[line - 1];
 
     if (!lineItemRow) return;
 

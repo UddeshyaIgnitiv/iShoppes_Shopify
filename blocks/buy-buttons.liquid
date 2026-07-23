@@ -76,6 +76,9 @@
       data-product-url="{{ product.url }}"
       on:submit="/handleSubmit"
       data-quantity-default="{% if product.selected_or_first_available_variant.quantity_rule.min %}{{ product.selected_or_first_available_variant.quantity_rule.min }}{% else %}1{% endif %}"
+      {% if product.metafields.custom.active_discount_labels != blank %}
+        data-bxgy-discounts="{{ product.metafields.custom.active_discount_labels | escape }}"
+      {% endif %}
     >
       <div
         class="visually-hidden"

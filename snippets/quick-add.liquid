@@ -67,6 +67,9 @@
     data-section-id="{{ section_id }}"
     data-product-id="{{ product.id }}"
     on:submit="/handleSubmit"
+    {% if product.metafields.custom.active_discount_labels != blank %}
+      data-bxgy-discounts="{{ product.metafields.custom.active_discount_labels | escape }}"
+    {% endif %}
     class="
       quick-add__product-form-component
       {% if product.options.size == 1 %} quick-add__product-form-component--single-option {% else %} quick-add__product-form-component--multi-option {% endif %}

@@ -3,6 +3,7 @@ import { fetchConfig, onAnimationEnd, preloadImage } from '@theme/utilities';
 import { ThemeEvents, CartAddEvent, CartErrorEvent, VariantUpdateEvent } from '@theme/events';
 import { cartPerformance } from '@theme/performance';
 import { morph } from '@theme/morph';
+import { adjustAddQuantityForBuyXGetY, parseBuyXGetYPatterns } from '@theme/bxgy-cart';
 
 export const ADD_TO_CART_TEXT_ANIMATION_DURATION = 2000;
 
@@ -185,15 +186,21 @@ class ProductFormComponent extends Component {
       formData.append('sections', cartItemComponentsSectionIds.join(','));
     });
 
-    const fetchCfg = fetchConfig('javascript', { body: formData });
+    this.#prepareBuyXGetYQuantity(formData)
+      .catch(() => {
+        // If cart lookup fails, continue with the requested quantity.
+      })
+      .then(() => {
+        const fetchCfg = fetchConfig('javascript', { body: formData });
 
-    fetch(Theme.routes.cart_add_url, {
-      ...fetchCfg,
-      headers: {
-        ...fetchCfg.headers,
-        Accept: 'text/html',
-      },
-    })
+        return fetch(Theme.routes.cart_add_url, {
+          ...fetchCfg,
+          headers: {
+            ...fetchCfg.headers,
+            Accept: 'text/html',
+          },
+        });
+      })
       .then((response) => response.json())
       .then((response) => {
         if (response.status) {
@@ -276,6 +283,50 @@ class ProductFormComponent extends Component {
         // add more thing to do in here if needed.
         cartPerformance.measureFromEvent('add:user-action', event);
       });
+  }
+
+  /**
+   * For Buy X Get Y free promos, include the free unit(s) in the add quantity
+   * so Shopify can apply the discount (e.g. qty 3 → add 4 for Buy 3 Get 1 Free).
+   * @param {FormData} formData
+   */
+  async #prepareBuyXGetYQuantity(formData) {
+    const labels = this.#getBuyXGetYLabels();
+    if (!labels || parseBuyXGetYPatterns(labels).length === 0) return;
+
+    const variantId = formData.get('id');
+    const requestedQty = Number(formData.get('quantity')) || Number(this.dataset.quantityDefault) || 1;
+    if (!variantId || requestedQty <= 0) return;
+
+    let existingQty = 0;
+    const cartUrl = Theme?.routes?.cart_url;
+    if (cartUrl) {
+      const cartResponse = await fetch(`${cartUrl}.js`);
+      const cartData = await cartResponse.json();
+      const matchingItem = (cartData?.items || []).find(
+        (/** @type {{ variant_id?: number | string }} */ item) => String(item.variant_id) === String(variantId)
+      );
+      existingQty = Number(matchingItem?.quantity || 0);
+    }
+
+    const adjustedQty = adjustAddQuantityForBuyXGetY(existingQty, requestedQty, labels);
+    if (adjustedQty !== requestedQty) {
+      formData.set('quantity', String(adjustedQty));
+    }
+  }
+
+  /**
+   * Reads BXGY labels from the product form, or falls back to the PDP promo element.
+   * @returns {string}
+   */
+  #getBuyXGetYLabels() {
+    if (this.dataset.bxgyDiscounts) return this.dataset.bxgyDiscounts;
+
+    const productId = this.dataset.productId;
+    if (!productId) return '';
+
+    const promo = document.querySelector(`product-discount-promotion[data-product-id="${productId}"]`);
+    return promo instanceof HTMLElement ? promo.dataset.discounts || '' : '';
   }
 
   /**

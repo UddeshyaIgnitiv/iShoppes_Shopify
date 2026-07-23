@@ -3,6 +3,7 @@ import { morphSection } from '@theme/section-renderer';
 import { DiscountUpdateEvent } from '@theme/events';
 import { fetchConfig } from '@theme/utilities';
 import { cartPerformance } from '@theme/performance';
+import { parseBuyXGetY } from '@theme/bxgy-cart';
 
 /**
  * A custom element that applies a discount to the cart.
@@ -137,7 +138,7 @@ class CartDiscount extends Component {
    * @param {string} discountCode
    */
   async #prepareCartForBuyXGetY(discountCode) {
-    const pattern = this.#parseBuyXGetY(discountCode);
+    const pattern = parseBuyXGetY(discountCode);
     if (!pattern) return;
 
     const cartUrl = Theme?.routes?.cart_url;
@@ -169,30 +170,6 @@ class CartDiscount extends Component {
     });
 
     await fetch(Theme.routes.cart_update_url, config);
-  }
-
-  /**
-   * Parse BUYxGETy-style discount code values.
-   * @param {string} discountCode
-   * @returns {{ buyQuantity: number; freeQuantity: number } | null}
-   */
-  #parseBuyXGetY(discountCode) {
-    const normalized = String(discountCode).toUpperCase().replace(/[^A-Z0-9]/g, '');
-    const hasFreeToken = normalized.includes('FREE');
-    const match = normalized.match(/(?:BUY|B)(\d+)(?:GET|G)(\d+)/);
-    if (!match) return null;
-
-    const buyQuantity = Number(match[1]);
-    const freeQuantity = Number(match[2]);
-
-    if (!Number.isFinite(buyQuantity) || !Number.isFinite(freeQuantity)) return null;
-    if (buyQuantity <= 0 || freeQuantity <= 0) return null;
-    // Guardrail: only treat code as BXGY item-quantity promo when it clearly looks
-    // like free-item logic (e.g. BUY2GET1, BUY1GET1FREE), not amount-off codes such
-    // as BUY3GET26 where "26" means percent/value discount.
-    if (freeQuantity > 5 && !hasFreeToken) return null;
-
-    return { buyQuantity, freeQuantity };
   }
 
   /**
